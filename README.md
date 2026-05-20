@@ -64,8 +64,9 @@ Chlorophyll measurements retain predictive signal up to **21 days prior** to a b
 
 | Source | Description | Records |
 |--------|-------------|---------|
-| [NASA MODIS Aqua L3](https://oceancolor.gsfc.nasa.gov) | Daily 4km chlorophyll-a, 2003–2025 | 7,500+ NetCDF files |
-| [CT DEEP / LISICOS](http://lisicos.uconn.edu/dep_portal.php) | In-situ water quality, 50 stations, 1993–2025 | 1.36M measurements |
+| NASA MODIS Aqua L3 | Daily 4km chlorophyll-a, 2003–2025 | 8,356 NetCDF files |
+| CT DEEP / LISICOS | In-situ water quality, 50 stations, 1993–2025 | 1.36M measurements |
+| Matched dataset | In-situ + satellite same-day observations | 354,685 records, 29.9% satellite coverage |
 | [CT DEEP Nutrients](http://lisicos.uconn.edu) | Nitrogen (NOx, NH3, TDN), phosphorus (DIP) | 204K measurements |
 
 **Study area:** Long Island Sound bounding box — 40.5–41.5°N, 73.8–71.8°W

@@ -43,6 +43,12 @@
 - This means CT DEEP UNDERESTIMATES Narrows bloom intensity by ~36.7%
 - Your training data uses all 50 stations but still has this geographic bias
 - Acknowledge this as a limitation: western-most bloom dynamics may be underrepresented
+## Cloud Coverage Analysis
+- 8,356 satellite files covering 2003-2025
+- 1,185,288 CT DEEP observations matched to satellite dates
+- 354,685 records have both in-situ and satellite chlorophyll (29.9% coverage)
+- Cloud cover is the primary data gap -- not a file availability issue
+- Coverage consistent with Perreira (2021) who used the same CT DEEP dataset
 
 **7. Multiple Factors Drive Blooms (Not Just Nutrients)**
 - Simple linear regressions between CHLA and nutrients showed poor correlations (r² < 0.3)
