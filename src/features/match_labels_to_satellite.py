@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 
 # Load labels
 print("Loading labels...")
-labels = pd.read_csv("data/hab_labels_lis.csv")
+labels = pd.read_csv("data/hab_features_final.csv", low_memory=False)
 labels['time'] = pd.to_datetime(labels['time'], utc=True)
 labels['date'] = labels['time'].dt.date
 
