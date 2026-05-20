@@ -17,11 +17,9 @@ df['date'] = pd.to_datetime(df['date'])
 # Features to use
 features = [
     'latitude', 'longitude', 'month',
-    'sea_water_temperature', 'sea_water_salinity',
-    'oxygen_concentration_in_sea_water', 'pH',
     'chl_anomaly', 'chl_climatology',
-    'chl_lag3', 'chl_lag7', 'chl_lag14', 'chl_lag21',
     'chl_roll7_mean', 'chl_roll7_std',
+    'chl_lag3', 'chl_lag7', 'chl_lag14', 'chl_lag21',
 ]
 
 # Predict bloom 7 days ahead
