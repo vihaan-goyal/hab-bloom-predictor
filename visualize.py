@@ -30,6 +30,6 @@ ax.set_xlabel('Longitude')
 ax.set_ylabel('Latitude')
 
 plt.tight_layout()
-plt.savefig('data/lis_chlorophyll_20200715.png', dpi=150)
+plt.savefig('figures/lis_chlorophyll_20200715.png', dpi=150)
 plt.show()
 print("Map saved.")
