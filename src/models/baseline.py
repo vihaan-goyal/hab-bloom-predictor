@@ -4,6 +4,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (classification_report, roc_auc_score, 
                              average_precision_score, confusion_matrix)
+from xgboost import XGBClassifier
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 import warnings
@@ -89,6 +90,23 @@ evaluate("Random Forest - Validation",
 # Feature importance
 importances = pd.Series(rf.feature_importances_, index=features)
 importances = importances.sort_values(ascending=True)
+
+print("\nTraining XGBoost...")
+scale_pos_weight = (y_train == 0).sum() / (y_train == 1).sum()
+
+xgb = XGBClassifier(
+    n_estimators=200,
+    max_depth=6,
+    learning_rate=0.1,
+    scale_pos_weight=scale_pos_weight,
+    random_state=42,
+    n_jobs=-1,
+    eval_metric='logloss',
+    verbosity=0
+)
+xgb.fit(X_train, y_train)
+evaluate("XGBoost - Validation",
+         y_val, xgb.predict(X_val), xgb.predict_proba(X_val)[:,1])
 
 fig, ax = plt.subplots(figsize=(10, 8))
 importances.plot(kind='barh', ax=ax, color='steelblue')
