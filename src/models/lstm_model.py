@@ -14,7 +14,7 @@ meta = pd.read_csv("data/sequence_meta.csv")
 meta['date'] = pd.to_datetime(meta['date'])
 
 # Subsample for local testing - comment out for full run on Colab
-SUBSET = True
+SUBSET = False
 if SUBSET:
     idx = np.random.choice(len(X), size=50000, replace=False)
     X = X[idx]
@@ -54,7 +54,7 @@ val_loader = DataLoader(HABDataset(X_val, y_val), batch_size=512, shuffle=False)
 
 # LSTM Model
 class HABPredictor(nn.Module):
-    def __init__(self, input_size, hidden_size=64, num_layers=2, dropout=0.3):
+    def __init__(self, input_size, hidden_size=64, num_layers=2, dropout=0.5): #0.3 -> 0.5
         super().__init__()
         self.lstm = nn.LSTM(
             input_size=input_size,
@@ -83,11 +83,16 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"Using device: {device}")
 
 model = HABPredictor(input_size=15).to(device)
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+# Add weight decay
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-4)
 criterion = nn.BCELoss()
 
 # Training loop
-EPOCHS = 20
+EPOCHS = 50
+best_auc = 0
+patience = 5
+patience_counter = 0
+best_model_state = None
 train_losses, val_aucs = [], []
 
 for epoch in range(EPOCHS):
@@ -115,7 +120,22 @@ for epoch in range(EPOCHS):
     train_losses.append(avg_loss)
     val_aucs.append(val_auc)
     
-    print(f"Epoch {epoch+1}/{EPOCHS} | Loss: {avg_loss:.4f} | Val AUC: {val_auc:.4f}")
+    if val_auc > best_auc:
+        best_auc = val_auc
+        best_model_state = {k: v.clone() for k, v in model.state_dict().items()}
+        patience_counter = 0
+    else:
+        patience_counter += 1
+    
+    print(f"Epoch {epoch+1}/{EPOCHS} | Loss: {avg_loss:.4f} | Val AUC: {val_auc:.4f} | Best: {best_auc:.4f}")
+    
+    if patience_counter >= patience:
+        print(f"Early stopping at epoch {epoch+1}")
+        break
+
+# Restore best model
+model.load_state_dict(best_model_state)
+print(f"\nBest Val AUC: {best_auc:.4f}")    
 
 # Final evaluation
 print("\nFinal evaluation on validation set:")
