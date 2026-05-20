@@ -204,5 +204,3 @@ Low salinity drives bloom probability up (freshwater/nutrient input from rivers)
 ## About
 
 Built by **Vihaan Goyal**, Westhill High School ('28), Stamford CT
-
-> *The MODIS data has been sitting there for 22 years waiting for someone to do this.*
