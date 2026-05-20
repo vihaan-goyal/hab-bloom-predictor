@@ -1,9 +1,12 @@
 import earthaccess
+from dotenv import load_dotenv
 import os
+load_dotenv()
+
+import earthaccess
+earthaccess.login(strategy="environment")
 
 os.makedirs("data/raw", exist_ok=True)
-
-earthaccess.login(strategy="interactive")
 
 results = earthaccess.search_data(
     short_name="MODISA_L3m_CHL",
