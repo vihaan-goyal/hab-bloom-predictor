@@ -49,17 +49,24 @@ sample = X_val.sample(5000, random_state=42)
 explainer = shap.TreeExplainer(xgb)
 shap_values = explainer.shap_values(sample)
 
+display_names = {
+    'oxygen_concentration_in_sea_water': 'dissolved_oxygen',
+    'sea_water_temperature': 'temperature',
+    'sea_water_salinity': 'salinity',
+}
+sample_display = sample.rename(columns=display_names)
+
 # Summary plot
-plt.figure()
-shap.summary_plot(shap_values, sample, show=False)
+plt.figure(figsize=(10, 6))
+shap.summary_plot(shap_values, sample_display, show=False)
 plt.tight_layout()
 plt.savefig('figures/shap_summary.png', dpi=150, bbox_inches='tight')
 plt.close()
 print("Saved shap_summary.png")
 
 # Bar plot
-plt.figure()
-shap.summary_plot(shap_values, sample, plot_type='bar', show=False)
+plt.figure(figsize=(10, 6))
+shap.summary_plot(shap_values, sample_display, plot_type='bar', show=False)
 plt.tight_layout()
 plt.savefig('figures/shap_importance.png', dpi=150, bbox_inches='tight')
 plt.close()
