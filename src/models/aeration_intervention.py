@@ -212,14 +212,14 @@ print(f"  Mean bloom probability: {highly_suitable['bloom_prob'].mean():.3f}")
 # ------------------------------------------------------------------
 
 # Figure 1: Intervention priority map
-fig, ax = plt.subplots(figsize=(12, 6))
+fig, ax = plt.subplots(figsize=(14, 7))
 sc = ax.scatter(
     station_priority['longitude'],
     station_priority['latitude'],
     c=station_priority['intervention_priority'],
     cmap='RdYlGn_r',
     s=station_priority['n_high_risk_days'] /
-      station_priority['n_high_risk_days'].max() * 400 + 40,
+      station_priority['n_high_risk_days'].max() * 800 + 100,
     alpha=0.85,
     edgecolors='gray',
     linewidths=0.5

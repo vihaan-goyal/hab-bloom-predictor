@@ -106,6 +106,9 @@ xgb.fit(X_train, y_train)
 evaluate("XGBoost - Validation",
          y_val, xgb.predict(X_val), xgb.predict_proba(X_val)[:,1])
 
+xgb.save_model("data/xgb_model.json")
+print("Model saved to data/xgb_model.json")
+
 fig, ax = plt.subplots(figsize=(10, 8))
 importances.plot(kind='barh', ax=ax, color='steelblue')
 ax.set_title('Random Forest Feature Importances')

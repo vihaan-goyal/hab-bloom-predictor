@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HAB Early Warning — Long Island Sound</title>
+<style>
+:root {
+  --bg: #f8f7f4;
+  --surface: #ffffff;
+  --surface2: #f2f1ee;
+  --border: rgba(0,0,0,0.08);
+  --border-strong: rgba(0,0,0,0.15);
+  --text: #1a1917;
+  --text2: #6b6a67;
+  --text3: #9e9d9a;
+  --red: #c0392b;
+  --red-bg: #fdf2f1;
+  --red-border: rgba(192,57,43,0.2);
+  --amber: #b7600a;
+  --amber-bg: #fdf6ee;
+  --amber-border: rgba(183,96,10,0.2);
+  --green: #2d7a3a;
+  --green-bg: #f0f8f1;
+  --green-border: rgba(45,122,58,0.2);
+  --blue: #1a5fa8;
+  --blue-bg: #f0f5fc;
+  --r: 6px;
+  --r-lg: 10px;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#171614;--surface:#1f1e1c;--surface2:#272624;
+    --border:rgba(255,255,255,0.07);--border-strong:rgba(255,255,255,0.13);
+    --text:#eeede9;--text2:#8a8986;--text3:#5a5956;
+    --red:#e05c4b;--red-bg:#1e1210;--red-border:rgba(224,92,75,0.2);
+    --amber:#e89030;--amber-bg:#1c1508;--amber-border:rgba(232,144,48,0.2);
+    --green:#4caf5e;--green-bg:#0c1a0e;--green-border:rgba(76,175,94,0.2);
+    --blue:#5b9fe0;--blue-bg:#0d1621;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
+/* Layout */
+.shell{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.sidebar{background:var(--surface);border-right:0.5px solid var(--border-strong);padding:1.25rem;display:flex;flex-direction:column;gap:1.5rem;position:sticky;top:0;height:100vh;overflow-y:auto}
+.main{padding:1.5rem;overflow-y:auto;display:flex;flex-direction:column;gap:1.25rem}
+/* Sidebar */
+.logo{font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--text)}
+.logo span{color:var(--text3);font-weight:400}
+.nav-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;color:var(--text2);transition:all .12s;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--surface2);color:var(--text);font-weight:500}
+.nav-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sidebar-meta{margin-top:auto;font-size:11px;color:var(--text3);line-height:1.6;border-top:0.5px solid var(--border);padding-top:1rem}
+/* Load bar */
+.load-bar{background:var(--surface);border:0.5px solid var(--border-strong);border-radius:var(--r-lg);padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.load-bar-left{display:flex;flex-direction:column;gap:2px}
+.load-title{font-size:13px;font-weight:500}
+.load-sub{font-size:12px;color:var(--text2)}
+.load-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.btn{font-size:12px;padding:5px 14px;border-radius:var(--r);border:0.5px solid var(--border-strong);background:var(--surface2);color:var(--text);cursor:pointer;transition:all .12s;white-space:nowrap}
+.btn:hover{border-color:var(--text3)}
+.btn.primary{background:var(--text);color:var(--surface);border-color:var(--text)}
+.btn.primary:hover{opacity:.88}
+/* Alert banner */
+.alert-banner{background:var(--red-bg);border:0.5px solid var(--red-border);border-radius:var(--r-lg);padding:.875rem 1.25rem;display:flex;align-items:flex-start;gap:10px}
+.alert-dot{width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0;margin-top:3px;animation:blink 1.8s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.alert-text{font-size:13px;color:var(--red);line-height:1.5}
+.alert-text strong{font-weight:600}
+/* Metrics row */
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.metric{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:.875rem 1rem}
+.metric-label{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.metric-val{font-size:24px;font-weight:500;letter-spacing:-.02em;line-height:1}
+.metric-sub{font-size:11px;color:var(--text3);margin-top:4px}
+.metric-val.red{color:var(--red)}
+.metric-val.amber{color:var(--amber)}
+.metric-val.green{color:var(--green)}
+/* Station table */
+.table-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+.table-header{padding:.875rem 1.25rem;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.table-title{font-size:13px;font-weight:500}
+.filters{display:flex;gap:6px}
+.filter-btn{font-size:11px;padding:3px 10px;border-radius:20px;border:0.5px solid var(--border-strong);background:transparent;color:var(--text2);cursor:pointer;transition:all .12s}
+.filter-btn.active{background:var(--text);color:var(--surface);border-color:var(--text)}
+.table-cols{display:grid;grid-template-columns:80px 1fr 72px 72px 72px 72px 80px;gap:8px;padding:.5rem 1.25rem;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);border-bottom:0.5px solid var(--border)}
+.col-r{text-align:right}
+.station-rows{display:flex;flex-direction:column}
+.srow{display:grid;grid-template-columns:80px 1fr 72px 72px 72px 72px 80px;gap:8px;padding:.6rem 1.25rem;align-items:center;border-bottom:0.5px solid var(--border);transition:background .1s;cursor:default}
+.srow:last-child{border-bottom:none}
+.srow:hover{background:var(--surface2)}
+.srow.row-red{background:var(--red-bg)}
+.srow.row-red:hover{background:var(--red-bg);filter:brightness(.97)}
+.srow.row-amber{background:var(--amber-bg)}
+.srow.row-amber:hover{background:var(--amber-bg);filter:brightness(.97)}
+.sname{font-size:13px;font-weight:600;color:var(--text)}
+.bar-wrap{height:4px;background:var(--surface2);border-radius:2px;overflow:hidden;border:0.5px solid var(--border)}
+.bar-fill{height:100%;border-radius:2px;transition:width .3s}
+.val{font-size:13px;text-align:right;color:var(--text)}
+.val.dim{color:var(--text3)}
+.val.red{color:var(--red);font-weight:500}
+.badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;text-align:center;letter-spacing:.03em}
+.badge.red{background:var(--red-bg);color:var(--red);border:0.5px solid var(--red-border)}
+.badge.amber{background:var(--amber-bg);color:var(--amber);border:0.5px solid var(--amber-border)}
+.badge.green{background:var(--green-bg);color:var(--green);border:0.5px solid var(--green-border)}
+/* Chart panel */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chart-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:1rem 1.25rem}
+.chart-title{font-size:12px;font-weight:500;color:var(--text2);margin-bottom:.75rem}
+.bar-chart{display:flex;flex-direction:column;gap:6px}
+.bc-row{display:flex;align-items:center;gap:8px}
+.bc-label{font-size:11px;color:var(--text2);width:32px;text-align:right;flex-shrink:0}
+.bc-track{flex:1;height:18px;background:var(--surface2);border-radius:3px;overflow:hidden;position:relative}
+.bc-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:6px;font-size:10px;font-weight:600;color:#fff;transition:width .4s}
+.bc-val{font-size:11px;color:var(--text2);width:36px;text-align:left;flex-shrink:0}
+/* Scatter */
+.scatter-wrap{position:relative;width:100%;height:180px}
+canvas{position:absolute;inset:0}
+/* Empty state */
+.empty{padding:3rem;text-align:center;color:var(--text3);font-size:13px;line-height:1.8}
+.empty strong{display:block;font-size:15px;color:var(--text2);margin-bottom:4px}
+/* Tooltip */
+.tip{position:fixed;background:var(--surface);border:0.5px solid var(--border-strong);border-radius:var(--r);padding:6px 10px;font-size:11px;color:var(--text);pointer-events:none;opacity:0;transition:opacity .1s;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+</style>
+</head>
+<body>
+
+<div class="tip" id="tip"></div>
+
+<div class="shell">
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div>
+    <div class="logo">HAB Monitor <span>/ LIS</span></div>
+  </div>
+  <div>
+    <div class="nav-label">Filter stations</div>
+    <button class="nav-item active" onclick="setFilter('all',this)">
+      <span class="nav-dot" style="background:var(--text3)"></span>All stations
+    </button>
+    <button class="nav-item" onclick="setFilter('alert',this)">
+      <span class="nav-dot" style="background:var(--red)"></span>Intervene
+    </button>
+    <button class="nav-item" onclick="setFilter('monitor',this)">
+      <span class="nav-dot" style="background:var(--amber)"></span>Monitor
+    </button>
+    <button class="nav-item" onclick="setFilter('ok',this)">
+      <span class="nav-dot" style="background:var(--green)"></span>OK
+    </button>
+  </div>
+  <div>
+    <div class="nav-label">Sort by</div>
+    <button class="nav-item active" id="sort-prob" onclick="setSort('bloom_prob',this)">
+      <span style="font-size:11px">↓</span> Bloom probability
+    </button>
+    <button class="nav-item" id="sort-do" onclick="setSort('do',this)">
+      <span style="font-size:11px">↑</span> Dissolved oxygen
+    </button>
+    <button class="nav-item" id="sort-s" onclick="setSort('aeration_score',this)">
+      <span style="font-size:11px">↓</span> Aeration score
+    </button>
+  </div>
+  <div class="sidebar-meta">
+    <div id="sidebar-date" style="font-weight:500;color:var(--text2);margin-bottom:4px">No data loaded</div>
+    Model: XGBoost<br>
+    AUC 0.936 · Test 2023–2025<br>
+    CT DEEP LISICOS<br><br>
+    Vihaan Goyal<br>Westhill High School
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="main">
+
+  <!-- Load bar -->
+  <div class="load-bar">
+    <div class="load-bar-left">
+      <div class="load-title">HAB Early Warning System — Long Island Sound</div>
+      <div class="load-sub" id="load-sub">Load a CSV from <code>daily_inference.py</code> to see live predictions</div>
+    </div>
+    <div class="load-actions">
+      <div id="date-range-wrap" style="display:none;display:flex;gap:6px;align-items:center">
+        <input type="date" id="date-input" class="btn" style="padding:4px 8px">
+        <button class="btn" onclick="filterByDate()">Go</button>
+      </div>
+      <label class="btn primary" style="cursor:pointer">
+        Load CSV
+        <input type="file" accept=".csv" onchange="loadCSV(event)" style="display:none">
+      </label>
+    </div>
+  </div>
+
+  <!-- Alert banner -->
+  <div id="alert-zone" style="display:none"></div>
+
+  <!-- Metrics -->
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-label">Stations</div>
+      <div class="metric-val" id="m-total">—</div>
+      <div class="metric-sub">processed</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">High risk</div>
+      <div class="metric-val red" id="m-high">—</div>
+      <div class="metric-sub">P &gt; 70%</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Intervene</div>
+      <div class="metric-val red" id="m-intervene">—</div>
+      <div class="metric-sub">all 3 criteria</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Mean prob</div>
+      <div class="metric-val" id="m-mean">—</div>
+      <div class="metric-sub">across stations</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Min DO</div>
+      <div class="metric-val" id="m-do">—</div>
+      <div class="metric-sub">mg/L (lowest)</div>
+    </div>
+  </div>
+
+  <!-- Charts row -->
+  <div class="chart-grid">
+    <div class="chart-card">
+      <div class="chart-title">Bloom probability by station</div>
+      <div class="bar-chart" id="prob-chart"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">DO vs bloom probability</div>
+      <div class="scatter-wrap">
+        <canvas id="scatter-canvas" role="img" aria-label="Scatter plot of dissolved oxygen vs bloom probability"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Station table -->
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-title" id="table-title">Stations</div>
+      <div class="filters">
+        <button class="filter-btn active" onclick="setFilter('all',this,'filter')">All</button>
+        <button class="filter-btn" onclick="setFilter('alert',this,'filter')">Intervene</button>
+        <button class="filter-btn" onclick="setFilter('monitor',this,'filter')">Monitor</button>
+        <button class="filter-btn" onclick="setFilter('ok',this,'filter')">OK</button>
+      </div>
+    </div>
+    <div class="table-cols">
+      <span>Station</span>
+      <span>Bloom probability</span>
+      <span class="col-r">P(bloom)</span>
+      <span class="col-r">Aeration S</span>
+      <span class="col-r">DO mg/L</span>
+      <span class="col-r">Temp °C</span>
+      <span class="col-r">Action</span>
+    </div>
+    <div class="station-rows" id="station-rows">
+      <div class="empty"><strong>No data loaded</strong>Run <code>python daily_inference.py --date YYYY-MM-DD</code><br>then click Load CSV and select <code>data/daily_predictions.csv</code></div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+let ALL_DATA = [];
+let currentFilter = 'all';
+let currentSort = 'bloom_prob';
+let scatterChart = null;
+
+function status(r) {
+  const intervene = r.intervene === true || r.intervene === 'True' || r.intervene === 'true';
+  if (intervene) return 'alert';
+  if (parseFloat(r.bloom_prob) > 0.50) return 'monitor';
+  return 'ok';
+}
+
+function barColor(p) {
+  if (p > 0.70) return '#c0392b';
+  if (p > 0.50) return '#b7600a';
+  return '#2d7a3a';
+}
+
+function setFilter(f, btn, source) {
+  currentFilter = f;
+  // sync both filter controls
+  document.querySelectorAll('.nav-item').forEach(b => {
+    if (['all','alert','monitor','ok'].some(x => b.textContent.toLowerCase().includes(x === 'ok' ? 'ok' : x)))
+      b.classList.remove('active');
+  });
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function setSort(field, btn) {
+  currentSort = field;
+  document.querySelectorAll('[id^=sort-]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function getFiltered() {
+  let data = currentFilter === 'all' ? ALL_DATA : ALL_DATA.filter(r => status(r) === currentFilter);
+  data = [...data].sort((a,b) => {
+    if (currentSort === 'do') return parseFloat(a.do) - parseFloat(b.do);
+    return parseFloat(b[currentSort]) - parseFloat(a[currentSort]);
+  });
+  return data;
+}
+
+function render() {
+  if (!ALL_DATA.length) return;
+  renderMetrics();
+  renderAlerts();
+  renderTable();
+  renderBarChart();
+  renderScatter();
+}
+
+function renderMetrics() {
+  const high = ALL_DATA.filter(r => parseFloat(r.bloom_prob) > 0.70).length;
+  const intervene = ALL_DATA.filter(r => status(r) === 'alert').length;
+  const mean = ALL_DATA.reduce((a,r) => a + parseFloat(r.bloom_prob), 0) / ALL_DATA.length;
+  const minDO = Math.min(...ALL_DATA.map(r => parseFloat(r.do)).filter(v => !isNaN(v)));
+  document.getElementById('m-total').textContent = ALL_DATA.length;
+  document.getElementById('m-high').textContent = high;
+  document.getElementById('m-intervene').textContent = intervene;
+  document.getElementById('m-mean').textContent = Math.round(mean * 100) + '%';
+  const doEl = document.getElementById('m-do');
+  doEl.textContent = minDO.toFixed(2);
+  doEl.className = 'metric-val' + (minDO < 6 ? ' red' : minDO < 8 ? ' amber' : ' green');
+}
+
+function renderAlerts() {
+  const alerts = ALL_DATA.filter(r => status(r) === 'alert');
+  const zone = document.getElementById('alert-zone');
+  if (!alerts.length) { zone.style.display = 'none'; return; }
+  zone.style.display = 'block';
+  zone.innerHTML = `<div class="alert-banner">
+    <div class="alert-dot"></div>
+    <div class="alert-text">
+      <strong>${alerts.length} station${alerts.length>1?'s':''} flagged for aeration assessment:</strong>
+      ${alerts.map(r=>r.station_name).join(', ')} —
+      P(bloom) &gt; 70%, DO &lt; 6.0 mg/L, and aeration score &gt; 0.60 all met simultaneously.
+    </div>
+  </div>`;
+}
+
+function renderTable() {
+  const filtered = getFiltered();
+  const title = document.getElementById('table-title');
+  title.textContent = `${filtered.length} station${filtered.length!==1?'s':''} ${currentFilter !== 'all' ? '· ' + currentFilter : ''}`;
+
+  if (!filtered.length) {
+    document.getElementById('station-rows').innerHTML =
+      '<div class="empty"><strong>No stations match</strong>Try a different filter</div>';
+    return;
+  }
+
+  document.getElementById('station-rows').innerHTML = filtered.map(r => {
+    const s = status(r);
+    const p = parseFloat(r.bloom_prob);
+    const pct = Math.round(p * 100);
+    const doVal = parseFloat(r.do);
+    const S = parseFloat(r.aeration_score);
+    const temp = parseFloat(r.temp);
+    const rowClass = s === 'alert' ? 'row-red' : s === 'monitor' ? 'row-amber' : '';
+    return `<div class="srow ${rowClass}">
+      <span class="sname">${r.station_name}</span>
+      <div><div class="bar-wrap"><div class="bar-fill" style="width:${pct}%;background:${barColor(p)}"></div></div></div>
+      <span class="val">${pct}%</span>
+      <span class="val ${S > 0.60 ? '' : 'dim'}">${S.toFixed(2)}</span>
+      <span class="val ${doVal < 6.0 ? 'red' : ''}">${doVal.toFixed(2)}</span>
+      <span class="val">${isNaN(temp) ? '—' : temp.toFixed(1)}</span>
+      <span class="badge ${s === 'alert' ? 'red' : s === 'monitor' ? 'amber' : 'green'}">
+        ${s === 'alert' ? 'Intervene' : s === 'monitor' ? 'Monitor' : 'OK'}
+      </span>
+    </div>`;
+  }).join('');
+}
+
+function renderBarChart() {
+  const sorted = [...ALL_DATA].sort((a,b) => parseFloat(b.bloom_prob) - parseFloat(a.bloom_prob));
+  document.getElementById('prob-chart').innerHTML = sorted.map(r => {
+    const p = parseFloat(r.bloom_prob);
+    const pct = Math.round(p * 100);
+    return `<div class="bc-row">
+      <span class="bc-label">${r.station_name}</span>
+      <div class="bc-track">
+        <div class="bc-fill" style="width:${pct}%;background:${barColor(p)}">${pct > 20 ? pct+'%' : ''}</div>
+      </div>
+      <span class="bc-val">${pct < 20 ? pct+'%' : ''}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderScatter() {
+  const canvas = document.getElementById('scatter-canvas');
+  const isDark = matchMedia('(prefers-color-scheme:dark)').matches;
+  const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+  const textColor = isDark ? '#5a5956' : '#9e9d9a';
+
+  const points = ALL_DATA.map(r => ({
+    x: parseFloat(r.do),
+    y: parseFloat(r.bloom_prob) * 100,
+    label: r.station_name,
+    s: status(r)
+  })).filter(p => !isNaN(p.x) && !isNaN(p.y));
+
+  const colors = points.map(p =>
+    p.s === 'alert' ? '#c0392b' : p.s === 'monitor' ? '#b7600a' : '#2d7a3a'
+  );
+
+  if (scatterChart) { scatterChart.destroy(); scatterChart = null; }
+
+  scatterChart = new Chart(canvas, {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        data: points.map(p => ({x: p.x, y: p.y})),
+        backgroundColor: colors,
+        pointRadius: 6,
+        pointHoverRadius: 8,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const p = points[ctx.dataIndex];
+              return `${p.label}: DO ${p.x.toFixed(1)} mg/L, P=${p.y.toFixed(0)}%`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: { display: true, text: 'Dissolved oxygen (mg/L)', color: textColor, font: { size: 10 } },
+          grid: { color: gridColor },
+          ticks: { color: textColor, font: { size: 10 } }
+        },
+        y: {
+          title: { display: true, text: 'Bloom probability (%)', color: textColor, font: { size: 10 } },
+          grid: { color: gridColor },
+          ticks: { color: textColor, font: { size: 10 } },
+          min: 0, max: 100
+        }
+      }
+    }
+  });
+}
+
+function loadCSV(evt) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const lines = e.target.result.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim());
+    ALL_DATA = lines.slice(1).map(line => {
+      const vals = line.split(',');
+      const row = {};
+      headers.forEach((h,i) => row[h] = vals[i] ? vals[i].trim() : '');
+      row.bloom_prob = parseFloat(row.bloom_prob);
+      row.aeration_score = parseFloat(row.aeration_score);
+      row.do = parseFloat(row.do);
+      row.temp = parseFloat(row.temp);
+      row.intervene = row.intervene === 'True' || row.intervene === 'true';
+      return row;
+    }).filter(r => !isNaN(r.bloom_prob));
+
+    const dateStr = ALL_DATA[0]?.date || file.name;
+    document.getElementById('sidebar-date').textContent = dateStr;
+    document.getElementById('load-sub').textContent =
+      `${ALL_DATA.length} stations loaded from ${file.name}`;
+
+    currentFilter = 'all';
+    currentSort = 'bloom_prob';
+    document.querySelectorAll('.filter-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+    document.querySelectorAll('.nav-item').forEach((b,i) => b.classList.toggle('active', i===0));
+
+    render();
+  };
+  reader.readAsText(file);
+}
+</script>
+</body>
+</html>
