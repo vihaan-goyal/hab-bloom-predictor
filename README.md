@@ -1,6 +1,6 @@
 # HAB Bloom Predictor
 
-> **Predicting harmful algal blooms in Long Island Sound 7 days in advance using 22 years of NASA satellite data and machine learning — and identifying where targeted aeration interventions could prevent them.**
+> **Predicting harmful algal blooms in Long Island Sound 7 days in advance using 22 years of NASA satellite data and machine learning and identifying where targeted aeration interventions could prevent them.**
 
 [![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)](https://python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0-orange?logo=pytorch)](https://pytorch.org)
@@ -14,7 +14,7 @@
 
 Harmful Algal Blooms (HABs) poison marine ecosystems, kill fish, close beaches, and cost the U.S. economy over **$100 million annually**. Long Island Sound has documented blooms of *Alexandrium* (paralytic shellfish toxins) and *Aureococcus anophagefferens* (brown tide). By the time a bloom is visible, it's already too late to prevent the damage.
 
-**Current monitoring is reactive. This project makes it predictive — and actionable.**
+**Current monitoring is reactive. This project makes it predictive and actionable.**
 
 ---
 
@@ -53,7 +53,7 @@ All models evaluated using spatiotemporal cross-validation (train: 1993–2019, 
 ## Scientific Findings
 
 **Geographic gradient**
-Bloom frequency ranges from **46% in western LIS** (near NYC wastewater inputs) to **1.7% in eastern LIS** — a clean eutrophication gradient consistent with Perreira (2021) and Gobler et al. (2006).
+Bloom frequency ranges from **46% in western LIS** (near NYC wastewater inputs) to **1.7% in eastern LIS** a clean eutrophication gradient consistent with Perreira (2021) and Gobler et al. (2006).
 
 **Long-term decline**
 Bloom frequency declined at **−0.63% per year** since 1993, with a sharp inflection after 2014 directly linked to Clean Water Act Phase III TMDL achievement and nitrogen reductions at wastewater treatment plants.
@@ -71,7 +71,7 @@ Of 27,412 high-risk bloom predictions in 2020–2022, **975 (3.6%)** met stringe
 
 ## Operational Deployment
 
-The system includes a daily inference pipeline and browser-based dashboard for real-time monitoring.
+The system includes a daily inference pipeline and a browser-based dashboard for real-time monitoring.
 
 ```bash
 # Generate predictions for any date
@@ -228,7 +228,7 @@ Open `src/deploy/dashboard.html` in a browser and load `data/daily_predictions.c
 
 ## SHAP Feature Importance
 
-The 7-day rolling chlorophyll mean (`chl_roll7_mean`) is the dominant predictor — nearly twice as important as the next feature. This validates the core hypothesis: **the trajectory of chlorophyll buildup over the preceding week is the strongest signal of an impending bloom.**
+The 7-day rolling chlorophyll mean (`chl_roll7_mean`) is the dominant predictor, nearly twice as important as the next feature. This validates the core hypothesis: **the trajectory of chlorophyll buildup over the preceding week is the strongest signal of an impending bloom.**
 
 The primary deployment model uses only chlorophyll trajectory features and achieves AUC 0.936, confirming that dissolved oxygen and temperature add negligible predictive power (ΔAUC < 0.005) over the chlorophyll-only baseline.
 
@@ -236,7 +236,11 @@ The primary deployment model uses only chlorophyll trajectory features and achie
 
 ## Limitations
 
+<<<<<<< HEAD
 - **Cloud coverage:** Valid satellite data exists for only 29.9% of station-days (70% cloud gap). The loss is more severe inside the 21-day patch sequences used by the deep learning models — roughly 60% of daily timesteps and 89% of individual patch pixels are cloud-obscured. Combined with the 4 km pixel size (a large fraction of the Sound's 34 km width), this is why the satellite-based models perform near chance on held-out years and the in-situ XGBoost model is the basis for deployment. Cloud gaps are also non-random: cloudy conditions correlate with the calm, stratified water that precedes blooms.
+=======
+- **Cloud coverage:** Satellite data available for only 29.9% of station-days. Cloud gaps are non-random; cloudy conditions correlate with bloom-favorable stratification.
+>>>>>>> bdebb76d903db6fed71009cd5f0c946fd767894c
 - **Biweekly sampling:** CT DEEP samples biweekly in summer. Lag features at 3 and 7 days are approximated from the nearest available reading within a 7-day tolerance window.
 - **Aeration scoring:** Suitability scores are derived from observational data, not a hydrodynamic model. Future work will couple this system with ROMS or FVCOM.
 - **Future satellite work:** Higher-resolution ocean color sensors — VIIRS (750 m) or Sentinel-3 OLCI (300 m) — may narrow the spatial-resolution gap that limits the MODIS-based models here.
@@ -255,4 +259,8 @@ The primary deployment model uses only chlorophyll trajectory features and achie
 
 ---
 
+<<<<<<< HEAD
 Built by **Vihaan Goyal & Lev Rubin**, Westhill High School, Stamford CT
+=======
+Built by **Vihaan Goyal**, Westhill High School, Stamford CT
+>>>>>>> bdebb76d903db6fed71009cd5f0c946fd767894c
