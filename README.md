@@ -26,7 +26,7 @@ Given 21 days of water quality observations at a monitoring station, this system
 Input:  21 days of chlorophyll trajectory at a CT DEEP monitoring station
 Output: P(bloom occurs in next 7 days) ∈ [0, 1]
         Aeration suitability score S ∈ [0, 1]
-        Intervention flag (True if P > 0.70, DO < 6.0 mg/L, S > 0.45)
+        Intervention flag (True if P > 0.70 AND S > 0.60 AND DO < 6.0 mg/L)
 ```
 
 ---
@@ -39,10 +39,12 @@ Output: P(bloom occurs in next 7 days) ∈ [0, 1]
 | LSTM (temporal) | 0.926 | — |
 | Logistic Regression | 0.916 | — |
 | Random Forest | 0.915 | — |
-| Hybrid (ConvLSTM + LSTM) | 0.744 | 0.658 |
-| ConvLSTM (satellite-only) | 0.696 | 0.610 |
+| Hybrid (ConvLSTM + LSTM)* | 0.744 | 0.658 |
+| ConvLSTM (satellite-only)* | 0.696 | 0.610 |
 
 All models evaluated using spatiotemporal cross-validation (train: 1993–2019, val: 2020–2022, test: 2023–2025). Random splitting would introduce data leakage.
+
+*Satellite-based models were trained only on the subset of station-days with valid cloud-free MODIS observations. They substantially underperform the in-situ models; see [Limitations](#limitations) for why 4 km imagery is poorly suited to a 34 km-wide estuary.*
 
 **XGBoost test set performance (2023–2025):** AUC 0.936 · Avg Precision 0.789 · Bloom recall 81% · Bloom precision 66%
 
@@ -63,7 +65,7 @@ Contrary to expectation, bloom frequency **peaks in February–March** at 0–5�
 Chlorophyll measurements retain predictive signal up to **21 days prior** to a bloom event (r = 0.466 at lag-21, r = 0.681 for 7-day rolling mean), motivating the 21-day lookback window.
 
 **Intervention opportunities**
-Of 27,412 high-risk bloom predictions in 2020–2022, **1,777 (6.5%)** met stringent aeration intervention criteria. Station A4 in the western Narrows is the highest-priority target, with dissolved oxygen as low as **1.39 mg/L** during predicted bloom events. August is the peak intervention window.
+Of 27,412 high-risk bloom predictions in 2020–2022, **975 (3.6%)** met stringent aeration intervention criteria (P > 0.70 AND S > 0.60 AND DO < 6.0 mg/L). Station A4 in the western Narrows is the highest-priority target, with dissolved oxygen as low as **1.39 mg/L** during predicted bloom events. August is the peak intervention window.
 
 ---
 
@@ -218,7 +220,7 @@ Open `src/deploy/dashboard.html` in a browser and load `data/daily_predictions.c
 - Early stopping (patience=5), Adam optimizer with weight decay
 
 ### Hybrid ConvLSTM + LSTM
-- ConvLSTM spatial stream: 8×8 MODIS patches, 21-day sequences, 64 hidden channels
+- ConvLSTM spatial stream: 8×8 MODIS patches, 21-day sequences, 16 hidden channels
 - LSTM temporal stream: 21-day in-situ feature sequences
 - Fused via concatenation → shared MLP classifier
 
@@ -234,9 +236,10 @@ The primary deployment model uses only chlorophyll trajectory features and achie
 
 ## Limitations
 
-- **Cloud coverage:** Satellite data available for only 29.9% of station-days. Cloud gaps are non-random — cloudy conditions correlate with bloom-favorable stratification.
+- **Cloud coverage:** Valid satellite data exists for only 29.9% of station-days (70% cloud gap). The loss is more severe inside the 21-day patch sequences used by the deep learning models — roughly 60% of daily timesteps and 89% of individual patch pixels are cloud-obscured. Combined with the 4 km pixel size (a large fraction of the Sound's 34 km width), this is why the satellite-based models perform near chance on held-out years and the in-situ XGBoost model is the basis for deployment. Cloud gaps are also non-random: cloudy conditions correlate with the calm, stratified water that precedes blooms.
 - **Biweekly sampling:** CT DEEP samples biweekly in summer. Lag features at 3 and 7 days are approximated from the nearest available reading within a 7-day tolerance window.
 - **Aeration scoring:** Suitability scores are derived from observational data, not a hydrodynamic model. Future work will couple this system with ROMS or FVCOM.
+- **Future satellite work:** Higher-resolution ocean color sensors — VIIRS (750 m) or Sentinel-3 OLCI (300 m) — may narrow the spatial-resolution gap that limits the MODIS-based models here.
 
 ---
 
@@ -252,4 +255,4 @@ The primary deployment model uses only chlorophyll trajectory features and achie
 
 ---
 
-Built by **Vihaan Goyal**, Westhill High School, Stamford CT
+Built by **Vihaan Goyal & Lev Rubin**, Westhill High School, Stamford CT

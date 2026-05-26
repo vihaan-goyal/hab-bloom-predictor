@@ -37,9 +37,15 @@ labels_sub = labels[labels['station_name'].isin(stations)].copy()
 print(f"Using {len(stations)} stations, {len(labels_sub)} label records")
 
 # Build per-station metadata: fixed lat/lon and sorted dates
+# Dedupe to ONE row per (station, date) -- the raw labels file has multiple
+# measurements per station-date (e.g. different depths), which would otherwise
+# spawn duplicate sequences and leak across the train/val/test split.
 station_info = {}
 for station_name, group in labels_sub.groupby('station_name'):
-    group = group.sort_values('date').reset_index(drop=True)
+    group = (group
+             .sort_values('date')
+             .drop_duplicates(subset='date', keep='first')   # one row per date
+             .reset_index(drop=True))
     station_info[station_name] = {
         'lat': group['latitude'].iloc[0],
         'lon': group['longitude'].iloc[0],

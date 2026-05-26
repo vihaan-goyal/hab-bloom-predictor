@@ -1,7 +1,7 @@
 # HAB Early Warning Dashboard
 
 **Spatiotemporal Prediction and Targeted Intervention for Harmful Algal Blooms in Long Island Sound**
-Vihaan Goyal · Westhill High School · Stamford, Connecticut
+Vihaan Goyal & Lev Rubin · Westhill High School · Stamford, Connecticut
 
 ---
 
@@ -96,7 +96,7 @@ The **Intervene** badge requires all three conditions to be met simultaneously:
 |---|---|---|
 | P(bloom) | > 70% | Model is confident a bloom is imminent |
 | DO | < 6.0 mg/L | Water is already hypoxic — aeration addresses a real oxygen deficit |
-| Aeration S | > 0.45 | Site conditions make aeration worthwhile |
+| Aeration S | > 0.60 | Site conditions make aeration worthwhile |
 
 **Why all three?**
 
