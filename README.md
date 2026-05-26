@@ -238,9 +238,6 @@ The primary deployment model uses only chlorophyll trajectory features and achie
 
 <<<<<<< HEAD
 - **Cloud coverage:** Valid satellite data exists for only 29.9% of station-days (70% cloud gap). The loss is more severe inside the 21-day patch sequences used by the deep learning models — roughly 60% of daily timesteps and 89% of individual patch pixels are cloud-obscured. Combined with the 4 km pixel size (a large fraction of the Sound's 34 km width), this is why the satellite-based models perform near chance on held-out years and the in-situ XGBoost model is the basis for deployment. Cloud gaps are also non-random: cloudy conditions correlate with the calm, stratified water that precedes blooms.
-=======
-- **Cloud coverage:** Satellite data available for only 29.9% of station-days. Cloud gaps are non-random; cloudy conditions correlate with bloom-favorable stratification.
->>>>>>> bdebb76d903db6fed71009cd5f0c946fd767894c
 - **Biweekly sampling:** CT DEEP samples biweekly in summer. Lag features at 3 and 7 days are approximated from the nearest available reading within a 7-day tolerance window.
 - **Aeration scoring:** Suitability scores are derived from observational data, not a hydrodynamic model. Future work will couple this system with ROMS or FVCOM.
 - **Future satellite work:** Higher-resolution ocean color sensors — VIIRS (750 m) or Sentinel-3 OLCI (300 m) — may narrow the spatial-resolution gap that limits the MODIS-based models here.
