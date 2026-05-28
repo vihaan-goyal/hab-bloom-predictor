@@ -9,6 +9,8 @@ Run from repo root:
     python src/deploy/daily_inference.py
 """
 
+import warnings
+warnings.filterwarnings('ignore', category=UserWarning)
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LogisticRegression
@@ -16,7 +18,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_auc_score
 import xgboost as xgb
 
-# ── Load data ──────────────────────────────────────────────────────────────────
+# --Load data ------------------------------------------------------------------
 print("Loading data/hab_features_daily.csv...")
 df = pd.read_csv("data/hab_features_daily.csv")
 df['date'] = pd.to_datetime(df['date'])
@@ -44,7 +46,7 @@ for station, grp in df.groupby('station_name'):
             labels[i] = 1
     df.loc[idx, 'bloom_28d'] = labels
 
-# ── Feature set ────────────────────────────────────────────────────────────────
+# --Feature set ----------------------------------------------------------------
 FEATURES = [
     'Chlorophyll', 'chl_lag1', 'chl_lag2', 'chl_lag3', 'chl_lag4',
     'chl_roll3_mean', 'chl_roll6_mean', 'chl_roll9_mean', 'chl_trend',
@@ -61,7 +63,7 @@ FEATURES = [f for f in FEATURES if f in df.columns]
 DO_COL   = 'oxygen_concentration_in_sea_water'
 TEMP_COL = 'sea_water_temperature'
 
-# ── Temporal splits ────────────────────────────────────────────────────────────
+# --Temporal splits ------------------------------------------------------------
 train = df[df['date'].dt.year <= 2019]
 val   = df[(df['date'].dt.year >= 2020) & (df['date'].dt.year <= 2022)]
 test  = df[df['date'].dt.year >= 2023]
@@ -75,7 +77,7 @@ y_test  = test['bloom_28d'].copy()
 
 MED = X_train.median()
 
-# ── Fit ensemble: LR 80% + XGBoost 20% ────────────────────────────────────────
+# --Fit ensemble: LR 80% + XGBoost 20% ----------------------------------------
 print("\nFitting ensemble (LR 80% + XGBoost 20%) on train set 1993-2019...")
 
 # XGBoost
@@ -112,7 +114,7 @@ ens_test   = 0.80 * lr_test_p + 0.20 * xgb_test_p
 print(f"Ensemble Val AUC  (2020-2022): {roc_auc_score(y_val,  ens_val):.3f}")
 print(f"Ensemble Test AUC (2023-2025): {roc_auc_score(y_test, ens_test):.3f}")
 
-# ── Aeration score formula ─────────────────────────────────────────────────────
+# --Aeration score formula -----------------------------------------------------
 # S = 0.45*(14-DO)/12 + 0.30*(T-10)/20 + 0.25*p
 # High-risk: S > 0.45 AND DO < 6.0 mg/L
 
@@ -122,7 +124,7 @@ def calc_aeration_score(do, temp, bloom_prob):
     return 0.45 * do_term + 0.30 * temp_term + 0.25 * np.clip(bloom_prob, 0.0, 1.0)
 
 
-# ── run_inference: single station/date lookup ──────────────────────────────────
+# --run_inference: single station/date lookup ----------------------------------
 def run_inference(station, date_str):
     """
     Look up the row nearest to date_str for the given station and return
@@ -136,11 +138,10 @@ def run_inference(station, date_str):
     diffs = (stn_df['date'] - target_date).abs()
     row = stn_df.loc[diffs.idxmin()]
 
-    feat_vals = row[FEATURES].fillna(MED)
-    feat_arr  = feat_vals.values.reshape(1, -1)
+    feat_df = pd.DataFrame([row[FEATURES].fillna(MED)], columns=FEATURES)
 
-    xgb_p = xgb_model.predict_proba(feat_arr)[0, 1]
-    lr_p  = lr_model.predict_proba(scaler.transform(feat_arr))[0, 1]
+    xgb_p = xgb_model.predict_proba(feat_df)[0, 1]
+    lr_p  = lr_model.predict_proba(scaler.transform(feat_df))[0, 1]
     bloom_prob = 0.80 * lr_p + 0.20 * xgb_p
 
     do   = row[DO_COL]   if not pd.isna(row[DO_COL])   else MED[DO_COL]
@@ -160,7 +161,7 @@ def run_inference(station, date_str):
     }
 
 
-# ── Specific historical validation dates ──────────────────────────────────────
+# --Specific historical validation dates --------------------------------------
 VALIDATION_DATES = [
     ('A4', '2022-09-01'),
     ('A4', '2022-08-17'),
@@ -190,23 +191,20 @@ for station, date_str in VALIDATION_DATES:
         f"{hr_str:>10}"
     )
 
-# ── Full validation period analysis (2020-2022) ───────────────────────────────
+# --Full validation period analysis (2020-2022) -------------------------------
 print("\n" + "="*80)
 print("FULL VAL PERIOD ANALYSIS (2020-2022)")
 print("="*80)
 
-val_df = val.copy().reset_index(drop=True)
+# Reset to 0-based index so numpy arrays align cleanly
+X_val_arr = X_val.fillna(MED).values
+val_feats_scaled = scaler.transform(X_val_arr)
 
-# Build scaled features for LR
-val_feats_scaled = pd.DataFrame(
-    scaler.transform(X_val.fillna(MED)), columns=FEATURES, index=X_val.index
-)
-
-xgb_probs = xgb_model.predict_proba(X_val.fillna(MED))[:,1]
+xgb_probs = xgb_model.predict_proba(X_val_arr)[:,1]
 lr_probs  = lr_model.predict_proba(val_feats_scaled)[:,1]
 ens_probs = 0.80 * lr_probs + 0.20 * xgb_probs
 
-val_df = val_df.loc[X_val.index].copy()
+val_df = val[[DO_COL, TEMP_COL, 'bloom_28d', 'station_name', 'date']].reset_index(drop=True).copy()
 val_df['bloom_prob'] = ens_probs
 
 do_vals   = val_df[DO_COL].fillna(MED[DO_COL]).values
@@ -226,7 +224,7 @@ print(f"\nTotal station-days (2020-2022): {total_days:,}")
 print(f"High-risk days (S>0.45 & DO<6): {hr_days:,} ({hr_pct:.1f}%)")
 
 # Top 10 stations by high-risk days
-print("\n── Top 10 Stations by High-Risk Days ──────────────────────────────────")
+print("\n--Top 10 Stations by High-Risk Days ----------------------------------")
 stn_hr = (
     val_df.groupby('station_name')['high_risk']
     .sum()
@@ -238,7 +236,7 @@ stn_hr.columns = ['Station', 'High-Risk Days']
 print(stn_hr.to_string(index=False))
 
 # Top 5 months by mean aeration score
-print("\n── Top 5 Months by Mean Aeration Score ────────────────────────────────")
+print("\n--Top 5 Months by Mean Aeration Score --------------------------------")
 month_names = {1:'Jan',2:'Feb',3:'Mar',4:'Apr',5:'May',6:'Jun',
                7:'Jul',8:'Aug',9:'Sep',10:'Oct',11:'Nov',12:'Dec'}
 val_df['month_num'] = val_df['date'].dt.month
