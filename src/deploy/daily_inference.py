@@ -1,403 +1,259 @@
 """
-daily_inference.py
-------------------
-Scheduled script (run via cron at 6am daily) that:
-  1. Fetches the last 21 days of sensor data from CT DEEP LISICOS ERDDAP
-  2. Engineers features matching the trained XGBoost model
-  3. Runs inference on all stations
-  4. Computes aeration suitability score S for high-risk stations
-  5. Writes results to data/daily_predictions.csv
-  6. Sends an email alert if any station crosses intervention thresholds
+daily_inference.py (corrected)
+-------------------------------
+Fits the corrected LR (80%) + XGBoost (20%) ensemble on the training set
+(1993-2019) and runs historical inference on specified dates and on the
+full 2020-2022 validation period.
 
-Usage:
-    python daily_inference.py                  # Run for today
-    python daily_inference.py --date 2024-08-15  # Run for a specific date (backtesting)
-
-Cron (every day at 6am):
-    0 6 * * * /path/to/conda/envs/hab/bin/python /path/to/daily_inference.py
+Run from repo root:
+    python src/deploy/daily_inference.py
 """
 
-import argparse
-import smtplib
-import os
-from datetime import date, timedelta
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-
-import numpy as np
 import pandas as pd
-import requests
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import roc_auc_score
 import xgboost as xgb
-from dotenv import load_dotenv
 
-load_dotenv()
+# ── Load data ──────────────────────────────────────────────────────────────────
+print("Loading data/hab_features_daily.csv...")
+df = pd.read_csv("data/hab_features_daily.csv")
+df['date'] = pd.to_datetime(df['date'])
 
-# ---------------------------------------------------------------------------
-# Config
-# ---------------------------------------------------------------------------
-
-ERDDAP_BASE = "https://lisicos.uconn.edu/erddap/tabledap/dep_wq_data.csv"
-
-# All 50 CT DEEP stations with their coordinates
-STATIONS = {
-    # Lettered stations
-    "A2": (41.0830, -73.4560), "A4": (41.0170, -73.5780),
-    "B3": (41.0830, -73.1830), "C1": (41.1500, -72.9170),
-    "C2": (41.0830, -73.0000), "D3": (41.1170, -72.7500),
-    "E1": (41.1670, -72.5500), "F2": (41.0830, -72.7330),
-    "F3": (41.0178, -73.1445), "H2": (41.1000, -72.5170),
-    "H4": (41.0330, -72.5670), "H6": (41.0260, -72.9135),
-    "I2": (41.1375, -72.6550), "J2": (41.1170, -72.4170),
-    "J4": (41.0330, -72.4170), "K2": (41.1170, -72.2670),
-    "M3": (41.2372, -72.0533), "N3": (41.2833, -71.9833),
-    # Numeric stations
-    "01": (40.9633, -73.6237), "02": (40.9347, -73.6008),
-    "03": (40.9794, -73.5606), "04": (40.9378, -73.5194),
-    "05": (41.0093, -73.5136), "06": (40.9611, -73.4768),
-    "07": (40.9505, -73.4255), "08": (41.0408, -73.4180),
-    "09": (41.0708, -73.3362), "10": (40.9517, -73.3326),
-    "12": (41.1086, -73.2530), "13": (41.0583, -73.2343),
-    "14": (40.9915, -73.2188), "15": (40.9313, -73.2212),
-    "16": (41.1203, -73.1625), "18": (41.1223, -73.0900),
-    "19": (41.0553, -73.0808), "20": (40.9940, -73.0423),
-    "21": (41.1640, -73.0148), "22": (41.0823, -73.0229),
-    "23": (41.1402, -72.9488), "25": (40.9810, -72.9182),
-    "26": (41.2092, -72.9085), "27": (41.1587, -72.8495),
-    "28": (41.0782, -72.8335), "29": (41.2315, -72.8297),
-    "30": (41.1963, -72.7750), "31": (41.0042, -72.7683),
-    "32": (41.2415, -72.6657), "33": (41.0038, -72.6512),
-    "34": (41.2460, -72.4683), "36": (41.2705, -72.2755),
-}
-# Features the XGBoost model was trained on (must match exactly)
-FEATURES = [
-    'latitude', 'longitude', 'month',
-    'chl_anomaly', 'chl_climatology',
-    'chl_roll7_mean', 'chl_roll7_std',
-    'chl_lag3', 'chl_lag7', 'chl_lag14', 'chl_lag21',
-]
-
-# Full feature set used in SHAP/ablation (superset of above)
-FULL_FEATURES = FEATURES + [
-    'sea_water_temperature', 'sea_water_salinity',
-    'oxygen_concentration_in_sea_water', 'pH',
-]
-
-MODEL_PATH = "data/xgb_model.json"
-CLIMATOLOGY_PATH = "data/chl_climatology.csv"  # monthly mean CHL per station
-OUTPUT_PATH = "data/daily_predictions.csv"
-
-# Alert thresholds
-BLOOM_PROB_THRESHOLD = 0.70     # P(bloom) > 70% triggers alert
-AERATION_SCORE_THRESHOLD = 0.60  # S > 0.6 triggers intervention flag
-DO_HYPOXIA_THRESHOLD = 6.0       # mg/L — hypoxia threshold
-
-# Email config (set in .env)
-ALERT_EMAIL_FROM = os.getenv("ALERT_EMAIL_FROM")
-ALERT_EMAIL_TO = os.getenv("ALERT_EMAIL_TO", "ctdeep.hab@ct.gov")
-SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
-SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
-SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
-
-LOCAL_DATA_PATH = "data/hab_features_final.csv"
-
-
-# ---------------------------------------------------------------------------
-# Step 1: Fetch data from LISICOS ERDDAP
-# ---------------------------------------------------------------------------
-
-def fetch_local(station: str, end_date: date, n_days: int = 21) -> pd.DataFrame:
-    """
-    Read the last n_days of data for a station from the local CSV
-    instead of hitting ERDDAP directly.
-    """
-    # Load once and cache globally to avoid re-reading for every station
-    global _local_df
-    if '_local_df' not in globals():
-        print("  Loading local data file...")
-        _local_df = pd.read_csv(LOCAL_DATA_PATH, low_memory=False)
-        _local_df['date'] = pd.to_datetime(_local_df['date'])
-
-    start_ts = pd.Timestamp(end_date - timedelta(days=n_days))
-    end_ts = pd.Timestamp(end_date)
-
-    mask = (
-        (_local_df['station_name'] == station) &
-        (_local_df['date'] >= start_ts) &
-        (_local_df['date'] <= end_ts) &
-        (_local_df['depth_code'] == 'S')
+# Recompute rolling features and bloom label for consistency
+for n, min_p in [(3, 2), (6, 3), (9, 5)]:
+    df[f'chl_roll{n}_mean'] = (
+        df.groupby('station_name')['Chlorophyll']
+        .transform(lambda x: x.rolling(n, min_periods=min_p).mean())
     )
-    subset = _local_df[mask].copy()
+df['chl_trend'] = (
+    df.groupby('station_name')['Chlorophyll']
+    .transform(lambda x: x.rolling(4, min_periods=3)
+               .apply(lambda v: np.polyfit(range(len(v)), v, 1)[0]))
+)
+df['bloom_28d'] = 0
+for station, grp in df.groupby('station_name'):
+    idx = grp.index
+    dates = grp['date'].values
+    chl = grp['Chlorophyll'].values
+    labels = np.zeros(len(grp), dtype=int)
+    for i in range(len(grp)):
+        mask = (dates > dates[i]) & (dates <= dates[i] + np.timedelta64(28, 'D'))
+        if mask.any() and (chl[mask] > 10).any():
+            labels[i] = 1
+    df.loc[idx, 'bloom_28d'] = labels
 
-    # Rename columns to match what engineer_features expects
-    subset = subset.rename(columns={
-        'Chlorophyll': 'Chlorophyll',
-        'sea_water_temperature': 'sea_water_temperature',
-        'sea_water_salinity': 'sea_water_salinity',
-        'oxygen_concentration_in_sea_water': 'oxygen_concentration_in_sea_water',
-        'pH': 'pH',
-    })
+# ── Feature set ────────────────────────────────────────────────────────────────
+FEATURES = [
+    'Chlorophyll', 'chl_lag1', 'chl_lag2', 'chl_lag3', 'chl_lag4',
+    'chl_roll3_mean', 'chl_roll6_mean', 'chl_roll9_mean', 'chl_trend',
+    'chl_anomaly', 'chl_climatology',
+    'do_lag1', 'temp_lag1', 'sal_lag1',
+    'sea_water_temperature', 'sea_water_salinity',
+    'oxygen_concentration_in_sea_water',
+    'month', 'latitude_x', 'longitude_x',
+    'nox_lag2', 'dip_lag2', 'dip_change', 'dip_x_month',
+    'neighbor_chl3_mean', 'neighbor_chl3_lag1',
+]
+FEATURES = [f for f in FEATURES if f in df.columns]
 
-    subset = subset.groupby('date').mean(numeric_only=True).reset_index()
-    return subset.sort_values('date').reset_index(drop=True)
+DO_COL   = 'oxygen_concentration_in_sea_water'
+TEMP_COL = 'sea_water_temperature'
 
-# ---------------------------------------------------------------------------
-# Step 2: Feature engineering
-# ---------------------------------------------------------------------------
+# ── Temporal splits ────────────────────────────────────────────────────────────
+train = df[df['date'].dt.year <= 2019]
+val   = df[(df['date'].dt.year >= 2020) & (df['date'].dt.year <= 2022)]
+test  = df[df['date'].dt.year >= 2023]
 
-def load_climatology() -> pd.DataFrame:
+X_train = train[FEATURES].copy()
+y_train = train['bloom_28d'].copy()
+X_val   = val[FEATURES].copy()
+y_val   = val['bloom_28d'].copy()
+X_test  = test[FEATURES].copy()
+y_test  = test['bloom_28d'].copy()
+
+MED = X_train.median()
+
+# ── Fit ensemble: LR 80% + XGBoost 20% ────────────────────────────────────────
+print("\nFitting ensemble (LR 80% + XGBoost 20%) on train set 1993-2019...")
+
+# XGBoost
+pos_weight = (y_train == 0).sum() / (y_train == 1).sum()
+xgb_model = xgb.XGBClassifier(
+    n_estimators=200, max_depth=6, learning_rate=0.1,
+    scale_pos_weight=pos_weight, eval_metric='auc',
+    random_state=42, verbosity=0,
+)
+xgb_model.fit(
+    X_train.fillna(MED), y_train,
+    eval_set=[(X_val.fillna(MED), y_val)],
+    verbose=False,
+)
+
+# Logistic Regression
+scaler = StandardScaler()
+X_tr_s = pd.DataFrame(scaler.fit_transform(X_train.fillna(MED)), columns=FEATURES)
+X_v_s  = pd.DataFrame(scaler.transform(X_val.fillna(MED)),       columns=FEATURES)
+X_te_s = pd.DataFrame(scaler.transform(X_test.fillna(MED)),      columns=FEATURES)
+
+lr_model = LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)
+lr_model.fit(X_tr_s, y_train)
+
+# Validate
+xgb_val_p  = xgb_model.predict_proba(X_val.fillna(MED))[:,1]
+lr_val_p   = lr_model.predict_proba(X_v_s)[:,1]
+ens_val    = 0.80 * lr_val_p + 0.20 * xgb_val_p
+
+xgb_test_p = xgb_model.predict_proba(X_test.fillna(MED))[:,1]
+lr_test_p  = lr_model.predict_proba(X_te_s)[:,1]
+ens_test   = 0.80 * lr_test_p + 0.20 * xgb_test_p
+
+print(f"Ensemble Val AUC  (2020-2022): {roc_auc_score(y_val,  ens_val):.3f}")
+print(f"Ensemble Test AUC (2023-2025): {roc_auc_score(y_test, ens_test):.3f}")
+
+# ── Aeration score formula ─────────────────────────────────────────────────────
+# S = 0.45*(14-DO)/12 + 0.30*(T-10)/20 + 0.25*p
+# High-risk: S > 0.45 AND DO < 6.0 mg/L
+
+def calc_aeration_score(do, temp, bloom_prob):
+    do_term   = np.clip((14.0 - do)   / 12.0, 0.0, 1.0)
+    temp_term = np.clip((temp - 10.0) / 20.0, 0.0, 1.0)
+    return 0.45 * do_term + 0.30 * temp_term + 0.25 * np.clip(bloom_prob, 0.0, 1.0)
+
+
+# ── run_inference: single station/date lookup ──────────────────────────────────
+def run_inference(station, date_str):
     """
-    Load the monthly chlorophyll climatology (mean CHL per station per month).
-    Built once from historical data; used to compute chl_anomaly.
+    Look up the row nearest to date_str for the given station and return
+    bloom_prob, DO, temperature, and aeration_score S.
     """
-    return pd.read_csv(CLIMATOLOGY_PATH)
-
-
-def engineer_features(raw: pd.DataFrame, station: str,
-                      lat: float, lon: float,
-                      climatology: pd.DataFrame,
-                      target_date: date) -> dict | None:
-    if raw.empty:
+    target_date = pd.to_datetime(date_str)
+    stn_df = df[df['station_name'] == station].copy()
+    if stn_df.empty:
         return None
 
-    raw = raw.sort_values('date').copy()
+    diffs = (stn_df['date'] - target_date).abs()
+    row = stn_df.loc[diffs.idxmin()]
 
-    # Get the most recent reading available
-    latest = raw.iloc[-1]
-    month = target_date.month
+    feat_vals = row[FEATURES].fillna(MED)
+    feat_arr  = feat_vals.values.reshape(1, -1)
 
-    # Chlorophyll series — don't reindex to daily, just work with what we have
-    chl_vals = raw['Chlorophyll'].dropna()
-    if len(chl_vals) < 1:
-        return None
+    xgb_p = xgb_model.predict_proba(feat_arr)[0, 1]
+    lr_p  = lr_model.predict_proba(scaler.transform(feat_arr))[0, 1]
+    bloom_prob = 0.80 * lr_p + 0.20 * xgb_p
 
-    # Current chlorophyll = most recent reading
-    chl_current = float(latest['Chlorophyll']) if not pd.isna(latest['Chlorophyll']) else float(chl_vals.iloc[-1])
+    do   = row[DO_COL]   if not pd.isna(row[DO_COL])   else MED[DO_COL]
+    temp = row[TEMP_COL] if not pd.isna(row[TEMP_COL]) else MED[TEMP_COL]
 
-    # Climatology lookup
-    clim_row = climatology[
-        (climatology['station_name'] == station) &
-        (climatology['month'] == month)
-    ]
-    chl_climatology = float(clim_row['chl_mean'].values[0]) if len(clim_row) else np.nan
-    chl_anomaly = chl_current - chl_climatology if not np.isnan(chl_climatology) else np.nan
+    S = calc_aeration_score(float(do), float(temp), bloom_prob)
+    raw_do = row[DO_COL]  # use original (may be NaN) for high-risk flag
+    high_risk = (S > 0.45) and (not pd.isna(raw_do)) and (float(raw_do) < 6.0)
 
-    # Rolling stats — just use available readings
-    chl_roll7_mean = float(chl_vals.mean())
-    chl_roll7_std = float(chl_vals.std()) if len(chl_vals) > 1 else 0.0
-
-    # Lag features — find closest reading to each lag target date
-    def lag_closest(lag_days):
-        target = pd.Timestamp(target_date - timedelta(days=lag_days))
-        if raw.empty:
-            return np.nan
-        diffs = (raw['date'] - target).abs()
-        closest_idx = diffs.idxmin()
-        # Only use if within 7 days of the target lag
-        if diffs[closest_idx].days > 7:
-            return np.nan
-        val = raw.loc[closest_idx, 'Chlorophyll']
-        return float(val) if not pd.isna(val) else np.nan
-
-    features = {
-        'station_name': station,
-        'date': target_date,
-        'latitude': lat,
-        'longitude': lon,
-        'month': month,
-        'chl_climatology': chl_climatology,
-        'chl_anomaly': chl_anomaly,
-        'chl_roll7_mean': chl_roll7_mean,
-        'chl_roll7_std': chl_roll7_std,
-        'chl_lag3':  lag_closest(3),
-        'chl_lag7':  lag_closest(7),
-        'chl_lag14': lag_closest(14),
-        'chl_lag21': lag_closest(21),
-        'sea_water_temperature': float(latest['sea_water_temperature']) if not pd.isna(latest['sea_water_temperature']) else np.nan,
-        'sea_water_salinity': float(latest['sea_water_salinity']) if not pd.isna(latest.get('sea_water_salinity', np.nan)) else np.nan,
-        'oxygen_concentration_in_sea_water': float(latest['oxygen_concentration_in_sea_water']) if not pd.isna(latest['oxygen_concentration_in_sea_water']) else np.nan,
-        'pH': float(latest['pH']) if not pd.isna(latest['pH']) else np.nan,
+    return {
+        'actual_date': row['date'].strftime('%Y-%m-%d'),
+        'bloom_prob':      round(bloom_prob, 4),
+        'DO':              round(float(do), 2),
+        'temp':            round(float(temp), 2),
+        'aeration_score':  round(S, 4),
+        'high_risk':       high_risk,
     }
 
-    # Need at least the core features to be non-NaN
-    core = ['chl_roll7_mean', 'chl_climatology', 'chl_anomaly']
-    if any(np.isnan(features[f]) for f in core):
-        return None
 
-    return features
+# ── Specific historical validation dates ──────────────────────────────────────
+VALIDATION_DATES = [
+    ('A4', '2022-09-01'),
+    ('A4', '2022-08-17'),
+    ('A4', '2021-08-31'),
+    ('A4', '2017-08-15'),
+]
 
-# ---------------------------------------------------------------------------
-# Step 3: Aeration suitability score
-# ---------------------------------------------------------------------------
+print("\n" + "="*80)
+print("SPECIFIC DATE INFERENCE")
+print("="*80)
+header = f"{'Date':<12} {'Station':<10} {'Bloom Prob':>10} {'DO':>6} {'Temp':>6} {'Aeration S':>11} {'High Risk?':>10}"
+print(header)
+print("-" * len(header))
 
-def aeration_score(do: float, temp: float, bloom_prob: float) -> float:
-    if np.isnan(do) or do <= 0:
-        return np.nan
-    # DO term: 0 at DO=14, 1 at DO=2
-    do_term = np.clip((14 - do) / 12, 0, 1)
-    # Temp term: 0 at 10C, 1 at 30C
-    t_norm = np.clip((temp - 10) / 20, 0, 1) if not np.isnan(temp) else 0.5
-    S = 0.45 * do_term + 0.30 * t_norm + 0.25 * bloom_prob
-    return float(np.clip(S, 0, 1))
-
-def intervention_flag(bloom_prob: float, S: float, do: float) -> bool:
-    """Returns True if all three intervention criteria are met."""
-    return (
-        bloom_prob > BLOOM_PROB_THRESHOLD and
-        S > AERATION_SCORE_THRESHOLD and
-        not np.isnan(do) and do < DO_HYPOXIA_THRESHOLD
+for station, date_str in VALIDATION_DATES:
+    result = run_inference(station, date_str)
+    if result is None:
+        print(f"{date_str:<12} {station:<10}  -- station not found")
+        continue
+    hr_str = "YES *" if result['high_risk'] else "no"
+    print(
+        f"{result['actual_date']:<12} {station:<10} "
+        f"{result['bloom_prob']:>10.3f} "
+        f"{result['DO']:>6.2f} "
+        f"{result['temp']:>6.1f} "
+        f"{result['aeration_score']:>11.4f} "
+        f"{hr_str:>10}"
     )
 
+# ── Full validation period analysis (2020-2022) ───────────────────────────────
+print("\n" + "="*80)
+print("FULL VAL PERIOD ANALYSIS (2020-2022)")
+print("="*80)
 
-# ---------------------------------------------------------------------------
-# Step 4: Send email alert
-# ---------------------------------------------------------------------------
+val_df = val.copy().reset_index(drop=True)
 
-def send_alert(alerts: pd.DataFrame, run_date: date):
-    """Send an HTML email alert to CT DEEP for stations flagging intervention."""
-    if not ALERT_EMAIL_FROM or not SMTP_PASSWORD:
-        print("[INFO] Email not configured — printing alert to console instead.")
-        print(alerts.to_string())
-        return
+# Build scaled features for LR
+val_feats_scaled = pd.DataFrame(
+    scaler.transform(X_val.fillna(MED)), columns=FEATURES, index=X_val.index
+)
 
-    subject = f"HAB Alert: {len(alerts)} Station(s) Flagged — {run_date}"
+xgb_probs = xgb_model.predict_proba(X_val.fillna(MED))[:,1]
+lr_probs  = lr_model.predict_proba(val_feats_scaled)[:,1]
+ens_probs = 0.80 * lr_probs + 0.20 * xgb_probs
 
-    rows = ""
-    for _, row in alerts.iterrows():
-        rows += f"""
-        <tr>
-            <td><b>{row['station_name']}</b></td>
-            <td>{row['bloom_prob']:.0%}</td>
-            <td>{row['aeration_score']:.2f}</td>
-            <td>{row['do']:.2f} mg/L</td>
-            <td>{row['temp']:.1f} °C</td>
-            <td style="color:#c0392b"><b>INTERVENE</b></td>
-        </tr>"""
+val_df = val_df.loc[X_val.index].copy()
+val_df['bloom_prob'] = ens_probs
 
-    html = f"""
-    <html><body>
-    <h2 style="font-family:sans-serif">🌊 HAB Early Warning System — {run_date}</h2>
-    <p style="font-family:sans-serif">
-        The following station(s) have crossed all three intervention thresholds:<br>
-        Bloom probability &gt; {BLOOM_PROB_THRESHOLD:.0%} AND
-        Aeration score &gt; {AERATION_SCORE_THRESHOLD} AND
-        DO &lt; {DO_HYPOXIA_THRESHOLD} mg/L
-    </p>
-    <table border="1" cellpadding="6" style="font-family:monospace;border-collapse:collapse">
-        <tr style="background:#2c3e50;color:white">
-            <th>Station</th><th>Bloom P</th><th>S Score</th>
-            <th>DO</th><th>Temp</th><th>Action</th>
-        </tr>
-        {rows}
-    </table>
-    <p style="font-family:sans-serif;font-size:12px;color:#888">
-        Full predictions: data/daily_predictions.csv<br>
-        HAB Bloom Predictor — Vihaan Goyal, Westhill High School
-    </p>
-    </body></html>"""
+do_vals   = val_df[DO_COL].fillna(MED[DO_COL]).values
+temp_vals = val_df[TEMP_COL].fillna(MED[TEMP_COL]).values
+val_df['aeration_score'] = calc_aeration_score(do_vals, temp_vals, ens_probs)
 
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = subject
-    msg["From"] = ALERT_EMAIL_FROM
-    msg["To"] = ALERT_EMAIL_TO
-    msg.attach(MIMEText(html, "html"))
+val_df['high_risk'] = (
+    (val_df['aeration_score'] > 0.45) &
+    (val_df[DO_COL] < 6.0)
+)
 
-    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
-        server.starttls()
-        server.login(ALERT_EMAIL_FROM, SMTP_PASSWORD)
-        server.sendmail(ALERT_EMAIL_FROM, ALERT_EMAIL_TO, msg.as_string())
+total_days  = len(val_df)
+hr_days     = val_df['high_risk'].sum()
+hr_pct      = hr_days / total_days * 100
 
-    print(f"[INFO] Alert email sent to {ALERT_EMAIL_TO}")
+print(f"\nTotal station-days (2020-2022): {total_days:,}")
+print(f"High-risk days (S>0.45 & DO<6): {hr_days:,} ({hr_pct:.1f}%)")
 
+# Top 10 stations by high-risk days
+print("\n── Top 10 Stations by High-Risk Days ──────────────────────────────────")
+stn_hr = (
+    val_df.groupby('station_name')['high_risk']
+    .sum()
+    .sort_values(ascending=False)
+    .head(10)
+    .reset_index()
+)
+stn_hr.columns = ['Station', 'High-Risk Days']
+print(stn_hr.to_string(index=False))
 
-# ---------------------------------------------------------------------------
-# Main pipeline
-# ---------------------------------------------------------------------------
+# Top 5 months by mean aeration score
+print("\n── Top 5 Months by Mean Aeration Score ────────────────────────────────")
+month_names = {1:'Jan',2:'Feb',3:'Mar',4:'Apr',5:'May',6:'Jun',
+               7:'Jul',8:'Aug',9:'Sep',10:'Oct',11:'Nov',12:'Dec'}
+val_df['month_num'] = val_df['date'].dt.month
+month_aer = (
+    val_df.groupby('month_num')['aeration_score']
+    .mean()
+    .sort_values(ascending=False)
+    .head(5)
+    .reset_index()
+)
+month_aer['Month'] = month_aer['month_num'].map(month_names)
+month_aer = month_aer[['Month', 'aeration_score']].rename(
+    columns={'aeration_score': 'Mean Aeration Score'}
+)
+print(month_aer.to_string(index=False))
 
-def run(target_date: date):
-    print(f"\n{'='*60}")
-    print(f"HAB Daily Inference — {target_date}")
-    print(f"{'='*60}")
-
-    # Load model and climatology
-    print("Loading model...")
-    model = xgb.XGBClassifier()
-    model.load_model(MODEL_PATH)
-
-    print("Loading climatology...")
-    climatology = load_climatology()
-
-    # Collect features for all stations
-    records = []
-    for station, (lat, lon) in STATIONS.items():
-        print(f"  Fetching {station}...", end=" ")
-        raw = fetch_local(station, target_date, n_days=60)
-        feats = engineer_features(raw, station, lat, lon, climatology, target_date)
-        if feats is None:
-            print("insufficient data — skipped")
-            continue
-        records.append(feats)
-        print("ok")
-
-    if not records:
-        print("[ERROR] No stations returned usable data.")
-        return
-
-    df = pd.DataFrame(records)
-
-    # Run inference
-    X = df[FEATURES].copy()
-    missing_mask = X.isna().any(axis=1)
-    if missing_mask.any():
-        print(f"[WARN] {missing_mask.sum()} stations have missing features — imputing with column median")
-        X = X.fillna(X.median())
-
-    df['bloom_prob'] = model.predict_proba(X.values)[:, 1]
-
-    # Compute aeration scores
-    df['do'] = df['oxygen_concentration_in_sea_water']
-    df['temp'] = df['sea_water_temperature']
-    df['aeration_score'] = df.apply(
-        lambda r: aeration_score(r['do'], r['temp'], r['bloom_prob']), axis=1
-    )
-    df['intervene'] = df.apply(
-        lambda r: intervention_flag(r['bloom_prob'], r['aeration_score'], r['do']), axis=1
-    )
-
-    # Save full results
-    out_cols = ['station_name', 'date', 'latitude', 'longitude',
-                'bloom_prob', 'aeration_score', 'do', 'temp',
-                'sea_water_salinity', 'pH', 'intervene']
-    df[out_cols].to_csv(OUTPUT_PATH, index=False)
-    print(f"\nSaved predictions to {OUTPUT_PATH}")
-
-    # Print summary
-    print(f"\nResults summary:")
-    print(f"  Stations processed: {len(df)}")
-    print(f"  High-risk (P > 0.70): {(df['bloom_prob'] > BLOOM_PROB_THRESHOLD).sum()}")
-    print(f"  Intervention flagged: {df['intervene'].sum()}")
-
-    top5 = df.nlargest(5, 'bloom_prob')[['station_name', 'bloom_prob', 'aeration_score', 'do', 'intervene']]
-    print(f"\nTop 5 stations by bloom probability:")
-    print(top5.to_string(index=False))
-
-    # Send alert if any stations flagged
-    alerts = df[df['intervene']][out_cols]
-    if len(alerts) > 0:
-        print(f"\n[ALERT] {len(alerts)} station(s) crossed intervention thresholds!")
-        send_alert(alerts, target_date)
-    else:
-        print("\n[OK] No stations require intervention today.")
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="HAB daily inference pipeline")
-    parser.add_argument("--date", type=str, default=None,
-                        help="Target date (YYYY-MM-DD). Defaults to today.")
-    args = parser.parse_args()
-
-    if args.date:
-        target = date.fromisoformat(args.date)
-    else:
-        target = date.today()
-
-    run(target)
+print(f"\nTotal high-risk station-days: {hr_days:,} out of {total_days:,} "
+      f"({hr_pct:.1f}%)")

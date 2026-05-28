@@ -20,9 +20,6 @@ FEATURES = [
     'chl_anomaly', 'chl_climatology',
     'chl_lag3', 'chl_lag7', 'chl_lag14', 'chl_lag21',
     'chl_roll7_mean', 'chl_roll7_std',
-    'total_discharge_cfs', 'discharge_lag5',
-    'discharge_lag10', 'discharge_lag15',
-    'discharge_roll7_mean',
 ]
 
 TARGET = 'bloom_7d_ahead'
