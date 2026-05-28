@@ -280,7 +280,7 @@ print(f"\nTotal station-days in intervention period : {n_total_station_days:,}")
 print(f"High-risk station-days (S>0.45 & DO<6)    : {n_high:,} ({pct_high:.1f}%)")
 
 # Per-station table
-print("\n── Per-Station Summary (top 15 by high-risk days) ──────────────────────")
+print("\n-- Per-Station Summary (top 15 by high-risk days) " + "-" * 22)
 stn_summ = (
     intervention_df.groupby(STATION_COL)
     .agg(
@@ -306,7 +306,7 @@ print(stn_summ.rename(columns={
 }).to_string(index=False))
 
 # Per-month table
-print("\n── Per-Month Summary ────────────────────────────────────────────────────")
+print("\n-- Per-Month Summary " + "-" * 52)
 month_names_map = {1:'Jan',2:'Feb',3:'Mar',4:'Apr',5:'May',6:'Jun',
                    7:'Jul',8:'Aug',9:'Sep',10:'Oct',11:'Nov',12:'Dec'}
 month_summ = (

@@ -17,6 +17,12 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_auc_score
 import xgboost as xgb
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--date', type=str, default='2022-09-01')
+args = parser.parse_args()
+TARGET_DATE = args.date
 
 # --Load data ------------------------------------------------------------------
 print("Loading data/hab_features_daily.csv...")
@@ -255,3 +261,31 @@ print(month_aer.to_string(index=False))
 
 print(f"\nTotal high-risk station-days: {hr_days:,} out of {total_days:,} "
       f"({hr_pct:.1f}%)")
+
+# -- Save daily_predictions.csv for dashboard ---------------------------------
+print("\nSaving data/daily_predictions.csv...")
+
+# Run inference on the requested date across all stations
+TARGET_DATE
+all_stations = df['station_name'].unique()
+
+rows = []
+for stn in all_stations:
+    result = run_inference(stn, TARGET_DATE)
+    if result is None:
+        continue
+    action = "Intervene" if result['high_risk'] else (
+             "Monitor" if result['bloom_prob'] > 0.4 else "OK")
+    rows.append({
+        'station_name':  stn,
+        'date':          TARGET_DATE,
+        'bloom_prob':    result['bloom_prob'],
+        'aeration_score': result['aeration_score'],
+        'do':        result['DO'],
+        'temp':        result['temp'],
+        'action':        action,
+    })
+
+out_df = pd.DataFrame(rows).sort_values('bloom_prob', ascending=False)
+out_df.to_csv("data/daily_predictions.csv", index=False)
+print(f"Saved {len(out_df)} stations to data/daily_predictions.csv")
