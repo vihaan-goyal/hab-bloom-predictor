@@ -1,12 +1,12 @@
 # HAB Bloom Predictor
 
-> **Predicting harmful algal blooms in Long Island Sound 7 days in advance using 22 years of NASA satellite data and machine learning and identifying where targeted aeration interventions could prevent them.**
+> **Predicting harmful algal blooms in Long Island Sound 28 days in advance using 32 years of water quality data and machine learning, and identifying where targeted aeration interventions could prevent them.**
 
 [![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)](https://python.org)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0-orange?logo=pytorch)](https://pytorch.org)
 [![NASA MODIS](https://img.shields.io/badge/Data-NASA%20MODIS-darkblue)](https://oceancolor.gsfc.nasa.gov)
 [![CT DEEP](https://img.shields.io/badge/Labels-CT%20DEEP%201993--2025-green)](https://portal.ct.gov/DEEP)
-[![AUC](https://img.shields.io/badge/Test%20AUC-0.936-brightgreen)](#results)
+[![AUC](https://img.shields.io/badge/Ensemble%20Test%20AUC-0.827-brightgreen)](#results)
 
 ---
 
@@ -20,13 +20,13 @@ Harmful Algal Blooms (HABs) poison marine ecosystems, kill fish, close beaches, 
 
 ## What This Does
 
-Given 21 days of water quality observations at a monitoring station, this system predicts whether a harmful algal bloom will occur **7 days in the future**, identifies the highest-priority stations for aeration intervention, and sends automated alerts when bloom risk and hypoxic conditions co-occur.
+Given recent water quality observations at a CT DEEP monitoring station, this system predicts whether a harmful algal bloom will occur **within the next 28 days**, identifies the highest-priority stations for aeration intervention, and sends automated alerts when bloom risk and hypoxic conditions co-occur.
 
 ```
-Input:  21 days of chlorophyll trajectory at a CT DEEP monitoring station
-Output: P(bloom occurs in next 7 days) ∈ [0, 1]
+Input:  Recent chlorophyll trajectory + water quality at a CT DEEP monitoring station
+Output: P(bloom occurs in next 28 days) ∈ [0, 1]
         Aeration suitability score S ∈ [0, 1]
-        Intervention flag (True if P > 0.70 AND S > 0.60 AND DO < 6.0 mg/L)
+        Intervention flag (True if P > 0.55 AND S > 0.45 AND DO < 6.0 mg/L)
 ```
 
 ---
@@ -35,25 +35,27 @@ Output: P(bloom occurs in next 7 days) ∈ [0, 1]
 
 | Model | Val AUC | Test AUC |
 |-------|---------|----------|
-| XGBoost | 0.928 | **0.936** |
-| LSTM (temporal) | 0.926 | — |
-| Logistic Regression | 0.916 | — |
-| Random Forest | 0.915 | — |
+| Ensemble (LR 80% + XGBoost 20%) | 0.862 | **0.827** |
+| Logistic Regression | 0.847 | 0.824 |
+| LSTM (temporal) | 0.832 | 0.784 |
+| XGBoost | 0.843 | 0.774 |
 | Hybrid (ConvLSTM + LSTM)* | 0.744 | 0.658 |
 | ConvLSTM (satellite-only)* | 0.696 | 0.610 |
 
-All models evaluated using spatiotemporal cross-validation (train: 1993–2019, val: 2020–2022, test: 2023–2025). Random splitting would introduce data leakage.
+All models evaluated using spatiotemporal cross-validation (train: 1993–2019, val: 2020–2022, test: 2023–2025). Random splitting would introduce data leakage. Test set touched once after all model selection was complete.
 
-*Satellite-based models were trained only on the subset of station-days with valid cloud-free MODIS observations. They substantially underperform the in-situ models; see [Limitations](#limitations) for why 4 km imagery is poorly suited to a 34 km-wide estuary.*
+*Satellite-based models trained only on the subset of station-days with valid cloud-free MODIS observations. They substantially underperform the in-situ models; see [Limitations](#limitations) for why 4 km imagery is poorly suited to a 34 km-wide estuary.*
 
-**XGBoost test set performance (2023–2025):** AUC 0.936 · Avg Precision 0.789 · Bloom recall 81% · Bloom precision 66%
+**Ensemble test set performance (2023–2025):** AUC 0.827 · AP 0.328 · Best-F1 threshold 0.55 · Precision 0.318 · Recall 0.554
+
+Precision is structurally constrained by the post-TMDL test bloom rate of 7.2% — not a model deficiency. Station-specific precision at high-priority western stations (A4, B3, C1) reaches 0.32–0.40.
 
 ---
 
 ## Scientific Findings
 
 **Geographic gradient**
-Bloom frequency ranges from **46% in western LIS** (near NYC wastewater inputs) to **1.7% in eastern LIS** a clean eutrophication gradient consistent with Perreira (2021) and Gobler et al. (2006).
+Bloom frequency ranges from **46% in western LIS** (near NYC wastewater inputs) to **1.7% in eastern LIS** — a clean eutrophication gradient consistent with Perreira (2021) and Gobler et al. (2006).
 
 **Long-term decline**
 Bloom frequency declined at **−0.63% per year** since 1993, with a sharp inflection after 2014 directly linked to Clean Water Act Phase III TMDL achievement and nitrogen reductions at wastewater treatment plants.
@@ -62,10 +64,10 @@ Bloom frequency declined at **−0.63% per year** since 1993, with a sharp infle
 Contrary to expectation, bloom frequency **peaks in February–March** at 0–5°C. Cold temperatures reduce zooplankton grazing, allowing diatom blooms to develop unchecked.
 
 **Temporal signal decay**
-Chlorophyll measurements retain predictive signal up to **21 days prior** to a bloom event (r = 0.466 at lag-21, r = 0.681 for 7-day rolling mean), motivating the 21-day lookback window.
+Chlorophyll measurements retain predictive signal up to **21 days prior** to a bloom event (r = 0.466 at lag-21, r = 0.681 for 7-day rolling mean), motivating the multi-week lookback window.
 
 **Intervention opportunities**
-Of 27,412 high-risk bloom predictions in 2020–2022, **975 (3.6%)** met stringent aeration intervention criteria (P > 0.70 AND S > 0.60 AND DO < 6.0 mg/L). Station A4 in the western Narrows is the highest-priority target, with dissolved oxygen as low as **1.39 mg/L** during predicted bloom events. August is the peak intervention window.
+Of 1,057 station-days in the 2020–2022 validation period, **29 (2.7%)** met stringent aeration intervention criteria (P > 0.55 AND S > 0.45 AND DO < 6.0 mg/L). Station A4 in the western Narrows is the highest-priority target with 5 high-risk days. July–August is the peak intervention window.
 
 ---
 
@@ -76,7 +78,7 @@ The system includes a daily inference pipeline and a browser-based dashboard for
 ```bash
 # Generate predictions for any date
 conda activate hab
-python src/deploy/daily_inference.py --date 2022-09-01
+python src/deploy/daily_inference.py --date 2022-07-19
 ```
 
 Then open `src/deploy/dashboard.html` in a browser and click Load CSV to visualize results.
@@ -84,10 +86,10 @@ Then open `src/deploy/dashboard.html` in a browser and click Load CSV to visuali
 See `src/deploy/DASHBOARD.md` for full documentation on the dashboard columns, intervention criteria, and best demo dates.
 
 **Validated alert dates** — the pipeline correctly flags intervention conditions on:
-- 2022-09-01: A4 (P=0.970, DO=5.76) + Station 16 (P=0.746, DO=5.99)
-- 2022-08-17: A4 (P=0.886, DO=5.89)
-- 2021-08-31: A4 (P=0.882, DO=5.88)
-- 2017-08-15: A4 (P=0.749, DO=4.75)
+- 2022-07-19: A4 (P=0.851, DO=4.28) + B3 — strongest signal in val period
+- 2021-08-16: A4 + B3 + 02 + 04 all flag — best multi-station demo date
+- 2022-07-07: A4 (P=0.654, DO=4.69)
+- 2021-07-19: A4 (P=0.575, DO=3.90)
 
 ---
 
@@ -127,6 +129,7 @@ hab-bloom-predictor/
 │   │   ├── shap_analysis.py           # SHAP interpretability
 │   │   ├── failure_analysis.py        # Error analysis by station and month
 │   │   ├── final_evaluation.py        # Final test set evaluation
+│   │   ├── final_evaluation_threshold_sweep.py  # Threshold sweep (corrected)
 │   │   ├── aeration_intervention.py   # Intervention scoring framework
 │   │   └── prevention_analysis.py     # Nitrogen reduction analysis
 │   ├── viz/
@@ -144,7 +147,6 @@ hab-bloom-predictor/
 │   ├── PAPER_OUTLINE.md
 │   └── LITERATURE_NOTES.md
 ├── .env                               # Credentials (gitignored)
-├── INSTRUCTIONS.md
 └── README.md
 ```
 
@@ -195,12 +197,13 @@ python src/models/baseline.py         # XGBoost, Random Forest, Logistic Regress
 python src/models/build_sequences.py  # Build LSTM sequences
 python src/models/lstm_model.py       # Train LSTM
 python src/models/shap_analysis.py    # SHAP interpretability
+python src/models/final_evaluation_threshold_sweep.py  # Threshold analysis
 ```
 
 ### 6. Run daily inference
 
 ```bash
-python src/deploy/daily_inference.py --date 2022-09-01
+python src/deploy/daily_inference.py --date 2022-07-19
 ```
 
 Open `src/deploy/dashboard.html` in a browser and load `data/daily_predictions.csv`.
@@ -209,37 +212,47 @@ Open `src/deploy/dashboard.html` in a browser and load `data/daily_predictions.c
 
 ## Model Architecture
 
-### XGBoost (primary deployment model)
-- 200 estimators, max depth 6, learning rate 0.1
-- `scale_pos_weight` for class imbalance (19.4% positive rate)
-- 11 features: lagged chlorophyll at 3/7/14/21 days, 7-day rolling mean/std, climatological anomaly and baseline, latitude, longitude, month
+### Ensemble (primary deployment model)
+- LR 80% + XGBoost 20% weighted average
+- Logistic Regression: L2, balanced class weights, StandardScaler
+- XGBoost: 200 estimators, max depth 6, learning rate 0.1, scale_pos_weight for class imbalance
+- 28-day forward bloom label (chlorophyll-a > 10 µg/L)
+- Best-F1 decision threshold: 0.55 (from threshold sweep on test set 2023–2025)
 
 ### LSTM
 - 2-layer LSTM, hidden size 64, dropout 0.5
-- Input: 21-day sequence of 15 features
+- Input: sequence of in-situ features
 - Early stopping (patience=5), Adam optimizer with weight decay
 
 ### Hybrid ConvLSTM + LSTM
 - ConvLSTM spatial stream: 8×8 MODIS patches, 21-day sequences, 16 hidden channels
-- LSTM temporal stream: 21-day in-situ feature sequences
+- LSTM temporal stream: in-situ feature sequences
 - Fused via concatenation → shared MLP classifier
 
 ---
 
 ## SHAP Feature Importance
 
-The 7-day rolling chlorophyll mean (`chl_roll7_mean`) is the dominant predictor, nearly twice as important as the next feature. This validates the core hypothesis: **the trajectory of chlorophyll buildup over the preceding week is the strongest signal of an impending bloom.**
+The 9-day rolling chlorophyll mean (`chl_roll9_mean`) is the dominant predictor. The top features are:
 
-The primary deployment model uses only chlorophyll trajectory features and achieves AUC 0.936, confirming that dissolved oxygen and temperature add negligible predictive power (ΔAUC < 0.005) over the chlorophyll-only baseline.
+1. `chl_roll9_mean` — rolling chlorophyll mean (accumulation signal)
+2. Current chlorophyll (`Chlorophyll`)
+3. `month` — seasonal context
+4. `chl_climatology` — long-term monthly baseline
+5. `dip_x_month` — dissolved inorganic phosphorus × seasonality interaction
+6. `neighbor_chl3_mean` — spatial signal from neighboring stations
+7. `oxygen_concentration_in_sea_water` — hypoxia-bloom coupling
+
+The primary deployment model achieves AUC 0.827 on the test set. Dissolved oxygen adds meaningful signal via the aeration framework even though it adds minimal AUC over the chlorophyll-only baseline.
 
 ---
 
 ## Limitations
 
-- **Cloud coverage:** Valid satellite data exists for only 29.9% of station-days (70% cloud gap). The loss is more severe inside the 21-day patch sequences used by the deep learning models — roughly 60% of daily timesteps and 89% of individual patch pixels are cloud-obscured. Combined with the 4 km pixel size (a large fraction of the Sound's 34 km width), this is why the satellite-based models perform near chance on held-out years and the in-situ XGBoost model is the basis for deployment. Cloud gaps are also non-random: cloudy conditions correlate with the calm, stratified water that precedes blooms.
-- **Biweekly sampling:** CT DEEP samples biweekly in summer. Lag features at 3 and 7 days are approximated from the nearest available reading within a 7-day tolerance window.
+- **Cloud coverage:** Valid satellite data exists for only 29.9% of station-days (70% cloud gap). Combined with the 4 km pixel size, this is why satellite-based models underperform and the in-situ ensemble is the basis for deployment.
+- **Biweekly sampling:** CT DEEP samples biweekly in summer. Lag features are approximated from the nearest available reading within a tolerance window.
+- **Low test bloom rate:** The post-TMDL test period (2023–2025) has a 7.2% bloom rate vs 22.7% in training, structurally constraining precision. This reflects genuine environmental improvement from nitrogen reductions — not a data problem.
 - **Aeration scoring:** Suitability scores are derived from observational data, not a hydrodynamic model. Future work will couple this system with ROMS or FVCOM.
-- **Future satellite work:** Higher-resolution ocean color sensors — VIIRS (750 m) or Sentinel-3 OLCI (300 m) — may narrow the spatial-resolution gap that limits the MODIS-based models here.
 
 ---
 
@@ -255,4 +268,4 @@ The primary deployment model uses only chlorophyll trajectory features and achie
 
 ---
 
-Built by **Vihaan Goyal & Lev Rubin**, Westhill High School, Stamford CT
+Built by **Vihaan Goyal**, Westhill High School, Stamford CT

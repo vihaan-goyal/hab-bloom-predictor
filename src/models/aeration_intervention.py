@@ -45,7 +45,7 @@ T_HIGH = 30.0        # C -> temp term = 1.0
 W_DO, W_TEMP, W_PROB = 0.45, 0.30, 0.25
 SUITABLE_SCORE = 0.6          # S threshold for "highly suitable"
 HYPOXIA_THRESHOLD = 6.0       # mg/L DO threshold for intervention
-BLOOM_PROB_THRESHOLD = 0.70   # P(bloom) threshold -- matches daily_inference.py
+BLOOM_PROB_THRESHOLD = 0.75   # P(bloom) threshold -- matches daily_inference.py
 
 
 def clamp01(x):
@@ -203,7 +203,7 @@ print(monthly[['month_name', 'high_risk_days',
 
 # ------------------------------------------------------------------
 # Part 4: Estimate Bloom-Days Preventable by Aeration
-# Highly suitable: P > 0.70 AND S > 0.6 AND DO < 6.0 mg/L
+# Highly suitable: P > 0.75 AND S > 0.6 AND DO < 6.0 mg/L
 # Three-condition criteria matches daily_inference.py intervention_flag()
 # ------------------------------------------------------------------
 print("\n" + "=" * 60)
