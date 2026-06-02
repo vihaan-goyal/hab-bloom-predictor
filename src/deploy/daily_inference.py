@@ -1,8 +1,8 @@
 """
 daily_inference.py
 ------------------
-Fits LR on the training set (1993-2022) and runs historical inference on
-specified dates and on the full 2022 validation period.
+Fits LR on the training set (1993-2019) and runs historical inference on
+specified dates and on the full 2020-2022 validation period.
 
 Run from repo root:
     python src/deploy/daily_inference.py --date 2022-09-01
@@ -78,8 +78,8 @@ AERATION_SCORE_MIN    = 0.45
 DO_HYPOXIA_THRESHOLD  = 6.0
 
 # -- Temporal splits -----------------------------------------------------------
-train = df[df['date'].dt.year <= 2022]
-val   = df[df['date'].dt.year == 2022]
+train = df[df['date'].dt.year <= 2019]
+val   = df[(df['date'].dt.year >= 2020) & (df['date'].dt.year <= 2022)]
 test  = df[df['date'].dt.year >= 2023]
 
 X_train = train[FEATURES].copy()
@@ -91,8 +91,8 @@ y_test  = test['bloom_28d'].copy()
 
 MED = X_train.median()
 
-# -- Fit LR on train 1993-2022 -------------------------------------------------
-print("\nFitting LR on train set 1993-2022...")
+# -- Fit LR on train 1993-2019 -------------------------------------------------
+print("\nFitting LR on train set 1993-2019...")
 
 scaler = StandardScaler()
 X_tr_s = scaler.fit_transform(X_train.fillna(MED))
@@ -105,7 +105,7 @@ lr_model.fit(X_tr_s, y_train)
 lr_val_p  = lr_model.predict_proba(X_v_s)[:, 1]
 lr_test_p = lr_model.predict_proba(X_te_s)[:, 1]
 
-print(f"LR Val AUC  (2022):      {roc_auc_score(y_val,  lr_val_p):.3f}")
+print(f"LR Val AUC  (2020-2022): {roc_auc_score(y_val,  lr_val_p):.3f}")
 print(f"LR Test AUC (2023-2025): {roc_auc_score(y_test, lr_test_p):.3f}")
 
 # -- Aeration score ------------------------------------------------------------
@@ -176,9 +176,9 @@ else:
         f"{hr_str:>10}"
     )
 
-# -- Full validation period analysis (2022) ------------------------------------
+# -- Full validation period analysis (2020-2022) -------------------------------
 print("\n" + "=" * 80)
-print("FULL VAL PERIOD ANALYSIS (2022)")
+print("FULL VAL PERIOD ANALYSIS (2020-2022)")
 print("=" * 80)
 
 X_val_arr        = X_val.fillna(MED).values
@@ -203,7 +203,7 @@ total_days = len(val_df)
 hr_days    = val_df['high_risk'].sum()
 hr_pct     = hr_days / total_days * 100
 
-print(f"\nTotal station-days (2022): {total_days:,}")
+print(f"\nTotal station-days (2020-2022): {total_days:,}")
 print(f"High-risk days (bloom_prob>{BLOOM_PROB_THRESHOLD} & S>{AERATION_SCORE_MIN} & DO<{DO_HYPOXIA_THRESHOLD}): {hr_days:,} ({hr_pct:.1f}%)")
 
 print("\n-- Top 10 Stations by High-Risk Days ---------------------------------")
