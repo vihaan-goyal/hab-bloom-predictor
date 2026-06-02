@@ -28,7 +28,7 @@ df = pd.read_csv("data/hab_features_tidal.csv")
 df['date'] = pd.to_datetime(df['date'])
 
 # Recompute rolling features and bloom label for consistency
-for n, min_p in [(3, 2), (6, 3), (9, 5)]:
+for n, min_p in [(3, 2), (6, 3), (9, 5), (14, 7), (21, 10)]:
     df[f'chl_roll{n}_mean'] = (
         df.groupby('station_name')['Chlorophyll']
           .transform(lambda x: x.rolling(n, min_periods=min_p).mean())
@@ -55,7 +55,8 @@ for station, grp in df.groupby('station_name'):
 # -- Feature set ---------------------------------------------------------------
 FEATURES_ALL = [
     'Chlorophyll', 'chl_lag1', 'chl_lag2', 'chl_lag3', 'chl_lag4',
-    'chl_roll3_mean', 'chl_roll6_mean', 'chl_roll9_mean', 'chl_trend',
+    'chl_roll3_mean', 'chl_roll6_mean', 'chl_roll9_mean',
+    'chl_roll14_mean', 'chl_roll21_mean', 'chl_trend',
     'chl_anomaly', 'chl_climatology',
     'do_lag1', 'temp_lag1', 'sal_lag1',
     'sea_water_temperature', 'sea_water_salinity',
