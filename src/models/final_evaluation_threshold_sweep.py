@@ -77,8 +77,8 @@ FEATURES = [f for f in FEATURES_ALL if f in df.columns]
 # ---------------------------------------------------------------------------
 # Splits
 # ---------------------------------------------------------------------------
-train = df[df['date'].dt.year <= 2022]
-val   = df[df['date'].dt.year == 2022]
+train = df[df['date'].dt.year <= 2019]
+val   = df[(df['date'].dt.year >= 2020) & (df['date'].dt.year <= 2022)]
 test  = df[df['date'].dt.year >= 2023]
 
 def prepare(split):
@@ -101,7 +101,7 @@ print(f"Test  bloom rate: {y_test.mean()*100:.1f}%")
 # ---------------------------------------------------------------------------
 # Fit LR on train 1993-2022
 # ---------------------------------------------------------------------------
-print("\nFitting LR on train 1993-2022 (incl. tidal anomaly features)...")
+print("\nFitting LR on train 1993-2019 (incl. tidal anomaly features)...")
 
 scaler = StandardScaler()
 X_tr_s = scaler.fit_transform(X_train.fillna(MED))
@@ -117,7 +117,7 @@ lr_model.fit(X_tr_s, y_train)
 lr_val_p  = lr_model.predict_proba(X_v_s)[:, 1]
 lr_test_p = lr_model.predict_proba(X_te_s)[:, 1]
 
-print(f"\nLR Val AUC  (2022):      {roc_auc_score(y_val,  lr_val_p):.4f}")
+print(f"\nLR Val AUC  (2020-2022):      {roc_auc_score(y_val,  lr_val_p):.4f}")
 print(f"LR Test AUC (2023-2025): {roc_auc_score(y_test, lr_test_p):.4f}")
 print(f"LR Test AP  (2023-2025): {average_precision_score(y_test, lr_test_p):.4f}")
 
