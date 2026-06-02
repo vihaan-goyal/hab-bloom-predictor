@@ -1,7 +1,7 @@
 """
 final_evaluation_threshold_sweep.py
 ------------------------------------
-Fits LR on train (1993-2022), then runs a full threshold sweep on the TEST
+Fits LR on train (1993-2019), then runs a full threshold sweep on the TEST
 set (2023-2025).
 
 Uses hab_features_daily.csv and bloom_28d label -- matching daily_inference.py.
