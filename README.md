@@ -86,10 +86,9 @@ Then open `src/deploy/dashboard.html` in a browser and click Load CSV to visuali
 See `src/deploy/DASHBOARD.md` for full documentation on the dashboard columns, intervention criteria, and best demo dates.
 
 **Validated alert dates** — the pipeline correctly flags intervention conditions on:
-- 2022-07-19: A4 (P=0.851, DO=4.28) + B3 — strongest signal in val period
-- 2021-08-16: A4 + B3 + 02 + 04 all flag — best multi-station demo date
-- 2022-07-07: A4 (P=0.654, DO=4.69)
-- 2021-07-19: A4 (P=0.575, DO=3.90)
+- 2022-07-19: A4 (P=0.820, DO=4.28) + B3 + 01 all flag — strongest signal in val period and best multi-station demo date
+- 2022-07-07: A4 (P=0.678, DO=4.69)
+- 2021-07-19: A4 (P=0.643, DO=3.90)
 
 ---
 

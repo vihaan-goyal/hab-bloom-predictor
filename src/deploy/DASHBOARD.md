@@ -118,15 +118,12 @@ The three-condition gate ensures aeration is recommended only when:
 These historical dates produce intervention alerts on the corrected pipeline:
 
 ```bash
-python src/deploy/daily_inference.py --date 2022-07-19   # A4 (P=0.851) + B3 both flag
-python src/deploy/daily_inference.py --date 2021-08-16   # A4 + B3 + 02 + 04 all flag
-python src/deploy/daily_inference.py --date 2022-07-07   # A4 (P=0.654) flags
-python src/deploy/daily_inference.py --date 2021-07-19   # A4 (P=0.575) flags
+python src/deploy/daily_inference.py --date 2022-07-19   # A4 (P=0.820) + B3 + 01 all flag
+python src/deploy/daily_inference.py --date 2022-07-07   # A4 (P=0.678) flags
+python src/deploy/daily_inference.py --date 2021-07-19   # A4 (P=0.643) flags
 ```
 
-**2021-08-16 is the best demo date for judges** — four stations flag simultaneously (A4, B3, 02, 04), demonstrating the spatial clustering of western LIS bloom risk. The system would have sent an alert to CT DEEP weeks before conditions peaked, giving time to stage aeration equipment.
-
-**2022-07-19 has the strongest single-station signal** — A4 at P=0.851, DO=4.28 mg/L, S=0.732.
+**2022-07-19 is the best demo date for judges** — three stations flag simultaneously (A4, B3, 01), with A4 the strongest at P=0.820, DO=4.28 mg/L, S=0.724. This demonstrates the spatial clustering of western LIS bloom risk; the system would have sent an alert to CT DEEP weeks before conditions peaked, giving time to stage aeration equipment.
 
 ---
 

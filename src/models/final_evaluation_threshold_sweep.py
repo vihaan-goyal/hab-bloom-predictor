@@ -29,8 +29,8 @@ import matplotlib.pyplot as plt
 # ---------------------------------------------------------------------------
 # Load + recompute features
 # ---------------------------------------------------------------------------
-print("Loading data/hab_features_daily.csv...")
-df = pd.read_csv("data/hab_features_daily.csv")
+print("Loading data/hab_features_tidal.csv...")
+df = pd.read_csv("data/hab_features_tidal.csv")
 df['date'] = pd.to_datetime(df['date'])
 
 for n, min_p in [(3, 2), (6, 3), (9, 5)]:
@@ -70,6 +70,7 @@ FEATURES_ALL = [
     'month', 'latitude_x', 'longitude_x',
     'nox_lag2', 'dip_lag2', 'dip_change', 'dip_x_month',
     'neighbor_chl3_mean', 'neighbor_chl3_lag1',
+    'tidal_gt_anom', 'tidal_msl_anom',
 ]
 FEATURES = [f for f in FEATURES_ALL if f in df.columns]
 
@@ -100,7 +101,7 @@ print(f"Test  bloom rate: {y_test.mean()*100:.1f}%")
 # ---------------------------------------------------------------------------
 # Fit LR on train 1993-2022
 # ---------------------------------------------------------------------------
-print("\nFitting LR on train 1993-2022...")
+print("\nFitting LR on train 1993-2022 (incl. tidal anomaly features)...")
 
 scaler = StandardScaler()
 X_tr_s = scaler.fit_transform(X_train.fillna(MED))

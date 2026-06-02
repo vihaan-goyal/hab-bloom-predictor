@@ -23,8 +23,8 @@ args = parser.parse_args()
 TARGET_DATE = args.date
 
 # -- Load data -----------------------------------------------------------------
-print("Loading data/hab_features_daily.csv...")
-df = pd.read_csv("data/hab_features_daily.csv")
+print("Loading data/hab_features_tidal.csv...")
+df = pd.read_csv("data/hab_features_tidal.csv")
 df['date'] = pd.to_datetime(df['date'])
 
 # Recompute rolling features and bloom label for consistency
@@ -63,6 +63,7 @@ FEATURES_ALL = [
     'month', 'latitude_x', 'longitude_x',
     'nox_lag2', 'dip_lag2', 'dip_change', 'dip_x_month',
     'neighbor_chl3_mean', 'neighbor_chl3_lag1',
+    'tidal_gt_anom', 'tidal_msl_anom',
 ]
 FEATURES = [f for f in FEATURES_ALL if f in df.columns]
 
