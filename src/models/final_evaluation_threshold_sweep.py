@@ -109,7 +109,7 @@ X_tr_s = scaler.fit_transform(X_train.fillna(MED))
 X_v_s  = scaler.transform(X_val.fillna(MED))
 X_te_s = scaler.transform(X_test.fillna(MED))
 
-lr_model = LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)
+lr_model = LogisticRegression(class_weight='balanced', C=0.05, max_iter=1000, random_state=42)
 lr_model.fit(X_tr_s, y_train)
 
 # ---------------------------------------------------------------------------
