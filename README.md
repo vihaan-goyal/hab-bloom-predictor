@@ -48,12 +48,12 @@ All models evaluated using spatiotemporal cross-validation (train: 1993–2019, 
 
 **Operating points (test set 2023–2025):**
 
-The deployed model — Logistic Regression (C=0.05) with tidal-anomaly, extended rolling-mean (14/21-day), and salinity-lag features — supports two operating points:
+The deployed model — Logistic Regression (C=0.05) with tidal-anomaly, extended rolling-mean (14/21-day), salinity-lag, and surface oxygen-saturation (`percent_saturation`) features — supports two operating points:
 
 | Threshold | Precision | Recall | F1 | TP | FP | FN | Use case |
 |-----------|-----------|--------|-----|-----|-----|-----|----------|
-| 0.60 (balanced) | 0.446 | 0.446 | 0.446 | 33 | 41 | 41 | Resource-constrained intervention |
-| 0.55 (high recall) | 0.374 | 0.541 | 0.442 | 40 | 67 | 34 | Early warning priority |
+| 0.60 (balanced) | 0.465 | 0.446 | 0.455 | 33 | 38 | 41 | Resource-constrained intervention |
+| 0.55 (high recall) | 0.387 | 0.554 | 0.456 | 41 | 65 | 33 | Early warning priority |
 
 Test AUC: 0.814 | Average Precision: 0.335
 
@@ -69,7 +69,7 @@ Precision is structurally constrained by the post-TMDL test bloom rate of 7.2% �
 | 01 | 16.7% | 0.50 | 0.273 | 1.000 | 0.429 | 0.400 | 0.667 |
 | 02 | 33.3% | 0.36 | 0.353 | 1.000 | 0.522 | 0.571 | 0.667 |
 
-At the fixed 0.60 operating point, C1 reaches **precision 0.80** (recall 0.57) and station 02 reaches 0.57 / 0.67 — well above the 0.45 global ceiling — confirming that station-specific operating points are worthwhile at high-bloom-rate sites. The validation-tuned thresholds favor recall on these small samples. Reproduce with `python src/models/station_specific_models.py`.
+At the fixed 0.60 operating point, C1 reaches **precision 0.80** (recall 0.57) and station 02 reaches 0.57 / 0.67 — well above the 0.47 global ceiling — confirming that station-specific operating points are worthwhile at high-bloom-rate sites. The validation-tuned thresholds favor recall on these small samples. Reproduce with `python src/models/station_specific_models.py`.
 
 ---
 
@@ -96,7 +96,7 @@ Of 1,057 station-days in the 2020–2022 validation period, **29 (2.7%)** met st
 
 The system includes a daily inference pipeline and a browser-based dashboard for real-time monitoring.
 
-**Operating thresholds:** The pipeline uses `BLOOM_PROB_THRESHOLD = 0.60` by default (the balanced operating point — fewer false alarms, suited to resource-constrained intervention). Operators prioritizing early warning can lower it to 0.55 (high-recall mode), which catches 7 more blooms on the 2023–2025 test set (TP 33 → 40) at the cost of 26 more false alarms (FP 41 → 67).
+**Operating thresholds:** The pipeline uses `BLOOM_PROB_THRESHOLD = 0.60` by default (the balanced operating point — fewer false alarms, suited to resource-constrained intervention). Operators prioritizing early warning can lower it to 0.55 (high-recall mode), which catches 8 more blooms on the 2023–2025 test set (TP 33 → 41) at the cost of 27 more false alarms (FP 38 → 65).
 
 ```bash
 # Generate predictions for any date
