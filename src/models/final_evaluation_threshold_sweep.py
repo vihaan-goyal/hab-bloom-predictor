@@ -10,6 +10,7 @@ Run from repo root:
     python src/models/final_evaluation_threshold_sweep.py
 """
 
+import glob
 import warnings
 warnings.filterwarnings('ignore', category=UserWarning)
 
@@ -32,6 +33,41 @@ import matplotlib.pyplot as plt
 print("Loading data/hab_features_tidal.csv...")
 df = pd.read_csv("data/hab_features_tidal.csv")
 df['date'] = pd.to_datetime(df['date'])
+
+
+def load_percent_saturation():
+    """percent_saturation lives only in the raw ERDDAP surface (depth_code='S')
+    extracts, not in the feature CSVs. Concatenate every deep_wq_S_*.csv, drop
+    the units row, and reduce to one value per (date, station_name).
+
+    The ERDDAP timestamps store local midnight encoded as UTC (e.g. EDT midnight
+    -> 04:00:00Z), so the UTC calendar date equals the local sample date that
+    keys the feature files."""
+    frames = []
+    for f in sorted(glob.glob('data/raw/deep_wq_extra/deep_wq_S_*.csv')):
+        # row 0 = header, row 1 = units ("UTC", "mg/L", ...) -> skip units.
+        frames.append(pd.read_csv(
+            f, skiprows=[1],
+            usecols=['station_name', 'time', 'percent_saturation']))
+    ps = pd.concat(frames, ignore_index=True)
+    ps = ps[ps['station_name'].notna()].copy()
+    ps['station_name'] = ps['station_name'].astype(str)
+    ps['date'] = (pd.to_datetime(ps['time'], utc=True)
+                    .dt.tz_localize(None).dt.normalize())
+    ps['percent_saturation'] = pd.to_numeric(ps['percent_saturation'],
+                                             errors='coerce')
+    return (ps.dropna(subset=['percent_saturation'])
+              .groupby(['date', 'station_name'], as_index=False)
+              ['percent_saturation'].mean())
+
+
+if 'percent_saturation' not in df.columns:
+    print("Merging percent_saturation from data/raw/deep_wq_extra/deep_wq_S_*.csv...")
+    ps = load_percent_saturation()
+    df['station_name'] = df['station_name'].astype(str)
+    df = df.merge(ps, on=['date', 'station_name'], how='left')
+    print(f"  percent_saturation coverage: "
+          f"{df['percent_saturation'].notna().mean() * 100:.1f}%")
 
 for n, min_p in [(3, 2), (6, 3), (9, 5), (14, 7), (21, 10)]:
     df[f'chl_roll{n}_mean'] = (
@@ -73,6 +109,7 @@ FEATURES_ALL = [
     'nox_lag2', 'dip_lag2', 'dip_change', 'dip_x_month',
     'neighbor_chl3_mean', 'neighbor_chl3_lag1',
     'tidal_gt_anom', 'tidal_msl_anom',
+    'percent_saturation',
 ]
 FEATURES = [f for f in FEATURES_ALL if f in df.columns]
 
