@@ -8,11 +8,11 @@ Westhill High School, Stamford, Connecticut
 
 ## Abstract (write LAST, ~250 words)
 Five required elements — nothing more, nothing less:
-- What you built: ML system that predicts HABs 7 days in advance in Long Island Sound
-- Data used: 22 years NASA MODIS satellite data + 32 years CT DEEP in-situ measurements, 1.36M chlorophyll measurements, 50 stations
-- Primary result: XGBoost AUC 0.936 on held-out 2023–2025 test set, 81% bloom recall
+- What you built: ML system that predicts HABs 28 days in advance in Long Island Sound
+- Data used: 32 years CT DEEP LISICOS in-situ measurements + NOAA CO-OPS tidal data + CT DEEP WQP nutrients; 11,447 station-days (aggregated from 1.36M raw depth-profile rows), 50 stations
+- Primary result: Logistic Regression AUC 0.814 on held-out 2023–2025 test set; precision 0.465, recall 0.446 at threshold 0.60
 - Secondary result: hybrid ConvLSTM+LSTM achieves AUC 0.744
-- Intervention result: 975 high-priority intervention opportunities; Station A4 DO as low as 1.39 mg/L; August peak window
+- Intervention result: ~313 high-risk days in 2020–2022 (S > 0.45 AND DO < 6.0); Station A4 highest priority, August peak window
 - Deployment: operational daily inference pipeline with automated alerts
 
 ---
@@ -62,8 +62,9 @@ Five required elements — nothing more, nothing less:
 - Biweekly Jun–Sep, monthly year-round
 - Variables: chlorophyll-a (µg/L), temperature (°C), salinity (psu), DO (mg/L), pH
 - Bloom threshold: chlorophyll-a > 10 µg/L — cite Perreira (2021)
-- Total observations: 1,358,852 measurements
-- Bloom observations: 262,959 (19.4% positive rate)
+- Raw depth-profile rows: 1,358,852 (multiple per station-visit; NOT the training set)
+- Aggregated station-days: **11,447** (one row per station-date after aggregate_daily.py)
+- Bloom rates: train 22.7% | val ~6% | test 7.2%
 - Years: 1993–2025
 
 ### 2.3 Satellite Data
@@ -86,19 +87,22 @@ Source | Description | Coverage | Records
 ## 3. Methods (~600 words)
 
 ### 3.1 Problem Formulation
-- Binary classification: predict bloom within next 7 days (yes/no)
-- Formal definition: y(t) = 1 if max{chl(t+1),...,chl(t+7)} > 10 µg/L
-- Why 7 days: operationally sufficient for CT DEEP to stage aeration equipment
+- Binary classification: predict bloom within next 28 days (yes/no)
+- Formal definition: y(t) = 1 if max{chl(t+1),...,chl(t+28)} > 10 µg/L
+- Why 28 days: biweekly CT DEEP sampling gives median inter-observation gap ~21 days; 28-day window aligns with the actual lead time available before confirmed bloom
 
 ### 3.2 Feature Engineering
-- Lagged chlorophyll at 3, 7, 14, 21 days
-- 7-day rolling mean (chl_roll7_mean) and std (chl_roll7_std)
-- Climatological anomaly: deviation from long-term monthly mean
-- Climatological baseline: long-term monthly mean
-- Spatial: latitude, longitude / Temporal: calendar month
-- Total: 11 features for primary model; 16 features for extended ablation model
-- Correlation decay: r=0.707 same-day → r=0.466 at 21-day lag
-- ⚠ Note 3-day and 7-day lags are approximated from nearest reading within 7-day window
+- Lagged chlorophyll at lag1–lag4 (prior observations)
+- Rolling means: 7, 14, 21-day (chl_roll7/14/21_mean)
+- Climatological anomaly and baseline (long-term monthly mean)
+- Tidal anomaly features: tidal_gt_anom, tidal_msl_anom (NOAA CO-OPS)
+- Salinity lags: sal_lag2, sal_lag3, sal_lag4 (falling salinity precedes blooms)
+- Surface oxygen saturation: percent_saturation (CT DEEP WQP)
+- Spatial: latitude, longitude, neighbor_chl3_mean / Temporal: calendar month
+- Dissolved oxygen, temperature, salinity
+- Total: 34 features in deployed model
+- Correlation decay (corrected, aggregated data): r=0.306 same-day → r=0.138 at 21-day lag
+- Lag features approximated from nearest reading within a tolerance window
 
 ### 3.3 Cross-Validation
 - Train: 1993–2019 | Val: 2020–2022 | Test: 2023–2025
@@ -112,15 +116,14 @@ Source | Description | Coverage | Records
 - LSTM: 2-layer, hidden 64, dropout 0.5, Adam, weight decay 1e-4, early stopping patience 5
 - ConvLSTM: 2-layer, 16 hidden channels, 3×3 kernels, 8×8 pixel MODIS patches
 - Hybrid: ConvLSTM spatial stream + LSTM temporal stream, concatenated → shared MLP
-- ⚠ Deep learning models trained on satellite-matched subset (290,938 samples) — tabular models on full 1.36M
+- ⚠ Deep learning models trained on satellite-matched subset (290,938 samples) — tabular models on full 11,447 station-days
 
 ### 3.4.1 Decision Threshold
-- All reported recall/precision values use threshold 0.50
-- Swept 0.10–0.90 to verify 0.50 is a reasonable operating point
-- At 0.50: recall 0.812, precision 0.662, false alarm rate 6.0%
-- At 0.35: recall 0.849 but false alarms triple to 10.1%
-- At 0.70 (best F1): recall 0.758, precision 0.743, F1 0.751
-- ⚠ Frame as deliberate choice, not default
+- Swept 0.10–0.90 on test set 2023–2025 (final_evaluation_threshold_sweep.py)
+- Two reported operating points:
+  - 0.60 (balanced): precision 0.465, recall 0.446, F1 0.455, TP=33, FP=38, FN=41
+  - 0.55 (high recall): precision 0.387, recall 0.554, F1 0.456, TP=41, FP=65, FN=33
+- ⚠ Frame as deliberate choice, not default; low test bloom rate (7.2%) structurally constrains precision
 
 ### 3.5 Aeration Intervention Framework
 - Define hypolimnetic aeration and the three conditions it requires
@@ -130,7 +133,7 @@ Source | Description | Coverage | Records
 - Applied to validation period (2020–2022) predictions only
 
 ### 3.6 Operational Deployment
-- Daily inference pipeline: fetches ERDDAP → engineers features → runs XGBoost → computes S → sends email alerts
+- Daily inference pipeline: fetches ERDDAP → engineers features → runs LR (C=0.05) → computes S → sends email alerts
 - Browser-based dashboard: station probability chart, DO vs. bloom scatter, intervention priority table
 - No server required — runs from CSV in browser
 
@@ -142,51 +145,52 @@ Source | Description | Coverage | Records
 - Geographic gradient: 46.3% bloom rate at A2 → 1.7% at N3
 - Long-term decline: −0.63%/year, inflection after 2014 linked to Clean Water Act TMDL
 - Seasonal pattern: February–March peak (~40%) driven by cold-water diatoms
-- Temporal signal decay: r=0.707 (same-day) → r=0.466 (21-day lag)
+- Temporal signal decay (corrected): r=0.306 (same-day) → r=0.138 (21-day lag)
 
 ### 4.2 Model Performance
-- Results table with all 6 models: Val AUC + Test AUC for XGBoost
-- XGBoost: Val 0.928, Test 0.936, Recall 0.81, Precision 0.66, Avg Precision 0.789
-- LSTM: Val 0.926
+- Results table with all 6 models: Val AUC + Test AUC
+- **LR (deployed, 34 feat)**: Val 0.824, Test **0.814**, precision 0.465, recall 0.446 @ 0.60
+- Ensemble (LR 80% + XGB 20%): Val 0.862, Test 0.827 (older experiment, not deployed)
+- XGBoost: Val 0.843, Test 0.774
+- LSTM: Val 0.832, Test 0.784
 - Hybrid: Val 0.744, Test 0.658
 - ConvLSTM: Val 0.696, Test 0.610
 - ⚠ Explain DL models trained on smaller satellite-matched subset
 
 ### 4.3 Feature Importance (SHAP)
-- Top feature: chl_roll7_mean — SHAP ~2x the next feature
-- Rank order: chl_roll7_mean, chl_anomaly, chl_climatology, dissolved_oxygen, salinity, temperature, chl_lag3
+- Top feature: chl_roll9_mean — SHAP ~2x the next feature (from XGBoost SHAP analysis)
+- Rank order: chl_roll9_mean, Chlorophyll, month, chl_climatology, dip_x_month, neighbor_chl3_mean, dissolved_oxygen
 - Critical finding: DO/temperature add ΔAUC < 0.005 over chlorophyll-only model
+- Deployed LR adds tidal anomalies, sal_lags, percent_saturation on top of base SHAP features
 
 ### 4.4 Ablation Study
 - Largest drop: removing climatological features (ΔAUC = −0.013)
 - Removing river discharge slightly improves (+0.002)
-- Minimal model (top 5 features): AUC 0.912
+- See ablation_study.py for current numbers
 
 ### 4.5 Failure Analysis
 - FP and FN both peak July–August
-- Station A4: highest error rates (616 FP, 311 FN)
+- See failure_analysis.py for current station-level breakdown
 
-### 4.6 Aeration Intervention
-- 27,412 high-risk predictions in 2020–2022 validation period
-- 975 (3.6%) meet stringent criteria (P > 0.70 AND S > 0.60 AND DO < 6.0 mg/L)
-- Mean bloom prob of intervention candidates: 0.836
-- Station A4: 2,560 high-risk days, mean bloom prob 0.87, minimum DO = 1.39 mg/L
-- August peak: 10,804 high-risk bloom-days, mean aeration score 0.677
-- February: highest bloom probability (0.954) but LOWEST aeration suitability (0.341)
+### 4.6 Aeration Intervention (corrected, 2020–2022 validation period)
+- Total station-days: 1,057
+- High-risk days (S > 0.45 AND DO < 6.0): **~313 (29.6%)**
+- Station A4: highest priority, 18 high-risk days
+- Top month: August (mean aeration score 0.574)
+- Peak intervention window: July–September
 
-### 4.7 Operational Validation
-- 2022-09-01: A4 P=0.970, DO=5.76, S=0.767 — Station 16 also flags (P=0.746, DO=5.99)
-- 2022-08-17: A4 P=0.886, DO=5.89
-- 2021-08-31: A4 P=0.882, DO=5.88
-- 2017-08-15: A4 P=0.749, DO=4.75
+### 4.7 Operational Validation (corrected demo dates)
+- 2022-07-19: A4 P=0.813, DO=4.28, S=0.722 — B3 and 01 also flag; best multi-station demo
+- 2022-07-07: A4 P=0.678, DO=4.69
+- 2021-07-19: A4 P=0.643, DO=3.90
 
 ---
 
 ## 5. Discussion (~400 words)
 
 ### 5.1 Performance explanation
-- AUC 0.936 on truly future data — generalizes well beyond training
-- XGBoost beats DL: (a) full 1.36M dataset vs 290K satellite-matched, (b) dominant feature is rolling mean easily captured by trees, (c) 4km patches too coarse for 34km-wide Sound
+- LR AUC 0.814 on truly future data — generalizes well beyond training
+- LR outperforms DL: (a) 11,447 station-days (aggregated) vs 290K satellite-matched for DL models, (b) dominant feature is rolling mean easily captured by linear model, (c) 4km MODIS patches too coarse for 34km-wide Sound; tidal/salinity-lag/saturation features add incremental precision
 
 ### 5.2 Biological validation
 - Rolling mean dominance validates hypothesis: bloom = temporal accumulation process
@@ -195,9 +199,9 @@ Source | Description | Coverage | Records
 
 ### 5.3 Aeration framework novelty
 - First system to translate bloom forecasts into intervention targeting guidance
-- A4 1.39 mg/L DO = sediment enters phosphorus-releasing anoxic state → positive feedback
-- August window: aeration most effective when thermal stratification AND bloom risk both high
-- February: highest bloom prob but lowest aeration score — cold water is well-mixed
+- A4 has minimum DO down to 2.68 mg/L in validation period — sediment enters phosphorus-releasing anoxic state → positive feedback
+- August window: aeration most effective when thermal stratification AND bloom risk both high (mean S=0.574 in Aug)
+- ~313 high-risk days (29.6%) in 2020–2022 with actionable aeration conditions
 
 ### 5.4 Policy finding
 - −0.63%/year decline + 2014 inflection = direct observational evidence for Clean Water Act effectiveness
@@ -205,7 +209,7 @@ Source | Description | Coverage | Records
 
 ### 5.5 Limitations
 - 70% cloud gap rate — systematic bias toward cloud-free conditions
-- Biweekly sampling → 3-day and 7-day lag features are approximated
+- Biweekly sampling → lag features are approximated from nearest reading within a tolerance window
 - Aeration scores from observational data, not hydrodynamic model
 - Fixed monitoring stations — performance at unmonitored locations unknown
 
@@ -217,9 +221,9 @@ Source | Description | Coverage | Records
 ---
 
 ## 6. Conclusion (~150 words)
-- AUC 0.936 on held-out 2023–2025 data
-- 81% bloom recall, 7-day advance warning
-- 975 intervention opportunities identified, A4 highest priority, August optimal window
+- LR AUC 0.814 on held-out 2023–2025 data
+- Precision 0.465, recall 0.446 at 0.60 threshold; 28-day advance warning
+- ~313 high-risk aeration days identified (2020–2022), A4 highest priority, August optimal window
 - Operational pipeline validated against confirmed low-DO events
 - First ML HAB system for LIS validated on held-out future data
 

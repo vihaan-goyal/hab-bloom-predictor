@@ -6,7 +6,7 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0-orange?logo=pytorch)](https://pytorch.org)
 [![NASA MODIS](https://img.shields.io/badge/Data-NASA%20MODIS-darkblue)](https://oceancolor.gsfc.nasa.gov)
 [![CT DEEP](https://img.shields.io/badge/Labels-CT%20DEEP%201993--2025-green)](https://portal.ct.gov/DEEP)
-[![AUC](https://img.shields.io/badge/Ensemble%20Test%20AUC-0.827-brightgreen)](#results)
+[![AUC](https://img.shields.io/badge/LR%20Test%20AUC-0.814-brightgreen)](#results)
 
 ---
 
@@ -35,8 +35,8 @@ Output: P(bloom occurs in next 28 days) ∈ [0, 1]
 
 | Model | Val AUC | Test AUC |
 |-------|---------|----------|
-| Ensemble (LR 80% + XGBoost 20%) | 0.862 | **0.827** |
-| Logistic Regression | 0.847 | 0.824 |
+| **Logistic Regression (deployed, 34 feat)** | **0.824** | **0.814** |
+| Ensemble (LR 80% + XGBoost 20%) | 0.862 | 0.827 |
 | LSTM (temporal) | 0.832 | 0.784 |
 | XGBoost | 0.843 | 0.774 |
 | Hybrid (ConvLSTM + LSTM)* | 0.744 | 0.658 |
@@ -61,15 +61,15 @@ Precision is structurally constrained by the post-TMDL test bloom rate of 7.2% �
 
 **Station-specific results (test set 2023–2025).** Two strategies were compared at the western stations: **(A)** a model trained only on that station's 1993–2019 history, and **(B)** the global model with a per-station decision threshold tuned on the 2020–2022 validation set. Strategy B is the deployed approach — it keeps the well-calibrated global probabilities and only re-tunes the threshold; those thresholds are stored in [`data/station_thresholds.csv`](data/station_thresholds.csv). Strategy A overfits the small per-station validation sets and is less reliable.
 
-| Station | Local bloom rate | Threshold (B) | Precision | Recall | F1 | Precision @0.60 | Recall @0.60 |
-|---------|-----------------|---------------|-----------|--------|-----|-----------------|--------------|
-| A4 | 20.0% | 0.79 | 0.455 | 0.625 | 0.526 | 0.318 | 0.875 |
-| B3 | 27.5% | 0.54 | 0.421 | 0.727 | 0.533 | 0.438 | 0.636 |
-| C1 | 17.5% | 0.41 | 0.312 | 0.714 | 0.435 | **0.800** | 0.571 |
-| 01 | 16.7% | 0.50 | 0.273 | 1.000 | 0.429 | 0.400 | 0.667 |
-| 02 | 33.3% | 0.36 | 0.353 | 1.000 | 0.522 | 0.571 | 0.667 |
+| Station | Local bloom rate | Precision | Recall | F1 |
+|---------|-----------------|-----------|--------|-----|
+| C1 | 17.5% | **0.800** | 0.571 | **0.667** |
+| A4 | 20.0% | 0.625 | 0.625 | 0.625 |
+| 02 | 33.3% | 0.571 | 0.667 | 0.615 |
+| B3 | 27.5% | 0.545 | 0.545 | 0.545 |
+| 01 | 16.7% | 0.400 | 0.667 | 0.500 |
 
-At the fixed 0.60 operating point, C1 reaches **precision 0.80** (recall 0.57) and station 02 reaches 0.57 / 0.67 — well above the 0.47 global ceiling — confirming that station-specific operating points are worthwhile at high-bloom-rate sites. The validation-tuned thresholds favor recall on these small samples. Reproduce with `python src/models/station_specific_models.py`.
+Results use per-station decision thresholds tuned on the 2020–2022 validation set and stored in [`data/station_thresholds.csv`](data/station_thresholds.csv). C1 reaches **precision 0.80** and station 02 reaches 0.57 / 0.67 — well above the 0.47 global ceiling — confirming that per-station thresholds are worthwhile at high-bloom-rate sites. Reproduce with `python src/models/station_specific_models.py`.
 
 ---
 
@@ -88,7 +88,7 @@ Contrary to expectation, bloom frequency **peaks in February–March** at 0–5�
 Chlorophyll measurements retain predictive signal up to **21 days prior** to a bloom event (r = 0.466 at lag-21, r = 0.681 for 7-day rolling mean), motivating the multi-week lookback window.
 
 **Intervention opportunities**
-Of 1,057 station-days in the 2020–2022 validation period, **29 (2.7%)** met stringent aeration intervention criteria (P > 0.55 AND S > 0.45 AND DO < 6.0 mg/L). Station A4 in the western Narrows is the highest-priority target with 5 high-risk days. July–August is the peak intervention window.
+Of 1,057 station-days in the 2020–2022 validation period, **~313 (29.6%)** met aeration-risk criteria (S > 0.45 AND DO < 6.0 mg/L). Station A4 is the highest-priority target with 18 high-risk days. Peak intervention window: July–August.
 
 ---
 
@@ -109,7 +109,7 @@ Then open `src/deploy/dashboard.html` in a browser and click Load CSV to visuali
 See `src/deploy/DASHBOARD.md` for full documentation on the dashboard columns, intervention criteria, and best demo dates.
 
 **Validated alert dates** — the pipeline correctly flags intervention conditions on:
-- 2022-07-19: A4 (P=0.820, DO=4.28) + B3 + 01 all flag — strongest signal in val period and best multi-station demo date
+- 2022-07-19: A4 (P=0.813, DO=4.28, S=0.722) + B3 + 01 all flag — strongest signal in val period and best multi-station demo date
 - 2022-07-07: A4 (P=0.678, DO=4.69)
 - 2021-07-19: A4 (P=0.643, DO=3.90)
 
@@ -119,10 +119,10 @@ See `src/deploy/DASHBOARD.md` for full documentation on the dashboard columns, i
 
 | Source | Description | Records |
 |--------|-------------|---------|
+| CT DEEP LISICOS | In-situ water quality, 50 stations, 1993–2025 (depth-profile raw: 1.36M rows) | **11,447 station-days** (aggregated) |
+| NOAA CO-OPS | Tidal water-level observations; tidal anomaly features | 1993–2025 |
+| CT DEEP WQP | Surface nutrients (NOx, NH3, TDN, DIP, percent_saturation) | 204K measurements |
 | NASA MODIS Aqua L3 | Daily 4km chlorophyll-a, 2003–2025 | 8,356 NetCDF files |
-| CT DEEP / LISICOS | In-situ water quality, 50 stations, 1993–2025 | 1.36M measurements |
-| Matched dataset | In-situ + satellite same-day observations | 354,685 records |
-| CT DEEP Nutrients | NOx, NH3, TDN, DIP | 204K measurements |
 | USGS Stream Gauges | CT, Thames, Housatonic River discharge | 1993–2025 |
 
 **Study area:** Long Island Sound — 40.5–41.5°N, 73.8–71.8°W
@@ -142,18 +142,19 @@ hab-bloom-predictor/
 │   │   ├── add_buoy_features.py
 │   │   └── add_discharge_features.py
 │   ├── models/
+│   │   ├── final_evaluation_threshold_sweep.py  # Final evaluation + threshold sweep
+│   │   ├── station_specific_models.py # Per-station threshold tuning (Strategy B)
+│   │   ├── ablation_study.py          # Feature ablation analysis
 │   │   ├── baseline.py                # Logistic Regression, Random Forest, XGBoost
 │   │   ├── lstm_model.py              # 2-layer LSTM
 │   │   ├── convlstm_model.py          # ConvLSTM satellite-only model
 │   │   ├── build_sequences.py         # Build LSTM input sequences
 │   │   ├── build_conv_sequences.py    # Build ConvLSTM satellite patches
-│   │   ├── ablation_study.py          # Feature ablation analysis
 │   │   ├── shap_analysis.py           # SHAP interpretability
 │   │   ├── failure_analysis.py        # Error analysis by station and month
-│   │   ├── final_evaluation.py        # Final test set evaluation
-│   │   ├── final_evaluation_threshold_sweep.py  # Threshold sweep (corrected)
 │   │   ├── aeration_intervention.py   # Intervention scoring framework
-│   │   └── prevention_analysis.py     # Nitrogen reduction analysis
+│   │   ├── prevention_analysis.py     # Nitrogen reduction analysis
+│   │   └── experiments/               # One-off experiment scripts (archived)
 │   ├── viz/
 │   │   ├── visualize.py               # Single-day chlorophyll map
 │   │   ├── timeseries.py              # Multi-day chlorophyll time series
@@ -234,12 +235,12 @@ Open `src/deploy/dashboard.html` in a browser and load `data/daily_predictions.c
 
 ## Model Architecture
 
-### Ensemble (primary deployment model)
-- LR 80% + XGBoost 20% weighted average
-- Logistic Regression: L2, balanced class weights, StandardScaler
-- XGBoost: 200 estimators, max depth 6, learning rate 0.1, scale_pos_weight for class imbalance
+### Logistic Regression (deployed model)
+- L2 regularization, `C=0.05`, `class_weight='balanced'`, StandardScaler
+- 34 features: chlorophyll rolling means (7/14/21-day), lags, climatology anomaly, tidal anomalies (tidal_gt_anom, tidal_msl_anom), salinity lags (lag2/3/4), percent_saturation, dissolved oxygen, temperature, spatial neighbor means, nutrient interactions, lat/lon/month
 - 28-day forward bloom label (chlorophyll-a > 10 µg/L)
-- Best-F1 decision threshold: 0.55 (from threshold sweep on test set 2023–2025)
+- Default threshold: 0.60 (balanced) — see operating points above
+- Primary data file: `data/hab_features_tidal.csv`
 
 ### LSTM
 - 2-layer LSTM, hidden size 64, dropout 0.5
@@ -265,7 +266,7 @@ The 9-day rolling chlorophyll mean (`chl_roll9_mean`) is the dominant predictor.
 6. `neighbor_chl3_mean` — spatial signal from neighboring stations
 7. `oxygen_concentration_in_sea_water` — hypoxia-bloom coupling
 
-The primary deployment model achieves AUC 0.827 on the test set. Dissolved oxygen adds meaningful signal via the aeration framework even though it adds minimal AUC over the chlorophyll-only baseline.
+The deployed Logistic Regression model achieves AUC 0.814 on the test set. Dissolved oxygen adds meaningful signal via the aeration framework even though it adds minimal AUC over the chlorophyll-only baseline.
 
 ---
 

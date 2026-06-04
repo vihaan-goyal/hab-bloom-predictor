@@ -9,8 +9,9 @@ Last updated: 2026-06-04
 
 | Model | Val AUC | Test AUC | Notes |
 |---|---|---|---|
-| Ensemble (LR 80% + XGB 20%) | **0.862** | **0.827** | Primary reported result |
-| Logistic Regression | 0.847 | 0.824 | Strong linear baseline |
+| **LR (deployed, 34 feat, C=0.05)** | **0.824** | **0.814** | **Final locked deployed model** |
+| Ensemble (LR 80% + XGB 20%) | 0.862 | 0.827 | Older experiment; not deployed |
+| Logistic Regression (baseline, 26 feat) | 0.847 | 0.824 | Baseline before tidal/sal/saturation features |
 | XGBoost (baselines_corrected.py) | 0.843 | 0.774 | lr=0.03, depth=3 |
 | XGBoost (shap_corrected.py) | 0.850 | 0.774 | lr=0.1, depth=6; used for SHAP only |
 | LSTM | 0.832 | 0.784 | Confirmed ~0.829/0.802 on latest run |
@@ -20,9 +21,11 @@ Last updated: 2026-06-04
 
 **Bloom rates:** train 22.7% | val ~6–7% | test 7.2%
 
-**Precision (test set):**
-- Global threshold: 0.17–0.29
-- Station-specific models: 0.32–0.40
+**Precision (test set, deployed LR 34-feat model):**
+- Global threshold 0.60: **0.465** (TP=33, FP=38, FN=41)
+- Global threshold 0.55: 0.387 (TP=41, FP=65, FN=33)
+- Station-specific (Strategy B per-station threshold): 0.40–0.80 (C1=0.800, A4=0.625, 02=0.571, B3=0.545, 01=0.400)
+- Note: older pre-correction results quoted 0.17–0.29 globally and 0.32–0.40 for station models — these are from the wrong pipeline
 
 **Prediction horizon:** 28 days (forward calendar window from observation date)
 
@@ -41,7 +44,8 @@ Scripts: `final_evaluation_threshold_sweep.py`, `daily_inference.py`.
 | Feature set | Prec | Recall | F1 | Test AUC | TP/FP/FN |
 |---|---|---|---|---|---|
 | Baseline (30 feat, incl. tidal anomalies) | 0.449 | 0.419 | 0.434 | 0.816 | 31/38/43 |
-| **+ sal_lag2/3/4 (33 feat) — INTEGRATED** | **0.446** | **0.446** | **0.446** | **0.814** | 33/41/41 |
+| + sal_lag2/3/4 (33 feat) | 0.446 | 0.446 | 0.446 | 0.814 | 33/41/41 |
+| **+ percent_saturation (34 feat) — FINAL DEPLOYED** | **0.465** | **0.446** | **0.455** | **0.814** | **33/38/41** |
 
 **sal_lag2/3/4** — salinity trajectory lags (2/3/4 prior observations), 97–98%
 coverage in `hab_features_tidal.csv`. Each correlates r≈−0.21 with bloom_28d
@@ -71,7 +75,7 @@ cost recall (0.365), a precision-for-recall trade — not integrated. Adding
 | Val rows (2020–2022) | 1,057 |
 | Test rows (2023–2025) | 1,034 |
 | Stations | ~50 CT DEEP LISICOS stations |
-| Key file | data/hab_features_daily.csv |
+| Key file | **data/hab_features_tidal.csv** |
 
 **How we got here:** Raw CT DEEP depth profiles had 120–200 rows per station
 visit (one row per depth). `aggregate_daily.py` reduced this to one row

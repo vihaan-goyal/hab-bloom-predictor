@@ -38,12 +38,15 @@ Click **Load CSV** in the top right and select `data/daily_predictions.csv`.
 ## What each column means
 
 ### P(bloom) — Bloom probability
-The ensemble model output (LR 80% + XGBoost 20%). The probability that a harmful algal bloom (chlorophyll-a > 10 µg/L) will occur at this station within the next **28 days**.
+The Logistic Regression model output (C=0.05, balanced). The probability that a harmful algal bloom (chlorophyll-a > 10 µg/L) will occur at this station within the next **28 days**.
 
 Computed from recent sensor history using these features:
-- `chl_roll9_mean` — 9-day rolling chlorophyll mean (dominant predictor)
+- `chl_roll7/14/21_mean` — rolling chlorophyll means (accumulation signal)
 - `chl_anomaly` — deviation from the long-term monthly climatology
 - `chl_lag1/2/3/4` — chlorophyll readings at lag offsets
+- `tidal_gt_anom`, `tidal_msl_anom` — NOAA CO-OPS tidal anomaly features
+- `sal_lag2/3/4` — salinity trajectory lags
+- `percent_saturation` — CT DEEP WQP surface oxygen saturation
 - `dissolved_oxygen`, `temperature`, `salinity`
 - `dip_x_month` — dissolved inorganic phosphorus interaction with seasonality
 - `neighbor_chl3_mean` — spatial chlorophyll signal from neighboring stations
@@ -57,8 +60,8 @@ Computed from recent sensor history using these features:
 | Green | Low risk | P ≤ 40% |
 
 **Two operating modes.** The high-risk cutoff has two recommended settings:
-- **Balanced (P > 60%)** — the default `daily_inference.py` threshold. Minimizes false alarms; use when intervention resources are constrained. Test set: precision 0.446, recall 0.446.
-- **High recall (P > 55%)** — lowers the bar to catch more blooms; use when early warning is the priority and more false alarms are acceptable. Test set: precision 0.374, recall 0.541 (catches 7 more blooms, 26 more false alarms than balanced).
+- **Balanced (P > 60%)** — the default `daily_inference.py` threshold. Minimizes false alarms; use when intervention resources are constrained. Test set: precision 0.465, recall 0.446.
+- **High recall (P > 55%)** — lowers the bar to catch more blooms; use when early warning is the priority and more false alarms are acceptable. Test set: precision 0.387, recall 0.554 (catches 8 more blooms, 27 more false alarms than balanced).
 
 ---
 
@@ -124,12 +127,12 @@ The three-condition gate ensures aeration is recommended only when:
 These historical dates produce intervention alerts on the corrected pipeline:
 
 ```bash
-python src/deploy/daily_inference.py --date 2022-07-19   # A4 (P=0.820) + B3 + 01 all flag
+python src/deploy/daily_inference.py --date 2022-07-19   # A4 (P=0.813) + B3 + 01 all flag
 python src/deploy/daily_inference.py --date 2022-07-07   # A4 (P=0.678) flags
 python src/deploy/daily_inference.py --date 2021-07-19   # A4 (P=0.643) flags
 ```
 
-**2022-07-19 is the best demo date for judges** — three stations flag simultaneously (A4, B3, 01), with A4 the strongest at P=0.820, DO=4.28 mg/L, S=0.724. This demonstrates the spatial clustering of western LIS bloom risk; the system would have sent an alert to CT DEEP weeks before conditions peaked, giving time to stage aeration equipment.
+**2022-07-19 is the best demo date** — three stations flag simultaneously (A4, B3, 01), with A4 the strongest at P=0.813, DO=4.28 mg/L, S=0.722. This demonstrates the spatial clustering of western LIS bloom risk; the system would have sent an alert to CT DEEP weeks before conditions peaked, giving time to stage aeration equipment.
 
 ---
 
@@ -152,6 +155,6 @@ The numeric stations (01–30) are clustered in the western Sound near the New Y
 |---|---|
 | `src/deploy/daily_inference.py` | Runs predictions for a given date, writes `data/daily_predictions.csv` |
 | `src/deploy/dashboard.html` | Browser-based visualization, loads the CSV |
-| `data/hab_features_daily.csv` | Full historical feature dataset (1993–2025, daily aggregated) |
+| `data/hab_features_tidal.csv` | Full historical feature dataset (1993–2025, 11,447 station-days, primary data file) |
 | `data/daily_predictions.csv` | Output of most recent inference run |
 | `data/threshold_sweep_results.csv` | Precision/recall/F1 at all thresholds (test set 2023–2025) |
