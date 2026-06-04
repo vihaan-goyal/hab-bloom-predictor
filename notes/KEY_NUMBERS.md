@@ -1,7 +1,7 @@
 # KEY_NUMBERS.md — HAB Bloom Predictor Reference
 
 Corrected pipeline. Do NOT use numbers from the OLD docs listed in Section 6.
-Last updated: 2026-05-28
+Last updated: 2026-06-04
 
 ---
 
@@ -29,6 +29,36 @@ Last updated: 2026-05-28
 **Top SHAP features (XGBoost):**
 chl_roll9_mean, Chlorophyll, month, chl_climatology, chl_roll3_mean,
 chl_roll6_mean, dip_x_month, neighbor_chl3_mean, dissolved_oxygen
+
+---
+
+## Section 1b — Feature experiments (LR C=0.05, balanced, threshold 0.60)
+
+Operating point: LR `C=0.05`, `class_weight='balanced'`, data
+`hab_features_tidal.csv`, evaluated on test 2023–2025 at threshold 0.60.
+Scripts: `final_evaluation_threshold_sweep.py`, `daily_inference.py`.
+
+| Feature set | Prec | Recall | F1 | Test AUC | TP/FP/FN |
+|---|---|---|---|---|---|
+| Baseline (30 feat, incl. tidal anomalies) | 0.449 | 0.419 | 0.434 | 0.816 | 31/38/43 |
+| **+ sal_lag2/3/4 (33 feat) — INTEGRATED** | **0.446** | **0.446** | **0.446** | **0.814** | 33/41/41 |
+
+**sal_lag2/3/4** — salinity trajectory lags (2/3/4 prior observations), 97–98%
+coverage in `hab_features_tidal.csv`. Each correlates r≈−0.21 with bloom_28d
+(lower/falling salinity precedes blooms, consistent with river nutrient pulses).
+Integrated 2026-06-04 (commit ce9d02c): recall +0.027 and F1 +0.012 for +2 TP,
+with precision essentially flat (−0.003) and AUC within noise (−0.002).
+
+### Unused-column sweep (`unused_features_search.py`, on top of baseline)
+
+Tested 14 unused `hab_features_daily.csv` columns. Only sal_lags gave a clean
+F1/recall gain. Notable correlations with bloom_28d:
+`neighbor_chl5_mean` +0.283, `sea_water_density` −0.241 (strongest physical
+predictor but CT DEEP stopped recording after 2019 → median-imputed test rows),
+`sal_lag2/3/4` ≈ −0.21, `chl_roll3_std` +0.157. The high-priority physical
+group (density+PAR+chl_std+pH) raised precision to 0.474 and AUC to 0.822 but
+cost recall (0.365), a precision-for-recall trade — not integrated. Adding
+`sea_water_density` on top of sal_lags was destructive (precision 0.394).
 
 ---
 
