@@ -57,7 +57,19 @@ The deployed model — Logistic Regression (C=0.05) with tidal-anomaly, extended
 
 Test AUC: 0.814 | Average Precision: 0.335
 
-Precision is structurally constrained by the post-TMDL test bloom rate of 7.2% — not a model deficiency. Station-specific precision at high-priority western stations (A4, B3, C1) reaches 0.32–0.40.
+Precision is structurally constrained by the post-TMDL test bloom rate of 7.2% — not a model deficiency. The five highest-priority western stations have local bloom rates of 17–33%, which makes precision far more tractable when each station is evaluated on its own.
+
+**Station-specific results (test set 2023–2025).** Two strategies were compared at the western stations: **(A)** a model trained only on that station's 1993–2019 history, and **(B)** the global model with a per-station decision threshold tuned on the 2020–2022 validation set. Strategy B is the deployed approach — it keeps the well-calibrated global probabilities and only re-tunes the threshold; those thresholds are stored in [`data/station_thresholds.csv`](data/station_thresholds.csv). Strategy A overfits the small per-station validation sets and is less reliable.
+
+| Station | Local bloom rate | Threshold (B) | Precision | Recall | F1 | Precision @0.60 | Recall @0.60 |
+|---------|-----------------|---------------|-----------|--------|-----|-----------------|--------------|
+| A4 | 20.0% | 0.79 | 0.455 | 0.625 | 0.526 | 0.318 | 0.875 |
+| B3 | 27.5% | 0.54 | 0.421 | 0.727 | 0.533 | 0.438 | 0.636 |
+| C1 | 17.5% | 0.41 | 0.312 | 0.714 | 0.435 | **0.800** | 0.571 |
+| 01 | 16.7% | 0.50 | 0.273 | 1.000 | 0.429 | 0.400 | 0.667 |
+| 02 | 33.3% | 0.36 | 0.353 | 1.000 | 0.522 | 0.571 | 0.667 |
+
+At the fixed 0.60 operating point, C1 reaches **precision 0.80** (recall 0.57) and station 02 reaches 0.57 / 0.67 — well above the 0.45 global ceiling — confirming that station-specific operating points are worthwhile at high-bloom-rate sites. The validation-tuned thresholds favor recall on these small samples. Reproduce with `python src/models/station_specific_models.py`.
 
 ---
 

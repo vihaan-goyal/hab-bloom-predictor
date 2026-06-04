@@ -289,6 +289,35 @@ for station in WESTERN_STATIONS:
     }
 
 # ---------------------------------------------------------------------------
+# 5b. Persist Strategy B thresholds into data/station_thresholds.csv
+# ---------------------------------------------------------------------------
+# Strategy B (global model + per-station threshold) is the operationally
+# recommended approach: it keeps the well-calibrated global probabilities and
+# only tunes the decision threshold per station. We merge those thresholds into
+# the existing station_thresholds.csv, updating only the western rows and
+# preserving every other station's fallback threshold.
+THRESH_CSV = 'data/station_thresholds.csv'
+try:
+    thr_tbl = pd.read_csv(THRESH_CSV, dtype={'station': str})
+except FileNotFoundError:
+    thr_tbl = pd.DataFrame(columns=['station', 'threshold'])
+
+thr_map = dict(zip(thr_tbl['station'], thr_tbl['threshold']))
+updated = []
+for st in WESTERN_STATIONS:
+    if st in per_station:
+        thr_map[st] = round(per_station[st]['tB'], 4)
+        updated.append(st)
+
+out_tbl = (pd.DataFrame({'station': list(thr_map.keys()),
+                         'threshold': list(thr_map.values())})
+           .sort_values('station')
+           .reset_index(drop=True))
+out_tbl.to_csv(THRESH_CSV, index=False)
+print(f"\nUpdated {THRESH_CSV}: Strategy B thresholds written for {updated} "
+      f"({len(out_tbl)} stations total).")
+
+# ---------------------------------------------------------------------------
 # 6. Per-station precision/recall grid (the key question)
 # ---------------------------------------------------------------------------
 print("\n" + "=" * 72)
