@@ -59,6 +59,7 @@ FEATURES_ALL = [
     'chl_roll14_mean', 'chl_roll21_mean', 'chl_trend',
     'chl_anomaly', 'chl_climatology',
     'do_lag1', 'temp_lag1', 'sal_lag1',
+    'sal_lag2', 'sal_lag3', 'sal_lag4',
     'sea_water_temperature', 'sea_water_salinity',
     'oxygen_concentration_in_sea_water',
     'month', 'latitude_x', 'longitude_x',
