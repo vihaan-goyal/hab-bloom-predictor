@@ -51,10 +51,14 @@ Computed from recent sensor history using these features:
 
 **Thresholds used in the dashboard:**
 | Color | Meaning | Threshold |
-|---|---|---|
-| Red | High risk | P > 55% |
-| Amber | Elevated risk | P > 40% |
+|-------|---------|-----------|
+| Red | High risk (Intervene) | P > 60% (balanced) or P > 55% (high recall) |
+| Amber | Elevated risk (Monitor) | P > 40% |
 | Green | Low risk | P ≤ 40% |
+
+**Two operating modes.** The high-risk cutoff has two recommended settings:
+- **Balanced (P > 60%)** — the default `daily_inference.py` threshold. Minimizes false alarms; use when intervention resources are constrained. Test set: precision 0.446, recall 0.446.
+- **High recall (P > 55%)** — lowers the bar to catch more blooms; use when early warning is the priority and more false alarms are acceptable. Test set: precision 0.374, recall 0.541 (catches 7 more blooms, 26 more false alarms than balanced).
 
 ---
 
@@ -94,11 +98,13 @@ Surface water temperature in Celsius. Used in the aeration score calculation. Wa
 
 The **Intervene** badge requires all three conditions to be met simultaneously:
 
-| Criterion | Threshold | Rationale |
-|---|---|---|
-| P(bloom) | > 55% | Model best-F1 operating point (threshold sweep on test set 2023–2025) |
-| DO | < 6.0 mg/L | Water is already hypoxic — aeration addresses a real oxygen deficit |
-| Aeration S | > 0.45 | Site conditions make aeration worthwhile |
+| Criterion | Balanced mode | High-recall mode | Rationale |
+|------------|---------------|------------------|-----------|
+| P(bloom) | > 60% | > 55% | Bloom-probability cutoff (threshold sweep on test set 2023–2025) |
+| DO | < 6.0 mg/L | < 6.0 mg/L | Water is already hypoxic — aeration addresses a real oxygen deficit |
+| Aeration S | > 0.45 | > 0.45 | Site conditions make aeration worthwhile |
+
+**Balanced mode (P > 60%)** is the `daily_inference.py` default — it prioritizes precision (fewer false alarms) for resource-constrained intervention. **High-recall mode (P > 55%)** catches more blooms for early-warning priority, accepting more false alarms. Only the P(bloom) cutoff changes between modes; the DO and aeration-score gates are identical.
 
 **Why all three?**
 

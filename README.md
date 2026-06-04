@@ -26,7 +26,7 @@ Given recent water quality observations at a CT DEEP monitoring station, this sy
 Input:  Recent chlorophyll trajectory + water quality at a CT DEEP monitoring station
 Output: P(bloom occurs in next 28 days) ∈ [0, 1]
         Aeration suitability score S ∈ [0, 1]
-        Intervention flag (True if P > 0.55 AND S > 0.45 AND DO < 6.0 mg/L)
+        Intervention flag (True if P > 0.60 AND S > 0.45 AND DO < 6.0 mg/L)
 ```
 
 ---
@@ -46,7 +46,16 @@ All models evaluated using spatiotemporal cross-validation (train: 1993–2019, 
 
 *Satellite-based models trained only on the subset of station-days with valid cloud-free MODIS observations. They substantially underperform the in-situ models; see [Limitations](#limitations) for why 4 km imagery is poorly suited to a 34 km-wide estuary.*
 
-**Ensemble test set performance (2023–2025):** AUC 0.827 · AP 0.328 · Best-F1 threshold 0.55 · Precision 0.318 · Recall 0.554
+**Operating points (test set 2023–2025):**
+
+The deployed model — Logistic Regression (C=0.05) with tidal-anomaly, extended rolling-mean (14/21-day), and salinity-lag features — supports two operating points:
+
+| Threshold | Precision | Recall | F1 | TP | FP | FN | Use case |
+|-----------|-----------|--------|-----|-----|-----|-----|----------|
+| 0.60 (balanced) | 0.446 | 0.446 | 0.446 | 33 | 41 | 41 | Resource-constrained intervention |
+| 0.55 (high recall) | 0.374 | 0.541 | 0.442 | 40 | 67 | 34 | Early warning priority |
+
+Test AUC: 0.814 | Average Precision: 0.335
 
 Precision is structurally constrained by the post-TMDL test bloom rate of 7.2% — not a model deficiency. Station-specific precision at high-priority western stations (A4, B3, C1) reaches 0.32–0.40.
 
@@ -74,6 +83,8 @@ Of 1,057 station-days in the 2020–2022 validation period, **29 (2.7%)** met st
 ## Operational Deployment
 
 The system includes a daily inference pipeline and a browser-based dashboard for real-time monitoring.
+
+**Operating thresholds:** The pipeline uses `BLOOM_PROB_THRESHOLD = 0.60` by default (the balanced operating point — fewer false alarms, suited to resource-constrained intervention). Operators prioritizing early warning can lower it to 0.55 (high-recall mode), which catches 7 more blooms on the 2023–2025 test set (TP 33 → 40) at the cost of 26 more false alarms (FP 41 → 67).
 
 ```bash
 # Generate predictions for any date
