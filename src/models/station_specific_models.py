@@ -64,6 +64,12 @@ if need:
 else:
     print("  sal_lag2/3/4 already present in tidal CSV (no merge needed).")
 
+print("Merging max_gust_3d from data/gust_features_daily.csv...")
+gust = pd.read_csv('data/gust_features_daily.csv', usecols=['date', 'max_gust_3d'])
+gust['date'] = pd.to_datetime(gust['date'])
+df = df.merge(gust, on='date', how='left')
+print(f"  max_gust_3d coverage: {df['max_gust_3d'].notna().mean() * 100:.1f}%")
+
 # ---------------------------------------------------------------------------
 # 2. Recompute rolling means + bloom_28d label (identical to all pipeline scripts)
 # ---------------------------------------------------------------------------
@@ -106,6 +112,7 @@ FEATURES_ALL = [
     'nox_lag2', 'dip_lag2', 'dip_change', 'dip_x_month',
     'neighbor_chl3_mean', 'neighbor_chl3_lag1',
     'tidal_gt_anom', 'tidal_msl_anom',
+    'max_gust_3d',
 ]
 FEATURES = [f for f in FEATURES_ALL if f in df.columns]
 missing = [f for f in FEATURES_ALL if f not in df.columns]
