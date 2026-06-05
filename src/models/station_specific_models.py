@@ -293,6 +293,7 @@ for station in WESTERN_STATIONS:
         'A_best': A_best, 'A_60': A_60, 'tA': tA,
         'B_best': B_best, 'B_60': B_60, 'tB': tB,
         'test_rate': yAte.mean(),
+        'n_pos': int(yAte.sum()), 'n_test': len(yAte),
     }
 
 # ---------------------------------------------------------------------------
@@ -344,6 +345,28 @@ for st in WESTERN_STATIONS:
           f"{r['A_best']['f1']:>5.3f} {r['A_60']['precision']:>7.3f} {r['A_60']['recall']:>7.3f} | "
           f"{r['tB']:>4.2f} {r['B_best']['precision']:>6.3f} {r['B_best']['recall']:>6.3f} "
           f"{r['B_best']['f1']:>5.3f} {r['B_60']['precision']:>7.3f} {r['B_60']['recall']:>7.3f}")
+
+print("\n" + "=" * 72)
+print("CONFUSION MATRIX DETAIL  (test 2023-2025)")
+print("=" * 72)
+print(f"{'Stn':>4} {'n+':>3} {'n':>4} | "
+      f"{'A@best':>8}  {'TP':>3} {'FP':>3} {'FN':>3} | "
+      f"{'A@0.60':>8}  {'TP':>3} {'FP':>3} {'FN':>3} | "
+      f"{'B@best':>8}  {'TP':>3} {'FP':>3} {'FN':>3} | "
+      f"{'B@0.60':>8}  {'TP':>3} {'FP':>3} {'FN':>3}")
+print("-" * 100)
+for st in WESTERN_STATIONS:
+    if st not in per_station:
+        print(f"{st:>4} {'--':>3} {'--':>4} | (skipped)")
+        continue
+    r = per_station[st]
+    def _cm(m, t):
+        return (f"t={t:.2f}   {m['tp']:>3} {m['fp']:>3} {m['fn']:>3}")
+    print(f"{st:>4} {r['n_pos']:>3} {r['n_test']:>4} | "
+          f"{_cm(r['A_best'], r['tA'])} | "
+          f"{_cm(r['A_60'],   0.60   )} | "
+          f"{_cm(r['B_best'], r['tB'])} | "
+          f"{_cm(r['B_60'],   0.60   )}")
 
 # ---------------------------------------------------------------------------
 # 7. Combined comparison across western stations
