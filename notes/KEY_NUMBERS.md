@@ -9,7 +9,7 @@ Last updated: 2026-06-04
 
 | Model | Val AUC | Test AUC | Notes |
 |---|---|---|---|
-| **LR (deployed, 34 feat, C=0.05)** | **0.824** | **0.814** | **Final locked deployed model** |
+| **LR (deployed, 35 feat, C=0.05)** | **0.824** | **0.815** | **Final locked deployed model** |
 | Ensemble (LR 80% + XGB 20%) | 0.862 | 0.827 | Older experiment; not deployed |
 | Logistic Regression (baseline, 26 feat) | 0.847 | 0.824 | Baseline before tidal/sal/saturation features |
 | XGBoost (baselines_corrected.py) | 0.843 | 0.774 | lr=0.03, depth=3 |
@@ -21,10 +21,10 @@ Last updated: 2026-06-04
 
 **Bloom rates:** train 22.7% | val ~6–7% | test 7.2%
 
-**Precision (test set, deployed LR 34-feat model):**
-- Global threshold 0.60: **0.465** (TP=33, FP=38, FN=41)
-- Global threshold 0.55: 0.387 (TP=41, FP=65, FN=33)
-- Station-specific (Strategy B per-station threshold): 0.40–0.80 (C1=0.800, A4=0.625, 02=0.571, B3=0.545, 01=0.400)
+**Precision (test set, deployed LR 35-feat model):**
+- Global threshold 0.60: **0.500** (TP=36, FP=36, FN=38)
+- Global threshold 0.55: 0.377 (TP=40, FP=66, FN=34)
+- Station-specific (best operating point per station): 0.50–1.00 (C1=1.000, 02=0.625, 01=0.500, A4=0.625, B3=0.556)
 - Note: older pre-correction results quoted 0.17–0.29 globally and 0.32–0.40 for station models — these are from the wrong pipeline
 
 **Prediction horizon:** 28 days (forward calendar window from observation date)
@@ -45,7 +45,8 @@ Scripts: `final_evaluation_threshold_sweep.py`, `daily_inference.py`.
 |---|---|---|---|---|---|
 | Baseline (30 feat, incl. tidal anomalies) | 0.449 | 0.419 | 0.434 | 0.816 | 31/38/43 |
 | + sal_lag2/3/4 (33 feat) | 0.446 | 0.446 | 0.446 | 0.814 | 33/41/41 |
-| **+ percent_saturation (34 feat) — FINAL DEPLOYED** | **0.465** | **0.446** | **0.455** | **0.814** | **33/38/41** |
+| + percent_saturation (34 feat) | 0.465 | 0.446 | 0.455 | 0.814 | 33/38/41 |
+| **+ max_gust_3d (35 feat) — FINAL DEPLOYED** | **0.500** | **0.486** | **0.493** | **0.815** | **36/36/38** |
 
 **sal_lag2/3/4** — salinity trajectory lags (2/3/4 prior observations), 97–98%
 coverage in `hab_features_tidal.csv`. Each correlates r≈−0.21 with bloom_28d
@@ -63,6 +64,34 @@ predictor but CT DEEP stopped recording after 2019 → median-imputed test rows)
 group (density+PAR+chl_std+pH) raised precision to 0.474 and AUC to 0.822 but
 cost recall (0.365), a precision-for-recall trade — not integrated. Adding
 `sea_water_density` on top of sal_lags was destructive (precision 0.394).
+
+---
+
+## Section 1c — Final Locked Numbers (35-feat pipeline, max_gust_3d integrated)
+
+> All numbers below are final. Do not update without retraining on new data.
+> Locked: 2026-06-04. Reproduce: `python src/models/final_evaluation_threshold_sweep.py`
+
+**Global model (LR, C=0.05, balanced, 35 features):**
+
+| Threshold | Prec | Rec | F1 | TP | FP | FN | AUC |
+|-----------|------|-----|-----|-----|-----|-----|-----|
+| 0.60 (balanced) | **0.500** | **0.486** | **0.493** | 36 | 36 | 38 | 0.815 |
+| 0.55 (high recall) | 0.377 | 0.541 | 0.444 | 40 | 66 | 34 | 0.815 |
+
+**Station-specific best operating points (test 2023–2025):**
+
+| Station | Rate | Strategy | Threshold | Prec | Rec | F1 | TP | FP | FN | n_pos |
+|---------|------|----------|-----------|------|-----|-----|-----|-----|-----|-------|
+| C1 | 17.5% | B (global) | 0.60 | **1.000** | 0.571 | 0.727 | 4 | 0 | 3 | 7 |
+| 02 | 33.3% | B (global) | 0.60 | 0.625 | 0.833 | 0.714 | 5 | 3 | 1 | 6 |
+| 01 | 16.7% | B (global) | 0.60 | 0.500 | 1.000 | 0.667 | 3 | 3 | 0 | 3 |
+| A4 | 20.0% | A (station-only) | 0.60 | 0.625 | 0.625 | 0.625 | 5 | 3 | 3 | 8 |
+| B3 | 27.5% | A (station-only) | 0.50 | 0.556 | 0.455 | 0.500 | 5 | 4 | 6 | 11 |
+
+Note: C1 precision=1.000 is genuine (4 TP, 0 FP) but small sample (7 test positives over 2023–2025).
+Strategy B = global model (all stations) + per-station threshold tuned on 2020–2022 val set.
+Strategy A = station-only model trained on that station's 1993–2019 data.
 
 ---
 

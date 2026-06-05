@@ -47,6 +47,7 @@ Computed from recent sensor history using these features:
 - `tidal_gt_anom`, `tidal_msl_anom` — NOAA CO-OPS tidal anomaly features
 - `sal_lag2/3/4` — salinity trajectory lags
 - `percent_saturation` — CT DEEP WQP surface oxygen saturation
+- `max_gust_3d` — 3-day maximum wind gust speed (NOAA ASOS, 3 CT stations)
 - `dissolved_oxygen`, `temperature`, `salinity`
 - `dip_x_month` — dissolved inorganic phosphorus interaction with seasonality
 - `neighbor_chl3_mean` — spatial chlorophyll signal from neighboring stations
@@ -60,8 +61,8 @@ Computed from recent sensor history using these features:
 | Green | Low risk | P ≤ 40% |
 
 **Two operating modes.** The high-risk cutoff has two recommended settings:
-- **Balanced (P > 60%)** — the default `daily_inference.py` threshold. Minimizes false alarms; use when intervention resources are constrained. Test set: precision 0.465, recall 0.446.
-- **High recall (P > 55%)** — lowers the bar to catch more blooms; use when early warning is the priority and more false alarms are acceptable. Test set: precision 0.387, recall 0.554 (catches 8 more blooms, 27 more false alarms than balanced).
+- **Balanced (P > 60%)** — the default `daily_inference.py` threshold. Minimizes false alarms; use when intervention resources are constrained. Test set: precision 0.500, recall 0.486, F1 0.493 (TP=36, FP=36, FN=38).
+- **High recall (P > 55%)** — lowers the bar to catch more blooms; use when early warning is the priority and more false alarms are acceptable. Test set: precision 0.377, recall 0.541, F1 0.444 (catches 4 more blooms, 30 more false alarms than balanced; TP=40, FP=66, FN=34).
 
 ---
 

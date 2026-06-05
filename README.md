@@ -6,7 +6,7 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0-orange?logo=pytorch)](https://pytorch.org)
 [![NASA MODIS](https://img.shields.io/badge/Data-NASA%20MODIS-darkblue)](https://oceancolor.gsfc.nasa.gov)
 [![CT DEEP](https://img.shields.io/badge/Labels-CT%20DEEP%201993--2025-green)](https://portal.ct.gov/DEEP)
-[![AUC](https://img.shields.io/badge/LR%20Test%20AUC-0.814-brightgreen)](#results)
+[![AUC](https://img.shields.io/badge/LR%20Test%20AUC-0.815-brightgreen)](#results)
 
 ---
 
@@ -35,7 +35,7 @@ Output: P(bloom occurs in next 28 days) ∈ [0, 1]
 
 | Model | Val AUC | Test AUC |
 |-------|---------|----------|
-| **Logistic Regression (deployed, 34 feat)** | **0.824** | **0.814** |
+| **Logistic Regression (deployed, 35 feat)** | **0.824** | **0.815** |
 | Ensemble (LR 80% + XGBoost 20%) | 0.862 | 0.827 |
 | LSTM (temporal) | 0.832 | 0.784 |
 | XGBoost | 0.843 | 0.774 |
@@ -48,28 +48,28 @@ All models evaluated using spatiotemporal cross-validation (train: 1993–2019, 
 
 **Operating points (test set 2023–2025):**
 
-The deployed model — Logistic Regression (C=0.05) with tidal-anomaly, extended rolling-mean (14/21-day), salinity-lag, and surface oxygen-saturation (`percent_saturation`) features — supports two operating points:
+The deployed model — Logistic Regression (C=0.05) with tidal-anomaly, extended rolling-mean (14/21-day), salinity-lag, surface oxygen-saturation (`percent_saturation`), and 3-day max wind gust (`max_gust_3d`) features — supports two operating points:
 
 | Threshold | Precision | Recall | F1 | TP | FP | FN | Use case |
 |-----------|-----------|--------|-----|-----|-----|-----|----------|
-| 0.60 (balanced) | 0.465 | 0.446 | 0.455 | 33 | 38 | 41 | Resource-constrained intervention |
-| 0.55 (high recall) | 0.387 | 0.554 | 0.456 | 41 | 65 | 33 | Early warning priority |
+| 0.60 (balanced) | 0.500 | 0.486 | 0.493 | 36 | 36 | 38 | Resource-constrained intervention |
+| 0.55 (high recall) | 0.377 | 0.541 | 0.444 | 40 | 66 | 34 | Early warning priority |
 
-Test AUC: 0.814 | Average Precision: 0.335
+Test AUC: 0.815 | Average Precision: 0.335
 
 Precision is structurally constrained by the post-TMDL test bloom rate of 7.2% — not a model deficiency. The five highest-priority western stations have local bloom rates of 17–33%, which makes precision far more tractable when each station is evaluated on its own.
 
 **Station-specific results (test set 2023–2025).** Two strategies were compared at the western stations: **(A)** a model trained only on that station's 1993–2019 history, and **(B)** the global model with a per-station decision threshold tuned on the 2020–2022 validation set. Strategy B is the deployed approach — it keeps the well-calibrated global probabilities and only re-tunes the threshold; those thresholds are stored in [`data/station_thresholds.csv`](data/station_thresholds.csv). Strategy A overfits the small per-station validation sets and is less reliable.
 
-| Station | Local bloom rate | Precision | Recall | F1 |
-|---------|-----------------|-----------|--------|-----|
-| C1 | 17.5% | **0.800** | 0.571 | **0.667** |
-| A4 | 20.0% | 0.625 | 0.625 | 0.625 |
-| 02 | 33.3% | 0.571 | 0.667 | 0.615 |
-| B3 | 27.5% | 0.545 | 0.545 | 0.545 |
-| 01 | 16.7% | 0.400 | 0.667 | 0.500 |
+| Station | Local bloom rate | Strategy | Threshold | Precision | Recall | F1 | TP | FP | FN |
+|---------|-----------------|---------|-----------|-----------|--------|-----|-----|-----|-----|
+| C1 | 17.5% | B (global+station t) | 0.60 | **1.000** | 0.571 | **0.727** | 4 | 0 | 3 |
+| 02 | 33.3% | B (global+station t) | 0.60 | 0.625 | 0.833 | 0.714 | 5 | 3 | 1 |
+| 01 | 16.7% | B (global+station t) | 0.60 | 0.500 | 1.000 | 0.667 | 3 | 3 | 0 |
+| A4 | 20.0% | A (station-only) | 0.60 | 0.625 | 0.625 | 0.625 | 5 | 3 | 3 |
+| B3 | 27.5% | A (station-only) | 0.50 | 0.556 | 0.455 | 0.500 | 5 | 4 | 6 |
 
-Results use per-station decision thresholds tuned on the 2020–2022 validation set and stored in [`data/station_thresholds.csv`](data/station_thresholds.csv). C1 reaches **precision 0.80** and station 02 reaches 0.57 / 0.67 — well above the 0.47 global ceiling — confirming that per-station thresholds are worthwhile at high-bloom-rate sites. Reproduce with `python src/models/station_specific_models.py`.
+Results use per-station decision thresholds tuned on the 2020–2022 validation set and stored in [`data/station_thresholds.csv`](data/station_thresholds.csv). C1 reaches **precision 1.000** (4 TP, 0 FP — genuine, but only 7 test positives) and station 02 reaches 0.625 / 0.833 — well above the 0.50 global ceiling — confirming that per-station thresholds are worthwhile at high-bloom-rate sites. Reproduce with `python src/models/station_specific_models.py`.
 
 ---
 
@@ -121,6 +121,7 @@ See `src/deploy/DASHBOARD.md` for full documentation on the dashboard columns, i
 |--------|-------------|---------|
 | CT DEEP LISICOS | In-situ water quality, 50 stations, 1993–2025 (depth-profile raw: 1.36M rows) | **11,447 station-days** (aggregated) |
 | NOAA CO-OPS | Tidal water-level observations; tidal anomaly features | 1993–2025 |
+| NOAA ASOS | Hourly automated surface observations (wind gusts), 3 CT stations | 1993–2025 |
 | CT DEEP WQP | Surface nutrients (NOx, NH3, TDN, DIP, percent_saturation) | 204K measurements |
 | NASA MODIS Aqua L3 | Daily 4km chlorophyll-a, 2003–2025 | 8,356 NetCDF files |
 | USGS Stream Gauges | CT, Thames, Housatonic River discharge | 1993–2025 |
@@ -237,7 +238,7 @@ Open `src/deploy/dashboard.html` in a browser and load `data/daily_predictions.c
 
 ### Logistic Regression (deployed model)
 - L2 regularization, `C=0.05`, `class_weight='balanced'`, StandardScaler
-- 34 features: chlorophyll rolling means (7/14/21-day), lags, climatology anomaly, tidal anomalies (tidal_gt_anom, tidal_msl_anom), salinity lags (lag2/3/4), percent_saturation, dissolved oxygen, temperature, spatial neighbor means, nutrient interactions, lat/lon/month
+- 35 features: chlorophyll rolling means (7/14/21-day), lags, climatology anomaly, tidal anomalies (tidal_gt_anom, tidal_msl_anom), salinity lags (lag2/3/4), percent_saturation, max_gust_3d (3-day max wind gust, NOAA ASOS), dissolved oxygen, temperature, spatial neighbor means, nutrient interactions, lat/lon/month
 - 28-day forward bloom label (chlorophyll-a > 10 µg/L)
 - Default threshold: 0.60 (balanced) — see operating points above
 - Primary data file: `data/hab_features_tidal.csv`

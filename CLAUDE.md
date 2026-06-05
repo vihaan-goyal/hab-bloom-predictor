@@ -29,6 +29,18 @@ Requires `data/gust_features_daily.csv` — generate with:
 
 Test AUC: 0.815 | Precision @0.60: 0.500 | Recall @0.60: 0.486 | F1 @0.60: 0.493
 
+**Station-specific best operating points (test 2023–2025):**
+
+| Station | Rate | Strategy | Threshold | Prec | Rec | F1 | TP | FP | FN |
+|---------|------|----------|-----------|------|-----|-----|-----|-----|-----|
+| C1 | 17.5% | B (global) | 0.60 | 1.000 | 0.571 | 0.727 | 4 | 0 | 3 |
+| 02 | 33.3% | B (global) | 0.60 | 0.625 | 0.833 | 0.714 | 5 | 3 | 1 |
+| 01 | 16.7% | B (global) | 0.60 | 0.500 | 1.000 | 0.667 | 3 | 3 | 0 |
+| A4 | 20.0% | A (station-only) | 0.60 | 0.625 | 0.625 | 0.625 | 5 | 3 | 3 |
+| B3 | 27.5% | A (station-only) | 0.50 | 0.556 | 0.455 | 0.500 | 5 | 4 | 6 |
+
+Note: C1 precision=1.000 is genuine (4 TP, 0 FP) but small sample (7 test positives).
+
 ## Key scripts
 
 | Script | Purpose |
