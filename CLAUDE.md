@@ -20,11 +20,14 @@ the evaluation script and the daily inference pipeline.
 
 ## Deployed model
 
-Logistic Regression, `C=0.05`, `class_weight='balanced'`, 34 features:
+Logistic Regression, `C=0.05`, `class_weight='balanced'`, 35 features:
 BASE + tidal_gt_anom + tidal_msl_anom + chl_roll14_mean + chl_roll21_mean +
-sal_lag2 + sal_lag3 + sal_lag4 + percent_saturation
+sal_lag2 + sal_lag3 + sal_lag4 + percent_saturation + max_gust_3d
 
-Test AUC: 0.814 | Precision @0.60: 0.465 | Recall @0.60: 0.446
+Requires `data/gust_features_daily.csv` — generate with:
+`python src/features/add_gust_features.py`
+
+Test AUC: 0.815 | Precision @0.60: 0.500 | Recall @0.60: 0.486 | F1 @0.60: 0.493
 
 ## Key scripts
 
