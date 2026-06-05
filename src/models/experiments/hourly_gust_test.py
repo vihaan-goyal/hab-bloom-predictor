@@ -2,12 +2,17 @@
 hourly_gust_test.py
 -------------------
 Tests whether hourly wind gust features extracted from ASOS LCD files
-improve precision over the baseline 34-feature LR model.
+improve precision over the baseline LR model.
 
-Daily wind speed previously failed (-4pp) because it smooths out mixing
-events. A single strong gust (>15 m/s) can break thermal stratification
-even when the daily average looks calm. HourlyWindGustSpeed captures
-these episodic events.
+Round 1 (original): tested gust features against the 34-feature baseline.
+  -> max_gust_3d won: +3.5pp precision, +3.8pp F1 at threshold 0.60.
+  -> max_gust_3d added to the deployed pipeline (now 35 features).
+
+Round 2 (this run): tests additional gust features against the new
+  35-feature baseline (BASE + max_gust_3d, Prec=0.500, F1=0.493).
+
+max_gust_3d is loaded from data/gust_features_daily.csv (pipeline source).
+Run src/features/add_gust_features.py first if that file does not exist.
 
 Run from repo root:
     & "$env:USERPROFILE/anaconda3/python.exe" src/models/experiments/hourly_gust_test.py
@@ -25,7 +30,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_auc_score, precision_score, recall_score, f1_score
 
 # ---------------------------------------------------------------------------
-# 1. Extract hourly gust data from ASOS files
+# 1. Extract hourly gust data from ASOS files (needed for experimental features
+#    not yet in the pipeline: max_gust_7d, n_strong_7d, gust_energy_7d, calm_hours_7d)
 # ---------------------------------------------------------------------------
 ASOS_DIR = 'data/raw/asos_wind'
 
@@ -68,13 +74,12 @@ hourly_df = pd.concat(all_hourly, ignore_index=True)
 print(f"Total hourly records: {len(hourly_df):,}")
 print(f"Non-null gusts: {hourly_df['gust_ms'].notna().sum():,} "
       f"({hourly_df['gust_ms'].notna().mean()*100:.1f}%)")
-print(f"Mean gust when present: {hourly_df['gust_ms'].mean():.2f} m/s")
 print(f"Date range: {hourly_df['date'].min().date()} to {hourly_df['date'].max().date()}")
 
 # ---------------------------------------------------------------------------
-# 2. Aggregate to daily gust features
+# 2. Aggregate to daily gust features (experimental only -- not max_gust_3d)
 # ---------------------------------------------------------------------------
-print("\nAggregating to daily gust features ...")
+print("\nAggregating to daily experimental gust features ...")
 daily_gust = (
     hourly_df.groupby('date')
     .agg(
@@ -89,7 +94,6 @@ daily_gust = (
 )
 
 daily_gust['max_gust_7d']    = daily_gust['max_gust_ms'].rolling(7, min_periods=3).max()
-daily_gust['max_gust_3d']    = daily_gust['max_gust_ms'].rolling(3, min_periods=2).max()
 daily_gust['n_strong_7d']    = daily_gust['n_strong_gusts'].rolling(7, min_periods=3).sum()
 daily_gust['gust_energy_7d'] = daily_gust['gust_energy'].rolling(7, min_periods=3).sum()
 daily_gust['calm_hours_7d']  = (
@@ -97,14 +101,27 @@ daily_gust['calm_hours_7d']  = (
     .rolling(7, min_periods=3).sum()
 )
 
-GUST_FEATURES = ['max_gust_7d', 'max_gust_3d', 'n_strong_7d',
-                 'gust_energy_7d', 'calm_hours_7d']
-
-daily_gust.to_csv('data/hourly_gust_daily.csv', index=False)
-print(f"Saved data/hourly_gust_daily.csv  ({len(daily_gust):,} days)")
+# max_gust_3d loaded from pipeline CSV below (not recomputed inline)
+EXP_GUST_FEATURES = ['max_gust_7d', 'n_strong_7d', 'gust_energy_7d', 'calm_hours_7d']
 
 # ---------------------------------------------------------------------------
-# 3. Load HAB features (same pipeline as baseline)
+# 3. Load max_gust_3d from the pipeline CSV (consistent with deployed model)
+# ---------------------------------------------------------------------------
+GUST_CSV = 'data/gust_features_daily.csv'
+if not os.path.exists(GUST_CSV):
+    raise FileNotFoundError(
+        f"{GUST_CSV} not found -- run python src/features/add_gust_features.py first"
+    )
+
+print(f"\nLoading max_gust_3d from {GUST_CSV} ...")
+gust_pipeline = pd.read_csv(GUST_CSV, usecols=['date', 'max_gust_3d'])
+gust_pipeline['date'] = pd.to_datetime(gust_pipeline['date'])
+print(f"  Loaded {len(gust_pipeline):,} days, "
+      f"max_gust_3d non-null: {gust_pipeline['max_gust_3d'].notna().sum():,} "
+      f"({gust_pipeline['max_gust_3d'].notna().mean()*100:.1f}%)")
+
+# ---------------------------------------------------------------------------
+# 4. Load HAB features (same pipeline as baseline)
 # ---------------------------------------------------------------------------
 print("\nLoading data/hab_features_tidal.csv ...")
 hab = pd.read_csv('data/hab_features_tidal.csv')
@@ -143,7 +160,7 @@ if 'percent_saturation' not in hab.columns:
 df = hab
 
 # ---------------------------------------------------------------------------
-# 4. Recompute rolling features and bloom_28d label
+# 5. Recompute rolling features and bloom_28d label
 # ---------------------------------------------------------------------------
 print("Computing rolling features and bloom_28d label ...")
 for n, min_p in [(3, 2), (6, 3), (9, 5), (14, 7), (21, 10)]:
@@ -171,17 +188,23 @@ for station, grp in df.groupby('station_name'):
     df.loc[idx, 'bloom_28d'] = labels
 
 # ---------------------------------------------------------------------------
-# 5. Merge daily gust features
+# 6. Merge gust features
 # ---------------------------------------------------------------------------
-print("\nMerging daily gust features ...")
-df = df.merge(daily_gust[['date'] + GUST_FEATURES], on='date', how='left')
+print("\nMerging gust features ...")
 
-for feat in GUST_FEATURES:
-    cov = df[feat].notna().mean() * 100
-    print(f"  {feat}: {cov:.1f}% coverage")
+# max_gust_3d from pipeline CSV
+df = df.merge(gust_pipeline, on='date', how='left')
+print(f"  max_gust_3d (pipeline): {df['max_gust_3d'].notna().mean()*100:.1f}% coverage")
+
+# experimental features from ASOS aggregation
+df = df.merge(daily_gust[['date'] + EXP_GUST_FEATURES], on='date', how='left')
+for feat in EXP_GUST_FEATURES:
+    print(f"  {feat}: {df[feat].notna().mean()*100:.1f}% coverage")
+
+ALL_GUST_FEATURES = ['max_gust_3d'] + EXP_GUST_FEATURES
 
 # ---------------------------------------------------------------------------
-# 6. Splits
+# 7. Splits
 # ---------------------------------------------------------------------------
 train = df[df['date'].dt.year <= 2019]
 val   = df[(df['date'].dt.year >= 2020) & (df['date'].dt.year <= 2022)]
@@ -192,7 +215,7 @@ print(f"Bloom rate -- train: {train['bloom_28d'].mean():.3f} | "
       f"val: {val['bloom_28d'].mean():.3f} | test: {test['bloom_28d'].mean():.3f}")
 
 # ---------------------------------------------------------------------------
-# 7. Gust feature coverage and correlations with bloom_28d
+# 8. Gust feature coverage and correlations with bloom_28d
 # ---------------------------------------------------------------------------
 val_test = pd.concat([val, test])
 
@@ -201,7 +224,7 @@ print("GUST FEATURE COVERAGE & CORRELATION WITH bloom_28d")
 print("=" * 75)
 print(f"{'Feature':<20}  {'Train %':>8}  {'Val+Test %':>10}  {'Corr(bloom_28d)':>16}")
 print("-" * 75)
-for feat in GUST_FEATURES:
+for feat in ALL_GUST_FEATURES:
     if feat not in df.columns:
         continue
     train_cov = train[feat].notna().mean() * 100
@@ -211,8 +234,9 @@ for feat in GUST_FEATURES:
     print(f"{feat:<20}  {train_cov:>7.1f}%  {vt_cov:>9.1f}%  {corr:>16.4f}")
 
 # ---------------------------------------------------------------------------
-# 8. Base feature set (same 34 features as pipeline)
+# 9. Feature sets
 # ---------------------------------------------------------------------------
+# 34-feature base (pipeline before max_gust_3d was added)
 BASE = [
     'Chlorophyll', 'chl_lag1', 'chl_lag2', 'chl_lag3', 'chl_lag4',
     'chl_roll3_mean', 'chl_roll6_mean', 'chl_roll9_mean', 'chl_trend',
@@ -230,14 +254,24 @@ BASE = [f for f in BASE if f in df.columns]
 print(f"\nBASE features available: {len(BASE)}")
 
 feature_sets = {
-    'BASE (baseline)':           BASE,
-    'BASE + max_gust_7d':        BASE + ['max_gust_7d'],
-    'BASE + max_gust_3d':        BASE + ['max_gust_3d'],
-    'BASE + n_strong_7d':        BASE + ['n_strong_7d'],
-    'BASE + gust_energy_7d':     BASE + ['gust_energy_7d'],
-    'BASE + calm_hours_7d':      BASE + ['calm_hours_7d'],
-    'BASE + all_gusts':          BASE + GUST_FEATURES,
-    'BASE + max+calm':           BASE + ['max_gust_7d', 'calm_hours_7d'],
+    # --- Round 1: original 34-feature baseline and single-gust additions ---
+    'BASE (34, orig baseline)':      BASE,
+    'BASE + max_gust_7d':            BASE + ['max_gust_7d'],
+    'BASE + max_gust_3d':            BASE + ['max_gust_3d'],
+    'BASE + n_strong_7d':            BASE + ['n_strong_7d'],
+    'BASE + gust_energy_7d':         BASE + ['gust_energy_7d'],
+    'BASE + calm_hours_7d':          BASE + ['calm_hours_7d'],
+    'BASE + all_gusts':              BASE + ALL_GUST_FEATURES,
+    'BASE + max+calm':               BASE + ['max_gust_7d', 'calm_hours_7d'],
+    # --- Round 2: new 35-feature baseline and additions on top of it ---
+    'BASE+gust3d (new baseline)':         BASE + ['max_gust_3d'],
+    'BASE+gust3d + max_gust_7d':          BASE + ['max_gust_3d', 'max_gust_7d'],
+    'BASE+gust3d + n_strong_7d':          BASE + ['max_gust_3d', 'n_strong_7d'],
+    'BASE+gust3d + gust_energy_7d':       BASE + ['max_gust_3d', 'gust_energy_7d'],
+    'BASE+gust3d + calm_hours_7d':        BASE + ['max_gust_3d', 'calm_hours_7d'],
+    'BASE+gust3d + all_other_gusts':      BASE + ['max_gust_3d', 'max_gust_7d',
+                                                   'n_strong_7d', 'gust_energy_7d',
+                                                   'calm_hours_7d'],
 }
 feature_sets = {
     k: [f for f in v if f in df.columns]
@@ -245,7 +279,7 @@ feature_sets = {
 }
 
 # ---------------------------------------------------------------------------
-# 9. Helpers
+# 10. Helpers
 # ---------------------------------------------------------------------------
 def eval_at(y, p, t=0.60):
     preds = (p >= t).astype(int)
@@ -287,7 +321,7 @@ def run_lr(features):
 
 
 # ---------------------------------------------------------------------------
-# 10. Run all feature sets
+# 11. Run all feature sets
 # ---------------------------------------------------------------------------
 print("\nRunning feature set evaluations ...")
 results = {}
@@ -296,37 +330,48 @@ for name, feats in feature_sets.items():
     results[name] = run_lr(feats)
 
 # ---------------------------------------------------------------------------
-# 11. Print results table sorted by F1
+# 12. Print results table sorted by F1
 # ---------------------------------------------------------------------------
 sorted_results = sorted(results.items(), key=lambda x: x[1]['f1'], reverse=True)
 
-BASELINE_PREC = results['BASE (baseline)']['precision']
-BASELINE_F1   = results['BASE (baseline)']['f1']
-BASELINE_REC  = results['BASE (baseline)']['recall']
+NEW_BASELINE_KEY  = 'BASE+gust3d (new baseline)'
+ORIG_BASELINE_KEY = 'BASE (34, orig baseline)'
+BASELINE_PREC = results[NEW_BASELINE_KEY]['precision']
+BASELINE_F1   = results[NEW_BASELINE_KEY]['f1']
+BASELINE_REC  = results[NEW_BASELINE_KEY]['recall']
 
-print("\n" + "=" * 108)
-print("HOURLY GUST FEATURE TEST (test 2023-2025, LR C=0.05, threshold=0.60)")
-print("=" * 108)
-hdr = (f"{'Feature Set':<32}  {'N':>4}  {'AUC':>7}  "
+print("\n" + "=" * 112)
+print("HOURLY GUST FEATURE TEST — ROUND 2 (test 2023-2025, LR C=0.05, threshold=0.60)")
+print("=" * 112)
+hdr = (f"{'Feature Set':<36}  {'N':>4}  {'AUC':>7}  "
        f"{'Prec@.60':>9}  {'Rec@.60':>8}  {'F1@.60':>7}  {'TP':>4}  {'FP':>4}  {'FN':>4}")
 print(hdr)
-print("-" * 108)
+print("-" * 112)
 
 for name, m in sorted_results:
     flag = ''
-    if name != 'BASE (baseline)':
+    if name not in (NEW_BASELINE_KEY, ORIG_BASELINE_KEY):
         beats_f1   = m['f1'] > BASELINE_F1 + 0.010
         beats_prec = (m['precision'] > BASELINE_PREC + 0.020) and (m['recall'] >= 0.35)
         if beats_f1 or beats_prec:
             flag = '  ***'
-    marker = '  <-- baseline' if name == 'BASE (baseline)' else ''
-    print(f"{name:<32}  {m['n_feat']:>4}  {m['auc']:>7.4f}  "
+    if name == NEW_BASELINE_KEY:
+        marker = '  <-- new baseline (35 feat, deployed)'
+    elif name == ORIG_BASELINE_KEY:
+        marker = '  <-- orig baseline (34 feat)'
+    else:
+        marker = ''
+    print(f"{name:<36}  {m['n_feat']:>4}  {m['auc']:>7.4f}  "
           f"{m['precision']:>9.3f}  {m['recall']:>8.3f}  {m['f1']:>7.3f}  "
           f"{m['tp']:>4}  {m['fp']:>4}  {m['fn']:>4}{flag}{marker}")
 
-print(f"\n*** = F1 > baseline+0.010  OR  Prec > baseline+0.020 (with Rec >= 0.35)")
+print(f"\n*** = beats new baseline by F1 > +0.010  OR  Prec > +0.020 (with Rec >= 0.35)")
 
-base = results['BASE (baseline)']
-print(f"\nBaseline check: Prec={base['precision']:.3f}  Rec={base['recall']:.3f}  "
-      f"F1={base['f1']:.3f}  AUC={base['auc']:.3f}")
-print(f"  Expected:     Prec~0.465  Rec~0.446  F1~0.455  AUC~0.814")
+nb = results[NEW_BASELINE_KEY]
+ob = results[ORIG_BASELINE_KEY]
+print(f"\nNew baseline check:  Prec={nb['precision']:.3f}  Rec={nb['recall']:.3f}  "
+      f"F1={nb['f1']:.3f}  AUC={nb['auc']:.3f}")
+print(f"  Expected:          Prec~0.500  Rec~0.486  F1~0.493  AUC~0.815")
+print(f"\nOrig baseline check: Prec={ob['precision']:.3f}  Rec={ob['recall']:.3f}  "
+      f"F1={ob['f1']:.3f}  AUC={ob['auc']:.3f}")
+print(f"  Expected:          Prec~0.465  Rec~0.446  F1~0.455  AUC~0.814")
