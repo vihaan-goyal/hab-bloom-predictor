@@ -69,6 +69,12 @@ if 'percent_saturation' not in df.columns:
     print(f"  percent_saturation coverage: "
           f"{df['percent_saturation'].notna().mean() * 100:.1f}%")
 
+print("Merging max_gust_3d from data/gust_features_daily.csv...")
+gust = pd.read_csv("data/gust_features_daily.csv", usecols=['date', 'max_gust_3d'])
+gust['date'] = pd.to_datetime(gust['date'])
+df = df.merge(gust, on='date', how='left')
+print(f"  max_gust_3d coverage: {df['max_gust_3d'].notna().mean() * 100:.1f}%")
+
 for n, min_p in [(3, 2), (6, 3), (9, 5), (14, 7), (21, 10)]:
     df[f'chl_roll{n}_mean'] = (
         df.groupby('station_name')['Chlorophyll']
@@ -110,6 +116,7 @@ FEATURES_ALL = [
     'neighbor_chl3_mean', 'neighbor_chl3_lag1',
     'tidal_gt_anom', 'tidal_msl_anom',
     'percent_saturation',
+    'max_gust_3d',
 ]
 FEATURES = [f for f in FEATURES_ALL if f in df.columns]
 
