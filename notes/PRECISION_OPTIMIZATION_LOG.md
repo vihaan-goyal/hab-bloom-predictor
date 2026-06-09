@@ -71,6 +71,35 @@ Status: REJECTED
 Discharge showed no signal in P2 -- interaction term won't help.
 Status: SKIPPED
 
+### Priority 8 — XGBoost Heavy Regularization (TODO)
+Method: XGBoost with min_child_weight=10, reg_alpha=1, max_depth=3, subsample=0.8
+Rationale: Locked model is LR. XGBoost val AUC=0.843 but test=0.774 -- overfitting gap.
+           Never tried heavy regularization specifically targeting test precision.
+Expected benefit: MEDIUM
+Status: TODO
+
+### Priority 9 — Station-Month Bloom Rate Feature (TODO)
+Feature: historical bloom frequency for each station x month (computed on train only)
+Rationale: January at A4 has ~2% historical bloom rate -- model should down-weight those
+           alerts. Already built in precision_features.py but tested on OLD pipeline only.
+           Never retested on corrected 28-day pipeline. Directly targets winter FPs.
+Expected benefit: MEDIUM-HIGH
+Status: TODO
+
+### Priority 10 — CHL Acceleration Feature (TODO)
+Feature: second derivative of CHL (rate of change of trend)
+Script: acceleration_feature.py already exists (May 28) -- never tested on corrected pipeline
+Rationale: FPs may spike suddenly; TPs build steadily. Acceleration captures this.
+Expected benefit: MEDIUM
+Status: TODO
+
+### Priority 11 — Neighbor Bloom Probability Feature (TODO)
+Feature: mean bloom probability of neighboring stations (from global model)
+Rationale: If A4 fires but B3/C1 show low bloom prob, that's evidence against the alert.
+           Currently have neighbor_chl3_mean but not neighbor bloom signal.
+Expected benefit: MEDIUM
+Status: TODO
+
 ### Priority 7 — Isotonic Calibration (REJECTED)
 Method: CalibratedClassifierCV isotonic + Platt sigmoid, fit on val (2020-2022)
 Result: Isotonic maps everything below 0.50 at test time (0 predictions at t=0.60).
@@ -89,7 +118,14 @@ Status: REJECTED
 | 1 | + Nutrient ffill        | 0.396     | 0.284  | 0.331 | 0.807 | -0.104     | REJECTED                         |
 | 2 | Discharge lags          | --        | --     | --    | --    | --         | SKIPPED -- corr <0.03 at all lags|
 | 4 | Per-station thresholds  | see above | --     | --    | --    | --         | C1=1.00, 02=0.625, A4=0.625, B3=0.556 |
-| 5 | + ERA5 wind stress      | 0.437     | 0.419  | 0.428 | 0.806 | -0.063     | REJECTED -- wind corr=-0.003, no signal |
+| 5 | + ERA5 wind stress      | 0.437     | 0.419  | 0.428 | 0.806 | -0.063     | REJECTED                         |
+| 6 | Isotonic/Platt cal      | --        | --     | --    | --    | --         | REJECTED -- breaks prob scale    |
+| 7 | + Kd490 water clarity   | 0.478     | 0.446  | 0.462 | 0.798 | -0.022     | REJECTED -- 78.8% null           |
+| 8 | + UConn nutrients       | 0.451     | 0.311  | 0.368 | 0.802 | -0.049     | REJECTED -- still monthly        |
+| 9 | XGBoost heavy reg       |           |        |       |       |            |                                  |
+| 10| Station-month bloom rate|           |        |       |       |            |                                  |
+| 11| CHL acceleration        |           |        |       |       |            |                                  |
+| 12| Neighbor bloom prob     |           |        |       |       |            |                                  |
 
 ---
 
