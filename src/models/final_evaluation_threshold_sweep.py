@@ -163,6 +163,16 @@ lr_model.fit(X_tr_s, y_train)
 lr_val_p  = lr_model.predict_proba(X_v_s)[:, 1]
 lr_test_p = lr_model.predict_proba(X_te_s)[:, 1]
 
+# --- dump test predictions for bootstrap_ci.py ---
+_test_meta = test.loc[test[FEATURES + ['bloom_28d']].dropna(subset=['bloom_28d']).index]
+pd.DataFrame({
+    "station_name": _test_meta['station_name'].astype(str).values,
+    "date":         _test_meta['date'].values,
+    "y_true":       y_test.values,
+    "y_prob":       lr_test_p,
+}).to_csv("data/test_predictions.csv", index=False)
+print(f"Saved data/test_predictions.csv ({len(y_test):,} rows)")
+
 print(f"\nLR Val AUC  (2020-2022):      {roc_auc_score(y_val,  lr_val_p):.4f}")
 print(f"LR Test AUC (2023-2025): {roc_auc_score(y_test, lr_test_p):.4f}")
 print(f"LR Test AP  (2023-2025): {average_precision_score(y_test, lr_test_p):.4f}")

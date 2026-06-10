@@ -53,6 +53,14 @@ model.fit(X_trainval.values, y_trainval.values)
 probs = model.predict_proba(X_test.values)[:,1]
 preds = (probs > 0.5).astype(int)
 
+kept = test[features + ['bloom_7d_ahead']].dropna().index
+pd.DataFrame({
+    "station_name": test.loc[kept, "station_name"].values,
+    "date":         test.loc[kept, "date"].values,
+    "y_true":       y_test.values,
+    "y_prob":       probs,
+}).to_csv("data/test_predictions.csv", index=False)
+
 print("\n" + "="*50)
 print("FINAL TEST SET RESULTS (2023-2025)")
 print("="*50)
