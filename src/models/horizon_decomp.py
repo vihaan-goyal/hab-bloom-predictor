@@ -66,18 +66,56 @@ def bootstrap_auc_ap(pooled, n_boot, seed):
     return np.array(aucs), np.array(aps)
 
 
+def paired_diff_bootstrap(pa, pb, n_boot, seed):
+    """AUC(a) - AUC(b) on the SAME resampled rows each draw. Tight because the
+    two horizons are correlated; far more sensitive than overlapping marginal CIs."""
+    a = pa[['station_name', 'date', 'y_true', 'y_prob']]
+    b = pb[['station_name', 'date', 'y_true', 'y_prob']]
+    m = a.merge(b, on=['station_name', 'date'], suffixes=('_a', '_b'))
+    rng = np.random.default_rng(seed)
+    year = pd.to_datetime(m['date']).dt.year.astype(str)
+    key = m['station_name'].astype(str) + "_" + year
+    groups = [np.array(v) for v in m.groupby(key).indices.values()]
+    ncl = len(groups)
+    yta, pra = m['y_true_a'].values, m['y_prob_a'].values
+    ytb, prb = m['y_true_b'].values, m['y_prob_b'].values
+    diffs = []
+    for _ in range(n_boot):
+        idx = np.concatenate([groups[c] for c in rng.integers(0, ncl, size=ncl)])
+        if len(np.unique(yta[idx])) < 2 or len(np.unique(ytb[idx])) < 2:
+            continue
+        diffs.append(roc_auc_score(yta[idx], pra[idx]) -
+                     roc_auc_score(ytb[idx], prb[idx]))
+    return np.array(diffs), len(m)
+
+
+def per_year_auc(pooled):
+    """AUC per test year for one horizon, to check the sparse-gap confound."""
+    out = []
+    for y, g in pooled.groupby('fold'):
+        yt, pr = g['y_true'].values, g['y_prob'].values
+        auc = roc_auc_score(yt, pr) if len(np.unique(yt)) > 1 else np.nan
+        out.append((int(y), int(yt.sum()), len(g), auc))
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--horizons", type=int, nargs="+", default=[7, 14, 21, 28])
     ap.add_argument("--first-test-year", type=int, default=2015)
     ap.add_argument("--last-test-year", type=int, default=2025)
     ap.add_argument("--threshold", type=float, default=0.60)
+    ap.add_argument("--compare", type=int, nargs=2, default=[21, 28],
+                    help="two horizons for the paired AUC-difference bootstrap")
+    ap.add_argument("--peryear", type=int, default=21,
+                    help="horizon for the per-year AUC breakdown (confound check)")
     ap.add_argument("--n-boot", type=int, default=2000)
     ap.add_argument("--seed", type=int, default=42)
     args = ap.parse_args()
 
     df, features = build_dataset(clean_labels=False)
 
+    pooled_by_h = {}
     summary = []
     for h in args.horizons:
         df['bloom_28d'] = build_forward_label(
@@ -88,6 +126,7 @@ def main():
                         min_hist_pos=20, min_val_pos=5, verbose=False)
         if pooled.empty:
             continue
+        pooled_by_h[h] = pooled
 
         yt = pooled['y_true'].values
         pr = pooled['y_prob'].values
@@ -130,6 +169,40 @@ def main():
     print(s.to_string(index=False))
     s.to_csv("data/horizon_decomp_summary.csv", index=False)
     print("\nSaved data/horizon_decomp_summary.csv")
+
+    # ---- paired horizon-difference bootstrap ----
+    ha, hb = args.compare
+    if ha in pooled_by_h and hb in pooled_by_h:
+        diffs, nmatch = paired_diff_bootstrap(
+            pooled_by_h[ha], pooled_by_h[hb], args.n_boot, args.seed)
+        lo, hi = np.percentile(diffs, [2.5, 97.5])
+        print("\n" + "=" * 70)
+        print(f"PAIRED AUC DIFFERENCE  horizon {ha} minus horizon {hb}")
+        print("=" * 70)
+        print(f"  matched rows: {nmatch:,}")
+        print(f"  mean difference: {np.mean(diffs):+.3f}  95% CI [{lo:+.3f}, {hi:+.3f}]")
+        print(f"  P(difference > 0): {np.mean(diffs > 0):.3f}")
+        if lo > 0:
+            print(f"  -> horizon {ha} ranks significantly better than {hb}. Lock {ha}.")
+        elif hi < 0:
+            print(f"  -> horizon {hb} ranks significantly better than {ha}.")
+        else:
+            print(f"  -> not distinguishable; the two horizons rank equally well.")
+
+    # ---- per-year AUC at the chosen horizon (confound check) ----
+    if args.peryear in pooled_by_h:
+        print("\n" + "=" * 70)
+        print(f"PER-YEAR AUC  at horizon {args.peryear}  "
+              f"(check vs sparse-gap years 2020/2021/2023/2025)")
+        print("=" * 70)
+        print(f"  {'year':>5}  {'pos':>4}  {'n':>5}  {'AUC':>6}")
+        print("  " + "-" * 26)
+        for y, pos, n, auc in per_year_auc(pooled_by_h[args.peryear]):
+            astr = f"{auc:.3f}" if not np.isnan(auc) else "  nan"
+            print(f"  {y:>5}  {pos:>4}  {n:>5}  {astr:>6}")
+        print("\n  If the well-sampled years (2019, 2024) hold high AUC at this")
+        print("  horizon, the horizon gain is real, not a sparse-year artifact.")
+
     print("\nRead: if AUC and AUPRC rise as horizon shrinks, the near-term head is")
     print("your real forecasting product. 'AUPRC_lift' is AUPRC over the no-skill")
     print("base rate; >1 means real precision signal. 'prec_top5' is the precision")
