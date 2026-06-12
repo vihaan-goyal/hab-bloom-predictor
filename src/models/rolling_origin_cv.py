@@ -82,7 +82,7 @@ def load_percent_saturation():
               ['percent_saturation'].mean())
 
 
-def build_dataset(clean_labels=False, sustain_window=14):
+def build_dataset(clean_labels=False, sustain_window=14, horizon=28):
     print("Loading data/hab_features_tidal.csv...")
     df = pd.read_csv("data/hab_features_tidal.csv")
     df['date'] = pd.to_datetime(df['date'])
@@ -115,9 +115,13 @@ def build_dataset(clean_labels=False, sustain_window=14):
     # SUSTAINED exceedances (drops single-sample spikes). clean_labels=False
     # reproduces the locked label exactly.
     label_kind = "SUSTAINED-only" if clean_labels else "original (any exceedance)"
-    print(f"Building bloom_28d label: {label_kind}")
+    print(f"Building forward label: {label_kind}, horizon={horizon}d "
+          f"(column name stays 'bloom_28d')")
+    # never inherit a pre-baked / frozen label from the CSV
+    df = df.drop(columns=[c for c in ('bloom_28d', 'is_sustained', 'is_exceedance')
+                          if c in df.columns])
     df['bloom_28d'] = build_forward_label(
-        df, horizon=28, threshold=10.0,
+        df, horizon=horizon, threshold=10.0,
         sustained_only=clean_labels, sustain_window=sustain_window)
 
     features = [f for f in FEATURES_ALL if f in df.columns]
@@ -294,10 +298,13 @@ def main():
     ap.add_argument("--clean-labels", action="store_true",
                     help="restrict bloom positives to sustained exceedances")
     ap.add_argument("--sustain-window", type=int, default=14)
+    ap.add_argument("--horizon", type=int, default=28,
+                    help="forward label horizon in days (paper headline is 21)")
     args = ap.parse_args()
 
     df, features = build_dataset(clean_labels=args.clean_labels,
-                                 sustain_window=args.sustain_window)
+                                 sustain_window=args.sustain_window,
+                                 horizon=args.horizon)
     print(f"Using {len(features)} features. Rows with labels: "
           f"{df['bloom_28d'].notna().sum():,}")
 
