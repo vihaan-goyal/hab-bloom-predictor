@@ -12,7 +12,9 @@ The precision ceiling is REAL but its cause is monitoring cadence + base rate,
 NOT a post-TMDL nitrogen mechanism. Across every test, things that improve AUC do
 NOT improve precision; precision tracks base rate. That AUC-vs-precision split is
 the quantitative signature of a cadence/base-rate-limited problem and is the
-paper's real scientific finding.
+paper's real scientific finding. Confirmed THREE independent ways: longer horizon,
+original-vs-sustained label, and label leniency all show more-positives -> higher
+raw precision -> LOWER skill (lift). The skillful target is the rare sustained bloom.
 
 Key facts, all verified and reproducible from current files:
 - Honest precision at t=0.60: 0.175 (h21) / 0.261 (h28). The old 0.500 headline was
@@ -50,19 +52,23 @@ DEAD (tested and rejected, or ruled out by findings)
   improves ranking at best, and discharge lags already logged null. Ruled out.
 - #6 phycocyanin / buoy chlorophyll: confirmed NO LIS buoy chl exists. DEAD as a
   data source, but became a paper finding (the observational gap).
+- #7 STRATIFICATION feature: DEAD, and HURTS. Was buildable (11,233 station-dates,
+  98% coverage, surface-bottom temp+salinity from hab_labels_final.csv). Adding
+  strat_temp/strat_dens/depth_span to the C=0.05 LR: AUC 0.852->0.838, paired diff
+  -0.014 [-0.021,-0.007] P(>0)=0.000; lift 5.72->4.86. Real physical mechanism but
+  no marginal signal over the chlorophyll features; spends regularization on noise.
+  Drop it. Last physically-motivated feature on the list.
+- LABEL REFINEMENT (near-miss FPs): DEAD, and worse than null. Paired lift bootstrap:
+  grace dlift=-1.60 [-2.46,-0.90], tol -2.25 [-3.57,-1.21], both -2.91 [-4.28,-1.74],
+  all P(>0)=0.000. The audit's 0.315 was pure base-rate illusion: loosening the label
+  raises raw precision (0.175->0.380) while lift FALLS (5.72->2.91). Lenient labels
+  manufacture less-predictable positives. Do NOT report a refinement gain.
+  This is now the THIRD independent confirmation (horizon, sustained, leniency) that
+  precision is base-rate-governed and the skillful target is the rare sustained bloom.
 
 ============================================================
 OPEN - genuinely live (not yet run)
 ============================================================
-HIGH-ISH VALUE
-- LABEL REFINEMENT on the 58 near-miss FPs: relabel sustained/near-threshold
-  crossings + widen window edge by outside_days. Optimistic +0.14 precision at
-  t=0.60. MUST verify under the station-year bootstrap, not as a point estimate.
-  The one concrete precision bump found this thread.
-- #7 stratification index (surface-bottom temp/density) from existing depth data:
-  the one untested FEATURE that attacks bloom FORMATION directly, free, in-house.
-  No new download. Plausible.
-
 LOW VALUE / EXHAUSTIVE-ONLY
 - #11 TabPFN v2, #12 EBM: cheap bake-off vs locked LR, ~an afternoon. Low odds of
   beating LR (bottleneck is data/cadence, not model capacity) but quick.
