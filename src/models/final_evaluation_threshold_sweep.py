@@ -27,6 +27,18 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
+import argparse
+
+# Minimal thread-through for the label robustness check. Defaults reproduce the
+# locked pipeline exactly (bloom label = chl > 10 ug/L, canonical preds path).
+_ap = argparse.ArgumentParser()
+_ap.add_argument('--bloom-threshold', type=float, default=10.0,
+                 help='chlorophyll-a ug/L cutoff defining a bloom day (locked value: 10)')
+_ap.add_argument('--preds-out', default='data/test_predictions.csv',
+                 help='where to dump per-row test predictions')
+_args, _ = _ap.parse_known_args()
+BLOOM_THRESHOLD = _args.bloom_threshold
+
 # ---------------------------------------------------------------------------
 # Load + recompute features
 # ---------------------------------------------------------------------------
@@ -95,7 +107,7 @@ for station, grp in df.groupby('station_name'):
     labels = np.zeros(len(grp), dtype=int)
     for i in range(len(grp)):
         mask = (dates > dates[i]) & (dates <= dates[i] + np.timedelta64(28, 'D'))
-        if mask.any() and (chl[mask] > 10).any():
+        if mask.any() and (chl[mask] > BLOOM_THRESHOLD).any():
             labels[i] = 1
     df.loc[idx, 'bloom_28d'] = labels
 
@@ -170,8 +182,8 @@ pd.DataFrame({
     "date":         _test_meta['date'].values,
     "y_true":       y_test.values,
     "y_prob":       lr_test_p,
-}).to_csv("data/test_predictions.csv", index=False)
-print(f"Saved data/test_predictions.csv ({len(y_test):,} rows)")
+}).to_csv(_args.preds_out, index=False)
+print(f"Saved {_args.preds_out} ({len(y_test):,} rows)")
 
 print(f"\nLR Val AUC  (2020-2022):      {roc_auc_score(y_val,  lr_val_p):.4f}")
 print(f"LR Test AUC (2023-2025): {roc_auc_score(y_test, lr_test_p):.4f}")
