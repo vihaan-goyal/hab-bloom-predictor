@@ -232,6 +232,92 @@ else:
     print("  No days met the criteria -- check thresholds.")
 
 # ------------------------------------------------------------------
+# Part 5: Expert-informed interpretable trigger (ANNOTATION LAYER ONLY)
+#
+# A transparent, physically-motivated flag co-designed with domain experts. It
+# fires when ALL of:
+#   - chl >= 12 ug/L                      (bloom already underway)
+#   - projected +25% chl growth over 2-3 days   (still accelerating)
+#   - DO < 4 mg/L                         (approaching hypoxia)
+#   - wind < 4 mph                        (calm; water column stratified/stagnant)
+#
+# NOTE ON THE ABSENCE OF A TEMPERATURE GATE:
+# There is deliberately NO temperature condition (e.g. no "temp > 25 C"). Our EDA
+# shows LIS blooms peak in Feb-March at 0-5 C (cold-water diatoms), so a high-temp
+# gate would filter out our MAIN bloom season. Do not re-add a temperature gate.
+#
+# This trigger is a sanity / annotation layer for human review ONLY. It does NOT
+# feed into, gate, or override the LR (or XGBoost) model output anywhere: it is
+# computed on the already-predicted high_risk frame and only counted for coverage
+# comparison against the suitability-score criteria. Nothing downstream reads it.
+# ------------------------------------------------------------------
+print("\n" + "=" * 60)
+print("PART 5: Expert-Informed Interpretable Trigger (annotation only)")
+print("=" * 60)
+
+CHL_TRIGGER_MIN = 12.0     # ug/L  -- bloom already present
+CHL_GROWTH_FRAC = 0.25     # projected +25% growth over 2-3 days
+DO_TRIGGER_MAX = 4.0       # mg/L  -- approaching hypoxia
+WIND_TRIGGER_MPH = 4.0     # mph   -- calm, stratified water
+MS_TO_MPH = 2.23694
+
+trig = high_risk.copy()
+
+# Bring in raw chlorophyll (not in the model FEATURES list) and a 3-day-ago value
+# to estimate near-term momentum. chl_lag3 is already carried in high_risk.
+trig = trig.merge(
+    df[['station_name', 'date', 'Chlorophyll']].drop_duplicates(['station_name', 'date']),
+    on=['station_name', 'date'], how='left')
+
+# Daily mean wind speed, keyed by date; convert m/s -> mph.
+wind = pd.read_csv("data/wind_features_daily.csv", usecols=['date', 'wind_speed_ms'])
+wind['date'] = pd.to_datetime(wind['date'])
+trig['date'] = pd.to_datetime(trig['date'])
+trig = trig.merge(wind, on='date', how='left')
+trig['wind_mph'] = trig['wind_speed_ms'] * MS_TO_MPH
+
+# "Projected +25% growth over 2-3 days": use recent 3-day momentum as the forward
+# projection -- if chl has risen >=25% over the last ~3 days it is projected to keep
+# climbing. Undefined (missing/zero baseline) counts as NOT firing.
+trig['chl_growth_3d'] = (trig['Chlorophyll'] - trig['chl_lag3']) / trig['chl_lag3']
+
+cond_chl    = trig['Chlorophyll'] >= CHL_TRIGGER_MIN
+cond_growth = trig['chl_growth_3d'] >= CHL_GROWTH_FRAC
+cond_do     = trig['oxygen_concentration_in_sea_water'] < DO_TRIGGER_MAX
+cond_wind   = trig['wind_mph'] < WIND_TRIGGER_MPH
+
+# Require every condition to be KNOWN and true (NaN -> False, i.e. do not fire).
+trig['expert_trigger'] = (
+    cond_chl.fillna(False) & cond_growth.fillna(False) &
+    cond_do.fillna(False) & cond_wind.fillna(False)
+)
+
+n_trigger = int(trig['expert_trigger'].sum())
+n_suitable = preventable          # Part 4 highly_suitable count (P>0.75, S>0.6, DO<6)
+n_high_risk = total_high_risk
+# Overlap keyed on (station, date) -- the merge above reset trig's index, so it no
+# longer aligns positionally with highly_suitable.
+_suitable_keys = set(zip(highly_suitable['station_name'],
+                         pd.to_datetime(highly_suitable['date'])))
+both = int(trig.loc[trig['expert_trigger']].apply(
+    lambda r: (r['station_name'], r['date']) in _suitable_keys, axis=1).sum()) \
+    if (n_trigger and n_suitable) else 0
+
+print("\nCoverage comparison over predicted high-risk bloom-days (2020-2022):")
+print(f"  Total high-risk bloom-days:                 {n_high_risk:,}")
+print(f"  Flagged by suitability-score criteria       {n_suitable:,}"
+      f"  ({n_suitable / n_high_risk * 100:.1f}% of high-risk)")
+print(f"  Flagged by expert interpretable trigger     {n_trigger:,}"
+      f"  ({n_trigger / n_high_risk * 100:.1f}% of high-risk)")
+print(f"  Flagged by BOTH                             {both:,}")
+print("\n  Per-condition hit counts (on high-risk days, known values only):")
+print(f"    chl >= {CHL_TRIGGER_MIN} ug/L:            {int(cond_chl.fillna(False).sum()):,}")
+print(f"    projected +{int(CHL_GROWTH_FRAC*100)}% 2-3d growth:  {int(cond_growth.fillna(False).sum()):,}")
+print(f"    DO < {DO_TRIGGER_MAX} mg/L:               {int(cond_do.fillna(False).sum()):,}")
+print(f"    wind < {WIND_TRIGGER_MPH} mph:            {int(cond_wind.fillna(False).sum()):,}")
+print("\n  (Annotation layer only -- not fed into or gating the model output.)")
+
+# ------------------------------------------------------------------
 # Figures
 # ------------------------------------------------------------------
 fig, ax = plt.subplots(figsize=(14, 7))
