@@ -80,6 +80,16 @@ if 'percent_saturation' not in hab.columns:
     print(f"  percent_saturation coverage (all rows): "
           f"{hab['percent_saturation'].notna().mean() * 100:.1f}%")
 
+# spring_neap: date-keyed astronomical spring-neap index (offline, ephem).
+# Merge on date only -- broadcasts across stations, the Moon is location-blind.
+print("Loading data/astro_features_daily.csv ...")
+astro = pd.read_csv('data/astro_features_daily.csv', parse_dates=['date'])
+_n = len(hab)
+hab = hab.merge(astro[['date', 'spring_neap']], on='date', how='left')
+assert len(hab) == _n, "astro merge changed row count -- duplicate dates?"
+print(f"  spring_neap coverage (all rows): "
+      f"{hab['spring_neap'].notna().mean() * 100:.1f}%")
+
 df = hab
 
 # -- 2. Recompute rolling features and bloom label -----------------------------
@@ -193,6 +203,40 @@ def run(features):
     return m
 
 
+def run_probs(features):
+    """Same as run() but also returns aligned (y_test, p_test). Both feature
+    sets share the same test rows (dropna is on bloom_28d only), so pairing holds."""
+    X_tr, y_tr = prepare(train, features)
+    X_te, y_te = prepare(test,  features)
+    MED = X_tr.median()
+    sc = StandardScaler()
+    lr = LogisticRegression(C=0.05, class_weight='balanced',
+                            max_iter=2000, random_state=42)
+    lr.fit(sc.fit_transform(X_tr.fillna(MED)), y_tr)
+    p_te = lr.predict_proba(sc.transform(X_te.fillna(MED)))[:, 1]
+    m = eval_at(y_te, p_te, 0.60)
+    m['n_feat'] = len(features)
+    return m, y_te.to_numpy(), p_te
+
+
+def paired_bootstrap_auc_delta(y, p_base, p_new, n_boot=2000, seed=42):
+    """Paired bootstrap CI for AUC(p_new) - AUC(p_base). One resampled index set
+    scores both models each iteration, preserving their correlation (an unpaired
+    two-AUC CI would be far too wide)."""
+    rng = np.random.default_rng(seed)
+    y, p_base, p_new = map(np.asarray, (y, p_base, p_new))
+    n = len(y)
+    deltas = []
+    for _ in range(n_boot):
+        idx = rng.integers(0, n, n)
+        yb = y[idx]
+        if yb.min() == yb.max():          # AUC undefined without both classes
+            continue
+        deltas.append(roc_auc_score(yb, p_new[idx]) - roc_auc_score(yb, p_base[idx]))
+    deltas = np.asarray(deltas)
+    return deltas.mean(), np.percentile(deltas, 2.5), np.percentile(deltas, 97.5)
+
+
 # -- 5. Baseline ---------------------------------------------------------------
 base = run(BASE)
 print("\n" + "=" * 78)
@@ -201,6 +245,25 @@ print("=" * 78)
 print(f"  N_feat={base['n_feat']}  AUC={base['auc']:.4f}  "
       f"Prec={base['precision']:.3f}  Rec={base['recall']:.3f}  "
       f"F1={base['f1']:.3f}  TP={base['tp']}  FP={base['fp']}  FN={base['fn']}")
+
+# -- 5b. Candidate: spring_neap (additive, paired bootstrap) -------------------
+print("\n" + "=" * 78)
+print("CANDIDATE FEATURE TEST: spring_neap (additive)")
+print("=" * 78)
+m_base, y_te, p_base = run_probs(BASE)
+m_sn,   _,    p_sn   = run_probs(BASE + ['spring_neap'])
+mean_d, lo, hi = paired_bootstrap_auc_delta(y_te, p_base, p_sn)
+print(f"  baseline (34):          AUC={m_base['auc']:.4f}  "
+      f"Prec={m_base['precision']:.3f}  Rec={m_base['recall']:.3f}  F1={m_base['f1']:.3f}")
+print(f"  baseline + spring_neap: AUC={m_sn['auc']:.4f}  "
+      f"Prec={m_sn['precision']:.3f}  Rec={m_sn['recall']:.3f}  F1={m_sn['f1']:.3f}")
+print(f"  point delta:  dAUC={m_sn['auc']-m_base['auc']:+.4f}  "
+      f"dPrec={m_sn['precision']-m_base['precision']:+.3f}  dF1={m_sn['f1']-m_base['f1']:+.3f}")
+print(f"  paired bootstrap dAUC: {mean_d:+.4f}  95% CI [{lo:+.4f}, {hi:+.4f}]")
+if lo > 0:
+    print("  VERDICT: CI excludes zero -> pull NOAA CO-OPS tidal range and retest.")
+else:
+    print("  VERDICT: CI includes zero -> null, report as tested-and-rejected mechanism.")
 
 # -- 6. Single-feature removal -------------------------------------------------
 single = {}
