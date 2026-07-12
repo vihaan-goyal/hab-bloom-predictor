@@ -1,7 +1,7 @@
 # Spatiotemporal Prediction of Harmful Algal Blooms in Long Island Sound
 # Using Machine Learning and NASA MODIS Satellite Data
 
-**Vihaan Goyal & Lev Rubin**
+**Vihaan Goyal**
 Westhill High School, Stamford, Connecticut
 
 ---
