@@ -1,324 +1,103 @@
 """
-daily_inference.py
-------------------
-Fits LR on the training set (1993-2019) and runs historical inference on
-specified dates and on the full 2020-2022 validation period.
+daily_inference.py  (v2 -- locked pipeline)
+-------------------------------------------
+Early-warning inference for the LOCKED model. Replaces the superseded
+XGBoost/7-day version.
 
-Run from repo root:
-    python src/deploy/daily_inference.py --date 2022-09-01
+For a target date D:
+  1. Loads the canonical dataset via src.models.locked_pipeline (single
+     source of truth -- no feature engineering is duplicated here).
+  2. Trains the locked LR on all rows whose 21-day label window is fully
+     observed on or before D (walk-forward: no future information).
+  3. Scores the most recent station visit at or before D for every station
+     (visits older than --max-stale days are reported as STALE, not scored).
+  4. Alert = P(exceedance within 21d) >= t* (frozen operating point 0.35,
+     selected out-of-sample on 2020-2022; see warning_operating_point.py).
+  5. Writes data/daily_predictions.csv for the dashboard.
+
+Operating characteristics at t*=0.35 (out-of-sample test 2023-2025):
+  POD 0.875 [0.750, 0.962] | FAR 0.875 | precision 0.125 [0.077, 0.172]
+An alert means: sample this station within the next 3 weeks. Roughly 1 in
+8 alerts precedes a verified exceedance, a 2.7x lift over the base rate.
+
+Aeration scoring from the previous version is intentionally omitted until
+the intervention framework rerun on corrected data is complete.
+
+Usage (from repo root):
+    python src/deploy/daily_inference.py
+    python src/deploy/daily_inference.py --date 2025-06-01
 """
 
-import glob
-import warnings
-warnings.filterwarnings('ignore', category=UserWarning)
-import pandas as pd
-import numpy as np
-from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import roc_auc_score
 import argparse
+import os
+import sys
+from datetime import date
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--date', type=str, default='2022-09-01')
-args = parser.parse_args()
-TARGET_DATE = args.date
+import pandas as pd
 
-# -- Load data -----------------------------------------------------------------
-print("Loading data/hab_features_tidal.csv...")
-df = pd.read_csv("data/hab_features_tidal.csv")
-df['date'] = pd.to_datetime(df['date'])
+sys.path.insert(0, os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..")))
+from src.models.locked_pipeline import (          # noqa: E402
+    HORIZON_DAYS, add_forward_label, fit_locked_model,
+    load_locked_dataframe, predict_proba)
 
-
-def load_percent_saturation():
-    """percent_saturation lives only in the raw ERDDAP surface (depth_code='S')
-    extracts, not in the feature CSVs. Concatenate every deep_wq_S_*.csv, drop
-    the units row, and reduce to one value per (date, station_name).
-
-    The ERDDAP timestamps store local midnight encoded as UTC (e.g. EDT midnight
-    -> 04:00:00Z), so the UTC calendar date equals the local sample date that
-    keys the feature files."""
-    frames = []
-    for f in sorted(glob.glob('data/raw/deep_wq_extra/deep_wq_S_*.csv')):
-        # row 0 = header, row 1 = units ("UTC", "mg/L", ...) -> skip units.
-        frames.append(pd.read_csv(
-            f, skiprows=[1],
-            usecols=['station_name', 'time', 'percent_saturation']))
-    ps = pd.concat(frames, ignore_index=True)
-    ps = ps[ps['station_name'].notna()].copy()
-    ps['station_name'] = ps['station_name'].astype(str)
-    ps['date'] = (pd.to_datetime(ps['time'], utc=True)
-                    .dt.tz_localize(None).dt.normalize())
-    ps['percent_saturation'] = pd.to_numeric(ps['percent_saturation'],
-                                             errors='coerce')
-    return (ps.dropna(subset=['percent_saturation'])
-              .groupby(['date', 'station_name'], as_index=False)
-              ['percent_saturation'].mean())
+T_STAR = 0.35            # frozen operating point -- do NOT tune here
+OUTPUT_PATH = "data/daily_predictions.csv"
 
 
-if 'percent_saturation' not in df.columns:
-    print("Merging percent_saturation from data/raw/deep_wq_extra/deep_wq_S_*.csv...")
-    ps = load_percent_saturation()
-    df['station_name'] = df['station_name'].astype(str)
-    df = df.merge(ps, on=['date', 'station_name'], how='left')
-    print(f"  percent_saturation coverage: "
-          f"{df['percent_saturation'].notna().mean() * 100:.1f}%")
+def parse_args():
+    p = argparse.ArgumentParser(description="Locked-model HAB early warning")
+    p.add_argument("--date", type=str, default=None,
+                   help="Target date YYYY-MM-DD (default: today)")
+    p.add_argument("--t-star", type=float, default=T_STAR)
+    p.add_argument("--max-stale", type=int, default=45,
+                   help="skip stations whose latest visit is older than this")
+    return p.parse_args()
 
-print("Merging max_gust_3d from data/gust_features_daily.csv...")
-gust = pd.read_csv("data/gust_features_daily.csv", usecols=['date', 'max_gust_3d'])
-gust['date'] = pd.to_datetime(gust['date'])
-df = df.merge(gust, on='date', how='left')
-print(f"  max_gust_3d coverage: {df['max_gust_3d'].notna().mean() * 100:.1f}%")
 
-# Recompute rolling features and bloom label for consistency
-for n, min_p in [(3, 2), (6, 3), (9, 5), (14, 7), (21, 10)]:
-    df[f'chl_roll{n}_mean'] = (
-        df.groupby('station_name')['Chlorophyll']
-          .transform(lambda x: x.rolling(n, min_periods=min_p).mean())
-    )
+def main():
+    a = parse_args()
+    target = (pd.Timestamp(a.date) if a.date
+              else pd.Timestamp(date.today()))
+    print(f"Target date: {target.date()}   t* = {a.t_star}   "
+          f"horizon = {HORIZON_DAYS}d")
 
-df['chl_trend'] = (
-    df.groupby('station_name')['Chlorophyll']
-      .transform(lambda x: x.rolling(4, min_periods=3)
-                 .apply(lambda v: np.polyfit(range(len(v)), v, 1)[0]))
-)
+    df = load_locked_dataframe()
+    df = add_forward_label(df, horizon=HORIZON_DAYS)
 
-df['bloom_28d'] = 0
-for station, grp in df.groupby('station_name'):
-    idx   = grp.index
-    dates = grp['date'].values
-    chl   = grp['Chlorophyll'].values
-    labels = np.zeros(len(grp), dtype=int)
-    for i in range(len(grp)):
-        mask = (dates > dates[i]) & (dates <= dates[i] + np.timedelta64(28, 'D'))
-        if mask.any() and (chl[mask] > 10).any():
-            labels[i] = 1
-    df.loc[idx, 'bloom_28d'] = labels
+    # Walk-forward: train only on rows whose label window closed by target.
+    train_end = target - pd.Timedelta(days=HORIZON_DAYS)
+    bundle = fit_locked_model(df, label_col="bloom_fwd", train_end=train_end)
+    print(f"Trained locked LR on {bundle['n_train']:,} rows through "
+          f"{train_end.date()} (bloom rate "
+          f"{bundle['train_bloom_rate']*100:.1f}%)")
 
-# -- Feature set ---------------------------------------------------------------
-FEATURES_ALL = [
-    'Chlorophyll', 'chl_lag1', 'chl_lag2', 'chl_lag3', 'chl_lag4',
-    'chl_roll3_mean', 'chl_roll6_mean', 'chl_roll9_mean',
-    'chl_roll14_mean', 'chl_roll21_mean', 'chl_trend',
-    'chl_anomaly', 'chl_climatology',
-    'do_lag1', 'temp_lag1', 'sal_lag1',
-    'sal_lag2', 'sal_lag3', 'sal_lag4',
-    'sea_water_temperature', 'sea_water_salinity',
-    'oxygen_concentration_in_sea_water',
-    'month', 'latitude_x', 'longitude_x',
-    'nox_lag2', 'dip_lag2', 'dip_change', 'dip_x_month',
-    'neighbor_chl3_mean', 'neighbor_chl3_lag1',
-    'tidal_gt_anom', 'tidal_msl_anom',
-    'percent_saturation',
-    'max_gust_3d',
-]
-FEATURES = [f for f in FEATURES_ALL if f in df.columns]
+    # Latest visit per station at or before target.
+    past = df[df['date'] <= target]
+    latest = (past.sort_values('date')
+                  .groupby('station_name', as_index=False).tail(1)).copy()
+    latest['days_old'] = (target - latest['date']).dt.days
+    fresh = latest[latest['days_old'] <= a.max_stale].copy()
+    stale = latest[latest['days_old'] > a.max_stale]
 
-DO_COL   = 'oxygen_concentration_in_sea_water'
-TEMP_COL = 'sea_water_temperature'
+    fresh['bloom_prob'] = predict_proba(bundle, fresh)
+    fresh['alert'] = fresh['bloom_prob'] >= a.t_star
 
-MAX_DATE_GAP_DAYS = 14   # skip station if nearest row is further than this
+    out_cols = ['station_name', 'date', 'days_old', 'bloom_prob', 'alert']
+    fresh[out_cols].sort_values('bloom_prob', ascending=False) \
+        .to_csv(OUTPUT_PATH, index=False)
+    print(f"Saved {OUTPUT_PATH}")
 
-# Intervention thresholds
-BLOOM_PROB_THRESHOLD = 0.60
-AERATION_SCORE_MIN    = 0.45
-DO_HYPOXIA_THRESHOLD  = 6.0
+    print(f"\nStations scored: {len(fresh)}   "
+          f"stale (> {a.max_stale}d, skipped): {len(stale)}")
+    print(f"Alerts at t*={a.t_star}: {int(fresh['alert'].sum())}")
+    top = fresh.nlargest(min(8, len(fresh)), 'bloom_prob')[out_cols]
+    print("\nTop stations by exceedance probability:")
+    print(top.to_string(index=False))
+    if len(stale):
+        print(f"\nStale stations (no visit within {a.max_stale}d): "
+              + ", ".join(sorted(stale['station_name'].astype(str))))
 
-# -- Temporal splits -----------------------------------------------------------
-train = df[df['date'].dt.year <= 2019]
-val   = df[(df['date'].dt.year >= 2020) & (df['date'].dt.year <= 2022)]
-test  = df[df['date'].dt.year >= 2023]
 
-X_train = train[FEATURES].copy()
-y_train = train['bloom_28d'].copy()
-X_val   = val[FEATURES].copy()
-y_val   = val['bloom_28d'].copy()
-X_test  = test[FEATURES].copy()
-y_test  = test['bloom_28d'].copy()
-
-MED = X_train.median()
-
-# -- Fit LR on train 1993-2019 -------------------------------------------------
-print("\nFitting LR on train set 1993-2019...")
-
-scaler = StandardScaler()
-X_tr_s = scaler.fit_transform(X_train.fillna(MED))
-X_v_s  = scaler.transform(X_val.fillna(MED))
-X_te_s = scaler.transform(X_test.fillna(MED))
-
-lr_model = LogisticRegression(class_weight='balanced', C=0.05, max_iter=1000, random_state=42)
-lr_model.fit(X_tr_s, y_train)
-
-lr_val_p  = lr_model.predict_proba(X_v_s)[:, 1]
-lr_test_p = lr_model.predict_proba(X_te_s)[:, 1]
-
-print(f"LR Val AUC  (2020-2022): {roc_auc_score(y_val,  lr_val_p):.3f}")
-print(f"LR Test AUC (2023-2025): {roc_auc_score(y_test, lr_test_p):.3f}")
-
-# -- Aeration score ------------------------------------------------------------
-def calc_aeration_score(do, temp, bloom_prob):
-    do_term   = np.clip((14.0 - do)   / 12.0, 0.0, 1.0)
-    temp_term = np.clip((temp - 10.0) / 20.0, 0.0, 1.0)
-    return 0.45 * do_term + 0.30 * temp_term + 0.25 * np.clip(bloom_prob, 0.0, 1.0)
-
-# -- Single station/date inference ---------------------------------------------
-def run_inference(station, date_str):
-    target_date = pd.to_datetime(date_str)
-    stn_df = df[df['station_name'] == station].copy()
-    if stn_df.empty:
-        return None
-
-    diffs = (stn_df['date'] - target_date).abs()
-    nearest_idx = diffs.idxmin()
-    if diffs[nearest_idx].days > MAX_DATE_GAP_DAYS:
-        return None
-
-    row = stn_df.loc[nearest_idx]
-    feat_df = pd.DataFrame([row[FEATURES].fillna(MED)], columns=FEATURES)
-
-    bloom_prob = lr_model.predict_proba(scaler.transform(feat_df))[0, 1]
-
-    raw_do = row[DO_COL]
-    raw_temp = row[TEMP_COL]
-    do   = float(raw_do)   if not pd.isna(raw_do)   else float(MED[DO_COL])
-    temp = float(raw_temp) if not pd.isna(raw_temp) else float(MED[TEMP_COL])
-
-    S = calc_aeration_score(do, temp, bloom_prob)
-    high_risk = (
-        bloom_prob > BLOOM_PROB_THRESHOLD and
-        S > AERATION_SCORE_MIN and
-        not pd.isna(raw_do) and
-        float(raw_do) < DO_HYPOXIA_THRESHOLD
-    )
-
-    return {
-        'actual_date':    row['date'].strftime('%Y-%m-%d'),
-        'bloom_prob':     round(bloom_prob, 4),
-        'DO':             round(do, 2),
-        'temp':           round(temp, 2),
-        'aeration_score': round(S, 4),
-        'high_risk':      high_risk,
-    }
-
-# -- Specific date inference ---------------------------------------------------
-print("\n" + "=" * 80)
-print(f"SPECIFIC DATE INFERENCE  ({TARGET_DATE})")
-print("=" * 80)
-header = (f"{'Date':<12} {'Station':<10} {'Bloom Prob':>10} "
-          f"{'DO':>6} {'Temp':>6} {'Aeration S':>11} {'High Risk?':>10}")
-print(header)
-print("-" * len(header))
-
-result = run_inference('A4', TARGET_DATE)
-if result is None:
-    print(f"{TARGET_DATE:<12} {'A4':<10}  -- no data within {MAX_DATE_GAP_DAYS} days")
-else:
-    hr_str = "YES *" if result['high_risk'] else "no"
-    print(
-        f"{result['actual_date']:<12} {'A4':<10} "
-        f"{result['bloom_prob']:>10.3f} "
-        f"{result['DO']:>6.2f} "
-        f"{result['temp']:>6.1f} "
-        f"{result['aeration_score']:>11.4f} "
-        f"{hr_str:>10}"
-    )
-
-# -- Full validation period analysis (2020-2022) -------------------------------
-print("\n" + "=" * 80)
-print("FULL VAL PERIOD ANALYSIS (2020-2022)")
-print("=" * 80)
-
-X_val_arr        = X_val.fillna(MED).values
-val_feats_scaled = scaler.transform(X_val_arr)
-
-lr_probs = lr_model.predict_proba(val_feats_scaled)[:, 1]
-
-val_df = val[[DO_COL, TEMP_COL, 'bloom_28d', 'station_name', 'date']].reset_index(drop=True).copy()
-val_df['bloom_prob'] = lr_probs
-
-do_vals   = val_df[DO_COL].fillna(MED[DO_COL]).values
-temp_vals = val_df[TEMP_COL].fillna(MED[TEMP_COL]).values
-val_df['aeration_score'] = calc_aeration_score(do_vals, temp_vals, lr_probs)
-
-val_df['high_risk'] = (
-    (val_df['bloom_prob'] > BLOOM_PROB_THRESHOLD) &
-    (val_df['aeration_score'] > AERATION_SCORE_MIN) &
-    (val_df[DO_COL] < DO_HYPOXIA_THRESHOLD)
-)
-
-total_days = len(val_df)
-hr_days    = val_df['high_risk'].sum()
-hr_pct     = hr_days / total_days * 100
-
-print(f"\nTotal station-days (2020-2022): {total_days:,}")
-print(f"High-risk days (bloom_prob>{BLOOM_PROB_THRESHOLD} & S>{AERATION_SCORE_MIN} & DO<{DO_HYPOXIA_THRESHOLD}): {hr_days:,} ({hr_pct:.1f}%)")
-
-print("\n-- Top 10 Stations by High-Risk Days ---------------------------------")
-stn_hr = (
-    val_df.groupby('station_name')['high_risk']
-          .sum()
-          .sort_values(ascending=False)
-          .head(10)
-          .reset_index()
-)
-stn_hr.columns = ['Station', 'High-Risk Days']
-print(stn_hr.to_string(index=False))
-
-print("\n-- Top 5 Months by Mean Aeration Score -------------------------------")
-month_names = {1:'Jan',2:'Feb',3:'Mar',4:'Apr',5:'May',6:'Jun',
-               7:'Jul',8:'Aug',9:'Sep',10:'Oct',11:'Nov',12:'Dec'}
-val_df['month_num'] = val_df['date'].dt.month
-month_aer = (
-    val_df.groupby('month_num')['aeration_score']
-          .mean()
-          .sort_values(ascending=False)
-          .head(5)
-          .reset_index()
-)
-month_aer['Month'] = month_aer['month_num'].map(month_names)
-print(month_aer[['Month', 'aeration_score']].rename(
-    columns={'aeration_score': 'Mean Aeration Score'}).to_string(index=False))
-
-print(f"\nTotal high-risk station-days: {hr_days:,} out of {total_days:,} ({hr_pct:.1f}%)")
-
-# -- Show actual high-risk dates for A4 (for finding valid demo dates) ---------
-a4_hr = val_df[(val_df['station_name'] == 'A4') & val_df['high_risk']]
-if len(a4_hr) > 0:
-    print("\n-- A4 high-risk dates (use these as demo dates) ----------------------")
-    print(a4_hr[['date', 'bloom_prob', DO_COL, 'aeration_score']].to_string(index=False))
-else:
-    print("\n-- No high-risk days found for A4 in val period ----------------------")
-    print("-- Top 5 A4 days by bloom_prob instead: ------------------------------")
-    a4_all = val_df[val_df['station_name'] == 'A4'].nlargest(5, 'bloom_prob')
-    print(a4_all[['date', 'bloom_prob', DO_COL, 'aeration_score']].to_string(index=False))
-
-# -- All high-risk days across all stations ------------------------------------
-all_hr = val_df[val_df['high_risk']].sort_values('bloom_prob', ascending=False)
-if len(all_hr) > 0:
-    print("\n-- All high-risk station-days (top 20 by bloom prob) -----------------")
-    print(all_hr[['date', 'station_name', 'bloom_prob', DO_COL, 'aeration_score']]
-          .head(20).to_string(index=False))
-
-# -- Save daily_predictions.csv for dashboard ----------------------------------
-print("\nSaving data/daily_predictions.csv...")
-
-all_stations = df['station_name'].unique()
-rows = []
-for stn in all_stations:
-    result = run_inference(stn, TARGET_DATE)
-    if result is None:
-        continue
-    action = ("Intervene" if result['high_risk'] else
-              "Monitor"   if result['bloom_prob'] > 0.40 else "OK")
-    rows.append({
-        'station_name':   stn,
-        'date':           TARGET_DATE,
-        'bloom_prob':     result['bloom_prob'],
-        'aeration_score': result['aeration_score'],
-        'do':             result['DO'],
-        'temp':           result['temp'],
-        'action':         action,
-    })
-
-out_df = pd.DataFrame(rows).sort_values('bloom_prob', ascending=False)
-out_df.to_csv("data/daily_predictions.csv", index=False)
-print(f"Saved {len(out_df)} stations to data/daily_predictions.csv")
+if __name__ == "__main__":
+    main()
