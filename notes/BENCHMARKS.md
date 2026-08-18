@@ -44,7 +44,8 @@ cadence-invariant (biological) residual.
 | NOAA GoM HAB-OFS (TX), transport direction | K. brevis bloom movement | days | 1.00 | 0.200 | 6 (of 146 issued) | BY2011-2012; tracking an already-identified bloom |
 | NOAA GoM HAB-OFS (TX), high respiratory irritation | aerosol impact | 3-4 d | 1.00 | 0.043 | 22 | BY2011-2012, single large bloom year |
 | NOAA Lake Erie seasonal forecast (Stumpf et al. 2012) | seasonal cyanobacteria severity index | months | n/a | n/a | 10 years | Continuous product judged on RMSE: 0.55 CI (discharge-only), 0.37 CI (blended). Benchmark for our planned seasonal severity product, not the EWS |
-| C-HARM (Anderson et al. 2016) | Pseudo-nitzschia bloom / domoic acid risk, CA | 1-3 d | TBD | TBD | TBD | Closest analog: probabilistic risk maps validated with POD against pier monitoring. Pull exact values from paper tables |
+| C-HARM Pseudo-nitzschia model, all CA stations (Anderson et al. 2016) | P-n bloom > 10^4 cells/L | nowcast | 0.67 | 0.67 | 2014-2015, weekly pier sampling | Optimized prediction point 0.52 (POD/FAR crossover); total accuracy 43%; ROC near 1:1 line |
+| C-HARM particulate DA model, Santa Cruz Wharf | pDA > 500 ng/L | nowcast | 0.68 | -- | same | Their best result: AUC 0.77 at prediction point 0.6; P-n model at same site AUC 0.33 (below random); pDA at Stearns Wharf AUC 0.04 (very few events) |
 
 ## Comparability caveats (must appear in the paper alongside the table)
 
@@ -61,13 +62,23 @@ cadence-invariant (biological) residual.
    possible.
 5. Verification density differs: California pier monitoring is far
    denser than LIS cruise sampling, which is the subject of our
-   cadence-thinning result.
+   cadence-thinning result. Notably, Anderson et al. attribute much of
+   C-HARM's weak pixel-level skill to spatial/temporal mismatch between
+   3-km model output and weekly pier sampling: the third reference
+   system (after both NOAA GoM assessments) whose reported skill is
+   limited by verification density rather than model quality.
+6. Comparison context for AUC: C-HARM nowcasts score AUC 0.33-0.77
+   against pier observations; the LIS system scores 0.815 (test) /
+   0.852 (rolling-origin CV) at a 21-day horizon. Different target and
+   region, but the LIS system operates within the skill range of the
+   pre-operational state of the art while forecasting 21 days ahead
+   rather than nowcasting.
 
 ## Open items
 
-- [ ] Pull C-HARM POD/FAR tables from Anderson et al. 2016 (Harmful
-      Algae 59). Try https://repository.library.noaa.gov/view/noaa/33076
-      or school library access.
+- [x] Pull C-HARM POD/FAR tables from Anderson et al. 2016 (Harmful
+      Algae 59). DONE via NOAA IR open-access manuscript
+      (repository.library.noaa.gov/view/noaa/33076). Values in table.
 - [ ] Check the Florida HAB-OFS assessment (Kavanaugh et al. 2013,
       CO-OPS 073) for additional POD/FAR values at higher n.
 - [ ] Decide table placement in paper (Discussion vs Results).
