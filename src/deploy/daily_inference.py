@@ -80,6 +80,23 @@ def main():
     fresh = latest[latest['days_old'] <= a.max_stale].copy()
     stale = latest[latest['days_old'] > a.max_stale]
 
+    if fresh.empty:
+        print(f"\nNo stations with a visit within {a.max_stale}d of "
+              f"{target.date()}.")
+        if len(latest):
+            newest = latest.loc[latest['days_old'].idxmin()]
+            print(f"Newest visit: {newest['station_name']} on "
+                  f"{newest['date'].date()} ({int(newest['days_old'])}d old). "
+                  f"All {len(stale)} stations stale; nothing to score.")
+        else:
+            print("No station visits at or before the target date at all.")
+        # Write an empty predictions file so the dashboard doesn't read stale output.
+        pd.DataFrame(columns=['station_name', 'date', 'days_old',
+                              'bloom_prob', 'alert']).to_csv(OUTPUT_PATH,
+                                                             index=False)
+        print(f"Saved empty {OUTPUT_PATH}")
+        return
+
     fresh['bloom_prob'] = predict_proba(bundle, fresh)
     fresh['alert'] = fresh['bloom_prob'] >= a.t_star
 
