@@ -1,0 +1,9 @@
+name: hab
+channels:
+  - defaults
+dependencies:
+  - python=3.11
+  - jupyter
+  - jupyter_client[version='<8']
+  - pyzmq[version='<25']
+prefix: C:\Users\goyski\.conda\envs\hab
