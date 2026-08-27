@@ -146,26 +146,64 @@ the fixes. Rerun the script to refresh.
 
 `fig12_dashboard_screenshot.png` — a screen capture of the dashboard.
 
-## ❓ Genuinely orphaned — 4 files
+## ❓ Orphaned — 4 files, origin now established
 
-No committed source has ever referenced these names; `git log -S` finds nothing
-but this README. Their filenames were added as images only:
+No committed source has ever referenced these names. An exhaustive `git grep`
+across **all 147 commits on every branch** confirms it: the code that made them
+was never committed. Their origin was reconstructed from commit timing, PNG
+metadata and figure geometry.
 
-| File | First appears |
-|---|---|
-| `bloom_locations.png` | `f8af187` (2026-05-20) "add figures folder, move plots out of data directory" |
-| `lr_feature_importance_corrected.png` | `5bf2d52` (2026-05-28) "checkpoint mid claude code refactor" |
-| `shap_bar_corrected.png` | `5bf2d52` (2026-05-28) |
-| `shap_beeswarm_corrected.png` | `5bf2d52` (2026-05-28) |
+### The three `*_corrected.png` files — a 12-minute window on 2026-05-28
 
-The likely story: `bloom_locations.png` predates the current code entirely — it
-was moved out of `data/` when the repo was first organised. The three
-`*_corrected.png` files arrived in a mid-refactor checkpoint and share the
-`_corrected` suffix with `shap_corrected.py`, which today writes
-`fig7_rf_importances.png` and `fig8_shap_beeswarm.png`. They are almost
-certainly earlier outputs of that same script under its previous filenames,
-which would make them Family B as well. Treat all four as unusable: nothing in
-the repo can regenerate or date them.
+| File | Size | Content |
+|---|---|---|
+| `lr_feature_importance_corrected.png` | 1335×1027 | LR \|coefficient\| bar chart |
+| `shap_bar_corrected.png` | 1185×1106 | mean \|SHAP\| bar chart, XGBoost |
+| `shap_beeswarm_corrected.png` | 1167×1104 | SHAP beeswarm, XGBoost |
+
+All three came from **an earlier, never-committed draft of
+`src/models/shap_corrected.py`**. The evidence:
+
+1. They were added by `5bf2d52` at **13:31**, the same commit that first added
+   `shap_corrected.py`.
+2. That committed version of the script already wrote `fig7_rf_importances.png`
+   and `fig8_shap_beeswarm.png` — and those two PNGs did **not** exist yet. They
+   arrived **12 minutes later** in `7e61fab` at **13:43**, once the script was
+   actually rerun.
+3. `shap_beeswarm_corrected.png` is **1167×1104**, the exact pixel dimensions of
+   `fig8_shap_beeswarm.png` — the same `shap.summary_plot` call at the same
+   figsize and dpi. `lr_feature_importance_corrected.png` (1335×1027) matches
+   `fig7_rf_importances.png` (1335×1029) to within tight-bbox rounding.
+4. All three are titled *"(corrected model, 28-day forecast horizon)"*, matching
+   the `*_corrected.py` family added in that same commit.
+5. `shap_corrected.py` still imports `LogisticRegression` without plotting it —
+   a leftover of the dropped LR-coefficient figure.
+
+So the draft produced LR coefficients + a SHAP bar + a beeswarm; the committed
+version kept RF importances + the beeswarm and dropped the other two. A blanket
+`git add figures/` swept the stale PNGs into the checkpoint commit.
+
+> **This matters for the SHAP ranking.** The ordering in `shap_bar_corrected.png`
+> — CHL rolling mean (4.5mo), CHL current, Month, CHL climatology, CHL rolling
+> mean (3mo), DIP × month, Neighbor CHL, Dissolved oxygen — is the ranking
+> quoted in `notes/KEY_NUMBERS.md`. That ranking therefore traces to this
+> orphaned draft: Family B labels, a 28-day horizon, and pre-leak-fix features.
+> Its axis label is even clipped mid-word, which is what an unpolished draft
+> looks like.
+
+### `bloom_locations.png` — predates the current codebase
+
+Added by `f8af187` (2026-05-20) *"add figures folder, move plots out of data
+directory"*, i.e. moved in from `data/` when the repo was first organised. The
+same commit added `plot_labels.py`, but that script only writes
+`bloom_frequency.png`, and its figsize (14×8) does not match this image
+(1800×900 → 12×6). It came from ad-hoc exploratory code that was never committed.
+
+Content is a latitude/longitude scatter of readings coloured bloom vs no-bloom,
+1993–2025. It uses the **descriptive** `bloom` flag (this reading exceeded
+10 µg/L), not the defective forward label, so it is not affected by the label
+defects — but it is badly overplotted (almost every point renders red, hiding
+the "no bloom" class) and carries no basemap. Low value, and unregenerable.
 
 ## Bottom line
 

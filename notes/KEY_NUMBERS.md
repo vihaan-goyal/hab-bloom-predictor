@@ -63,8 +63,15 @@ Last updated: 2026-06-04 (content), superseded 2026-08-26
 > SUPERSEDED: the locked horizon is 21 days. A 28-day horizon is the Family B
 > defect described in the banner above.
 
-**Top SHAP features (XGBoost)** — SUPERSEDED, computed on Family B labels via
-`shap_corrected.py`; the ranking has not been regenerated on corrected labels:
+**Top SHAP features (XGBoost)** — SUPERSEDED. Traced 2026-08-27 to
+`figures/shap_bar_corrected.png`, an orphaned figure from a never-committed
+draft of `shap_corrected.py` (see `figures/README.md`). Family B labels, 28-day
+horizon, pre-leak-fix features. It has a second, independent problem:
+`dip_x_month` sits in the top seven while being 49.5% missing, and missingness
+alone tracks the label (`dip_change` missing → bloom rate 0.201 vs 0.054
+present), so median imputation makes the ranking partly read "was this
+measured?". Dropping all four nutrient features moves test AUC by −0.0012.
+Not regenerated on corrected labels:
 chl_roll9_mean, Chlorophyll, month, chl_climatology, chl_roll3_mean,
 chl_roll6_mean, dip_x_month, neighbor_chl3_mean, dissolved_oxygen
 
