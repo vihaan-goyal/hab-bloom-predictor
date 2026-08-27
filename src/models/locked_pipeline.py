@@ -1,9 +1,16 @@
 """
 locked_pipeline.py
 ------------------
-SINGLE SOURCE OF TRUTH for the locked HAB pipeline. Extracted verbatim from
-final_evaluation_threshold_sweep.py so that evaluation, deployment, and any
-future script share one implementation instead of copies.
+SINGLE SOURCE OF TRUTH for the locked HAB pipeline, so that evaluation,
+deployment, and any future script share one implementation instead of copies.
+
+This file used to claim it was "extracted verbatim from
+final_evaluation_threshold_sweep.py". Git says otherwise: it was written fresh
+in 44b72b3 (2026-08-12), which did not touch the sweep script at all. The sweep
+script has used a 28-day uncensored label continuously since c71d985
+(2026-06-01) and still does. The two were never the same, so do not treat that
+script as this module's reference implementation -- it is the Family B label
+(28-day horizon, no right-censoring) that this module exists to replace.
 
 Locked spec:
   data    : data/hab_features_tidal.csv
@@ -30,7 +37,13 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 
-BASE_CSV = "data/hab_features_tidal.csv"
+# v2 is the leak-free build. hab_features_tidal.csv carries chl_climatology,
+# chl_anomaly, tidal_gt_anom and tidal_msl_anom computed against full-record
+# climatologies, which fold test-period data into training-row features. All
+# four are in FEATURES_ALL. Regenerate v2 with:
+#   python src/features/rebuild_climatology.py
+#   python src/features/rebuild_tidal_anomalies.py
+BASE_CSV = "data/hab_features_tidal_v2.csv"
 PS_GLOB = "data/raw/deep_wq_extra/deep_wq_S_*.csv"
 GUST_CSV = "data/gust_features_daily.csv"
 
@@ -127,7 +140,21 @@ def add_forward_label(df, horizon=HORIZON_DAYS, threshold=BLOOM_THRESHOLD,
     """Window label: 1 if any Chlorophyll > threshold within `horizon` days
     strictly after the row's date, at the same station. NaN where the window
     extends beyond the last observation at that station (right-censored),
-    so unfinished windows are excluded from training rather than counted 0."""
+    so unfinished windows are excluded from training rather than counted 0.
+
+    CAVEAT -- right-censoring is not the whole story. At h=21 it excludes only
+    87 rows (0.8%). A further 5,458 rows (47.7%) have a window that closed with
+    NO station visit inside it, and those are scored 0 here: the survey cadence
+    is ~21 days, so most windows contain no observation at all. Such a row means
+    "no exceedance was observed", not "no exceedance occurred". Keeping them
+    holds the positive rate at 0.146 instead of 0.280 and inflates the negative
+    class, which depresses precision and FAR rather than flattering them.
+
+    This is the locked spec and is left unchanged. To compute verification-style
+    metrics over resolvable windows only, use
+    label_utils.build_forward_label(..., unverifiable='exclude'), which is
+    identical to this function apart from that policy
+    (tests/test_label_equivalence.py pins the equivalence)."""
     df = df.copy()
     df[col] = np.nan
     for station, grp in df.groupby('station_name'):

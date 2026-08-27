@@ -11,14 +11,27 @@ For a target date D:
      observed on or before D (walk-forward: no future information).
   3. Scores the most recent station visit at or before D for every station
      (visits older than --max-stale days are reported as STALE, not scored).
-  4. Alert = P(exceedance within 21d) >= t* (frozen operating point 0.35,
+  4. Alert = P(exceedance within 21d) >= t* (frozen operating point 0.30,
      selected out-of-sample on 2020-2022; see warning_operating_point.py).
   5. Writes data/daily_predictions.csv for the dashboard.
 
-Operating characteristics at t*=0.35 (out-of-sample test 2023-2025):
-  POD 0.875 [0.750, 0.962] | FAR 0.875 | precision 0.125 [0.077, 0.172]
-An alert means: sample this station within the next 3 weeks. Roughly 1 in
-8 alerts precedes a verified exceedance, a 2.7x lift over the base rate.
+Operating characteristics at t*=0.30 (out-of-sample test 2023-2025):
+  all windows        POD 0.896 | FAR 0.886 | precision 0.114
+  verifiable windows POD 0.896 | FAR 0.854 | precision 0.146
+An alert means: sample this station within the next 3 weeks.
+
+t* WAS 0.35 AND THE OPERATING CHARACTERISTICS WERE POD 0.875 / FAR 0.875.
+Both were derived from rolling-origin CV predictions built by
+label_utils.build_forward_label before it right-censored: unresolvable windows
+were scored as negatives, so the selection sweep saw a label set that could not
+occur in operation. Re-selected on censored labels and leak-free features under
+the same documented rule (highest threshold with selection POD >= 0.8), 0.35
+only reaches POD 0.682 and no longer qualifies; 0.30 does.
+
+"verifiable windows" restricts to the 58.8% of windows that contained a station
+visit, so a negative means an observation showed no exceedance rather than that
+nothing was looked at. Precision is the honest 0.146 there. Both rows are given
+because the locked spec counts all windows.
 
 Aeration scoring from the previous version is intentionally omitted until
 the intervention framework rerun on corrected data is complete.
@@ -41,7 +54,7 @@ from src.models.locked_pipeline import (          # noqa: E402
     HORIZON_DAYS, add_forward_label, fit_locked_model,
     load_locked_dataframe, predict_proba)
 
-T_STAR = 0.35            # frozen operating point -- do NOT tune here
+T_STAR = 0.30            # frozen operating point -- do NOT tune here
 OUTPUT_PATH = "data/daily_predictions.csv"
 
 

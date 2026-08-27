@@ -29,6 +29,9 @@ import warnings
 warnings.filterwarnings('ignore', category=UserWarning)
 warnings.filterwarnings('ignore', category=RuntimeWarning)
 
+import os
+import sys
+
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
@@ -37,15 +40,24 @@ from sklearn.metrics import (
     roc_auc_score, f1_score, precision_score, recall_score,
 )
 
+sys.path.insert(0, os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..")))
+from src.models.label_utils import build_forward_label       # noqa: E402
+from src.models.locked_pipeline import (                     # noqa: E402
+    BASE_CSV, HORIZON_DAYS, add_forward_label)
+
 WESTERN_STATIONS = ['A4', 'B3', 'C1', '01', '02']
 MIN_TEST_BLOOMS = 3
-FIXED_THRESH = 0.60
+# Reference threshold only. 0.60 came from a sweep run on the test set; the
+# defensible global operating point is t* = 0.30, selected on validation
+# (warning_operating_point.py). Per-station thresholds below are picked on val.
+FIXED_THRESH = 0.30
 
 # ---------------------------------------------------------------------------
 # 1. Load + merge sal_lag2/3/4
 # ---------------------------------------------------------------------------
-print("Loading data/hab_features_tidal.csv...")
-df = pd.read_csv('data/hab_features_tidal.csv')
+print(f"Loading {BASE_CSV}...")
+df = pd.read_csv(BASE_CSV, low_memory=False)
 df['date'] = pd.to_datetime(df['date'])
 
 # sal_lag2/3/4 live in hab_features_daily.csv. The current tidal CSV already
@@ -85,17 +97,29 @@ df['chl_trend'] = (
                  .apply(lambda v: np.polyfit(range(len(v)), v, 1)[0]))
 )
 
-df['bloom_28d'] = 0
-for station, grp in df.groupby('station_name'):
-    idx   = grp.index
-    dates = grp['date'].values
-    chl   = grp['Chlorophyll'].values
-    labels = np.zeros(len(grp), dtype=int)
-    for i in range(len(grp)):
-        mask = (dates > dates[i]) & (dates <= dates[i] + np.timedelta64(28, 'D'))
-        if mask.any() and (chl[mask] > 10).any():
-            labels[i] = 1
-    df.loc[idx, 'bloom_28d'] = labels
+# Label comes from the locked pipeline, not from a local copy.
+#
+# This block used to build its own 28-day label, initialized to 0 and only ever
+# written up to 1, so a window that could never be resolved was scored as a
+# clean negative. That is the Family B defect: it inflates the negative class,
+# depresses the positive rate from 0.280 to 0.146, and every per-station
+# precision number published from this script inherited it.
+#
+# add_forward_label uses the locked horizon (21d) and returns NaN for
+# right-censored windows; the existing dropna(subset=['bloom_28d']) below then
+# drops them. The column keeps its old name so the rest of the script is
+# unchanged.
+df = add_forward_label(df, horizon=HORIZON_DAYS, col='bloom_28d')
+_n_lab = int(df['bloom_28d'].notna().sum())
+print(f"Locked label h={HORIZON_DAYS}d: {_n_lab:,} labeled rows, "
+      f"{int(df['bloom_28d'].isna().sum()):,} right-censored, "
+      f"positive rate {df['bloom_28d'].mean():.3f}")
+
+# Flags windows that actually contained a station visit. A window that closed
+# with no visit carries a 0 that means "nothing was observed", not "nothing
+# happened"; at h=21 that is ~48% of rows.
+df['verifiable'] = build_forward_label(
+    df, horizon=HORIZON_DAYS, unverifiable='exclude').notna().astype(int)
 
 # ---------------------------------------------------------------------------
 # 3. Feature set (same as pipeline)
@@ -127,7 +151,9 @@ def prepare(split):
     """Drop rows with no label; fill features with train medians is done later."""
     rows = split[FEATURES + ['bloom_28d']].dropna(subset=['bloom_28d'])
     X = rows[FEATURES].copy().reset_index(drop=True)
-    y = rows['bloom_28d'].copy().reset_index(drop=True)
+    # Labels are float now (NaN carries right-censoring); the dropna above
+    # removed those, so the survivors cast cleanly to int.
+    y = rows['bloom_28d'].astype(int).reset_index(drop=True)
     return X, y
 
 
@@ -260,7 +286,7 @@ for station in WESTERN_STATIONS:
     print(f"    @best : P={A_best['precision']:.3f} R={A_best['recall']:.3f} "
           f"F1={A_best['f1']:.3f} AUC={A_best['auc']:.3f} "
           f"(TP={A_best['tp']} FP={A_best['fp']} FN={A_best['fn']})")
-    print(f"    @0.60 : P={A_60['precision']:.3f} R={A_60['recall']:.3f} "
+    print(f"    @t*={FIXED_THRESH:.2f}: P={A_60['precision']:.3f} R={A_60['recall']:.3f} "
           f"F1={A_60['f1']:.3f} "
           f"(TP={A_60['tp']} FP={A_60['fp']} FN={A_60['fn']})")
 
@@ -277,7 +303,7 @@ for station in WESTERN_STATIONS:
     print(f"    @best : P={B_best['precision']:.3f} R={B_best['recall']:.3f} "
           f"F1={B_best['f1']:.3f} AUC={B_best['auc']:.3f} "
           f"(TP={B_best['tp']} FP={B_best['fp']} FN={B_best['fn']})")
-    print(f"    @0.60 : P={B_60['precision']:.3f} R={B_60['recall']:.3f} "
+    print(f"    @t*={FIXED_THRESH:.2f}: P={B_60['precision']:.3f} R={B_60['recall']:.3f} "
           f"F1={B_60['f1']:.3f} "
           f"(TP={B_60['tp']} FP={B_60['fp']} FN={B_60['fn']})")
 
@@ -289,9 +315,25 @@ for station in WESTERN_STATIONS:
     combB_pred.extend((pB_te >= tB).astype(int).tolist())
     combB_y.extend(yB_te.tolist())
 
+    # ---- Pick the winning strategy on VALIDATION, never on test ---------
+    # The published per-station table picked A vs B by comparing test F1,
+    # which is selection on the test set reported as test performance. The
+    # winner is now decided by val F1 at each strategy's own val-selected
+    # threshold; the test column is then read out once, for the winner.
+    A_val = eval_at(yAv, pA_v, tA) if len(yAv) else None
+    B_val = eval_at(yB_v, pB_v, tB) if len(yB_v) else None
+    if A_val is None or B_val is None:
+        winner = 'B'          # global model is the safer default
+        why = 'no val rows; defaulted to B'
+    else:
+        winner = 'A' if A_val['f1'] > B_val['f1'] else 'B'
+        why = (f"val F1 A={A_val['f1']:.3f} vs B={B_val['f1']:.3f}")
+    print(f"\n  WINNER (selected on val): Strategy {winner}  ({why})")
+
     per_station[station] = {
-        'A_best': A_best, 'A_60': A_60, 'tA': tA,
-        'B_best': B_best, 'B_60': B_60, 'tB': tB,
+        'A_best': A_best, 'A_60': A_60, 'tA': tA, 'A_val': A_val,
+        'B_best': B_best, 'B_60': B_60, 'tB': tB, 'B_val': B_val,
+        'winner': winner,
         'test_rate': yAte.mean(),
         'n_pos': int(yAte.sum()), 'n_test': len(yAte),
     }
@@ -332,8 +374,8 @@ print("\n" + "=" * 72)
 print("PER-STATION SUMMARY  (test 2023-2025)")
 print("=" * 72)
 print(f"{'Stn':>4} {'rate%':>6} | "
-      f"{'A_t':>4} {'A_P@t':>6} {'A_R@t':>6} {'A_F1':>5} {'A_P@60':>7} {'A_R@60':>7} | "
-      f"{'B_t':>4} {'B_P@t':>6} {'B_R@t':>6} {'B_F1':>5} {'B_P@60':>7} {'B_R@60':>7}")
+      f"{'A_t':>4} {'A_P@t':>6} {'A_R@t':>6} {'A_F1':>5} {'A_P@t*':>7} {'A_R@t*':>7} | "
+      f"{'B_t':>4} {'B_P@t':>6} {'B_R@t':>6} {'B_F1':>5} {'B_P@t*':>7} {'B_R@t*':>7}")
 print("-" * 110)
 for st in WESTERN_STATIONS:
     if st not in per_station:
@@ -351,9 +393,9 @@ print("CONFUSION MATRIX DETAIL  (test 2023-2025)")
 print("=" * 72)
 print(f"{'Stn':>4} {'n+':>3} {'n':>4} | "
       f"{'A@best':>8}  {'TP':>3} {'FP':>3} {'FN':>3} | "
-      f"{'A@0.60':>8}  {'TP':>3} {'FP':>3} {'FN':>3} | "
+      f"{'A@t*':>8}  {'TP':>3} {'FP':>3} {'FN':>3} | "
       f"{'B@best':>8}  {'TP':>3} {'FP':>3} {'FN':>3} | "
-      f"{'B@0.60':>8}  {'TP':>3} {'FP':>3} {'FN':>3}")
+      f"{'B@t*':>8}  {'TP':>3} {'FP':>3} {'FN':>3}")
 print("-" * 100)
 for st in WESTERN_STATIONS:
     if st not in per_station:
@@ -364,9 +406,9 @@ for st in WESTERN_STATIONS:
         return (f"t={t:.2f}   {m['tp']:>3} {m['fp']:>3} {m['fn']:>3}")
     print(f"{st:>4} {r['n_pos']:>3} {r['n_test']:>4} | "
           f"{_cm(r['A_best'], r['tA'])} | "
-          f"{_cm(r['A_60'],   0.60   )} | "
+          f"{_cm(r['A_60'], FIXED_THRESH)} | "
           f"{_cm(r['B_best'], r['tB'])} | "
-          f"{_cm(r['B_60'],   0.60   )}")
+          f"{_cm(r['B_60'], FIXED_THRESH)}")
 
 # ---------------------------------------------------------------------------
 # 7. Combined comparison across western stations
@@ -387,7 +429,7 @@ def combined_from_preds(y, preds):
     }
 
 
-# Global model on the western subset, evaluated at the fixed 0.60 threshold.
+# Global model on the western subset, evaluated at the fixed FIXED_THRESH.
 g_60 = combined_from_preds(combg_y, (combg_p >= FIXED_THRESH).astype(int))
 g_60['auc'] = roc_auc_score(combg_y, combg_p) if len(set(combg_y)) >= 2 else float('nan')
 A_comb = combined_from_preds(combA_y, combA_pred)   # pooled station thresholds

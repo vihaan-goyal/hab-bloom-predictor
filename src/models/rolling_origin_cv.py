@@ -82,9 +82,16 @@ def load_percent_saturation():
               ['percent_saturation'].mean())
 
 
-def build_dataset(clean_labels=False, sustain_window=14, horizon=28):
-    print("Loading data/hab_features_tidal.csv...")
-    df = pd.read_csv("data/hab_features_tidal.csv")
+DEFAULT_DATA = "data/hab_features_tidal_v2.csv"
+
+
+def build_dataset(clean_labels=False, sustain_window=14, horizon=28,
+                  data_path=DEFAULT_DATA):
+    # Defaults to the v2 file: hab_features_tidal.csv carries chl_climatology,
+    # chl_anomaly, tidal_gt_anom and tidal_msl_anom built from full-record
+    # climatologies, which leak test-period data into training rows.
+    print(f"Loading {data_path}...")
+    df = pd.read_csv(data_path, low_memory=False)
     df['date'] = pd.to_datetime(df['date'])
 
     if 'percent_saturation' not in df.columns:
@@ -300,11 +307,14 @@ def main():
     ap.add_argument("--sustain-window", type=int, default=14)
     ap.add_argument("--horizon", type=int, default=28,
                     help="forward label horizon in days (paper headline is 21)")
+    ap.add_argument("--data", default=DEFAULT_DATA,
+                    help="feature file; defaults to the leak-free v2 build")
     args = ap.parse_args()
 
     df, features = build_dataset(clean_labels=args.clean_labels,
                                  sustain_window=args.sustain_window,
-                                 horizon=args.horizon)
+                                 horizon=args.horizon,
+                                 data_path=args.data)
     print(f"Using {len(features)} features. Rows with labels: "
           f"{df['bloom_28d'].notna().sum():,}")
 
