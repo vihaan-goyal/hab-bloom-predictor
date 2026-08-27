@@ -21,7 +21,7 @@ For a target date, `daily_inference.py`:
    target date. Walk-forward: no future information.
 3. Scores the most recent visit at each station. Visits older than 45 days are
    reported as stale and not scored.
-4. Issues an alert where P(exceedance within 21 days) >= t* = 0.35.
+4. Issues an alert where P(exceedance within 21 days) >= t* = 0.30.
 5. Writes `data/daily_predictions.csv`.
 
 An alert means: **prioritize a water sample at this station within the next
@@ -29,17 +29,25 @@ three weeks.**
 
 ## Operating characteristics
 
-The alert threshold t* = 0.35 was frozen by a pre-registered rule (highest
+The alert threshold t* = 0.30 was frozen by a pre-registered rule (highest
 threshold reaching POD >= 0.8 on out-of-sample 2020 to 2022 predictions) and
 evaluated once on out-of-sample 2023 to 2025:
 
-| POD | FAR | Precision | CSI |
-|---|---|---|---|
-| 0.875 [0.750, 0.962] | 0.875 [0.828, 0.923] | 0.125 [0.077, 0.172] | 0.122 |
+| Windows | POD | FAR | Precision | CSI |
+|---|---|---|---|---|
+| all | 0.896 [0.781, 0.977] | 0.886 | 0.114 [0.071, 0.158] | 0.113 |
+| verifiable | 0.896 | 0.854 | 0.146 | 0.144 |
 
-Roughly 1 in 8 alerts precedes a verified exceedance, a 2.7x lift over the
-4.6% base rate, while 42 of 48 test-period events were flagged three weeks
-ahead. The high false alarm ratio is a deliberate cost-asymmetry choice: a
+Roughly 1 in 9 alerts precedes a verified exceedance, a 2.3x lift over the
+5.0% base rate, while 43 of 48 test-period events were flagged three weeks
+ahead. "Verifiable" restricts to the 58.8% of windows that actually contained
+a station visit, where a negative means an observation showed no exceedance
+rather than that nothing was looked at.
+
+t* was 0.35 until the shared label builder was fixed to right-censor. The old
+value was selected against predictions in which unresolvable windows had been
+scored as clean negatives; under the same rule on corrected labels it reaches
+only POD 0.682 and no longer qualifies. The high false alarm ratio is a deliberate cost-asymmetry choice: a
 missed bloom carries ecological and shellfish-industry costs, while a false
 alarm prompts a sample at a station where, about half the time, no sample
 would otherwise occur in the window.

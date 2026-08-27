@@ -1,5 +1,12 @@
 # Benchmarks: LIS EWS vs Reference HAB Forecast Systems
 
+> **Contains superseded numbers (flagged 2026-08-26).** Figures here predate a
+> six-defect audit: Family B/C label bugs, full-record climatology leakage in 4
+> of the locked 35 features, a threshold swept on test, and a per-station
+> strategy chosen on test. Verified current numbers are in `CLAUDE.md`; see
+> `notes/KEY_NUMBERS.md` for the full list and `src/archive/README.md` for which
+> scripts carry which defect.
+
 Task 3 of the August 2026 plan. Status: draft. C-HARM numbers still TBD
 (need Anderson et al. 2016 full text; see Open Items).
 

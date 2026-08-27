@@ -1,5 +1,12 @@
 # Precision Ceiling Investigation: Results
 
+> **Contains superseded numbers (flagged 2026-08-26).** Figures here predate a
+> six-defect audit: Family B/C label bugs, full-record climatology leakage in 4
+> of the locked 35 features, a threshold swept on test, and a per-station
+> strategy chosen on test. Verified current numbers are in `CLAUDE.md`; see
+> `notes/KEY_NUMBERS.md` for the full list and `src/archive/README.md` for which
+> scripts carry which defect.
+
 Canonical record of the powered, leakage-free investigation into the HAB precision
 ceiling. Supersedes the original planning version of this document. Every hypothesis
 below was tested under rolling-origin expanding-window cross-validation (11 folds,

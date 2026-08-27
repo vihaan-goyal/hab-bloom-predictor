@@ -1,7 +1,39 @@
 # KEY_NUMBERS.md — HAB Bloom Predictor Reference
 
-Corrected pipeline. Do NOT use numbers from the OLD docs listed in Section 6.
-Last updated: 2026-06-04
+> ## SUPERSEDED — 2026-08-26
+>
+> **Almost every number below is from a discredited pipeline. Do not quote this
+> file.** It is kept as provenance for where stale figures came from.
+>
+> Six defects were found by systematic self-audit after this file was written:
+>
+> 1. **Family B labels** — 28-day horizon, no right-censoring. 33.4% of rows
+>    were scored negative on a window containing no observation, deflating the
+>    positive rate from 0.297 to 0.198. Section 1, Section 1b and the SHAP
+>    ranking below all inherit this.
+> 2. **Family C labels** — `shift(-7)` on a ~21-day survey cadence spans a
+>    median of 217 days. Anything traceable to `shap_analysis.py`,
+>    `failure_analysis.py` or the aeration work describes a seasonal signal.
+> 3. **Climatology leakage** — `chl_climatology`, `chl_anomaly`,
+>    `tidal_gt_anom` and `tidal_msl_anom` were computed against full-record
+>    climatologies, folding test-period data into training rows. All four are
+>    in the locked 35.
+> 4. **Threshold 0.60 was swept on the test set.** Retired.
+> 5. **Per-station strategy was chosen by test F1.** Retired.
+> 6. **The shared label builder never emitted NaN**, so the operating point
+>    t\* = 0.35 was itself selected against fabricated negatives.
+>
+> **Current verified numbers live in `CLAUDE.md`.** Headline: test AUC 0.856,
+> t\* = 0.30, precision 0.114 (0.146 over verifiable windows), POD 0.896.
+>
+> A seventh issue is documented and deliberately unchanged: 47.7% of windows
+> close with no station visit and are still scored 0. That *depresses*
+> precision rather than flattering it.
+>
+> Superseded scripts now live in `src/archive/` — see its README for which
+> defect each carries.
+
+Last updated: 2026-06-04 (content), superseded 2026-08-26
 
 ---
 
@@ -28,8 +60,11 @@ Last updated: 2026-06-04
 - Note: older pre-correction results quoted 0.17–0.29 globally and 0.32–0.40 for station models — these are from the wrong pipeline
 
 **Prediction horizon:** 28 days (forward calendar window from observation date)
+> SUPERSEDED: the locked horizon is 21 days. A 28-day horizon is the Family B
+> defect described in the banner above.
 
-**Top SHAP features (XGBoost):**
+**Top SHAP features (XGBoost)** — SUPERSEDED, computed on Family B labels via
+`shap_corrected.py`; the ranking has not been regenerated on corrected labels:
 chl_roll9_mean, Chlorophyll, month, chl_climatology, chl_roll3_mean,
 chl_roll6_mean, dip_x_month, neighbor_chl3_mean, dissolved_oxygen
 
