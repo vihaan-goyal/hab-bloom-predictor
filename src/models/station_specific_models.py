@@ -48,6 +48,9 @@ from src.models.locked_pipeline import (                     # noqa: E402
 
 WESTERN_STATIONS = ['A4', 'B3', 'C1', '01', '02']
 MIN_TEST_BLOOMS = 3
+# Minimum validation positives before a per-station threshold is trusted.
+# Matches --min-val-pos in rolling_origin_cv.py.
+MIN_VAL_POS = 5
 # Reference threshold only. 0.60 came from a sweep run on the test set; the
 # defensible global operating point is t* = 0.30, selected on validation
 # (warning_operating_point.py). Per-station thresholds below are picked on val.
@@ -157,13 +160,36 @@ def prepare(split):
     return X, y
 
 
-def best_f1_threshold(y, p):
+def best_f1_threshold(y, p, station=""):
     """Sweep thresholds on a grid and return the one maximizing F1.
 
-    Uses a fine grid rather than precision_recall_curve so small per-station
-    val sets behave predictably. Returns FIXED_THRESH if y has only one class.
+    Falls back to the global operating point unless the validation slice has at
+    least MIN_VAL_POS positives.
+
+    WHY THE GUARD EXISTS
+    Per-station validation slices here hold 0-5 positive windows. Maximizing F1
+    on that few events does not estimate a threshold, it memorizes them, and the
+    result was materially worse than simply using the global t*:
+
+        stn  val_pos  tuned_t  F1@tuned  F1@global(0.30)
+        A4         2     0.92     0.000            0.294
+        B3         4     0.63     0.353            0.375
+        C1         1     0.43     0.421            0.296
+        02         5     0.36     0.421            0.381
+
+    A4 is the operational failure: two validation positives pushed the threshold
+    to 0.92, so that station would have issued essentially no alerts and caught
+    none of its five test events. That threshold was being written into
+    data/station_thresholds.csv, which bootstrap_ci.py --mode perstation and
+    audit_flagged_windows.py both read.
+
+    MIN_VAL_POS matches --min-val-pos in rolling_origin_cv.py, which already
+    applies this rule for the same reason.
     """
-    if y.nunique() < 2:
+    if y.nunique() < 2 or int(y.sum()) < MIN_VAL_POS:
+        if station:
+            print(f"    [{station}] only {int(y.sum())} val positives "
+                  f"(< {MIN_VAL_POS}); using global t* = {FIXED_THRESH}")
         return FIXED_THRESH
     grid = np.arange(0.05, 0.951, 0.01)
     best_t, best_f1 = FIXED_THRESH, -1.0
@@ -277,7 +303,7 @@ for station in WESTERN_STATIONS:
              if len(XAv) else np.array([]))
     pA_te = lrA.predict_proba(scA.transform(XAte.fillna(medA)))[:, 1]
 
-    tA = best_f1_threshold(yAv, pA_v) if len(yAv) else FIXED_THRESH
+    tA = best_f1_threshold(yAv, pA_v, f"{station} A") if len(yAv) else FIXED_THRESH
     A_best = eval_at(yAte, pA_te, tA)
     A_60   = eval_at(yAte, pA_te, FIXED_THRESH)
 
@@ -294,7 +320,7 @@ for station in WESTERN_STATIONS:
     pB_v,  yB_v  = global_probs(val_s)
     pB_te, yB_te = global_probs(test_s)
 
-    tB = best_f1_threshold(yB_v, pB_v) if len(yB_v) else FIXED_THRESH
+    tB = best_f1_threshold(yB_v, pB_v, f"{station} B") if len(yB_v) else FIXED_THRESH
     B_best = eval_at(yB_te, pB_te, tB)
     B_60   = eval_at(yB_te, pB_te, FIXED_THRESH)
 

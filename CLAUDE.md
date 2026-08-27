@@ -80,21 +80,35 @@ Test 2023–2025 (n=956, 48 positives, base rate 5.0%), AUC **0.856**:
 Bootstrap 95% CI (2000 resamples, clustered by station-year):
 precision [0.071, 0.158] · recall [0.781, 0.977] · F1 [0.130, 0.270].
 
-**Station-specific operating points (test 2023–2025).** Strategy winner and
-threshold are both selected on validation; the test column is read out once.
+**Station-specific operating points (test 2023–2025).** Strategy winner picked
+on validation; the test column is read out once.
 
-| Station | Rate | Winner | Threshold | Prec | Rec | F1 | TP | FP | FN |
-|---------|------|--------|-----------|------|-----|-----|-----|-----|-----|
-| C1 | 10.3% | B (global) | 0.44 | 0.267 | 1.000 | 0.421 | 4 | 11 | 0 |
-| 02 | 23.5% | A (station-only) | 0.12 | 0.235 | 1.000 | 0.381 | 4 | 13 | 0 |
-| B3 | 15.4% | B (global) | 0.63 | 0.250 | 0.500 | 0.333 | 3 | 9 | 3 |
-| A4 | 13.2% | B (global) | 0.92 | 0.000 | 0.000 | 0.000 | 0 | 0 | 5 |
-| 01 | — | — | — | skipped: fewer than 3 test positives | | | | |
+| Station | Rate | Winner | Threshold | Prec | Rec | F1 |
+|---------|------|--------|-----------|------|-----|-----|
+| B3 | 15.4% | A (station-only) | 0.30 (global) | 0.240 | 1.000 | 0.387 |
+| 02 | 23.5% | A (station-only) | 0.12 (tuned) | 0.235 | 1.000 | 0.381 |
+| A4 | 13.2% | A (station-only) | 0.30 (global) | 0.200 | 1.000 | 0.333 |
+| C1 | 10.3% | A (station-only) | 0.30 (global) | 0.176 | 0.750 | 0.286 |
+| 01 | — | — | — | skipped: fewer than 3 test positives | | |
 
-**No station reaches precision > 0.50.** Each rests on 3–6 test positives, so
-these are noisy regardless of sign. An earlier version of this table reported
-precision 0.500–1.000 and F1 up to 0.727; those came from Family B labels and a
-leaked climatology, and are void.
+**Per-station threshold tuning is not supported by this dataset, and is not
+used.** Only **1 of 42 stations** (02, with 5) has ≥5 validation positives;
+most have 0–2. `best_f1_threshold` therefore falls back to the global t\* unless
+`MIN_VAL_POS` is met — matching the `--min-val-pos` rule already in
+`rolling_origin_cv.py`. Without that guard A4 tuned to 0.92 on two validation
+positives and caught **none** of its five test events (F1 0.000 vs 0.294 at the
+global threshold).
+
+The apparent gain from per-station thresholds was an artifact. Pooled, they gave
+precision 0.176 at recall 0.667; a *single* global threshold of 0.45 reaches
+precision **0.185** at the same recall. Per-station tuning was strictly worse
+than one number — the same conclusion the station-gate experiment reached, and
+further evidence the ceiling is temporal rather than spatial.
+
+**No station reaches precision > 0.50.** Each rests on 3–6 test positives.
+An earlier version of this table reported precision 0.500–1.000 and F1 up to
+0.727; those came from Family B labels, a leaked climatology, and thresholds
+selected on test. They are void.
 
 ## Headline results
 
@@ -122,6 +136,7 @@ leaked climatology, and are void.
 | `warning_operating_point.py` | Selects and freezes t\* on validation |
 | `src/features/rebuild_climatology.py` | Expanding-window chl climatology |
 | `src/features/rebuild_tidal_anomalies.py` | Expanding-window tidal anomalies |
+| `tests/audit_station_thresholds.py` | Flags per-station thresholds with too little evidence (`--fix` resets them) |
 | `src/deploy/daily_inference.py` | Daily inference pipeline + alert emails |
 | `src/deploy/dashboard.html` | Browser-based monitoring dashboard |
 
