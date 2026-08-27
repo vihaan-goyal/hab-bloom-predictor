@@ -18,8 +18,9 @@ python src/models/bootstrap_ci.py --preds data/test_predictions.csv --mode globa
 # Daily inference for a given date (generates data/daily_predictions.csv)
 python src/deploy/daily_inference.py --date 2025-07-15
 
-# Label semantics are pinned by a test — run it after touching any label code
+# Label semantics are pinned by tests — run both after touching any label code
 python tests/test_label_equivalence.py
+python tests/test_no_inline_labels.py
 ```
 
 ## Primary data file
@@ -108,6 +109,7 @@ leaked climatology, and are void.
 |--------|---------|
 | `src/models/locked_pipeline.py` | Single source of truth: features, label, model spec |
 | `src/models/label_utils.py` | Shared label builder (`sustained_only`, `unverifiable`) |
+| `warning_threshold_selection.py` | Independent re-derivation of t\* (agrees exactly) |
 | `src/models/emit_test_predictions.py` | Produces `data/test_predictions.csv` |
 | `src/models/bootstrap_ci.py` | Confidence intervals on the operating point |
 | `src/models/basin_alert.py` | Western-basin alert product |
@@ -139,8 +141,11 @@ directory.
 
 ## Outstanding
 
-- ~64 scripts in `src/models/` still build a Family B label inline; they are not
-  on the live path, but their printed numbers are not trustworthy.
+- 72 legacy scripts still build a label inline (30 of them in
+  `src/models/experiments/`). They are off the live path, but their printed
+  numbers are not trustworthy. `tests/test_no_inline_labels.py` freezes that
+  list, asserts the live path stays clean, and fails if a new one appears —
+  shrink the list, never grow it. `python tests/scan_labels.py` refreshes it.
 - `neighbor_chl3_mean` / `neighbor_chl3_lag1` are in the locked 35 but arrive
   pre-baked from `hab_features_daily.csv`, whose producer does not exist in the
   repo. Their construction cannot be verified.
