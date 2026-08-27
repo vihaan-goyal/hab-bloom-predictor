@@ -21,7 +21,9 @@ compute `probs` on the test set:
     }).to_csv("data/test_predictions.csv", index=False)
 
 Two operating points are supported:
-    --mode global       single threshold for every station (default t=0.60)
+    --mode global       single threshold for every station (default t=0.30,
+                        the val-selected operating point; 0.60 came from a
+                        threshold sweep run on the test set)
     --mode perstation   per-station thresholds from data/station_thresholds.csv
                         (Strategy B). Rows whose station is missing fall back to
                         the global threshold.
@@ -178,7 +180,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--preds", default="data/test_predictions.csv")
     ap.add_argument("--mode", choices=["global", "perstation"], default="global")
-    ap.add_argument("--threshold", type=float, default=0.60,
+    ap.add_argument("--threshold", type=float, default=0.30,
                     help="global threshold, and fallback for unmapped stations")
     ap.add_argument("--thresholds", default="data/station_thresholds.csv",
                     help="per-station thresholds CSV (perstation mode)")

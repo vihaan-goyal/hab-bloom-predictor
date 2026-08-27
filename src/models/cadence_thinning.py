@@ -19,7 +19,7 @@ Design (locked model is FROZEN -- nothing here retunes anything):
      produces a measurable curve.
   3. Recompute h21 labels on the thinned series via add_forward_label
      (verification gets sparser too -- that is the point), then evaluate
-     at the frozen operating point t* = 0.35 on 2023-2025.
+     at the frozen operating point t* = 0.30 on 2023-2025.
   3. Report POD / FAR / CSI / precision on (a) all resolvable windows and
      (b) verifiable windows only (>= 1 future visit inside the horizon),
      plus the empty-window fraction and realized median inter-sample gap.
@@ -52,7 +52,9 @@ from src.models.locked_pipeline import (          # noqa: E402
     HORIZON_DAYS, add_forward_label, fit_locked_model,
     load_locked_dataframe, predict_proba)
 
-T_STAR = 0.35
+# 0.30, not 0.35: re-selected on val after label_utils.build_forward_label
+# was fixed to right-censor. See warning_operating_point.py.
+T_STAR = 0.30
 TRAIN_END = pd.Timestamp("2019-12-31")
 TEST_START = pd.Timestamp("2023-01-01")
 TEST_END = pd.Timestamp("2025-12-31")
@@ -190,7 +192,7 @@ def main():
     ax1.axvline(HORIZON_DAYS, ls="--", color="gray", lw=1,
                 label=f"h = {HORIZON_DAYS}d")
     ax1.set_xlabel("Realized median inter-sample gap (days)")
-    ax1.set_ylabel("Score at t* = 0.35")
+    ax1.set_ylabel(f"Score at t* = {T_STAR}")
     ax1.set_title("EWS operating characteristics vs sampling cadence")
     ax1.legend()
 
