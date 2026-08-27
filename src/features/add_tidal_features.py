@@ -105,17 +105,34 @@ print(f"Mean GT (tidal range): {monthly['tidal_gt'].mean():.3f} m")
 print(f"Mean MSL: {monthly['tidal_msl'].mean():.3f} m")
 
 # ---------------------------------------------------------------------------
-# Compute tidal anomaly: GT relative to long-term monthly mean
+# Compute tidal anomaly: GT relative to the EXPANDING monthly climatology
 # High positive anomaly = unusually strong tidal mixing this month
+#
+# The climatology for a given calendar month in year Y is the mean of that same
+# month over years STRICTLY BEFORE Y. It used to be groupby('month_num').mean()
+# over the whole 1993-2025 series, which folded test-period sea level into the
+# anomaly on every training row -- leakage, since tidal_gt_anom and
+# tidal_msl_anom are both in the locked 35 features. Months with fewer than
+# MIN_PRIOR_YEARS of history are left NaN rather than guessed.
 # ---------------------------------------------------------------------------
+MIN_PRIOR_YEARS = 3
+
+monthly = monthly.sort_values('date').reset_index(drop=True)
 monthly['month_num'] = monthly['date'].dt.month
-monthly_clim = monthly.groupby('month_num')['tidal_gt'].mean().rename('tidal_gt_clim')
-monthly = monthly.merge(monthly_clim, on='month_num', how='left')
+
+
+def _expanding_clim(df, col):
+    grp = df.groupby('month_num')[col]
+    prior_mean = grp.transform(lambda s: s.expanding().mean().shift(1))
+    prior_n = grp.transform(lambda s: s.expanding().count().shift(1))
+    return prior_mean.where(prior_n >= MIN_PRIOR_YEARS)
+
+
+monthly['tidal_gt_clim'] = _expanding_clim(monthly, 'tidal_gt')
 monthly['tidal_gt_anom'] = monthly['tidal_gt'] - monthly['tidal_gt_clim']
 
 # MSL anomaly -- unusually high sea level = more coastal flooding + nutrient flushing
-msl_clim = monthly.groupby('month_num')['tidal_msl'].mean().rename('tidal_msl_clim')
-monthly = monthly.merge(msl_clim, on='month_num', how='left')
+monthly['tidal_msl_clim'] = _expanding_clim(monthly, 'tidal_msl')
 monthly['tidal_msl_anom'] = monthly['tidal_msl'] - monthly['tidal_msl_clim']
 
 TIDAL_FEATURES = ['tidal_gt', 'tidal_msl', 'tidal_gt_anom', 'tidal_msl_anom']
