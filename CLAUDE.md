@@ -21,6 +21,9 @@ python src/deploy/daily_inference.py --date 2025-07-15
 # Label semantics are pinned by tests — run both after touching any label code
 python tests/test_label_equivalence.py
 python tests/test_no_inline_labels.py
+
+# environment.yml must cover every import in the repo
+python tests/check_dependencies.py
 ```
 
 ## Primary data file
@@ -149,6 +152,10 @@ directory.
 - `neighbor_chl3_mean` / `neighbor_chl3_lag1` are in the locked 35 but arrive
   pre-baked from `hab_features_daily.csv`, whose producer does not exist in the
   repo. Their construction cannot be verified.
+- `environment.yml` was missing 9 packages that scripts import, `polars` among
+  them (9 files, including `audit_flagged_windows.py` and
+  `check_label_integrity.py`). Now declared, but **not yet installed here** —
+  run `conda env update -f environment.yml` before trusting those two scripts.
 - **Reproducibility gap:** nothing in the repo builds `hab_features_daily.csv`
   (77 columns, 54 of them with no producer), and the raw NOAA CO-OPS tidal and
   ASOS wind inputs are no longer on disk. `data/` is entirely gitignored.
