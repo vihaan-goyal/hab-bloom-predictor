@@ -115,6 +115,15 @@ selected on test. They are void.
 - **Western-basin alert** (`basin_alert.py`): POD **1.000**, FAR **0.625**,
   CSI **0.375** on test, at a basin threshold pre-registered on val (12 TP,
   20 FP, 0 FN across 41 decision days). The strongest result in the project.
+
+  **Report it with its confound.** `basin_prob` is a max over the stations
+  sampled that day, and the label is "any western station exceeds in the
+  window" — both scale with how many stations were looked at. On test,
+  `n_stations` **alone** reaches AUC 0.713 against AUC 0.865 for the model
+  (corr with the label +0.351). The model is genuinely +0.152 AUC above that
+  null, but a reader who is not shown the null will overrate the result.
+  `basin_alert.py` now prints this check on every run. 41 decision days with
+  12 positives is also a small sample.
 - **Cadence decomposition** (`cadence_thinning.py`): as sampling is thinned,
   raw FAR climbs 0.886 → 0.974 while FAR over *verifiable* windows stays flat
   near 0.85 and POD holds near 0.89. Apparent false alarms are substantially an
@@ -164,6 +173,15 @@ directory.
   numbers are not trustworthy. `tests/test_no_inline_labels.py` freezes that
   list, asserts the live path stays clean, and fails if a new one appears —
   shrink the list, never grow it. `python tests/scan_labels.py` refreshes it.
+- The four nutrient features (`nox_lag2`, `dip_lag2`, `dip_change`,
+  `dip_x_month`) are close to inert: dropping all four moves test AUC by
+  −0.0012 (0.8562 → 0.8550), though POD does fall 0.896 → 0.854. They are
+  50–62% missing, and the *missingness itself* tracks the label hard
+  (`dip_change` missing → bloom rate 0.201 vs 0.054 present), so train-median
+  imputation hands the model a readable "was this measured?" channel. Their
+  missingness rate also shifts between eras (`nox_lag2`: 49.8% in train vs
+  70.0% in test). `dip_x_month` was cited as a top-7 SHAP feature; that ranking
+  is likely reading the missingness pattern, not nutrient chemistry.
 - `neighbor_chl3_mean` / `neighbor_chl3_lag1` are in the locked 35 but arrive
   pre-baked from `hab_features_daily.csv`, whose producer does not exist in the
   repo. Their construction cannot be verified.

@@ -170,6 +170,30 @@ def main():
     print(f"CSI {m['csi']:.3f} [{ci['csi'][0]:.3f}, {ci['csi'][1]:.3f}]")
     print(f"(TP {m['tp']} / FP {m['fp']} / FN {m['fn']})")
 
+    # ---- sampling-effort null baseline ------------------------------------
+    # basin_prob is a MAX over the stations sampled that day, and basin_label is
+    # "any western station exceeds in (d, d+h]". Both scale with how many
+    # stations were looked at, so part of the apparent skill is observation
+    # effort rather than prediction. Report the confound rather than hide it:
+    # n_stations on its own is a legitimate null model for this task.
+    try:
+        from sklearn.metrics import roc_auc_score
+        yv = test["basin_label"].values.astype(int)
+        if len(set(yv)) > 1:
+            auc_model = roc_auc_score(yv, test["basin_prob"].values)
+            auc_effort = roc_auc_score(yv, test["n_stations"].values)
+            r = np.corrcoef(test["n_stations"].values, yv)[0, 1]
+            print(f"\nsampling-effort check (this label depends on how many "
+                  f"stations were sampled)")
+            print(f"  AUC from basin_prob (model)   : {auc_model:.3f}")
+            print(f"  AUC from n_stations alone     : {auc_effort:.3f}"
+                  f"   <- null baseline")
+            print(f"  corr(n_stations, basin_label) : {r:+.3f}")
+            print(f"  model skill above effort      : "
+                  f"{auc_model - auc_effort:+.3f} AUC")
+    except Exception as exc:                     # never let the check break the run
+        print(f"\n(sampling-effort check skipped: {exc})")
+
     days.to_csv("data/basin_alert_daily.csv", index=False)
     print("\nSaved data/basin_alert_val_sweep.csv, data/basin_alert_daily.csv")
 
