@@ -117,19 +117,57 @@ per station-date. The old pipeline never aggregated, producing a spurious
 
 ### Lag correlation decay (fig6): CHL(t-lag) vs bloom_28d(t)
 
-| Lag (days) | Pearson r | p-value | n |
-|---|---|---|---|
-| 0 | **0.306** | 2.3e-247 | 11,447 |
-| 3 | 0.190 | 6.3e-92 | 11,297 |
-| 7 | 0.184 | 2.4e-85 | 11,097 |
-| 14 | 0.160 | 8.9e-63 | 10,755 |
-| 21 | 0.138 | 2.1e-45 | 10,426 |
-| 28 | 0.125 | 1.5e-36 | 10,098 |
-| 35 | 0.091 | 1.5e-19 | 9,776 |
-| 42 | 0.132 | 7.9e-38 | 9,460 |
+**LABEL CORRECTED 2026-08-29.** This table was previously headed "Lag (days)". It is
+not days — it is **prior visits**. `src/viz/generate_eda_figures.py:294` computes
+`groupby(STATION_COL)[CHL_COL].shift(lag)`, a *row* shift, while the variable is
+named `lag_days` and the figure's x-axis reads "Lag (days)". The r values below are
+correct and reproduce exactly; only the unit was wrong.
 
-Signal is present but modest (r~0.19–0.31), consistent with the biweekly
-sampling interval and ecological lag structure.
+| Lag (prior visits) | Approx. calendar days | Pearson r | p-value | n |
+|---|---|---|---|---|
+| 0 | 0 | **0.306** | 2.3e-247 | 11,447 |
+| 3 | ~63 | 0.190 | 6.3e-92 | 11,297 |
+| 7 | ~147 | 0.184 | 2.4e-85 | 11,097 |
+| 14 | ~294 | 0.160 | 8.9e-63 | 10,755 |
+| 21 | ~441 | 0.138 | 2.1e-45 | 10,426 |
+| 28 | ~588 | 0.125 | 1.5e-36 | 10,098 |
+| 35 | ~735 | 0.091 | 1.5e-19 | 9,776 |
+| 42 | ~882 | 0.132 | 7.9e-38 | 9,460 |
+
+Conversion uses the median inter-visit gap of **21 days**, so "lag 42" is roughly
+**2.4 years**, not six weeks. This reframes the table entirely: it is not a picture
+of predictive signal decaying over an ecologically meaningful horizon, it is mostly
+a picture of correlation between readings separated by months to years. The
+non-monotonic bounce at lag 35 -> 42 (0.091 -> 0.132) is unsurprising at ~2 years'
+separation, where between-station differences dominate over temporal persistence.
+
+**`figures/fig6_lag_correlation_decay.png` and `figures/lag_correlation_decay.png`
+carry the same mislabelled axis and should be regenerated before use in the paper.**
+
+#### True calendar-day lags (computed 2026-08-29)
+
+For each reading, the nearest strictly-prior reading within +/-3 days of the target
+lag, same station:
+
+| Lag (days) | Pearson r | n |
+|---|---|---|
+| 7 | 0.280 | 388 |
+| 14 | 0.291 | 4,779 |
+| 21 | 0.213 | 1,630 |
+| 28 | 0.220 | 5,310 |
+| 35 | 0.263 | 2,625 |
+| 42 | 0.220 | 2,986 |
+
+**Do not read a decay curve into this either.** The match counts swing from 388 to
+5,310 across adjacent lags because station visits cluster near 14- and 28-day
+spacings, so each lag samples a different and non-comparable subset of the network.
+Lags 0 and 3 are omitted because a +/-3 day window cannot separate them at this
+cadence. The honest conclusion is that **this sampling design cannot support a
+calendar-day lag-decay curve at all**; the visit-lag table above is the only
+defensible version, and it must be labelled in visits.
+
+Signal is present but modest (r ~ 0.19-0.31 in visit-lag terms), consistent with the
+biweekly-to-triweekly sampling interval and ecological lag structure.
 
 ---
 

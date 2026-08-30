@@ -270,9 +270,14 @@ else:
     print(f"  Saved: {out}")
 
 # ---- Figure 6: lag correlation decay ---------------------------------------
-# NOTE: with corrected daily data, lag correlation is computed across
-# calendar time (not within a single CTD cast). Each station-date has
-# one CHL value, so we compute autocorrelation properly.
+# NOTE: each station-date has one CHL value (no intra-cast duplication), so the
+# autocorrelation is computed over station VISITS, not over calendar time. An
+# earlier version of this comment claimed calendar time, which is what led the
+# axis and notes/KEY_NUMBERS.md to be labelled in days. Visits are spaced a median
+# of 21 days apart, so the lag axis spans roughly 0 to 2.4 years. A true
+# calendar-day version is not supportable at this cadence: matched-pair counts
+# swing from ~390 to ~5,300 across adjacent day-lags because visits cluster near
+# 14- and 28-day spacings. See notes/KEY_NUMBERS.md Section 3.
 
 print("\n[Fig 6] Lag correlation decay ...")
 
@@ -283,13 +288,18 @@ else:
     # against the future bloom label.
     # We correlate chl(t-lag) with bloom_28d(t) across all station-dates.
 
-    lag_days = [0, 3, 7, 14, 21, 28, 35, 42]
+    # NOTE: these are PRIOR VISITS, not days. `.shift(n)` below moves n rows, and
+    # rows are station visits spaced a median of 21 days apart, so lag 42 is about
+    # 2.4 years rather than six weeks. The variable was previously named `lag_days`
+    # and the axis labelled "Lag (days)", which misrepresented every value.
+    lag_visits = [0, 3, 7, 14, 21, 28, 35, 42]
+    MEDIAN_GAP_DAYS = 21
     corrs = []
 
     df_sorted = df.sort_values([STATION_COL, DATE_COL]).copy()
 
-    for lag in lag_days:
-        # shift CHL forward by lag days per station
+    for lag in lag_visits:
+        # shift CHL back by `lag` VISITS per station
         # (i.e., correlate past CHL with current bloom label)
         df_sorted["chl_lagged"] = (
             df_sorted.groupby(STATION_COL)[CHL_COL]
@@ -298,7 +308,8 @@ else:
         valid = df_sorted[["chl_lagged", BLOOM_COL]].dropna()
         r, p = stats.pearsonr(valid["chl_lagged"], valid[BLOOM_COL])
         corrs.append((lag, r, p))
-        print(f"    lag={lag:2d} days  r={r:.3f}  p={p:.2e}  n={len(valid):,}")
+        print(f"    lag={lag:2d} visits (~{lag * MEDIAN_GAP_DAYS:4d} d)  "
+              f"r={r:.3f}  p={p:.2e}  n={len(valid):,}")
 
     lags_arr  = np.array([c[0] for c in corrs])
     r_arr     = np.array([c[1] for c in corrs])
@@ -313,9 +324,12 @@ else:
         ax.scatter(lag, r, s=80, color=color, zorder=4)
 
     ax.axhline(0, color="gray", lw=0.8, linestyle="--")
-    ax.set_xlabel("Lag (days)", fontsize=11)
+    ax.set_xlabel(f"Lag (prior station visits; median {MEDIAN_GAP_DAYS} d apart)",
+                  fontsize=11)
     ax.set_ylabel("Pearson r (CHL vs. bloom_28d)", fontsize=11)
-    ax.set_title("Predictive Signal Decay: Lagged CHL vs. Future Bloom\n(corrected daily data)", fontsize=12, fontweight="bold")
+    ax.set_title("Lagged CHL vs. Future Bloom\n"
+                 "(lag in prior VISITS, not days: lag 42 is ~2.4 years)",
+                 fontsize=12, fontweight="bold")
     ax.set_facecolor(PALETTE["grid"])
     ax.grid(color="white", lw=0.8)
 
