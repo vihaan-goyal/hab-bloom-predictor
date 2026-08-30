@@ -1,3 +1,10 @@
+> **SUPERSEDED.** Marked 2026-08-30. Built on the **XGBoost** model with a 7-day label,
+> evaluated on 2020-2022 as validation. Its raw counts (10,232 FP / 4,904 FN) are on the
+> un-aggregated multi-cast row scale that `KEY_NUMBERS.md` Section 6 bans — the correct
+> scale is 11,447 station-days. The qualitative patterns (errors peak Jul-Aug; western
+> stations A4, B3, D3, C1, C2, F3 dominate) still hold and are corroborated elsewhere,
+> but **no number in this file should be quoted.**
+
 # Failure Analysis Memo
 
 ## Overview

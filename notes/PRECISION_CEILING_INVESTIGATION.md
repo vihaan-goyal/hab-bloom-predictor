@@ -21,7 +21,13 @@ marginal CIs.
 
 - Pooled AUC at 21 days: 0.852, 95% CI [0.823, 0.878].
 - Pooled AUC at 28 days (prior default): 0.815, 95% CI [0.784, 0.844].
-- Honest operating-point precision at t=0.60: ~0.26 (NOT 0.500).
+- Honest operating-point precision at t=0.60: **0.175 at h21**, 0.261 at h28 (NOT 0.500).
+  *(Corrected 2026-08-29. This line previously read "~0.26" with no horizon, which
+  conflicted with PRECISION_PUSH_TRACKER.md. Recomputed directly from
+  `data/cv_pred_orig_h21.csv` / `_h28.csv` at t=0.60: h21 gives 0.175 over 416 alerts
+  at a 0.039 base rate; h28 gives 0.261 over 318 alerts at 0.058. The old "~0.26" was
+  the h28 figure carried into an h21 context. This document standardises on h21, so
+  quote 0.175.)*
 - High-confidence alert precision (top 5% of predictions): ~0.22 to 0.28.
 
 ---

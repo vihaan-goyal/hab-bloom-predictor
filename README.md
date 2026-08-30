@@ -56,8 +56,8 @@ src/
     final_evaluation_threshold_sweep.py   single-split evaluation
     threshold_robustness.py         label-definition robustness (10 vs 12 ug/L)
     experiments/                    rejected improvement attempts (13)
-  deploy/                           daily inference + dashboard (being migrated
-                                    to the locked model; see DASHBOARD.md)
+  deploy/                           daily inference on the locked model;
+                                    dashboard.html is stale (see DASHBOARD.md)
 data/                               gitignored; see Data sources
 figures/
 paper/                              LaTeX (Overleaf)
@@ -87,5 +87,95 @@ python warning_robustness.py --t-star 0.35
 ## Status notes
 
 - Horizon is standardized at 21 days throughout. An earlier single-split evaluation used a 28-day label; where its numbers appear in older notes they are superseded.
-- `src/deploy/` still runs a superseded XGBoost model and is being migrated to the locked pipeline.
+- `src/deploy/daily_inference.py` runs the locked pipeline (v2): it imports `locked_pipeline`, fits the LR walk-forward in-process, and loads no serialized model. The residual stale artifact is `src/deploy/dashboard.html`, whose sidebar still reads "Model: XGBoost / AUC 0.827" and which parses `aeration_score`/`do`/`temp`/`intervene` columns the current script no longer emits.
 - Aeration intervention results are pending a rerun on corrected data and should not be quoted yet.
+
+---
+
+## Findings
+
+Five results, each with the number that supports it. The negatives are the substance,
+not the leftovers.
+
+### 1. The alert beats "always alert", and nothing else
+
+Until August 2026 this repo contained no trivial reference forecast, so "POD 0.875"
+had nothing to be measured against. `src/models/reference_baselines.py` adds four
+(always-alert, station x month climatology, station x day-of-year climatology,
+persistence) with a paired station-year clustered bootstrap of the lift difference.
+
+| Level | base rate | model lift | clearly beats |
+|---|---|---|---|
+| Station-day (n=956, 48 events) | 0.050 | **2.63x** | always-alert only, +1.651 [+1.197, +2.228] |
+| Basin-day (n=41, 12 events) | 0.293 | 1.37x | nothing; +0.390 [+0.000, +0.909] vs always-alert |
+
+At station-day level the model is decisively better than no information. Against
+climatology (+0.331 [-0.009, +0.712]) and persistence the CIs include zero, so it is
+not demonstrably better than a lookup table. At basin level a day-of-year table
+(1.52x) and "was the last reading above 10?" (1.81x) both score numerically higher
+than the model.
+
+**Mechanism:** basin aggregation raises the base rate from 0.05 to 0.29, and
+lift = precision / base_rate. The aggregation that buys verification coverage spends
+the model's entire advantage. Report the station-day product, not the basin one.
+
+### 2. Searching 912 operating points finds exactly chance
+
+`src/models/basin_search.py` pre-registers a 912-cell grid (threshold x west-lon cut x
+season gate x min-stations x aggregator), selects on validation only by a fixed rule,
+and scores one configuration on test once. A permutation null re-runs the entire
+search on shuffled labels.
+
+- best real validation lift: **1.84x**
+- permutation null best-lift: median **1.83x**, 95th percentile 3.01x
+- the real result sits at the **52nd percentile of noise**
+
+At 8 validation events, any search over this space returns ~1.8x whether or not the
+labels carry information. The selected configuration scores POD 1.000 / FAR 0.583 /
+lift 1.62x on test; that number is the output of selecting on noise and is not
+reported as an improvement. This is a direct quantitative demonstration of the failure
+mode recorded in `notes/PRECISION_CEILING_INVESTIGATION.md` Finding 1.
+
+### 3. The detector cannot see the HAB it is named for
+
+`notes/BENCHMARKS.md` and Hattenrath-Lehmann & Gobler (2016) record that CTDEEP -- the
+provider of this dataset -- reported *Cochlodinium* (rust tide) patches in Long Island
+Sound in 2012 and 2016, plus an extensive bloom in Port Jefferson Harbor in 2016.
+
+Our Jul-Oct chlorophyll for 2016 is **0.6 sd below** the multi-year average (mean 4.21
+vs 2012's 11.18), and across all 11,447 station-days exactly **one** reading reaches
+the 100 ug/L rust-tide dense-patch level. Rust tide forms localised surface
+aggregations that a station-day mean over multiple casts dilutes away.
+
+Consequence for framing: chl-a > 10 ug/L is a **biomass** threshold, not a harm
+threshold. Benign winter diatom blooms are counted; genuine HABs are missed. What this
+model predicts is phytoplankton biomass exceedance. See `notes/LITERATURE_NOTES.md`.
+
+### 4. Temperature is nearly uninformative here
+
+Bloom rate below 15 C is **22.4%** versus **25.5%** at or above it (n=2,787
+exceedances with paired temperature). A third of exceedances fall below the 15 C
+threshold Reinl et al. (2023) use to define a cold-water bloom, and 20% below 5 C.
+This cuts against the warming-drives-blooms framing that dominates the HAB
+literature, and is consistent with the Feb-Mar cold-water diatom peak.
+
+### 5. No point of no return exists
+
+`src/models/point_of_no_return.py` tests, over 617 pre-onset observations, whether a
+bloom ever becomes unavoidable. Two independent methods share **zero** rows. The
+model-free test (50 matched historical analogues per state) peaks at **0.62**, median
+0.04. The model counterfactual's apparent answer -- 65% of summer events locked in
+~29 days out -- collapses to **0%** once temperature, salinity and tides are allowed
+to move within their own observed station-season range, so it measures lever
+restriction rather than inevitability.
+
+### Also worth knowing
+
+- **Model class does not matter.** Ensemble vs locked LR on the same test split:
+  +0.0038 AUC, 95% CI [-0.0100, +0.0201]. Every tree ensemble in
+  `data/full_model_comparison_results.csv` scores clearly worse (VotingEnsemble 0.7918,
+  StackedLR 0.7697) than LR (0.8139-0.8157).
+- **A typical bloom onset carries one in-situ reading in the preceding month**
+  (median 3 in 90 days; median inter-visit gap 21 days = the forecast horizon).
+- **There is no spare data.** The raw ERDDAP export holds 106 real stations and 11,508
+  station-days with usable chlorophyll; the model already uses 11,447 (~99.5%).

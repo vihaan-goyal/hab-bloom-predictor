@@ -2,7 +2,8 @@
 Dissolved Oxygen (DO) EDA — mirrors the chlorophyll temporal analysis.
 
 Generates:
-  figures/do_lag_correlation_decay.png   — r vs. lag (0,3,7,14,21 days)
+  figures/do_lag_correlation_decay.png   — r vs. lag (0,3,7,14,21 prior VISITS,
+                                           median 21 d apart, NOT days)
   figures/do_distribution_by_bloom.png   — DO distribution: bloom vs. non-bloom
   figures/do_seasonal_pattern.png        — monthly median DO vs. bloom frequency
   figures/do_station_gradient.png        — mean DO by station (west→east)
