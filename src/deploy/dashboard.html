@@ -142,7 +142,7 @@ canvas{position:absolute;inset:0}
       <span class="nav-dot" style="background:var(--text3)"></span>All stations
     </button>
     <button class="nav-item" onclick="setFilter('alert',this)">
-      <span class="nav-dot" style="background:var(--red)"></span>Intervene
+      <span class="nav-dot" style="background:var(--red)"></span>Alert
     </button>
     <button class="nav-item" onclick="setFilter('monitor',this)">
       <span class="nav-dot" style="background:var(--amber)"></span>Monitor
@@ -156,17 +156,15 @@ canvas{position:absolute;inset:0}
     <button class="nav-item active" id="sort-prob" onclick="setSort('bloom_prob',this)">
       <span style="font-size:11px">↓</span> Bloom probability
     </button>
-    <button class="nav-item" id="sort-do" onclick="setSort('do',this)">
-      <span style="font-size:11px">↑</span> Dissolved oxygen
-    </button>
-    <button class="nav-item" id="sort-s" onclick="setSort('aeration_score',this)">
-      <span style="font-size:11px">↓</span> Aeration score
+    <button class="nav-item" id="sort-age" onclick="setSort('days_old',this)">
+      <span style="font-size:11px">↑</span> Days since visit
     </button>
   </div>
   <div class="sidebar-meta">
     <div id="sidebar-date" style="font-weight:500;color:var(--text2);margin-bottom:4px">No data loaded</div>
-    Model: XGBoost<br>
-    AUC 0.827 · Test 2023–2025<br>
+    Model: Logistic regression (locked pipeline)<br>
+    Pooled CV AUC 0.852 · t*=0.35<br>
+    POD 0.875 · FAR 0.875 · Test 2023–2025<br>
     CT DEEP LISICOS<br><br>
     Vihaan Goyal<br>Westhill High School
   </div>
@@ -204,14 +202,14 @@ canvas{position:absolute;inset:0}
       <div class="metric-sub">processed</div>
     </div>
     <div class="metric">
-      <div class="metric-label">High risk</div>
+      <div class="metric-label">Elevated</div>
       <div class="metric-val red" id="m-high">—</div>
-      <div class="metric-sub">P &gt; 70%</div>
+      <div class="metric-sub">P &gt; 20%</div>
     </div>
     <div class="metric">
-      <div class="metric-label">Intervene</div>
+      <div class="metric-label">Alerts</div>
       <div class="metric-val red" id="m-intervene">—</div>
-      <div class="metric-sub">all 3 criteria</div>
+      <div class="metric-sub">P ≥ t* = 0.35</div>
     </div>
     <div class="metric">
       <div class="metric-label">Mean prob</div>
@@ -219,9 +217,9 @@ canvas{position:absolute;inset:0}
       <div class="metric-sub">across stations</div>
     </div>
     <div class="metric">
-      <div class="metric-label">Min DO</div>
+      <div class="metric-label">Stalest data</div>
       <div class="metric-val" id="m-do">—</div>
-      <div class="metric-sub">mg/L (lowest)</div>
+      <div class="metric-sub">days since visit (max)</div>
     </div>
   </div>
 
@@ -232,9 +230,9 @@ canvas{position:absolute;inset:0}
       <div class="bar-chart" id="prob-chart"></div>
     </div>
     <div class="chart-card">
-      <div class="chart-title">DO vs bloom probability</div>
+      <div class="chart-title">Data age vs bloom probability</div>
       <div class="scatter-wrap">
-        <canvas id="scatter-canvas" role="img" aria-label="Scatter plot of dissolved oxygen vs bloom probability"></canvas>
+        <canvas id="scatter-canvas" role="img" aria-label="Scatter plot of days since last visit vs bloom probability"></canvas>
       </div>
     </div>
   </div>
@@ -245,7 +243,7 @@ canvas{position:absolute;inset:0}
       <div class="table-title" id="table-title">Stations</div>
       <div class="filters">
         <button class="filter-btn active" onclick="setFilter('all',this,'filter')">All</button>
-        <button class="filter-btn" onclick="setFilter('alert',this,'filter')">Intervene</button>
+        <button class="filter-btn" onclick="setFilter('alert',this,'filter')">Alert</button>
         <button class="filter-btn" onclick="setFilter('monitor',this,'filter')">Monitor</button>
         <button class="filter-btn" onclick="setFilter('ok',this,'filter')">OK</button>
       </div>
@@ -254,9 +252,7 @@ canvas{position:absolute;inset:0}
       <span>Station</span>
       <span>Bloom probability</span>
       <span class="col-r">P(bloom)</span>
-      <span class="col-r">Aeration S</span>
-      <span class="col-r">DO mg/L</span>
-      <span class="col-r">Temp °C</span>
+      <span class="col-r">Days old</span>
       <span class="col-r">Action</span>
     </div>
     <div class="station-rows" id="station-rows">
@@ -275,15 +271,15 @@ let currentSort = 'bloom_prob';
 let scatterChart = null;
 
 function status(r) {
-  const intervene = r.intervene === true || r.intervene === 'True' || r.intervene === 'true';
-  if (intervene) return 'alert';
-  if (parseFloat(r.bloom_prob) > 0.50) return 'monitor';
+  // v2 contract: 'alert' is emitted by daily_inference.py at the frozen t*=0.35
+  if (r.alert === true || parseFloat(r.bloom_prob) >= 0.35) return 'alert';
+  if (parseFloat(r.bloom_prob) >= 0.20) return 'monitor';
   return 'ok';
 }
 
 function barColor(p) {
-  if (p > 0.70) return '#c0392b';
-  if (p > 0.50) return '#b7600a';
+  if (p >= 0.35) return '#c0392b';
+  if (p >= 0.20) return '#b7600a';
   return '#2d7a3a';
 }
 
@@ -309,7 +305,7 @@ function setSort(field, btn) {
 function getFiltered() {
   let data = currentFilter === 'all' ? ALL_DATA : ALL_DATA.filter(r => status(r) === currentFilter);
   data = [...data].sort((a,b) => {
-    if (currentSort === 'do') return parseFloat(a.do) - parseFloat(b.do);
+    if (currentSort === 'days_old') return parseInt(a.days_old) - parseInt(b.days_old);
     return parseFloat(b[currentSort]) - parseFloat(a[currentSort]);
   });
   return data;
@@ -325,17 +321,18 @@ function render() {
 }
 
 function renderMetrics() {
-  const high = ALL_DATA.filter(r => parseFloat(r.bloom_prob) > 0.70).length;
-  const intervene = ALL_DATA.filter(r => status(r) === 'alert').length;
+  const high = ALL_DATA.filter(r => parseFloat(r.bloom_prob) >= 0.20).length;
+  const alerts = ALL_DATA.filter(r => status(r) === 'alert').length;
   const mean = ALL_DATA.reduce((a,r) => a + parseFloat(r.bloom_prob), 0) / ALL_DATA.length;
-  const minDO = Math.min(...ALL_DATA.map(r => parseFloat(r.do)).filter(v => !isNaN(v)));
+  const maxAge = Math.max(...ALL_DATA.map(r => parseInt(r.days_old)).filter(v => !isNaN(v)));
   document.getElementById('m-total').textContent = ALL_DATA.length;
   document.getElementById('m-high').textContent = high;
-  document.getElementById('m-intervene').textContent = intervene;
+  document.getElementById('m-intervene').textContent = alerts;
   document.getElementById('m-mean').textContent = Math.round(mean * 100) + '%';
-  const doEl = document.getElementById('m-do');
-  doEl.textContent = minDO.toFixed(2);
-  doEl.className = 'metric-val' + (minDO < 6 ? ' red' : minDO < 8 ? ' amber' : ' green');
+  const ageEl = document.getElementById('m-do');
+  ageEl.textContent = isFinite(maxAge) ? maxAge + ' d' : '—';
+  // 21 d = median inter-visit gap = the forecast horizon; older than that is stale
+  ageEl.className = 'metric-val' + (maxAge > 21 ? ' red' : maxAge > 14 ? ' amber' : ' green');
 }
 
 function renderAlerts() {
@@ -346,9 +343,10 @@ function renderAlerts() {
   zone.innerHTML = `<div class="alert-banner">
     <div class="alert-dot"></div>
     <div class="alert-text">
-      <strong>${alerts.length} station${alerts.length>1?'s':''} flagged for aeration assessment:</strong>
-      ${alerts.map(r=>r.station_name).join(', ')} —
-      P(bloom) &gt; 70%, DO &lt; 6.0 mg/L, and aeration score &gt; 0.60 all met simultaneously.
+      <strong>${alerts.length} station${alerts.length>1?'s':''} above the alert threshold (t* = 0.35):</strong>
+      ${alerts.map(r=>r.station_name).join(', ')}.
+      At this operating point POD is 0.875 and FAR is 0.875 — roughly 7 of 8 alerts
+      are false alarms (2.7&times; lift over the 4.6% base rate). See DASHBOARD.md.
     </div>
   </div>`;
 }
@@ -368,19 +366,15 @@ function renderTable() {
     const s = status(r);
     const p = parseFloat(r.bloom_prob);
     const pct = Math.round(p * 100);
-    const doVal = parseFloat(r.do);
-    const S = parseFloat(r.aeration_score);
-    const temp = parseFloat(r.temp);
+    const age = parseInt(r.days_old);
     const rowClass = s === 'alert' ? 'row-red' : s === 'monitor' ? 'row-amber' : '';
     return `<div class="srow ${rowClass}">
       <span class="sname">${r.station_name}</span>
       <div><div class="bar-wrap"><div class="bar-fill" style="width:${pct}%;background:${barColor(p)}"></div></div></div>
       <span class="val">${pct}%</span>
-      <span class="val ${S > 0.60 ? '' : 'dim'}">${S.toFixed(2)}</span>
-      <span class="val ${doVal < 6.0 ? 'red' : ''}">${doVal.toFixed(2)}</span>
-      <span class="val">${isNaN(temp) ? '—' : temp.toFixed(1)}</span>
+      <span class="val ${age > 21 ? 'red' : ''}">${isNaN(age) ? '—' : age + ' d'}</span>
       <span class="badge ${s === 'alert' ? 'red' : s === 'monitor' ? 'amber' : 'green'}">
-        ${s === 'alert' ? 'Intervene' : s === 'monitor' ? 'Monitor' : 'OK'}
+        ${s === 'alert' ? 'Alert' : s === 'monitor' ? 'Monitor' : 'OK'}
       </span>
     </div>`;
   }).join('');
@@ -408,7 +402,7 @@ function renderScatter() {
   const textColor = isDark ? '#5a5956' : '#9e9d9a';
 
   const points = ALL_DATA.map(r => ({
-    x: parseFloat(r.do),
+    x: parseInt(r.days_old),
     y: parseFloat(r.bloom_prob) * 100,
     label: r.station_name,
     s: status(r)
@@ -439,14 +433,14 @@ function renderScatter() {
           callbacks: {
             label: ctx => {
               const p = points[ctx.dataIndex];
-              return `${p.label}: DO ${p.x.toFixed(1)} mg/L, P=${p.y.toFixed(0)}%`;
+              return `${p.label}: last visit ${p.x} d ago, P=${p.y.toFixed(0)}%`;
             }
           }
         }
       },
       scales: {
         x: {
-          title: { display: true, text: 'Dissolved oxygen (mg/L)', color: textColor, font: { size: 10 } },
+          title: { display: true, text: 'Days since last station visit', color: textColor, font: { size: 10 } },
           grid: { color: gridColor },
           ticks: { color: textColor, font: { size: 10 } }
         },
@@ -473,10 +467,8 @@ function loadCSV(evt) {
       const row = {};
       headers.forEach((h,i) => row[h] = vals[i] ? vals[i].trim() : '');
       row.bloom_prob = parseFloat(row.bloom_prob);
-      row.aeration_score = parseFloat(row.aeration_score);
-      row.do = parseFloat(row.do);
-      row.temp = parseFloat(row.temp);
-      row.intervene = row.intervene === 'True' || row.intervene === 'true';
+      row.days_old = parseInt(row.days_old);
+      row.alert = row.alert === 'True' || row.alert === 'true';
       return row;
     }).filter(r => !isNaN(r.bloom_prob));
 

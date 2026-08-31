@@ -169,6 +169,38 @@ model-free test (50 matched historical analogues per state) peaks at **0.62**, m
 to move within their own observed station-season range, so it measures lever
 restriction rather than inevitability.
 
+### The rejected-attempts ledger, enumerated
+
+This README previously said "thirteen pre-registered improvement attempts were
+rejected" but named only seven and quantified one. The full ledger, with deltas where
+they were logged (sources: `notes/PRECISION_OPTIMIZATION_LOG.md`,
+`notes/PRECISION_PUSH_TRACKER.md`, `src/models/experiments/`):
+
+| # | Attempt | Outcome |
+|---|---|---|
+| 1 | Nutrient forward-fill | **-10.4pp** precision (stale monthly samples) |
+| 2 | NOAA ASOS wind (land-based) | **-4pp** |
+| 3 | MODIS satellite CHL | **-7.8pp** (4 km too coarse) |
+| 4 | ERA5 wind stress | **-6.3pp** (corr -0.003; wind is noise for LIS blooms) |
+| 5 | Kd490 water clarity | **-2.2pp** (78.8% null in the merge) |
+| 6 | UConn nutrients | **-4.9pp** (still monthly cadence) |
+| 7 | River discharge lags | no signal, corr < 0.03 at every lag; screened out |
+| 8 | Isotonic/Platt calibration | breaks the probability scale; val too small (~67 positives) |
+| 9 | XGBoost | **-33pp** precision |
+| 10 | Station-month bloom rate | rejected; delta not logged (`experiments/test_station_month_rate.py`) |
+| 11 | Chlorophyll acceleration | rejected; delta not logged (`experiments/test_chl_acceleration.py`) |
+| 12 | Neighbor bloom probability | rejected; delta not logged (`experiments/test_neighbor_bloom_prob.py`) |
+| 13 | Station-gated alert policy | rejected; false alarms arise at bloom-prone stations in non-bloom periods, so the ceiling is temporal, not spatial |
+
+Rejected since, under rolling-origin CV and this session's baselines: selective
+prediction / station abstention (CI [-0.024, +0.037] straddles zero); stratification
+features (paired AUC -0.014 [-0.021, -0.007] — real physics, no marginal signal);
+label refinement (raises raw precision 0.175 to 0.380 while lift *falls* 5.72 to 2.91 —
+a base-rate illusion); the ensemble (+0.0038 AUC vs LR, CI [-0.0100, +0.0201]); and the
+912-configuration basin operating-point search (52nd percentile of its own permutation
+null). The consistency of these failures across mechanism, model class, and alerting
+policy is the precision-ceiling finding.
+
 ### Also worth knowing
 
 - **Model class does not matter.** Ensemble vs locked LR on the same test split:

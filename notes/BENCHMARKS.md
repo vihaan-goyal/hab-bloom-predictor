@@ -37,15 +37,25 @@ cadence-invariant (biological) residual.
 
 ## Benchmark table
 
-| System | Target | Lead | POD | FAR | n (assessable) | Notes |
-|---|---|---|---|---|---|---|
-| LIS basin alert (this work) | chl-a > 10 ug/L, western LIS | 21 d | 1.00 | 0.60 | 41 basin-days, 12 events (2023-2025) | Initiation forecast; threshold pre-registered on 2020-2022 val; rule-of-three POD lower bound ~0.75 |
-| LIS station-day (this work) | same | 21 d | 0.875 | 0.875 | 956 station-days (2023-2025) | ver_far ~0.83; empty-window fraction 41% |
-| NOAA GoM HAB-OFS (TX), transport direction | K. brevis bloom movement | days | 1.00 | 0.200 | 6 (of 146 issued) | BY2011-2012; tracking an already-identified bloom |
-| NOAA GoM HAB-OFS (TX), high respiratory irritation | aerosol impact | 3-4 d | 1.00 | 0.043 | 22 | BY2011-2012, single large bloom year |
-| NOAA Lake Erie seasonal forecast (Stumpf et al. 2012) | seasonal cyanobacteria severity index | months | n/a | n/a | 10 years | Continuous product judged on RMSE: 0.55 CI (discharge-only), 0.37 CI (blended). Benchmark for our planned seasonal severity product, not the EWS |
-| C-HARM Pseudo-nitzschia model, all CA stations (Anderson et al. 2016) | P-n bloom > 10^4 cells/L | nowcast | 0.67 | 0.67 | 2014-2015, weekly pier sampling | Optimized prediction point 0.52 (POD/FAR crossover); total accuracy 43%; ROC near 1:1 line |
-| C-HARM particulate DA model, Santa Cruz Wharf | pDA > 500 ng/L | nowcast | 0.68 | -- | same | Their best result: AUC 0.77 at prediction point 0.6; P-n model at same site AUC 0.33 (below random); pDA at Stearns Wharf AUC 0.04 (very few events) |
+Base rate and lift columns added 2026-08-31. Lift = precision / base rate — the only
+metric here measured against a reference rather than rewarding a convenient base rate.
+**None of the external systems publish their event base rates**, so their lift cannot
+be computed (n/r), which means none of the published POD/FAR pairs below can be
+compared against that system's own climatology. Reporting both is a contribution of
+this work, not standard practice. Reference-forecast rows come from
+`src/models/reference_baselines.py` (`data/reference_baselines.csv`).
+
+| System | Target | Lead | POD | FAR | base rate | lift | n (assessable) | Notes |
+|---|---|---|---|---|---|---|---|---|
+| LIS basin alert (this work) | chl-a > 10 ug/L, western LIS | 21 d | 1.00 | 0.60 | 0.293 | 1.37 | 41 basin-days, 12 events (2023-2025) | Initiation forecast; threshold pre-registered on 2020-2022 val; POD exact CI [0.735, 1.000]. **Advantage over always-alert has a CI touching zero** (+0.390 [+0.000, +0.909]); see reference rows |
+| LIS station-day (this work) | same | 21 d | 0.875 | 0.875 | 0.046 | 2.7 | 956 station-days (2023-2025) | ver_far ~0.83; empty-window fraction 41%. Beats always-alert decisively: paired lift diff +1.651 [+1.197, +2.228] |
+| — always-alert, basin (reference) | same | — | 1.00 | 0.707 | 0.293 | 1.00 | same 41 basin-days | Requires no data; the floor |
+| — persistence, basin (reference) | same | — | 0.75 | 0.471 | 0.293 | 1.81 | same 41 basin-days | "Was the last reading above 10?" — numerically outscores the basin model's 1.37 (paired CI includes 0) |
+| NOAA GoM HAB-OFS (TX), transport direction | K. brevis bloom movement | days | 1.00 | 0.200 | n/r | n/r | 6 (of 146 issued) | BY2011-2012; tracking an already-identified bloom |
+| NOAA GoM HAB-OFS (TX), high respiratory irritation | aerosol impact | 3-4 d | 1.00 | 0.043 | n/r | n/r | 22 | BY2011-2012, single large bloom year |
+| NOAA Lake Erie seasonal forecast (Stumpf et al. 2012) | seasonal cyanobacteria severity index | months | n/a | n/a | n/r | n/r | 10 years | Continuous product judged on RMSE: 0.55 CI (discharge-only), 0.37 CI (blended). Benchmark for our planned seasonal severity product, not the EWS |
+| C-HARM Pseudo-nitzschia model, all CA stations (Anderson et al. 2016) | P-n bloom > 10^4 cells/L | nowcast | 0.67 | 0.67 | n/r | n/r | 2014-2015, weekly pier sampling | Optimized prediction point 0.52 (POD/FAR crossover); total accuracy 43%; ROC near 1:1 line |
+| C-HARM particulate DA model, Santa Cruz Wharf | pDA > 500 ng/L | nowcast | 0.68 | -- | n/r | n/r | same | Their best result: AUC 0.77 at prediction point 0.6; P-n model at same site AUC 0.33 (below random); pDA at Stearns Wharf AUC 0.04 (very few events) |
 
 ## Comparability caveats (must appear in the paper alongside the table)
 
