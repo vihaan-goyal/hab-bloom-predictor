@@ -3,7 +3,11 @@
 ## Run instructions
 
 ```bash
-conda activate hab
+# Use the BASE conda env: ~/anaconda3/python.exe (or `conda activate base`).
+# The `hab` env is BROKEN (exit 127 on np.linalg.lstsq / sklearn fits): its
+# pip-installed scipy conflicts with conda-forge MKL. Three in-place repairs
+# failed (2026-09-01); recreate it if you need it:
+#   conda env remove -n hab && conda env create -f environment.yml
 
 # Final evaluation with threshold sweep (test set 2023–2025)
 python src/models/final_evaluation_threshold_sweep.py
