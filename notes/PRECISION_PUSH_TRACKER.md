@@ -22,8 +22,12 @@ Key facts, all verified and reproducible from current files:
 - PR-AUC: 0.221 (h21), 0.264 (h28). Clean monotone PR tradeoff, no plateau.
 - 99% of 21-day forward windows hold <=1 chlorophyll reading (48% hold zero). The
   "ground truth" is itself mostly unobserved.
-- No buoy chlorophyll exists for LIS (NERACOOS/UConn buoys measure temp/sal/DO/
-  turbidity only). The ~21-day ship survey is the ONLY in-situ chl record. This
+- [CORRECTED 2026-09-01] Buoy chlorophyll fluorescence DOES exist for LIS (UConn
+  LISICOS ECO-FL at WLIS/EXRX, 15-min, 2019-2026; `data/buoy_eco_fl/`), but it
+  does not calibrate to extracted chl-a (R^2 0.13 / 0.02 on 52 co-located pairs)
+  and, run through the Narragansett recipe (`src/models/experiments/
+  lis_buoy_recipe.py`), gives onset precision 0.16-0.18 -- boat level. The
+  ~21-day ship survey remains the only CALIBRATED in-situ chl record. This
   makes cadence a fundamental observing-system limit, and turns the future sensor
   device into a documented gap-filler.
 - A4/B3 mechanistic attribution does NOT hold: errors are Sound-wide, and A4/B3 are
@@ -50,8 +54,9 @@ DEAD (tested and rejected, or ruled out by findings)
   straddles zero. Station reliability not stable across years. DEAD.
 - #5 USGS river discharge: a daily covariate cannot fix an unobserved window;
   improves ranking at best, and discharge lags already logged null. Ruled out.
-- #6 phycocyanin / buoy chlorophyll: confirmed NO LIS buoy chl exists. DEAD as a
-  data source, but became a paper finding (the observational gap).
+- #6 phycocyanin / buoy chlorophyll: [CORRECTED 2026-09-01] buoy fluorescence
+  exists but is uncalibrated and adds no skill (see line 25 correction). DEAD as
+  a data source; the paper finding is "uncalibrated," not "nonexistent".
 - #7 STRATIFICATION feature: DEAD, and HURTS. Was buildable (11,233 station-dates,
   98% coverage, surface-bottom temp+salinity from hab_labels_final.csv). Adding
   strat_temp/strat_dens/depth_span to the C=0.05 LR: AUC 0.852->0.838, paired diff
@@ -103,4 +108,6 @@ WRITING TODO (deferred, but flagged)
   product. Do NOT claim 21d wins on everything; it loses to 28d on precision.
 - Sustained label = label-quality/ranking improvement, NOT a precision gain (state
   explicitly; AUPRC is a tie).
-- Cadence limit + no-buoy-chl as the headline limitation; sensor device as the fix.
+- Cadence limit + uncalibrated-buoy-chl as the headline limitation. NOTE 2026-09-01:
+  the Narragansett fork's matched experiments show event RARITY, not cadence,
+  explains most of the LIS precision ceiling; see the fork's findings note.
