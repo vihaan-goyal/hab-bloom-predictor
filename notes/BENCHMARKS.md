@@ -78,6 +78,25 @@ so neither can go in the table above.
   forward forecast; no lead time, no event definition, no baseline.
   https://eartharxiv.org/repository/view/7979/
 
+### Positioning table (2026-09-01) — "different question, stricter evaluation"
+
+| | CyFi (NASA) | Mermer et al. 2024 | NOAA HAB-OFS / C-HARM | This work |
+|---|---|---|---|---|
+| What it does | detects blooms *now* from satellite | explains chl-a from same-sample nutrients | forecasts / tracks a known bloom | **forecasts new blooms days ahead** |
+| Lead time | 0 | 0 | days | **7 d (Narragansett) / 21 d (LIS)** |
+| Water type | small inland lakes | Lake Erie (freshwater) | Gulf of Mexico, California coast | two temperate estuaries |
+| Skill reported | qualitative | R² 0.85 | POD / FAR | AUC 0.88; precision 0.66 [0.62, 0.69]; POD 0.65 |
+| Base rate stated | no | no | no | **yes** |
+| Beats a trivial baseline? | not tested | not tested | not tested | **yes — CIs exclude 0** |
+| Multi-year held-out test | not stated | not stated | small n | **9 years, station-year clustered CIs** |
+| Pre-registered negatives | no | no | no | **14 rejected attempts + one refuted hypothesis** |
+
+Read across: ahead on evaluation rigor (base rate, trivial baselines,
+clustered CIs, pre-registration); behind on deployment scope (CyFi is a
+shipped tool, NOAA is operational); not comparable on raw numbers (an R²
+from same-sample regression is not a forecast skill). Phrase it as
+"stricter," never "better."
+
 Why this matters for framing: the general literature answers "is there ML for
 HABs?" with nowcasts and same-sample regressions. Our task — an exceedance
 *forecast* days ahead with a stated base rate, lift, and CIs — is the
