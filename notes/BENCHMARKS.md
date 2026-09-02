@@ -57,6 +57,33 @@ this work, not standard practice. Reference-forecast rows come from
 | C-HARM Pseudo-nitzschia model, all CA stations (Anderson et al. 2016) | P-n bloom > 10^4 cells/L | nowcast | 0.67 | 0.67 | n/r | n/r | 2014-2015, weekly pier sampling | Optimized prediction point 0.52 (POD/FAR crossover); total accuracy 43%; ROC near 1:1 line |
 | C-HARM particulate DA model, Santa Cruz Wharf | pDA > 500 ng/L | nowcast | 0.68 | -- | n/r | n/r | same | Their best result: AUC 0.77 at prediction point 0.6; P-n model at same site AUC 0.33 (below random); pDA at Stearns Wharf AUC 0.04 (very few events) |
 
+## Related ML systems that are NOT comparable (checked 2026-09-01)
+
+Both surfaced by a Google search for "ML model that predicts harmful algal
+blooms". Neither forecasts, neither reports base rates or trivial baselines,
+so neither can go in the table above.
+
+- **CyFi — Cyanobacteria Finder** (NASA / DrivenData, open-source Python).
+  Sentinel-2 imagery → cyanobacteria density *now* at a point, for small
+  inland lakes/rivers; 8,979 training samples. A **nowcast** of a different
+  organism (cyanobacteria, WHO severity levels) in a different setting; the
+  authors state it is not applicable to coastal/marine water. No forecast
+  lead time; no quantitative skill published in the blog post.
+  https://www.earthdata.nasa.gov/news/blog/applying-machine-learning-harmful-algal-blooms
+- **Mermer, Zhang & Demir 2024 (EarthArXiv 7979)** — "Predicting HABs Using
+  Ensemble ML and Explainable AI", Lake Erie 2013–2020. Regresses chl-a
+  concentration from co-sampled water quality (R² ≈ 0.85 for XGBoost/Deep
+  Forest; SHAP highlights particulate N/C, total P). This is a **same-time
+  regression** — chl-a from nutrients measured in the same sample — not a
+  forward forecast; no lead time, no event definition, no baseline.
+  https://eartharxiv.org/repository/view/7979/
+
+Why this matters for framing: the general literature answers "is there ML for
+HABs?" with nowcasts and same-sample regressions. Our task — an exceedance
+*forecast* days ahead with a stated base rate, lift, and CIs — is the
+question those systems don't attempt, which is why the honest comparators
+remain the operational forecast systems (NOAA HAB-OFS, C-HARM) above.
+
 ## Comparability caveats (must appear in the paper alongside the table)
 
 1. Task difficulty differs. GoM transport and respiratory forecasts
