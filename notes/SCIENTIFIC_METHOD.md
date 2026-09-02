@@ -2,7 +2,7 @@
 
 **Update this file at the end of every work session.** It is the single place
 where the project's question, hypotheses, variables, controls, results, and
-conclusion are kept current. Last updated: 2026-09-01.
+conclusion are kept current. Last updated: 2026-09-01 (end of session).
 
 ## Overarching question
 
@@ -67,6 +67,20 @@ already collects?
 - **Tuning search (360 configs, pre-registered):** the reference model is
   already the optimum at its bloom definition; a lift-maximising rule merely
   chases rarer labels.
+
+### Session addenda (2026-09-01, evening)
+- Pre-registered 360-config tuning search: the reference model is the
+  optimum at its bloom definition; lift-maximising selection chases rarity.
+- Lift at LIS rarity over nine CV years: 7–8× vs 2.7× (dense sampling
+  triples ranking skill; precision still rarity-capped).
+- The 2014 cliff: LIS bloom-days 42–59% (2009–13) → 9% (2014) → 3–11%
+  since; Narragansett flat — awaiting DEEP/UConn confirmation (email drafted).
+- Probability 21 d before onset: LIS median 0.46, Narragansett 0.85; most
+  of the 3-week signal is seasonal; Narragansett curve flat −21→−1.
+- Calibration: LIS days scored ≥0.9 bloomed 58% of the time (7/12) — ranking
+  monotonic, confidence inflated; report lift/ranking, not raw probabilities.
+- Positioning vs CyFi / Mermer 2024 / NOAA: different question (forecast vs
+  nowcast), stricter evaluation; never "better".
 
 ## Conclusion (current)
 
