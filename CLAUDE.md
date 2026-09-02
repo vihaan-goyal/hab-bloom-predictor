@@ -55,6 +55,11 @@ Note: C1 precision=1.000 is genuine (4 TP, 0 FP) but small sample (7 test positi
 | `src/deploy/daily_inference.py` | Daily inference pipeline + alert emails |
 | `src/deploy/dashboard.html` | Browser-based monitoring dashboard |
 
+## End of every session
+
+Update  (question, hypotheses, variables, results,
+conclusion) with what changed. It is the one-page truth of the project.
+
 ## Experiment scripts
 
 One-off experiments that are not part of the main pipeline are archived in
