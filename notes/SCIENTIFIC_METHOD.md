@@ -2,7 +2,7 @@
 
 **Update this file at the end of every work session.** It is the single place
 where the project's question, hypotheses, variables, controls, results, and
-conclusion are kept current. Last updated: 2026-09-01 (end of session).
+conclusion are kept current. Last updated: 2026-09-03 (end of session).
 
 ## Overarching question
 
@@ -82,6 +82,46 @@ already collects?
 - Positioning vs CyFi / Mermer 2024 / NOAA: different question (forecast vs
   nowcast), stricter evaluation; never "better".
 
+## Phase 4 — Does the model transfer? (2026-09-03)
+
+**Question.** Is the bloom-precursor signature learned in Narragansett specific
+to that bay, or general?
+
+**Test 1, export (fork findings §19).** The frozen Narragansett model, applied
+with no retraining to six other systems (Chesapeake Bay, six NERRS reserves,
+UK shelf via Cefas SmartBuoys, Australian IMOS moorings, western Lake Erie,
+SF Bay/Suisun Delta; 124k–144k station-days), after quantile-rescaling each
+site's chlorophyll. IV: training site. DV: onset-only lift over always-alert,
+AUC, station-year bootstrap CIs. Control: a model refit on each site's own
+data, a chl>c rule, climatology. Result: exported model within CI of the local
+refit at NERRS, UK, Australia and Lake Erie; clearly below it at Chesapeake and
+SF Delta (both tidal-fresh). Raw transfer without rescaling never alerts
+anywhere; rescaling is the whole trick. No method beats the simple rule by much
+at any estuary; the model's edge is ranking (AUC 0.86 vs 0.73 in the UK).
+
+**Test 2, import (§20).** A model trained on all six foreign sites, never shown
+Narragansett, tested on Narragansett 2023: lift 1.64 [1.31, 2.10], AUC 0.76 vs
+the local model's 2.00, 0.84. Transfer is asymmetric: exports well, does not
+replace local data where blooms are strong.
+
+**Test 3, water-type models (§22, pre-registered).** Hypothesis: models per
+salinity regime (fresh / estuarine / marine) would fix the tidal-fresh
+failures. Leave-one-site-out across 12 site×regime holdouts. Regime model
+pooled lift 1.36 [1.32, 1.40] vs single Narragansett model 1.45 [1.37, 1.54]
+vs all-sites-pooled 1.37. **Rejected.** Water type carries no information
+beyond data volume; the run-up shape is universal, only its strength varies.
+
+**Deliverable.** `predict_anywhere.py` + a 122 kB frozen model: anyone with
+sub-daily chlorophyll (plus optional temp/sal/DO) can score their site.
+Verified to reproduce the harness to three decimals (Lake Erie, SF Bay); does
+not reproduce LIS (a 7-day daily-sonde model asked a 21-day question on
+boat visits: AUC 0.77 vs 0.875 for the LIS-trained model).
+
+**Also this session.** Narragansett's nitrogen load fell >50% after 2006 with
+no exceedance cliff, which weakens the pure-TMDL reading of the LIS 2014 step;
+reply drafted to the existing June thread with CT DEEP (O'Brien-Clayton) and
+UConn (O'Donnell, Fake) asking whether 2014 was a method change.
+
 ## Conclusion (current)
 
 Blooms can be forecast; the model's ranking skill is genuine in both bays.
@@ -110,4 +150,4 @@ DO marks bloom-prone water, it does not cause blooms.
 
 Parent repo: README.md Findings, notes/KEY_NUMBERS.md, notes/BENCHMARKS.md.
 Fork (../hab-bloom-predictor-narragansett): notes/NARRAGANSETT_FINDINGS.md
-§1–16, figures/nar_fig1–7. Every number has a script under src/.
+§1–22, figures/nar_fig1–9, predict_anywhere.py + release/. Every number has a script under src/.
