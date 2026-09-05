@@ -17,7 +17,7 @@ Subject: Question about LIS chlorophyll decline after 2014 — student research 
 
 Dear Dr. [Name],
 
-I'm a senior at Westhill High School in Stamford working on a science research
+I'm a junior at Westhill High School in Stamford working on a science research
 project using the CT DEEP Long Island Sound water quality dataset (1993–2025,
 via the UConn ERDDAP server). I'd be grateful for a few minutes of your
 expertise on one result I don't want to misinterpret.
