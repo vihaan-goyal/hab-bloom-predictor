@@ -2,7 +2,7 @@
 
 **Update this file at the end of every work session.** It is the single place
 where the project's question, hypotheses, variables, controls, results, and
-conclusion are kept current. Last updated: 2026-09-03 (end of session).
+conclusion are kept current. Last updated: 2026-09-04 (end of session).
 
 ## Overarching question
 
@@ -122,6 +122,33 @@ no exceedance cliff, which weakens the pure-TMDL reading of the LIS 2014 step;
 reply drafted to the existing June thread with CT DEEP (O'Brien-Clayton) and
 UConn (O'Donnell, Fake) asking whether 2014 was a method change.
 
+## Phase 5 - Can the model go global on satellite data? (2026-09-04)
+
+**Question.** Sub-daily sondes exist at a few hundred stations; satellites see
+every coast daily. Does a satellite-chlorophyll-driven version of the model
+keep useful 7-day onset skill?
+
+**Design (pre-registered).** 89 sonde stations across seven systems; daily
+satellite chlorophyll at each from four products (OLCI 300 m, gap-filled 2 km,
+VIIRS 4 km, OLCI 4 km) plus 1 km SST; features from the satellite series only;
+truth from the sondes. GO if satellite-refit onset lift >= 1.3 (CI > 1), beating
+a satellite threshold rule, with >= 60% of onsets observable in the prior week.
+
+**Result.** NO-GO at every resolution. Satellite refit lift 1.07-1.26 (CIs
+above 1 but below the bar); climatology with no satellite data beats it
+everywhere but the open shelf; the exported Narragansett model gets nothing
+from satellite input (lift ~1.0). Satellite chlorophyll agrees weakly with the
+sondes inside estuaries (Spearman 0.1-0.2; 0.4-0.8 offshore) and is visible
+only 20-40% of days. Scored against its own label the satellite model reports
+lift 1.75, i.e. it predicts itself, not the water: the key caveat for any
+satellite HAB product validated without in-situ truth. Fork findings 23, fig 10.
+
+**Also this session.** A pre-registered test of water-type ("regime") models
+also failed (fork 22): regime lift 1.36 vs the single Narragansett model 1.45.
+Coverage roadmap therefore stands at: exported Narragansett model at any site
+with sub-daily sondes (predict_anywhere.py), local refit where >= 3 years of
+local data exist, satellites for nowcast screening only.
+
 ## Conclusion (current)
 
 Blooms can be forecast; the model's ranking skill is genuine in both bays.
@@ -150,4 +177,4 @@ DO marks bloom-prone water, it does not cause blooms.
 
 Parent repo: README.md Findings, notes/KEY_NUMBERS.md, notes/BENCHMARKS.md.
 Fork (../hab-bloom-predictor-narragansett): notes/NARRAGANSETT_FINDINGS.md
-§1–22, figures/nar_fig1–9, predict_anywhere.py + release/. Every number has a script under src/.
+§1–23, figures/nar_fig1–10, predict_anywhere.py + release/. Every number has a script under src/.
