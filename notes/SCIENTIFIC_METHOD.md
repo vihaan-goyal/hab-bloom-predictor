@@ -177,6 +177,41 @@ regime models, refits at the 11 best ERDDAP sites) and never beat the exported
 model on marine or open-coast sites (median delta lift -0.06 at the ERDDAP
 sites); it helps only in tidal-fresh and estuarine water with 3+ local years.
 
+## Phase 7 - Is every result documented and reproducible? (2026-09-05)
+
+**Question.** Could a stranger regenerate every number in both repos from the
+notes, the scripts and the public data, without asking us anything?
+
+**Method.** Audited both repos: git status, every findings section checked
+for a named script, every referenced script checked for existence, every
+data source checked for a fetch script or download URL, then the committed
+`environment.yml` built from scratch into a fresh conda env and used to run
+the pipeline.
+
+**Result.** Code was fully committed and every data source had a documented
+route, but four gaps would have stopped a stranger. (1) Fork findings §7-13
+and §15 named no script; §15 (the 2014 cliff) was an inline calculation with
+no script at all. (2) §6 and §17 cited scripts that live in this repo without
+saying so. (3) The Cefas download is a manual, login-gated portal export and
+the notes did not say what was requested. (4) `environment.yml` had never been
+built and did not describe the environment that produced the results: it
+pinned Python 3.11, pandas 3.0 and scikit-learn 1.8, while every run used
+Python 3.13, pandas 2.3.3 and scikit-learn 1.7.2, and the released model
+file unpickles with version warnings under 1.8.
+
+**Fixes.** A Reproducibility map (section, script, inputs, output) now heads
+the fork findings note; `src/models/experiments/bloom_rate_by_period.py`
+regenerates the §15 table exactly; cross-repo references are labelled; §19
+records the exact Cefas export request; `environment.yml` is re-pinned to
+the real versions with torch/xgboost/shap moved to an optional block, and a
+clean `conda env create` was verified to build and run inference, a model
+fit and a warning-free load of the released model. The "hab env is broken"
+note described one damaged local env, not the recipe.
+
+**Not covered.** This repo's older LIS chapter was not re-audited beyond
+confirming its evidence map; this repo's own `environment.yml` still lists
+the deep-learning extras unpinned to the base env.
+
 ## Conclusion (current)
 
 Blooms can be forecast; the model's ranking skill is genuine in both bays.
