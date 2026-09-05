@@ -172,6 +172,10 @@ as the seven-network test. Fork findings 24, fig 11, data/registry/.
 useful 7-day bloom-onset probability at every public sub-daily chlorophyll
 sonde tested (80 systems), with skill set by each site's bloom
 statistics rather than by the model; it cannot be driven by satellites.
+Retraining on a site's own data was tested three ways (seven-network refits,
+regime models, refits at the 11 best ERDDAP sites) and never beat the exported
+model on marine or open-coast sites (median delta lift -0.06 at the ERDDAP
+sites); it helps only in tidal-fresh and estuarine water with 3+ local years.
 
 ## Conclusion (current)
 
