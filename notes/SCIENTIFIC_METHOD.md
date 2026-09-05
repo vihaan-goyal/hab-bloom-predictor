@@ -2,7 +2,7 @@
 
 **Update this file at the end of every work session.** It is the single place
 where the project's question, hypotheses, variables, controls, results, and
-conclusion are kept current. Last updated: 2026-09-04 (end of session).
+conclusion are kept current. Last updated: 2026-09-05 (end of session).
 
 ## Overarching question
 
@@ -149,6 +149,30 @@ Coverage roadmap therefore stands at: exported Narragansett model at any site
 with sub-daily sondes (predict_anywhere.py), local refit where >= 3 years of
 local data exist, satellites for nowcast screening only.
 
+## Phase 6 - How many sites can the model run on today? (2026-09-05)
+
+**Question.** With satellites ruled out (Phase 5), coverage is the set of public
+sub-daily chlorophyll sondes. How many exist, and does the exported model work
+on them blind?
+
+**Method.** Crawled the 48 public fixed-platform ERDDAP servers for datasets
+with a chlorophyll variable and a measured cadence of 1-60 min; 325 found,
+172 eligible fixed sondes (~1,400 station-years) after removing cruise,
+glider and duplicate records. Ran the frozen Narragansett model on the 100
+longest, scoring each with the section-19 protocol (own-site p75 label,
+onset rows, one calibration slice for the threshold, station-year bootstrap).
+
+**Result.** 87 new sites with predictions, 74 scored: median onset lift
+1.58, 67 of 74 with a CI above 1.0, none below, median AUC 0.74.
+Gulf of Mexico, Florida, Carolinas, California, Great Lakes, Alaska, British
+Columbia, New Hampshire, Hawaii and six other Pacific islands. Same skill band
+as the seven-network test. Fork findings 24, fig 11, data/registry/.
+
+**Where the project now stands.** One model, trained on one bay, produces a
+useful 7-day bloom-onset probability at every public sub-daily chlorophyll
+sonde tested (80 systems), with skill set by each site's bloom
+statistics rather than by the model; it cannot be driven by satellites.
+
 ## Conclusion (current)
 
 Blooms can be forecast; the model's ranking skill is genuine in both bays.
@@ -177,4 +201,4 @@ DO marks bloom-prone water, it does not cause blooms.
 
 Parent repo: README.md Findings, notes/KEY_NUMBERS.md, notes/BENCHMARKS.md.
 Fork (../hab-bloom-predictor-narragansett): notes/NARRAGANSETT_FINDINGS.md
-§1–23, figures/nar_fig1–10, predict_anywhere.py + release/. Every number has a script under src/.
+§1–24, figures/nar_fig1–11, predict_anywhere.py + release/, data/registry/. Every number has a script under src/.
