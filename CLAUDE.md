@@ -8,6 +8,8 @@
 # pip-installed scipy conflicts with conda-forge MKL. Three in-place repairs
 # failed (2026-09-01); recreate it if you need it:
 #   conda env remove -n hab && conda env create -f environment.yml
+# (2026-09-05: the fork's environment.yml is re-pinned to the base env's real versions and
+#  verified to build from scratch; this repo's yml still lists the torch/xgboost extras.)
 
 # Final evaluation with threshold sweep (test set 2023–2025)
 python src/models/final_evaluation_threshold_sweep.py

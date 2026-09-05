@@ -205,4 +205,9 @@ DO marks bloom-prone water, it does not cause blooms.
 
 Parent repo: README.md Findings, notes/KEY_NUMBERS.md, notes/BENCHMARKS.md.
 Fork (../hab-bloom-predictor-narragansett): notes/NARRAGANSETT_FINDINGS.md
-§1–24, figures/nar_fig1–11, predict_anywhere.py + release/, data/registry/. Every number has a script under src/.
+§1–24, figures/nar_fig1–11, predict_anywhere.py + release/, data/registry/. Every number has a script under src/;
+the **Reproducibility map** at the top of the fork's findings note lists, per section, the script, inputs and
+output (added 2026-09-05 after an audit found §7–13 and §15 named none; §15 was an inline calculation and now has
+`src/models/experiments/bloom_rate_by_period.py`, which reproduces the 2014-cliff table exactly). Cross-repo
+dependencies: fork §12 and §17 read this repo's `src/models/experiments/{lis_buoy_recipe,prob_before_onset_lis}.py`
+outputs; fork §15 reads this repo's `data/hab_features_tidal.csv`. Cefas is the one manual download.
