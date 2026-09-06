@@ -2,7 +2,7 @@
 
 **Update this file at the end of every work session.** It is the single place
 where the project's question, hypotheses, variables, controls, results, and
-conclusion are kept current. Last updated: 2026-09-05 (end of session).
+conclusion are kept current. Last updated: 2026-09-06 (end of session).
 
 ## Overarching question
 
@@ -259,7 +259,7 @@ the deep-learning extras unpinned to the base env.
 **Question.** Do forecasts issued before the outcome is known show the same
 onset lift as the retrospective tests?
 
-**Method (pre-registered, fork notes/PROSPECTIVE_PROTOCOL.md v1.0).** Frozen
+**Method (pre-registered, fork notes/PROSPECTIVE_PROTOCOL.md v1.0, amended 1.1 and 1.2 on 2026-09-06 before any issuance).** Frozen
 model (sha 5c0f7a17), threshold 0.50, 20 live sonde stations in four groups
 (LIS buoys WLIS/EXRX via UConn ERDDAP; two Kachemak Bay NERRS; six Maryland
 Eyes on the Bay; ten IOOS ERDDAP sites chosen by a written rule), each
@@ -273,8 +273,26 @@ NERRS/Chesapeake 1.3-2.0x, ERDDAP 1.5-2.5x. This is also the first time the
 exported Narragansett model was applied to any LIS data; section 12 had only
 retrained the recipe. Narragansett cannot be included: RIDEM has no live feed.
 
-**Status.** Code built and dry-run verified; no forecast issued. Formal start
-after the ISEF Form 1A adult-sponsor signature. Results will be added here.
+**Pre-start health check (2026-09-06).** 11 of 20 stations current. Dead at
+source: both Kachemak NERRS sondes (no chlorophyll channel in 2026) and Indian
+River Lagoon Banana River (sonde out since July). Caught before issuance:
+Scripps pier's catalogued chlorophyll channel had read a constant zero flagged
+QARTOD 4 since April; amendment 1.1 switches it to the pier's live ECO channel
+(fresh site, p75 1.33 on 21 months, site threshold withdrawn), drops readings
+flagged 4/9 at all ERDDAP sites, and documents the NERRS NaN-flag rule.
+Amendment 1.2 revises the LIS-buoy expectation band (above). Dry run under
+1.1: 10 ok, 3 stale, 4 warm-up, 3 feed_down.
+
+**Positioning (notes/BENCHMARKS.md, 2026-09-06).** Eight operational HAB
+products tabulated with sources: every one forecasts a species or toxin for
+one region with a locally trained model, none states a base rate, one (Gulf
+HAB-OFS) tests against chance. This work forecasts chlorophyll onset at any
+sonde with no retraining and always shows base rate and a trivial baseline.
+Framing stays "different question, stricter evaluation", never "better".
+
+**Status.** Code built, protocol frozen at 1.2, dry-run verified; no forecast
+issued. Formal start after the ISEF Form 1A adult-sponsor signature. Results
+will be added here.
 
 ### Decision value (2026-09-06)
 
@@ -356,16 +374,23 @@ temperature in LIS.
 ## Limitations
 
 Sonde fluorescence reads ~1.3–1.6× above lab chlorophyll (n=734 pairs; lab 10
-≈ sonde 13–16); LIS buoy test rests on two buoys and 78 positives; the 2014
-step change awaits confirmation from DEEP/UConn that it is not a method
-change (see EMAIL_DRAFT_2014_CLIFF.md); all findings are correlational — low
-DO marks bloom-prone water, it does not cause blooms.
+≈ sonde 13–16); LIS buoy tests rest on two buoys (§12: 78 positives; zero-shot
+§25.1: WLIS transfers weakly, AUC 0.63, with a fluorometer gain that drifts 7×);
+the 2014 step is now more likely a lab-record change than ecology and awaits
+DEEP/UConn's answer (email drafted, to be sent 2026-09-08); the LIS decision-value
+numbers rest on 48 blooms and carry wide CIs; nothing has yet been tested
+prospectively; all findings are correlational — low DO marks bloom-prone water,
+it does not cause blooms.
 
 ## Where the evidence lives
 
-Parent repo: README.md Findings, notes/KEY_NUMBERS.md, notes/BENCHMARKS.md.
+Parent repo: README.md Findings, notes/KEY_NUMBERS.md, notes/BENCHMARKS.md (incl.
+operational-products table), src/models/decision_value.py + figures/fig_decision_value.png,
+src/models/experiments/cliff_satellite_check.py + figures/fig_cliff_satellite.png,
+notes/ISEF_RESEARCH_PLAN.md, notes/COMPETITION_CHECKLIST.md.
 Fork (../hab-bloom-predictor-narragansett): notes/NARRAGANSETT_FINDINGS.md
-§1–24, figures/nar_fig1–11, predict_anywhere.py + release/, data/registry/. Every number has a script under src/;
+§1–25, figures/nar_fig1–11, predict_anywhere.py + release/, data/registry/,
+notes/PROSPECTIVE_PROTOCOL.md + src/deploy/prospective_*.py + data/prospective/ (ledger, tracked). Every number has a script under src/;
 the **Reproducibility map** at the top of the fork's findings note lists, per section, the script, inputs and
 output (added 2026-09-05 after an audit found §7–13 and §15 named none; §15 was an inline calculation and now has
 `src/models/experiments/bloom_rate_by_period.py`, which reproduces the 2014-cliff table exactly). Cross-repo
