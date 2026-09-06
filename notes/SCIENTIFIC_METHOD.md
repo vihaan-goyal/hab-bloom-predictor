@@ -254,6 +254,24 @@ note described one damaged local env, not the recipe.
 confirming its evidence map; this repo's own `environment.yml` still lists
 the deep-learning extras unpinned to the base env.
 
+## Phase 8 - Does the skill hold prospectively? (built 2026-09-05; not started)
+
+**Question.** Do forecasts issued before the outcome is known show the same
+onset lift as the retrospective tests?
+
+**Method (pre-registered, fork notes/PROSPECTIVE_PROTOCOL.md v1.0).** Frozen
+model (sha 5c0f7a17), threshold 0.50, 20 live sonde stations in four groups
+(LIS buoys WLIS/EXRX via UConn ERDDAP; two Kachemak Bay NERRS; six Maryland
+Eyes on the Bay; ten IOOS ERDDAP sites chosen by a written rule), each
+station's own p75 frozen from its history. Weekly issuance appended to a
+tracked ledger; outcomes scored 9+ days later; station-week clustered
+bootstrap; nothing reported below n >= 30 rows and 5 positives. Expected
+bands: LIS buoys 2-3x, NERRS/Chesapeake 1.3-2.0x, ERDDAP 1.5-2.5x.
+Narragansett cannot be included: RIDEM has no live feed.
+
+**Status.** Code built and dry-run verified; no forecast issued. Formal start
+after the ISEF Form 1A adult-sponsor signature. Results will be added here.
+
 ## Conclusion (current)
 
 Blooms can be forecast; the model's ranking skill is genuine in both bays.
