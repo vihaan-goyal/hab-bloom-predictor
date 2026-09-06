@@ -266,8 +266,12 @@ Eyes on the Bay; ten IOOS ERDDAP sites chosen by a written rule), each
 station's own p75 frozen from its history. Weekly issuance appended to a
 tracked ledger; outcomes scored 9+ days later; station-week clustered
 bootstrap; nothing reported below n >= 30 rows and 5 positives. Expected
-bands: LIS buoys 2-3x, NERRS/Chesapeake 1.3-2.0x, ERDDAP 1.5-2.5x.
-Narragansett cannot be included: RIDEM has no live feed.
+bands: LIS buoys 1.1-2.5x (revised 2026-09-06 from a retrospective zero-shot
+run of the frozen model on WLIS/EXRX: EXRX lift 1.9-2.5, AUC 0.81-0.84; WLIS
+1.1-1.5, AUC 0.63, its fluorometer gain drifts 7x; fork findings 25.1),
+NERRS/Chesapeake 1.3-2.0x, ERDDAP 1.5-2.5x. This is also the first time the
+exported Narragansett model was applied to any LIS data; section 12 had only
+retrained the recipe. Narragansett cannot be included: RIDEM has no live feed.
 
 **Status.** Code built and dry-run verified; no forecast issued. Formal start
 after the ISEF Form 1A adult-sponsor signature. Results will be added here.

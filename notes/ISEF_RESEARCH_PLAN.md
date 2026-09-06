@@ -41,7 +41,7 @@ except in tidal-fresh water with 3+ local years.
 Q4. Does the skill hold prospectively, on forecasts issued before the outcome
 is known?
 H4: pooled onset lift over a fall season falls inside the retrospective band
-for each site group (LIS buoys 2–3×; NERRS and Chesapeake 1.3–2.0×; ERDDAP
+for each site group (LIS buoys 1.1–2.5×; NERRS and Chesapeake 1.3–2.0×; ERDDAP
 top sites 1.5–2.5×). Threshold, sites and scoring rule are frozen before the
 first issuance (notes/PROSPECTIVE_PROTOCOL.md in the Narragansett repo).
 
