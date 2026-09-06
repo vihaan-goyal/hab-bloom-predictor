@@ -272,6 +272,60 @@ Narragansett cannot be included: RIDEM has no live feed.
 **Status.** Code built and dry-run verified; no forecast issued. Formal start
 after the ISEF Form 1A adult-sponsor signature. Results will be added here.
 
+### Decision value (2026-09-06)
+
+**Question.** What is the forecast worth in the unit a monitoring manager
+budgets in: station-visits per confirmed bloom, under a fixed monthly budget?
+
+**Method (`src/models/decision_value.py`).** Per bay, per calendar month of
+the out-of-sample period, per budget V in {4, 8, 12} station-visits a month,
+five ways of choosing which station-days to visit: calendar (even spacing,
+fixed station rotation), random-uniform (= always-alert / base rate, 200
+seeds), climatology (station x month bloom rate from training years only),
+alert-directed top-V by out-of-sample probability within the month, and a
+causal alert variant that spends budget day by day on rows above the shipped
+t* (LIS 0.35, Narragansett 0.50; unspent budget stays unspent). A visit
+confirms a bloom if the station-day's label is 1. Totals over months; 95 %
+CI by resampling months (n = 2000, seed 42). Inputs: LIS = the locked
+walk-forward frame (LR fit <= 2019, test 2023-25, 956 station-days, 48
+blooms, 28 months); Narragansett = pooled rolling-origin out-of-fold GB
+tier-A probabilities, onset rows only (chl <= 10), 2015-23 (15,118
+station-days, 3,964 blooms, 108 months). Sanity check reproduced exactly:
+at the full budget the alert precision equals the published lift x base rate
+(LIS 0.132 = 2.63 x 0.050; Narragansett 2023 single split 0.696 = 2.00 x
+0.347).
+
+**Results at V = 8 (data/decision_value.csv, figures/fig_decision_value.png).**
+
+| Strategy | LIS visits/bloom [95% CI] | LIS share caught | Narragansett visits/bloom [95% CI] | Narragansett share caught |
+|---|---|---|---|---|
+| Calendar (fixed rotation) | 15.4 [8.4, 44.0] | 0.29 | 3.81 [3.36, 4.41] | 0.057 |
+| Random / always-alert | 18.7 [10.0, 51.9] | 0.24 | 3.51 [3.13, 4.00] | 0.062 |
+| Climatology | 9.3 [5.3, 24.4] | 0.48 | 1.76 [1.58, 2.01] | 0.124 |
+| Alert-directed (top-V per month) | 8.3 [4.9, 21.6] | 0.54 | 1.45 [1.34, 1.58] | 0.151 |
+| Alert-directed (causal, t*) | 6.9 [3.5, 38.6] | 0.31 | 1.60 [1.45, 1.78] | 0.113 |
+
+- LIS: With 8 station-visits a month, calendar sampling confirms 4.7 blooms
+  per season (15.4 visits per bloom [8.4, 44.0]); alert-directed sampling
+  confirms 8.7 (8.3 visits per bloom [4.9, 21.6]). Season = test year (3
+  years, 2025 partial).
+- Narragansett: With 8 station-visits a month, calendar sampling confirms
+  25.2 blooms per season (3.8 visits per bloom [3.4, 4.4]); alert-directed
+  sampling confirms 66.3 (1.4 visits per bloom [1.3, 1.6]). Season = test
+  year (9 years).
+
+**Conclusion.** The alert roughly halves the cost of a confirmed bloom in
+LIS (1.9x, wide CI: 48 blooms) and cuts it 2.6x in Narragansett; the ordering
+is the same at V = 4 and 12. Two caveats the lift numbers hid: (i) in LIS the
+free climatology forecast gets most of the way there (9.3 visits per bloom
+vs 8.3 for the alert; CIs overlap), so the model's marginal value over "use
+the season" is small in the bloom-rare Sound and clear only in Narragansett
+(1.76 vs 1.45, CIs disjoint); (ii) the causal t* variant spends only about
+half its LIS budget (104 of 215 visits) because alerts are sparse, which
+makes its visits-per-bloom look best while it catches fewer blooms (0.31 vs
+0.54 of the season's). The earlier "2.5-3x better than the calendar" claim
+is now replaced by these scripted numbers.
+
 ## Conclusion (current)
 
 Blooms can be forecast; the model's ranking skill is genuine in both bays.
@@ -283,7 +337,9 @@ step (ratio 1.08 [1.01, 1.16]) while the lab record falls to 0.13 [0.10,
 0.15], and lab–satellite agreement drops to zero from 2014, so the evidence
 currently points to the record, not the Sound (Phase 3 cross-check; CT DEEP
 asked 2026-09-05). In a bloom-rare system the forecast's value
-is triage (2.5–3× better than the calendar at choosing where to sample), and
+is triage (at 8 station-visits a month one confirmed bloom costs 15.4 calendar
+visits vs 8.3 alert-directed in LIS, 3.8 vs 1.4 in Narragansett;
+src/models/decision_value.py), and
 continuous sensors would roughly triple that.
 
 ## Variables that turned out not to matter (a finding in itself)
