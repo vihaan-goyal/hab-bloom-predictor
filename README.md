@@ -10,7 +10,7 @@ Vihaan Goyal, Westhill High School, Stamford, Connecticut
 
 A regularized logistic regression forecasts chlorophyll-a exceedances (>10 ug/L within 21 days of a station visit) across Long Island Sound with strong ranking skill (pooled out-of-sample AUC 0.852), but alert precision is capped near 0.13 regardless of model class, feature set, threshold, era, or spatial alerting policy. Thirteen pre-registered improvement attempts were rejected. The central finding is that this precision ceiling is mechanistic, not a modeling failure:
 
-1. **Ecology.** After the Clean Water Act nitrogen TMDL was met (~2014), western stations became nitrogen limited, decoupling elevated chlorophyll from realized blooms.
+1. **Rarity.** Chlorophyll exceedances in the DEEP lab record fall from 42–59% of station-days (2009–2013) to 3–11% from 2014 on, and rare events cap precision regardless of model. Whether the 2014 step is ecological (nitrogen TMDL) or a change in the lab record is unresolved: MODIS satellite chlorophyll over the same stations shows no step, and lab–satellite agreement drops to zero from 2014 (`src/models/experiments/cliff_satellite_check.py`, `figures/fig_cliff_satellite.png`). CT DEEP has been asked.
 2. **Sampling.** The median gap between chlorophyll measurements is 21 days, equal to the forecast horizon. 48% of inter-sample gaps exceed the horizon, so many predicted events cannot even be verified.
 
 Across eras and label definitions the system delivers a roughly constant 2.5 to 3.4x precision lift over the base rate, and no intervention has moved that multiplier.
@@ -42,8 +42,8 @@ Complexity does not help: XGBoost cost 33 points of precision against this basel
 
 ## Key ecological context
 
-- Long-term chlorophyll decline since 1993, sharp inflection at the ~2014 TMDL achievement
-- Post-TMDL biomass-bloom decoupling at western stations (A4, B3), confirmed by near-zero NOx observations
+- Long-term chlorophyll decline since 1993 in the lab record, with a sharp 2014 step that the satellite record does not show (cause under inquiry with CT DEEP; do not cite as TMDL effect)
+- Biomass-bloom decoupling at western stations (A4, B3) after 2014, with near-zero NOx observations; the decoupling stands, its cause does not
 - Bloom frequency peaks February to March at 0 to 5 C, driven by cold-water diatoms, not summer cyanobacteria
 - Chlorophyll biomass (this project's target) skews west and tracks eutrophication; toxin-producing HAB species monitored by the state concentrate in eastern LIS. This system is a eutrophication early warning tool, not a direct toxin predictor.
 

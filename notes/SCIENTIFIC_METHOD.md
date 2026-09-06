@@ -59,14 +59,56 @@ already collects?
   year, with Narragansett as the untreated control.
 - **Result — supported.** (a) At matched rarity precision falls to LIS level
   (0.14 single-year; 0.29–0.48 pooled). (b) LIS station-days > 10 µg/L:
-  42–59% in 2009–2013 → 9% in 2014 → 3–11% every year since, coinciding with
-  the nitrogen TMDL being met; Narragansett held at ~30–40% throughout.
+  42–59% in 2009–2013 → 9% in 2014 → 3–11% every year since; Narragansett
+  held at ~30–40% throughout. (Attribution to the nitrogen TMDL was withdrawn
+  2026-09-05: see the satellite cross-check below.)
 - **Secondary finding:** at matched rarity, dense sampling still gives
   7–8× lift [lower CI 5.3–6.0] vs the boat network's 2.7× — sensors improve
   *where to look*, not *how often alerts are right*.
 - **Tuning search (360 configs, pre-registered):** the reference model is
   already the optimum at its bloom definition; a lift-maximising rule merely
   chases rarer labels.
+
+**Satellite cross-check (2026-09-05).** The 2014 cliff in the lab record
+could be a lab/method change, so it was tested against an instrument with no
+2014 change: MODIS-Aqua L3m daily chlor_a, 4 km grid, 5×5-pixel patch (~20 km)
+around each of the 50 stations (`data/modis_station_daily.csv`; script
+`src/models/experiments/cliff_satellite_check.py`, criterion fixed in the
+docstring before the run). *Criterion:* station-days with valid_frac ≥ 0.5;
+threshold = 75th percentile of satellite chl over 2005–2013 pooled
+(= 10.6 satellite units, n = 40,241); R = share(2015–2023) / share(2009–2013),
+station-year clustered bootstrap (n = 2000, seed 42); step confirmed if
+R < 0.5 with CI upper < 0.7, no step if CI lower > 0.8. *Result:* satellite
+share above threshold 0.240 (2009–2013, n = 22,547) → 0.202 (2014, n = 4,225)
+→ 0.260 (2015–2023, n = 41,212); **R = 1.08 [1.01, 1.16] — NO STEP.**
+Sensitivity at an absolute 10: R = 1.08 [1.01, 1.16]. Annual mean satellite chl
+7.4–11.1 throughout (8.9 pre, 9.3 post). The lab record over the same years:
+0.469 (n = 1,877) → 0.092 (n = 401) → 0.060 (n = 3,361), R = 0.13 [0.10, 0.15];
+restricted to the same station-days on which the satellite is valid (so not a
+coverage artefact): lab 0.395 (n = 408) → 0.037 (n = 107) → 0.040 (n = 891),
+R = 0.10 [0.07, 0.14], while the satellite on those very days is 0.348 → 0.421
+→ 0.339, R = 0.97 [0.83, 1.16]. Matched-day 2×2: pre-2014 (n = 810) lab and
+satellite exceed together 104 times vs 74 expected by chance, kappa 0.18; from
+2014 on (n = 1,147) 16 vs 17 expected, kappa 0.00 — the weak day-level
+agreement that existed vanishes exactly in 2014. Satellite valid-day fraction
+is flat (0.21–0.28 per year; 0.23 in 2014), so the satellite population did
+not change. *Meaning for the thesis:* an independent instrument sees no change
+in LIS surface chlorophyll across 2014, so the cliff most likely lives in the
+lab record (method, lab, or protocol change), not in the Sound. The "LIS is
+bloom-rare because the TMDL worked" reading (Phase 3 result (b), §15 of the
+fork) is therefore not supported and must be softened to: the *label* became
+rare in 2014 for reasons not yet established, and that label rarity — whatever
+its cause — is what caps precision. The rarity mechanism (Phase 3 (a), matched-
+rarity test) stands; the ecological attribution does not. *Limits:* MODIS
+chlor_a is biased in optically complex estuarine water and averages a 20 km
+patch around a point sample, and even before 2014 it agreed with the lab only
+weakly (kappa 0.18–0.25), so it is a coarse witness; but a 5–8× fall in
+exceedance frequency would move a 20 km surface mean, and the satellite moved
+by +8 % [+1, +16]. Only 24 % of station-days are satellite-valid (cloud, land
+adjacency), so matched-day n is modest (43–155 per year). Written to
+`data/cliff_satellite_check.csv` and `figures/fig_cliff_satellite.png`; the
+draft email to CT DEEP / UConn (`notes/EMAIL_DRAFT_2014_CLIFF.md`) should now
+ask specifically about a 2014 chlorophyll method change.
 
 ### Session addenda (2026-09-01, evening)
 - Pre-registered 360-config tuning search: the reference model is the
@@ -216,8 +258,13 @@ the deep-learning extras unpinned to the base env.
 
 Blooms can be forecast; the model's ranking skill is genuine in both bays.
 Alert precision is set by bloom rarity — not model class, features, training
-data volume, or sampling frequency — and LIS blooms became rare in 2014
-because pollution control worked. In a bloom-rare system the forecast's value
+data volume, or sampling frequency — and the LIS bloom *label* became rare
+in 2014. Whether that is ecology or a change in the lab chlorophyll record is
+unresolved: MODIS satellite chlorophyll over the same stations shows no 2014
+step (ratio 1.08 [1.01, 1.16]) while the lab record falls to 0.13 [0.10,
+0.15], and lab–satellite agreement drops to zero from 2014, so the evidence
+currently points to the record, not the Sound (Phase 3 cross-check; CT DEEP
+asked 2026-09-05). In a bloom-rare system the forecast's value
 is triage (2.5–3× better than the calendar at choosing where to sample), and
 continuous sensors would roughly triple that.
 
