@@ -348,6 +348,58 @@ makes its visits-per-bloom look best while it catches fewer blooms (0.31 vs
 0.54 of the season's). The earlier "2.5-3x better than the calendar" claim
 is now replaced by these scripted numbers.
 
+## Phase 9 - Would a neural network do better? (2026-09-10)
+
+**Question.** The LIS chapter chose logistic regression because every neural and
+tree alternative lost on 11k station-days and 74 test blooms. Narragansett has
+4.5M raw 15-minute sonde rows, 42k labelled station-days and 380 bloom events,
+and §11 showed skill falling when cadence is thinned below daily. Does (a) a
+sequence model on the raw 15-minute record beat the daily-feature GB, and (b) a
+pooled multi-site network with a learned site embedding close the
+reverse-transfer gap (§20: pooled GB blind on Narragansett AUC 0.76 / lift 1.64
+vs local 0.839 / 2.00)?
+
+**Method (both pre-registered in fork findings §26-27 before any run; env
+`hab-nn` = base pins + CPU torch, `environment-nn.yml`; `src/nn/`).** (a) A 2x2
+on identical rows: input (23 daily tier-A features vs a 7-day window of 672
+15-minute steps of chl, temperature, salinity, DO with missingness masks) x
+model (GB vs neural), plus a hybrid; train <= 2020, val 2021-22, test 2023 onset
+rows (1,697 after a >= 50 % window-coverage rule; base 0.347; 13 station-year
+clusters); 5 seeds per network, 5-seed mean-probability ensemble as the primary
+object; *paired* station-year clustered bootstrap (same resamples for every
+model, verified to reproduce the fork's marginal `boot_ci` to 4 dp). GO if
+paired dAUC(CNN - GB) CI excludes 0 and point >= +0.02. (b) The §20 pooled rows
+(six foreign systems, 144k station-days, Narragansett never in training), MLP
+with a 4-d site embedding and an UNK token used for the unseen bay, early
+stopping on a 15 % foreign holdout, Narragansett 2021-22 for the threshold only.
+GO if AUC >= 0.80 and paired dLift vs pooled GB CI excludes 0 and lift >= 1.82.
+
+**Result (a): NO, and reliably so.** GB-daily 0.839, MLP-daily 0.829, CNN-15min
+0.822, Hybrid 0.827 on the same 1,697 rows; paired dAUC(CNN - GB) -0.017
+[-0.027, -0.002], 0 of 5 CNN seeds above GB, all four cells at lift 1.83-1.85
+with overlapping CIs. The architecture control (MLP ~ GB) says model class is
+not the lever; the hybrid (~ MLP) says the 15-minute structure adds nothing on
+top of the daily aggregates. The daily-mean contract is the right resolution;
+the 15-minute record's value is in building dense daily rows (§11-13), not in
+feeding a sequence model. Fig 12.
+
+**Result (b):** NO-GO on every bar, and in the wrong direction. Pooled GB
+(re-run) 0.762 / lift 1.57; pooled MLP without embedding 0.719; with the UNK site
+embedding 0.700 / lift 1.36, paired dLift vs pooled GB -0.21 [-0.45, -0.05]; mean-of-sites
+embedding 0.723. The networks fit the *foreign* holdout as well as the GB (AUC
+0.84-0.85) and transfer worse, so the §20 gap is not site identity that an
+embedding can absorb; it is the weak-event problem named there (foreign "blooms"
+are 75th-percentile wiggles), and a more flexible model learns those wiggles
+without learning anything that carries to a strong-bloom bay. Fig 13.
+
+**What this settles.** Across both bays and four model families (LR, GB, MLP,
+1-D CNN) plus tree ensembles, the ranking skill of the precursor signature is
+~0.82-0.84 AUC on onset rows and does not move with model class, input
+resolution or training-set size. Rarity, not modelling, sets alert precision
+(Phase 3). No further architecture work is planned; any new one needs its own
+pre-registered section with the prior that it must overcome a reliably
+negative ~0.02 rather than a null.
+
 ## Conclusion (current)
 
 Blooms can be forecast; the model's ranking skill is genuine in both bays.
@@ -366,7 +418,9 @@ continuous sensors would roughly triple that.
 
 ## Variables that turned out not to matter (a finding in itself)
 
-Model class (LR ≈ GB in LIS; GB slightly ahead in Narragansett), extra
+Model class (LR ≈ GB in LIS; GB slightly ahead in Narragansett; a 15-minute
+sequence CNN and a tabular MLP both at or slightly below GB, Phase 9), input
+resolution finer than daily (Phase 9), extra
 features (13 LIS attempts; stratification, pH, diel DO, chl acceleration in
 Narragansett), more training data (14k → 34k station-days: no change),
 temperature in LIS.
@@ -389,7 +443,7 @@ operational-products table), src/models/decision_value.py + figures/fig_decision
 src/models/experiments/cliff_satellite_check.py + figures/fig_cliff_satellite.png,
 notes/ISEF_RESEARCH_PLAN.md, notes/COMPETITION_CHECKLIST.md.
 Fork (../hab-bloom-predictor-narragansett): notes/NARRAGANSETT_FINDINGS.md
-§1–25, figures/nar_fig1–11, predict_anywhere.py + release/, data/registry/,
+§1–27, figures/nar_fig1–13, predict_anywhere.py + release/, data/registry/, src/nn/ + environment-nn.yml (Phase 9),
 notes/PROSPECTIVE_PROTOCOL.md + src/deploy/prospective_*.py + data/prospective/ (ledger, tracked). Every number has a script under src/;
 the **Reproducibility map** at the top of the fork's findings note lists, per section, the script, inputs and
 output (added 2026-09-05 after an audit found §7–13 and §15 named none; §15 was an inline calculation and now has
