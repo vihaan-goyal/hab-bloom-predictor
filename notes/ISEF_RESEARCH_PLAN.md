@@ -31,6 +31,14 @@ sampling frequency, or bloom rarity?
 H2: bloom rarity. Prediction (pre-registered 2026-09-01): thinning
 Narragansett's daily record to LIS's boat cadence will *not* reproduce LIS's
 low precision, but re-thresholding Narragansett to LIS's bloom rate will.
+Model class and input resolution were tested last (2026-09-10, two
+pre-registered neural-network tests, Narragansett findings §26–27): a 1-D
+CNN on the raw 15-minute record scored reliably slightly *below* the
+daily-feature gradient-boosting model on identical rows (paired ΔAUC −0.017
+[−0.027, −0.002]), and a pooled six-site network with a learned site
+embedding transferred worse than pooled boosting (AUC 0.70 vs 0.76). Model
+class, features, data volume and sampling frequency are all now excluded;
+rarity stands.
 
 Q3. Does a model trained on Narragansett Bay transfer to other water bodies
 with no retraining?
@@ -69,14 +77,19 @@ first issuance (notes/PROSPECTIVE_PROTOCOL.md in the Narragansett repo).
    temperature, salinity lags, month. No future information.
 3. Models: logistic regression and gradient boosting; walk-forward
    year-by-year training; test years never touched during development.
+   Neural networks (tabular MLP, 1-D CNN on 7-day 15-minute windows, a
+   hybrid, and a pooled multi-site MLP with site embedding) were tested
+   under pre-registered criteria on 2026-09-10 and did not beat gradient
+   boosting; they are reported as negative results, not used.
 4. Evaluation on onset rows only (today below threshold) so persistence
    cannot inflate skill; precision always reported beside base rate; lift =
    precision / base rate; 95% CIs by station-year clustered bootstrap
    (n=2000, seed 42); baselines: always-alert, persistence, climatology,
    simple chlorophyll rules.
-5. Six pre-registered tests of H2 (cadence thinning, rarity re-thresholding,
+5. Eight pre-registered tests of H2 (cadence thinning, rarity re-thresholding,
    LIS buoys at 15-minute cadence, tuning search, lead-time sweep,
-   sonde–lab calibration).
+   sonde–lab calibration, and the two neural-network tests in item 3:
+   sequence model on 15-minute data, pooled site-embedding network).
 
 ### D.2 Completed before plan approval: transfer and coverage (2026-09-03 to 09-05)
 6. Export the Narragansett model; apply unchanged to six foreign networks
@@ -118,7 +131,8 @@ identified with a research user agent.
 ## F. Data analysis
 
 Python 3.13, scikit-learn 1.7.2, pandas 2.3.3 (pinned in environment.yml;
-verified to build from scratch). All scripts, data-fetch procedures and
+verified to build from scratch; the neural-network tests add CPU PyTorch
+2.12 in a second pinned environment, environment-nn.yml). All scripts, data-fetch procedures and
 results are in two public GitHub repositories; every figure and number has a
 named script. Statistical reporting rules: onset rows only; base rate
 beside every precision; clustered bootstrap CIs; pre-registered criteria
