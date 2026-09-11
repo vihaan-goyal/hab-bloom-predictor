@@ -392,6 +392,19 @@ embedding can absorb; it is the weak-event problem named there (foreign "blooms"
 are 75th-percentile wiggles), and a more flexible model learns those wiggles
 without learning anything that carries to a strong-bloom bay. Fig 13.
 
+**The ceiling as geometry (2026-09-11, fork findings §28; `src/models/lr_geometry.py`,
+`figures/fig_lr_geometry.png`).** Because LR matches every other model, the decision
+surface is close to a plane; projecting test-period onset rows onto the LR
+log-odds axis draws the ceiling. Reading rule fixed first: if the class overlap
+(OVL, integral of the smaller of the two class densities) differs by < 0.10
+between bays while the bloom share differs ~7x, the precision gap is rarity.
+Result: OVL 0.44 in LIS vs 0.52 in Narragansett (LIS separates *better*, AUC
+0.855 vs 0.810), bloom share 0.036 vs 0.347, precision at t* 0.11 vs 0.64.
+About three quarters of blooms in both bays sit inside the no-bloom central
+band, which is why every model family lands at the same AUC. The first
+number on the figure is the one to put beside the precision-vs-base-rate
+result on the board.
+
 **What this settles.** Across both bays and four model families (LR, GB, MLP,
 1-D CNN) plus tree ensembles, the ranking skill of the precursor signature is
 ~0.82-0.84 AUC on onset rows and does not move with model class, input
@@ -440,10 +453,11 @@ it does not cause blooms.
 
 Parent repo: README.md Findings, notes/KEY_NUMBERS.md, notes/BENCHMARKS.md (incl.
 operational-products table), src/models/decision_value.py + figures/fig_decision_value.png,
+src/models/lr_geometry.py + figures/fig_lr_geometry.png + data/lr_geometry_*.csv (Phase 9 geometry),
 src/models/experiments/cliff_satellite_check.py + figures/fig_cliff_satellite.png,
 notes/ISEF_RESEARCH_PLAN.md, notes/COMPETITION_CHECKLIST.md.
 Fork (../hab-bloom-predictor-narragansett): notes/NARRAGANSETT_FINDINGS.md
-§1–27, figures/nar_fig1–13, predict_anywhere.py + release/, data/registry/, src/nn/ + environment-nn.yml (Phase 9),
+§1–28, figures/nar_fig1–14, predict_anywhere.py + release/, data/registry/, src/nn/ + environment-nn.yml (Phase 9),
 notes/PROSPECTIVE_PROTOCOL.md + src/deploy/prospective_*.py + data/prospective/ (ledger, tracked). Every number has a script under src/;
 the **Reproducibility map** at the top of the fork's findings note lists, per section, the script, inputs and
 output (added 2026-09-05 after an audit found §7–13 and §15 named none; §15 was an inline calculation and now has
