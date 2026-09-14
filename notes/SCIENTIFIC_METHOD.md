@@ -413,6 +413,68 @@ resolution or training-set size. Rarity, not modelling, sets alert precision
 pre-registered section with the prior that it must overcome a reliably
 negative ~0.02 rather than a null.
 
+## Phase 10 - Does the LIS model hold on a second agency's record of the same water? (pre-registered 2026-09-14, before any run)
+
+**Question.** The LIS model has only ever been scored on CT DEEP's own
+cruises. The Interstate Environmental Commission (IEC) samples the western
+Narrows with its own boat, crew and lab: 22 stations, weekly late June to
+mid-September and monthly the rest of the year since 2018, lab chlorophyll a,
+DO, temperature, salinity (EPA Water Quality Portal, org 31ISC2RS_WQX, records
+to 2025-12-09; raw pull `data/iec_wqp_raw.csv`). Does the frozen LIS model
+beat always-alert on IEC station-days with no retraining?
+
+**Why this is a real test.** Same instrument class as training (bottle
+chlorophyll from boat visits, so no sonde rescaling), but a different agency,
+lab method (Standard Methods 10200 H and EPA 445.0 vs DEEP's), a bloom rate
+about ten times LIS's (41% of IEC samples since 2018 exceed 10 ug/L), and
+winter coverage DEEP never had. IEC stations A4, B3, C1 and C2 sit within
+~1 km of DEEP stations of the same names, which allows a same-week
+cross-lab check.
+
+**Hypotheses.** H10a: onset-only lift of the frozen LIS model on IEC
+2018-2025 has a station-year bootstrap CI entirely above 1.0. H10b: AUC on
+the same rows is within 0.70-0.85. H10c: same-week DEEP vs IEC chlorophyll at
+the four paired stations agree within a factor of two (median ratio in
+0.5-2.0), so the 10 ug/L label means the same thing in both records.
+
+**Method (fixed before running).** `src/transfer/iec_zero_shot.py`.
+- Model: locked spec from `src/models/locked_pipeline.py` fit on LIS rows
+  to 2019-12-31 with the 21-day, >10 ug/L label; scaler and imputation
+  medians from LIS training only. IEC data never touches the fit.
+- IEC rows: Sound stations only (Byram River sites BR1-BR10 dropped);
+  surface = shallowest depth <= 1.5 m per station-date parsed from the
+  activity ID; one row per station-date; 2018-01-01 to 2025-12-09 primary
+  (year-round period); 1991-2017 summer-only rows reported as secondary.
+- Features: the 35 locked features built by the LIS recipe (visit-based
+  lags and rolling means, station-month climatology from the IEC record,
+  three-nearest-station neighbour mean on the same survey date, monthly
+  tidal anomalies by date, ERA5 gust by date). Nutrient lags and
+  percent_saturation are unavailable for 2018+ and take the LIS training
+  median, as half of LIS rows already do.
+- Label: any chlorophyll > 10 ug/L within 21 days after the visit at the
+  same station; right-censored windows excluded (locked rule).
+- Scoring: onset rows (today <= 10 ug/L). Two operating points: the LIS
+  global threshold 0.60, and a threshold chosen on IEC 2018-2019 rows for
+  POD >= 0.6 then applied to 2020-2025. Metrics: precision, POD, lift =
+  precision / base rate, AUC; 2000-draw station-year clustered bootstrap
+  (seed 42). Baselines: always-alert, station-month climatology, chl > c
+  rule with c chosen on 2018-2019. Secondary label: own-station p75.
+- Cross-lab check: DEEP and IEC chlorophyll at A4/B3/C1/C2 paired within
+  +/-3 days, 2018-2025; report n, median ratio, Spearman r.
+
+**Expected bands (written before the run).** Base rate on onset rows
+0.30-0.55, so the ceiling on lift is about 2-3. Expect lift 1.2-1.8, AUC
+0.70-0.85, precision 0.45-0.70. A lift CI including 1.0 rejects H10a. If
+H10c fails (ratio outside 0.5-2.0) the p75 label becomes primary and the
+10 ug/L result is reported as method-confounded.
+
+**What it is not.** Not a prospective test (IEC posts with a lag of
+months); not a refit (a fourth model would add nothing to the claim). It
+is the outside-agency confirmation (workstream C1) using data already
+public.
+
+**Result.** _pending_
+
 ## Conclusion (current)
 
 Blooms can be forecast; the model's ranking skill is genuine in both bays.
