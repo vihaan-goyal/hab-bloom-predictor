@@ -473,7 +473,65 @@ months); not a refit (a fourth model would add nothing to the claim). It
 is the outside-agency confirmation (workstream C1) using data already
 public.
 
-**Result.** _pending_
+**Result (run 2026-09-14, same day, `src/transfer/iec_zero_shot.py`;
+`data/iec_zero_shot_results.csv`, `figures/fig_iec_zero_shot.png`).**
+5,204 IEC station-days, 34 stations, 1991-2025. Primary rows: 949 onset
+station-days 2020-2025, base rate 0.13 (below the 0.30-0.55 band: the
+monthly winter cadence leaves most 21-day windows with one or no visit, so
+onset-row positives are rarer than the 41% sample share suggested).
+
+| Model (2020-2025 onset rows, h21, >10 ug/L) | Prec | POD | Lift [95% CI] | AUC [CI] |
+|---|---|---|---|---|
+| LIS frozen, t=0.60 (LIS global threshold) | 0.24 | 0.62 | **1.84 [1.59, 2.11]** | 0.73 [0.68, 0.78] |
+| LIS frozen, t=0.82 (chosen on IEC 2018-19 for POD>=0.6) | 0.34 | 0.44 | 2.53 [2.08, 3.00] | same |
+| Station-month climatology (2018-19) | 0.20 | 0.80 | 1.50 [1.37, 1.65] | 0.73 [0.68, 0.78] |
+| chl > 3 rule (2018-19) | 0.17 | 0.90 | 1.26 [1.17, 1.35] | 0.61 |
+| Always-alert | 0.13 | 1.00 | 1.00 | 0.50 |
+
+- **H10a holds**: lift CI entirely above 1.0 at both thresholds; lift 1.84 is
+  at the top of the pre-registered 1.2-1.8 band. Precision 0.24 is below
+  the 0.45-0.70 band only because the base rate came in at 0.13, not 0.4.
+- **H10b holds**: AUC 0.73 [0.68, 0.78], inside 0.70-0.85. But
+  station-month climatology reaches the same AUC (0.73); the model's edge
+  over climatology is in lift at a fixed operating point (1.84 vs 1.50, CIs
+  touching; 2.53 vs 1.50 at t*), not in ranking. Same pattern as the
+  Narragansett trivial-rule comparison (fork findings 8): the model wins,
+  modestly.
+- Secondary: own-station p75 label lift 1.73 [1.52, 1.94], AUC 0.72;
+  1991-2017 summer-only rows lift 1.20 [1.15, 1.25], AUC 0.71 (weekly
+  summer cadence, higher base rate 0.27, so less headroom). All rows
+  2020-2025 (not onset-only) AUC 0.79 [0.76, 0.81]. 13 stations have >=30
+  onset rows; every per-station lift point estimate is above 1 (1.4-3.2),
+  five with CI above 1.
+- **H10c holds on the ratio, weakly on agreement**: 60 same-station pairs
+  within +/-3 days 2018-2025, median IEC/DEEP ratio 1.25 [IQR 0.75-1.95],
+  Spearman r = 0.38, bloom/no-bloom agreement 0.68. Across all 243 pairs
+  since 1991, r = 0.07. Two labs sampling the same station in the same
+  week agree on the 10 ug/L label about two times in three. The label is
+  noisy at the visit level; the model's skill survives that noise.
+
+**The 2014 step, second witness (unplanned, run after the above).** Summer
+(Jun-Sep) share of samples > 10 ug/L at the four paired stations:
+
+| Network, paired A4/B3/C1/C2 | 2005-2013 | 2014-2025 |
+|---|---|---|
+| CT DEEP | 0.50 (n=271) | **0.07** (n=344) |
+| IEC | 0.66 (n=107) | **0.47** (n=136) |
+
+DEEP's paired-station share is 0.00 in each of 2014-2017; IEC's is 0.55,
+0.50, 1.00, 0.25 in the same years, at the same stations. All-station
+figures: DEEP 0.44 -> 0.04, IEC 0.61 -> 0.54. An independent agency's lab
+saw no cliff in the same water. With the MODIS null (Phase 3), the 2014
+step now has two witnesses against it being ecology. This is the
+strongest evidence yet that the LIS label rarity after 2014 is a property
+of the DEEP chlorophyll record.
+
+**Conclusion of Phase 10.** The LIS precursor signature is a property of
+the western Sound, not of DEEP's dataset: it transfers to a second
+agency's record with no retraining (lift 1.84 [1.59, 2.11]). Its margin
+over climatology is real but modest. And the same record shows the 2014
+cliff is not in the water.
+
 
 ## Conclusion (current)
 
@@ -485,7 +543,8 @@ unresolved: MODIS satellite chlorophyll over the same stations shows no 2014
 step (ratio 1.08 [1.01, 1.16]) while the lab record falls to 0.13 [0.10,
 0.15], and lab–satellite agreement drops to zero from 2014, so the evidence
 currently points to the record, not the Sound (Phase 3 cross-check; CT DEEP
-asked 2026-09-05). In a bloom-rare system the forecast's value
+asked 2026-09-05; confirmed by the IEC record in Phase 10: an independent lab at
+the same four stations shows 0.66 -> 0.47, not 0.50 -> 0.07). In a bloom-rare system the forecast's value
 is triage (at 8 station-visits a month one confirmed bloom costs 15.4 calendar
 visits vs 8.3 alert-directed in LIS, 3.8 vs 1.4 in Narragansett;
 src/models/decision_value.py), and
