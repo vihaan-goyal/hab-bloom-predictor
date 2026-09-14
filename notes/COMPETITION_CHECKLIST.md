@@ -48,8 +48,9 @@ Adult sponsor: **not yet secured — critical path.**
 
 | Who | For | Sent | Reply | Next nudge |
 |---|---|---|---|---|
-| CT DEEP (K. O'Brien-Clayton) + UConn (J. O'Donnell, T. Fake) | 2014 step confirmation; weekly LIS buoy digest; named contact | Gmail draft ready | — | Sept 18 |
-| CT DEEP (M. Becker) and UConn (J. Vaudrey) | same question, cold drafts | Gmail drafts ready | — | only if the thread above is silent by Sept 18 |
+| CT DEEP (K. O'Brien-Clayton) + UConn (J. O'Donnell, T. Fake) | 2014 method/column change (corrected-to-raw ratio 0.4 -> 0.8 in 2014, corrected empty 2022-24); 2026 cruises to ERDDAP | 2026-09-14 (reply on June thread) | — | Sept 28 |
+| IEC (S. Wilder, cc E. Powers) | 2026 posting date / early share; IEC chlorophyll method stable through 2014? | 2026-09-14 | — | Sept 28 |
+| CT DEEP (M. Becker, E. Marquis) | same 2014 question | not sent (drafts gone) | — | only if the thread above is silent by Sept 28 |
 | College counselor | sponsor referral | 2026-09-05 | — | Sept 12 |
 | UConn LISICOS PI | fallback for buoy data questions | — | — | Oct 1 if DEEP silent |
 | RIDEM Narragansett Bay program | training-bay confirmation | — | — | Oct 1 |
