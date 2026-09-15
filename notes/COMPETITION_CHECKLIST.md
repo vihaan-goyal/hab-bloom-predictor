@@ -43,6 +43,10 @@ Adult sponsor: **not yet secured — critical path.**
 | Judge Q&A sheet | notes/BOARD.md appendix | Jan |
 | Project data book / log | git history of both repos + SCIENTIFIC_METHOD.md | continuous |
 | Figures | figures/ in both repos; atlas screenshot | Jan |
+| Device (Phase 11, MVP): order CCMP1332 + kaolin, PAC powder, magnetite pigment, 24 N52 blocks, square tube, ESP32 | notes/DEVICE_PROTOTYPE.md s3, s7 | Sept 21 |
+| Device: Forms 1/1A/1B/3 signed, Designated Supervisor (chemistry teacher) named | DEVICE_PROTOTYPE.md s6 | Oct 5 |
+| Device: week-1 chemistry + stock-preparation pilot; clay-only blank (gate) | SCIENTIFIC_METHOD.md Phase 11 | Oct 9 / Oct 23 |
+| Device: three-arm jars, dose screen, 3 tank runs, board panel | DEVICE_PROTOTYPE.md s3, s9 | Nov 9 - Dec 18 |
 
 ## Outside contacts
 

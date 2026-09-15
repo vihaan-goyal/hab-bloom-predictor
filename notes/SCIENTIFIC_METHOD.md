@@ -533,6 +533,84 @@ over climatology is real but modest. And the same record shows the 2014
 cliff is not in the water.
 
 
+## Phase 11 - Can the forecast trigger a mitigation that leaves nothing on the bottom? (designed 2026-09-15; bench work not started)
+
+**Question.** Aeration cannot prevent a bloom (notes/AERATION_RESEARCH.md); the
+only in-water mitigation with an operational record is modified-clay
+flocculation, which sinks the floc onto the bed (notes/CLAY_FLOCCULATION_RESEARCH.md).
+No study has combined clay flocculation with retrieval of the floc in seawater,
+and none has dosed on a forecast (notes/CLAY_RETRIEVAL_RESEARCH.md s9). Does a
+magnetite-kaolin-PAC clay, dosed when the forecast ledger alerts, remove a
+Long Island Sound diatom at pre-bloom density and come back out on a magnet?
+
+**How the design was reached.** A builder agent drafted the device; three
+independent reviewers critiqued v1, v2 and v3 in turn (notes/device_reviews/);
+a scientist verifier then graded every component WORKS / PLAUSIBLE /
+UNSUPPORTED (notes/DEVICE_VERIFICATION.md). Frozen design: notes/DEVICE_PROTOTYPE.md
+(v4). Decisions that survived review: no flotation (the one brackish DAF trial
+fell to 21% chlorophyll removal at 19-20 ppt); a physical blend of magnetite
+pigment, EPK kaolin and PAC powder rather than co-precipitated magnetic clay
+(same material once PAC bridges it in seawater, no hot iron chemistry for a
+school lab); capture by settling first, then a floor raster of square-tube
+NdFeB stacks with release after every pass; a minimum viable January program
+with recovery fraction as the headline number and the two-density dose study
+deferred to summer 2027. The field concept is documented but marked "concept,
+not performed"; the verifier rates it UNSUPPORTED (tidal timing inconsistent,
+bed shear 0.06-0.09 Pa resuspends fresh PAC floc, natural magnetite in LIS
+sediment confounds a bed survey, permits are agency-led).
+
+**Pre-registered hypotheses (bench, MVP; bands written before any run).**
+- **H11a (removal).** Magnetic PAC-kaolin at 0.2 g/L (product basis, seawater
+  make-up) removes *Skeletonema marinoi* (CCMP1332, Milford CT isolate) at
+  1e4 cells/mL by 70-95% at 5 h (control-normalised Sedgewick-Rafter counts,
+  n = 3 jars), and within +/-15 points of plain PAC-kaolin at the same dose.
+  Pass: mean RE >= 70% with the n = 3 CI lower bound > 50% and
+  |magnetic - plain| <= 15 points. Mean >= 70% with a lower bound of 40-50%
+  reads "consistent, underpowered", not failed (verifier risk 3). Below 50%:
+  rerun at 0.6 g/L and report both.
+- **H11b (recovery).** The settle-raster-column sequence recovers 75-95% of
+  dosed magnetite-equivalent and >= 70% of total dry product in the clay-only
+  blank, 60-90% / 50-85% with culture, and <= 10% of plain PAC-kaolin
+  (magnetic-specificity control). Pass: mean magnetite-equivalent >= 70% over
+  n = 3 tank runs, each >= 60%; total >= 50%; plain <= 10%. A blank below
+  70/80 is a design failure (gate), not a hypothesis failure.
+- **H11c (dose-density), MVP version.** RE at 1e4 cells/mL rises
+  monotonically over 0.05, 0.1, 0.2 g/L and the fitted D90 lies in 0.05-0.2
+  g/L; pass if the D90 CI sits within 0.025-0.4 g/L; if RE >= 90% already at
+  0.05 g/L, D90 is a lower bound and H11c reads "not testable". Full version
+  (summer 2027): D90(1e5)/D90(1e4) in 1.5-4x, bootstrap CI lower bound > 1.0.
+
+**Two edits the verifier requires before the build (adopted).** (1) Week-1
+stock-preparation pilot: the two best sources on PAC-clay in seawater (Yu et
+al. 2016; EPA/WHOI ECOHAB report) show that ageing and storing the stock in
+seawater costs floc size and dose; compare DI-aged-then-seawater-dispersed,
+seawater-aged (v4), and PAC-pre-diluted-then-clay on one 1e4 culture, n = 2,
+six jars, one afternoon; if DI-aged wins by > 15 points the recipe changes
+before the Nov 6 freeze. (2) Tank runs log DO and turbidity 2 cm above the
+floor before, during and 1 h after the raster, and every recovery miss is
+attributed (left on floor, stranded on tube, never in floc) by torch photo and
+a pull test of the tank rinse, so raster resuspension is a measured quantity.
+
+**What is not claimed.** Not bloom prevention (a p75 exceedance is a
+top-quartile day, not a harmful bloom, and pre-emption is only coherent in an
+enclosed volume); not nutrient removal (one 600 m3 treatment would export
+~0.1 kg N while adding ~3 kg Al and ~32 kg Fe); not "no habitat impact"
+(dissolved Al from PAC is likely above the 24 ug/L marine guideline for hours
+regardless of retrieval, and the documented clay harm to clams is
+resuspension, which a raster causes); not field-ready. Board sentences and
+the reject list are in DEVICE_PROTOTYPE.md s9 with the verifier's two
+qualifications (split jar removal from the tank trigger; "no HAB clay study",
+not "no study").
+
+**Gates.** Forms 1/1A/1B/3 signed by Oct 5; week-1 chemistry by Oct 9;
+culture >= 5e5 cells/mL in 20 L by Oct 26; clay-only blank >= 70% solids and
+>= 80% magnetite-equivalent by Oct 23 (retry Oct 30), design frozen Nov 6
+whatever the number; counting checkpoint Nov 20; controller unattended dose
+Dec 4; three tank runs by Dec 18. Fallbacks and what the board shows at each
+failure: DEVICE_PROTOTYPE.md s11.
+
+**Result.** _pending_
+
 ## Conclusion (current)
 
 Blooms can be forecast; the model's ranking skill is genuine in both bays.
