@@ -5,3 +5,4 @@ __pycache__/
 .env
 !figures/
 deep_wq.csv
+.agents/
