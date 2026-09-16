@@ -76,6 +76,36 @@ Figure: `figures/sim/fig_floc_kinetics.png`.
 
 Figure: `figures/sim/fig_rake_capture.png`.
 
+
+## 4. Optimisation sweep (2026-09-16, `optimize.py`)
+
+`python src/sim/optimize.py` (~5 min). Stage A: 1,728 floc settings (dose x rapid mix x slow-mix G x slow-mix time x settle time x 6 chemistry scenarios); target settled clay >= 90% and cells removed >= 90%. Stage B1: 4-7 stacks x three pass plans; Stage B2: speed 1-8 cm/s x skid 3-10 mm x magnetite fraction 10-37.5%; target >= 95% of settled flocs captured. Figure `figures/sim/fig_opt.png`; CSVs `data/sim/opt_*.csv`.
+
+**Findings.**
+- Chemistry dominates. At the v7 dose (0.2 g/L) a pre-aggregated stock with moderate stickiness settles 95-96% of the clay; a dispersed stock at the same stickiness settles 54-63%; no mixing setting rescues a poorly neutralised dispersed stock (best 64% even at 0.4 g/L). The robust setting across 5 of 6 scenarios needs 0.4 g/L, twice the aluminium.
+- Faster slow mix wins in the model: G 60 for 10 min plus 10 min settling matches v7's G 30 for 15 min plus 15 min settling (95% vs 96% settled, pre-aggregated alpha 0.35) in 21 min instead of 31. Breakup is represented only by the Kolmogorov size cap (132 um at G 60), so real floc breakup at G 60 is a risk.
+- Pass plan matters more than magnet count. Two passes aligned to each long wall capture 100% of settled flocs with any 4-7 stacks; the v7 plan (11/41/11 mm) needs 6 stacks and its third pass adds nothing.
+- Magnet margins are large: >= 99% capture at speeds to 8 cm/s with 3-6 mm skids and magnetite down to 10% of the blend; capture only fails with a 10 mm skid at 4-8 cm/s and low magnetite.
+
+**Recommended settings (proposed; not yet applied to v7-final):**
+
+| Setting | v7-final | Recommended | Why |
+|---|---|---|---|
+| Stock | pilot decides S or D | pre-aggregated paste, pilot still decides | 54% vs 96% settled at 0.2 g/L |
+| Dose | 0.2 g/L | 0.2 g/L; pilot also runs 0.1 and 0.4 | 0.1 works only with good chemistry; 0.4 doubles aluminium |
+| Rapid mix | 60 s, G ~300 | 60 s, G ~300 | unchanged |
+| Slow mix | G 30, 15 min | G 60, 10 min | same settling, 5 min faster; breakup risk flagged |
+| Settle | 15 min | 10 min | same settled fraction at G 60 |
+| Stacks | 6 (24 blocks) | 5 (20 blocks) | 4 is the model minimum; 5 keeps the per-pass pad <= 2.5 mm on 160 cm2 of face at 0.2 g/L |
+| Pass plan | 3 passes at 11/41/11 mm | 2 passes, tube edge against each long wall | 100% of settled flocs; drops the redundant pass |
+| Speed | 1 cm/s | 2 cm/s | magnetic capture unchanged; faster speeds excluded because resuspension is unmodelled |
+| Skid | 3 mm | 3 mm | 10 mm starts losing flocs at speed |
+| Magnetite in blend | 37.5% | 20% (about 8 : 25.3 : 6.7 magnetite : kaolin : PAC) | 10% still captures >= 99%; 20% keeps margin for flocs that incorporate little magnetite; iron added ~29 mg/L instead of 54 |
+
+**Predicted result at the recommended settings** (pre-aggregated stock, moderate stickiness): about 95% of clay settled x ~100% of settled flocs captured = **~95% magnetite-equivalent recovery, upper bound**; one run about 28 min (21 min flocculate and settle, ~7 min rastering) instead of ~44 min; 4 fewer magnet blocks.
+
+**What the sweep cannot decide:** the chemistry (collision efficiency) is swept, not predicted, so dose and stock route stay with the October pilot; pad capacity, stranding, resuspension and floc stripping remain unmodelled; a lower magnetite fraction raises the chance that some kaolin carries no magnetite, which only the detachment test measures.
+
 ## What the models cannot see
 
 These are the reasons the measured recovery should come in below the prediction, and the attribution fractions in DEVICE_PROTOTYPE.md s3 are designed to catch each one:
