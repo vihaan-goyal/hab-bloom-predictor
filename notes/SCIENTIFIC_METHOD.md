@@ -626,6 +626,12 @@ gate Dec 4 (pump and paddle from a test row, student mixing); three tank runs
 by Dec 15. Fallbacks and what the board shows at each
 failure: DEVICE_PROTOTYPE.md s11.
 
+**Addendum 2026-09-16.** Capture before settling (pumping the vessel through a
+magnetic trap during the slow mix) is the mechanism that separates magnetic
+clay from plain clay in tidal water; it is deferred to summer 2027 as a
+pre-registered comparison against the January settle-and-raster result
+(DEVICE_PROTOTYPE.md s12a). Not in the January build.
+
 **Result.** _pending_
 
 ## Conclusion (current)

@@ -265,6 +265,21 @@ Phase 11 was entered 2026-09-15. The replacements below (13 pairs, verbatim hard
 
 1. Two-density D90 program (0.025-0.8 g/L half-log, 1e4 and 1e5, n = 3, 78 jars, ~126 counts; H11c full) [R2 finding 3]. 2. Co-precipitated clay vs blend [R3 B2]. 3. Heterosigma (CCMP452) [CLAY s2]. 4. 30 d regrowth [CLAY s2]. 5. Full Hall map [R3 B4]. 6. 1e5 Chl series [R2 finding 11]. 7. Field Version A, two pens, partner as applicant [V5, V6]. 8. Magnetite-ballast resuspension threshold and natural-magnetite baseline [V2].
 
+
+## 12a. Capture before settling (addendum 2026-09-16)
+
+**Question raised by the user:** can the clay be caught before it sinks? Yes, and it is the one operational advantage magnetic clay has over plain clay; it is the field Version B mechanism (s5) and is not in the January bench program.
+
+**Mechanism.** Dose and rapid-mix as in s3; during the 15 min slow mix, draw the vessel through a magnetic trap (magnet-lined pipe or a rotating low-intensity drum) and return the water. Flocs carry magnetite from the first minute and are held at the trap as they pass. Industrial precedent: CoMag magnetite-ballasted clarification, magnetite recovered from a recirculated flow by a drum at > 99% [V2; RET s1].
+
+**Why the bench uses settle-then-raster instead.** In a still 20 L tank the whole dose is on the floor within 3-9 min [R2], and a floor raster is the cheapest thing to build and measure. v1's in-line pipe was rejected because a 60 cm pipe holds ~15% of the dose [R1 finding 1]; a trap that keeps up with 20 L in 15 min needs a drum or ~10x the trap area.
+
+**Why it matters in the field.** Settled PAC-clay floc resuspends at 0.06-0.09 Pa and leaves under a curtain on the next tide [V2, V5]; capture during the 0.5-2 h suspended window avoids that. Version B is sized on it: 160 m3 through a drum in 1 h, 63% cap per pass if the effluent returns inside the cell [R4 B9].
+
+**Trade-off, unmeasured anywhere.** Flocs are still growing during the window, so early capture takes smaller, weaker flocs; pump shear can break them into < 50 um fragments that consume oxygen [RET s5].
+
+**Summer 2027 test (added to s12).** Same 20 L tank, same dose and culture: a pumped loop (~4 L/min, 7 turnovers in 30 min) through a magnetic trap sized on pole-face area during T1-T31, scored exactly as s3 (magnetite-equivalent recovery, four miss fractions, resuspension index, floc photo), against the January settle-and-raster result. Pre-register: recovery within 15 points of the raster result and floc photo D50 >= 50 um at capture; if recovery falls > 15 points below, the shear cost is real and Version B needs a gentler intake.
+
 ## 13. Open issues (cannot be resolved without data)
 
 1. Which stock route flocculates best at 0.2 g/L in this matrix [V1]: the pilot.
