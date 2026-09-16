@@ -56,6 +56,7 @@ Note: C1 precision=1.000 is genuine (4 TP, 0 FP) but small sample (7 test positi
 | `src/models/ablation_study.py` | Feature ablation (useful for paper) |
 | `src/deploy/daily_inference.py` | Daily inference pipeline + alert emails |
 | `src/deploy/dashboard.html` | Browser-based monitoring dashboard |
+| `src/sim/rake_field.py`, `floc_kinetics.py`, `rake_capture.py` | Device simulation: magnet field (Magpylib), floc growth, raster capture; see notes/DEVICE_SIMULATION.md |
 
 ## End of every session
 

@@ -282,6 +282,8 @@ Phase 11 was entered 2026-09-15. The replacements below (13 pairs, verbatim hard
 
 ## 13. Open issues (cannot be resolved without data)
 
+*Simulation, 2026-09-16 (notes/DEVICE_SIMULATION.md):* predicted floor-raster recovery 94-96% with good flocculation, 54-72% with poor; the magnets are not the limit; pass 3 repeats lane A and adds nothing; the 8-tube 30 mm contingency frame does not fit 31.75 mm tubes on a 250 mm floor and targets the wrong failure mode. Proposed changes are listed in that note and are not yet applied here.
+
 1. Which stock route flocculates best at 0.2 g/L in this matrix [V1]: the pilot.
 2. 24 h-aged versus freshly pasted stock: untested [R4 B3].
 3. Ms and coercivity of the pigment grade bought [V1]; the same powder calibrates the pull test.

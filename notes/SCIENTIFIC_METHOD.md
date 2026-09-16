@@ -632,6 +632,19 @@ clay from plain clay in tidal water; it is deferred to summer 2027 as a
 pre-registered comparison against the January settle-and-raster result
 (DEVICE_PROTOTYPE.md s12a). Not in the January build.
 
+**Predicted before measurement (2026-09-16; notes/DEVICE_SIMULATION.md).**
+Magpylib field model reproduces the reviewers' hand numbers (single block 0.32 T
+at 3.2 mm, stack repulsion 116 N) and shows the six-stack array gives 0.22 T at
+the capture surface. A Smoluchowski floc model says floc size at 15 min depends
+almost entirely on collision efficiency (D50 2-22 um at low efficiency, ~140 um
+at full charge neutralisation or with a pre-aggregated stock). A Monte-Carlo
+raster model predicts magnetite-equivalent floor-raster recovery of about
+94-96% if flocculation is good and 54-72% if poor, insensitive to rake speed
+(0.5-2 cm/s), skid height (0-6 mm) and Ms (60-80); the no-magnetite control
+recovers 0%. These are upper bounds: pad stranding, resuspension and floc
+stripping are not modelled. H11b bands unchanged. The model also shows the
+8-tube 30 mm contingency frame does not fit 1-1/4 in tubes on a 250 mm floor.
+
 **Result.** _pending_
 
 ## Conclusion (current)
