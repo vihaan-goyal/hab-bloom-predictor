@@ -5,7 +5,7 @@ notes/device_reviews/ and notes/DEVICE_VERIFICATION.md). Design freeze for the b
 to match this version (bands unchanged). Companion research: notes/CLAY_RETRIEVAL_RESEARCH.md,
 notes/CLAY_FLOCCULATION_RESEARCH.md, notes/AERATION_RESEARCH.md. -->
 
-# Ledger-triggered magnetic clay flocculation with magnetic retrieval: design v7-final (freeze)
+# Ledger-triggered magnetic clay flocculation with magnetic retrieval: design v8 (v7-final + Amendment A1)
 
 Source keys: [RET] = notes/CLAY_RETRIEVAL_RESEARCH.md, [CLAY] = notes/CLAY_FLOCCULATION_RESEARCH.md, [AER] = notes/AERATION_RESEARCH.md, [PROT] = hab-bloom-predictor-narragansett/notes/PROSPECTIVE_PROTOCOL.md s1, s5, s7 plus `LEDGER_COLS` in `src/deploy/prospective_forecast.py`, [SM11] = notes/SCIENTIFIC_METHOD.md Phase 11 (lines 536-608), [R1]-[R6] = review1-6.md, [V] = verification.md, **[A]** = my assumption or calculation. Prices are reviewer-verified where tagged, otherwise **[A]**.
 
@@ -32,6 +32,29 @@ v2 to v3 [R2]: settle-raster-column; matched jars; logistic D90; NaOH titration;
 v1 to v2 [R1]: sleeved rods; Sedgewick-Rafter and extracted Chl; NaOH; magnetite Plan B; G stated; three arms; ledger keys.
 
 </details>
+
+## A1. Amendment A1, 2026-09-16: simulation-optimised settings (governs over sections 1-12 where they conflict)
+
+Applied before any bench work, from the optimisation sweep in notes/DEVICE_SIMULATION.md s4 (1,728 flocculation settings, 12 rake layouts, 36 speed/skid/magnetite combinations). Hypothesis bands H11a-c do not move; SCIENTIFIC_METHOD.md Phase 11 carries the matching dated amendment.
+
+| Setting | v7-final | A1 | Basis (simulation) |
+|---|---|---|---|
+| Magnetite in the dry blend | 37.5% (15 : 18.5 : 6.5 per 40 g) | **20%: 8 g magnetite : 25.3 g EPK kaolin : 6.7 g PAC powder per 40 g** (PAC stays 5:1 on mineral solids) | capture of settled flocs >= 99% down to 10% magnetite at <= 2 cm/s and <= 6 mm skid; 20% keeps margin for flocs that incorporate little magnetite. Iron added ~29 mg/L instead of 54; aluminium unchanged at ~5 mg/L |
+| Slow mix | 30 rpm paddle, G ~30, 15 min | **G ~60 for 10 min**: tank paddle motor 48-50 rpm (G scales as rpm^1.5); jar rig motors ~95-100 rpm | same settled fraction (95% vs 96%, pre-aggregated stock) in less time. Risk: breakup at G 60 is represented only by a size cap |
+| Settle | 15 min | **10 min** | same settled fraction at G 60 |
+| Magnet stacks | 6 (24 blocks) | **5 (20 blocks)** at 33 mm centres; frame span 163.75 mm | 4 is the model minimum; 5 keeps the per-pass pad <= 2.5 mm on 160 cm2 of pole face at 0.2 g/L |
+| Floor passes | 3, lanes at 11 / 41 / 11 mm | **2: pass 1 with the outer tube against long wall A (edge 0.5 mm), pass 2 against long wall B (edge 85.75 mm)** | 100% of settled flocs with 4-7 stacks; the v7 third pass repeated lane A |
+| Column passes | 2 cycles | 1 cycle | not modelled; kept as a straggler sweep |
+| Rake speed | 1 cm/s | **2 cm/s** | capture unchanged to 8 cm/s; capped at 2 because resuspension is unmodelled |
+| Skid | 3 mm | 3 mm | 10 mm loses flocs at speed |
+| Dose screen (H11c MVP) | 0.05, 0.1, 0.2 g/L | **0.05, 0.1, 0.2, 0.4 g/L** (12 jars) | chemistry dominates; 0.4 is the robust dose if the stock flocculates poorly |
+| Recovery-gate contingency | 8-tube frame at 30 mm | **diagnose first**: floc photo at T11 and a 10 mL column count at T20. Loss in the column: chemistry (dose 0.4 or other stock route). Loss on the floor: add a centre pass. Loss in the tube rinse: slow the withdrawal | the 8-tube frame needs 254 mm on a 250 mm floor, and magnet reach is not the failure mode |
+
+**Run clock under A1** (T = minutes from dosing): T0-T1 drill; **T1-T11 paddle at G ~60**; **T11-T21 settle**, T20 count, floor sample, DO; **T21-T29 two floor passes** at 2 cm/s with release after each (~3.6 min per cycle: ~37 s travel, ~3 min lift, release, rinse, reinsert); **T29-T33 one column cycle**; T33 count and floor sample; **T93** floor sample and DO (1 h after raster). 5 h and 24 h reads unchanged. Resuspension index = T33 count / T20 count. Blanks take fraction (iii) at T93 and next school morning.
+
+**Other quantities that change.** Pull-test aliquot of 150 mg now holds ~30 mg magnetite, inside the 5-200 mg line. Dosed magnetite per tank run 0.8 g (was 1.48 g); fraction (iii) detection floor 8 mg = 1.0% of dose, calibrated above 20 mg = 2.5%. Floor 750 nm sample tube moves to a corner (both lanes touch a long wall, so the long-wall margins no longer exist); the ~5 mm corner patch it shadows goes to fraction (ii). Count table 57 -> 60 (three 0.4 g/L jars), ~35 h. Budget: 22 N52 blocks (20 in stacks + pull-test + settling) at $8 = $176, the 8 contingency blocks are dropped, motors swapped at the same price: **buy-everything $700, $533 with five borrows**. Week-1 dry mixes use the A1 ratio; the 50 wt% re-blend fallback becomes a 37.5 wt% re-blend.
+
+**Predicted under A1** (pre-aggregated stock, moderate stickiness): ~95% of clay settled x ~100% of settled flocs captured = ~95% magnetite-equivalent recovery, an upper bound; one tank run ~33 min to the end of the column cycle (was ~56 min under v7 including three raster cycles).
 
 ## 1. Design decision
 
@@ -282,7 +305,7 @@ Phase 11 was entered 2026-09-15. The replacements below (13 pairs, verbatim hard
 
 ## 13. Open issues (cannot be resolved without data)
 
-*Simulation, 2026-09-16 (notes/DEVICE_SIMULATION.md):* predicted floor-raster recovery 94-96% with good flocculation, 54-72% with poor; the magnets are not the limit; pass 3 repeats lane A and adds nothing; the 8-tube 30 mm contingency frame does not fit 31.75 mm tubes on a 250 mm floor and targets the wrong failure mode. Proposed changes are listed in that note and are not yet applied here.
+*Simulation, 2026-09-16 (notes/DEVICE_SIMULATION.md):* predicted floor-raster recovery 94-96% with good flocculation, 54-72% with poor; the magnets are not the limit; pass 3 repeats lane A and adds nothing; the 8-tube 30 mm contingency frame does not fit 31.75 mm tubes on a 250 mm floor and targets the wrong failure mode. Applied 2026-09-16 as Amendment A1 (top of this document).
 
 1. Which stock route flocculates best at 0.2 g/L in this matrix [V1]: the pilot.
 2. 24 h-aged versus freshly pasted stock: untested [R4 B3].

@@ -87,7 +87,7 @@ Figure: `figures/sim/fig_rake_capture.png`.
 - Pass plan matters more than magnet count. Two passes aligned to each long wall capture 100% of settled flocs with any 4-7 stacks; the v7 plan (11/41/11 mm) needs 6 stacks and its third pass adds nothing.
 - Magnet margins are large: >= 99% capture at speeds to 8 cm/s with 3-6 mm skids and magnetite down to 10% of the blend; capture only fails with a 10 mm skid at 4-8 cm/s and low magnetite.
 
-**Recommended settings (proposed; not yet applied to v7-final):**
+**Recommended settings (applied 2026-09-16 as DEVICE_PROTOTYPE.md Amendment A1):**
 
 | Setting | v7-final | Recommended | Why |
 |---|---|---|---|
@@ -118,7 +118,7 @@ These are the reasons the measured recovery should come in below the prediction,
 - **Column passes**, which could recover some of the suspended fraction.
 - **Flocculation chemistry**: alpha is a swept parameter, not predicted; the seawater versus DI stock question is only answerable by the pilot.
 
-## Design implications (proposed, not yet applied to v7-final)
+## Design implications (applied 2026-09-16 as DEVICE_PROTOTYPE.md Amendment A1)
 
 1. The October stock-route pilot and the clay-only blanks measure exactly the variables the model says control recovery. No change needed; their priority rises.
 2. Replace the "+2 stacks at 30 mm" contingency with: if a blank fails, run a floc-size photo and a T31 column sample first. If the loss is in the water column, the fix is chemistry; if it is on the floor, add a third lane offset; if it is in the tube rinse, slow the withdrawal.

@@ -645,6 +645,18 @@ recovers 0%. These are upper bounds: pad stranding, resuspension and floc
 stripping are not modelled. H11b bands unchanged. The model also shows the
 8-tube 30 mm contingency frame does not fit 1-1/4 in tubes on a 250 mm floor.
 
+**Amendment A1, 2026-09-16 (before any bench work; DEVICE_PROTOTYPE.md A1).**
+Settings changed to the simulation optimum: magnetite 20% of the dry blend
+(was 37.5%); slow mix G ~60 for 10 min and settle 10 min (were G ~30, 15 and
+15); 5 magnet stacks (was 6); 2 floor passes with the frame against each long
+wall (was 3 at 11/41/11 mm) at 2 cm/s (was 1) and one column cycle; the
+recovery-gate contingency is a diagnosis (column count, floc photo, tube
+rinse) instead of an 8-tube frame, which does not fit the floor. Run clock
+becomes T1-T11 paddle, T11-T21 settle, T21-T33 raster and column, resuspension
+index T33/T20. H11c's MVP dose screen adds 0.4 g/L (12 jars). H11a, H11b and
+H11c bands do not move. Predicted recovery under A1: ~95%
+magnetite-equivalent, upper bound.
+
 **Result.** _pending_
 
 ## Conclusion (current)
