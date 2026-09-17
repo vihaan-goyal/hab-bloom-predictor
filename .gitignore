@@ -6,3 +6,5 @@ __pycache__/
 !figures/
 deep_wq.csv
 .agents/
+.claude/skills/
+skills-lock.json

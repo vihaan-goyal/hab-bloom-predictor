@@ -1,0 +1,300 @@
+<title>Bloom Forecast Board</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f5f7fa; --surface:#ffffff; --ink:#1b2431; --muted:#5c6776; --line:#d6dce5;
+  --blue:#2a78d6; --orange:#eb6834; --grey:#8a8f98; --blue-soft:#e3edfa; --orange-soft:#fdeae2;
+  --board:#fbfbf8; --board-edge:#b9bfc9; --zone:#eef2f7;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11161d; --surface:#181f29; --ink:#e7ecf2; --muted:#9aa5b4; --line:#2b3440;
+    --blue:#5a9be6; --orange:#f08556; --grey:#8a8f98; --blue-soft:#1c2c42; --orange-soft:#3a251c;
+    --board:#1d242f; --board-edge:#3a4450; --zone:#232c38;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11161d; --surface:#181f29; --ink:#e7ecf2; --muted:#9aa5b4; --line:#2b3440;
+  --blue:#5a9be6; --orange:#f08556; --grey:#8a8f98; --blue-soft:#1c2c42; --orange-soft:#3a251c;
+  --board:#1d242f; --board-edge:#3a4450; --zone:#232c38;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Serif 4",Georgia,serif;font-size:16px;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding:40px 24px 80px}
+h1,h2,h3,.eyebrow,.zone-label,.tile b{font-family:Archivo,"Helvetica Neue",Arial,sans-serif}
+h1{font-size:clamp(30px,4vw,44px);font-weight:800;line-height:1.05;letter-spacing:-.01em;margin:0 0 8px;text-wrap:balance}
+h2{font-size:24px;font-weight:700;margin:56px 0 12px;letter-spacing:-.005em;text-wrap:balance}
+h3{font-size:17px;font-weight:700;margin:22px 0 6px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lede{font-size:18px;color:var(--muted);max-width:66ch;margin:0 0 28px}
+p{max-width:68ch}
+code,.mono{font-family:"IBM Plex Mono",Consolas,monospace;font-size:.88em}
+code{background:var(--zone);padding:1px 5px;border-radius:3px}
+.board{position:relative;width:100%;aspect-ratio:48/36;background:var(--board);border:2px solid var(--board-edge);border-radius:4px;margin:20px 0 10px;overflow:hidden}
+.board .fold{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--board-edge)}
+.board .fold.l{left:25%}.board .fold.r{left:75%}
+.zone{position:absolute;background:var(--zone);border:1px solid var(--line);border-radius:3px;padding:5px 7px;overflow:hidden}
+.zone-label{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--ink);display:flex;gap:6px;align-items:baseline}
+.zone-label .n{display:inline-block;min-width:18px;height:18px;line-height:18px;text-align:center;border-radius:9px;background:var(--blue);color:#fff;font-size:10px}
+.zone small{display:block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;color:var(--muted);margin-top:2px;line-height:1.3}
+.zone.fig{background:var(--blue-soft);border-color:transparent}
+.zone.key{background:var(--orange-soft);border-color:transparent}
+.zone.title{background:var(--ink);color:var(--bg)}
+.zone.title .zone-label{color:var(--bg)}
+.zone.title .zone-label .n{background:var(--orange)}
+.zone.title small{color:var(--bg);opacity:.8}
+.dims{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);margin-bottom:28px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin:0 0 6px}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px;border:1px solid var(--line)}
+.legend .lz::before{background:var(--zone)}.legend .lf::before{background:var(--blue-soft)}.legend .lk::before{background:var(--orange-soft)}.legend .lt::before{background:var(--ink)}
+.panel{display:grid;grid-template-columns:1fr;gap:14px;margin-top:10px}
+.block{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px 18px 14px}
+.block .head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.block .head h3{margin:0}
+.block .spec{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted)}
+.copy{border-left:3px solid var(--orange);padding:6px 12px;margin:8px 0;background:var(--orange-soft);border-radius:0 4px 4px 0}
+.copy .h{font-family:Archivo,sans-serif;font-weight:700;font-size:15px;display:block;margin-bottom:3px}
+.copy p{margin:0 0 6px;font-size:15px}
+.copy ul{margin:0;padding-left:18px;font-size:15px}
+.figref{display:flex;gap:12px;align-items:flex-start;background:var(--blue-soft);border-radius:4px;padding:8px 12px;margin:8px 0;font-size:14px}
+.figref .tag{font-family:Archivo,sans-serif;font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);white-space:nowrap;padding-top:2px}
+.note{font-size:14px;color:var(--muted);margin:6px 0 0}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:Archivo,sans-serif;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+td.num{text-align:right}
+.tablewrap{overflow-x:auto;margin:10px 0}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+.tile b{display:block;font-size:26px;font-weight:800;letter-spacing:-.01em;line-height:1.1;font-variant-numeric:tabular-nums}
+.tile span{font-size:13px;color:var(--muted)}
+.tile.o b{color:var(--orange)}.tile.b b{color:var(--blue)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:720px){.two{grid-template-columns:1fr}}
+ul.tight{margin:6px 0;padding-left:20px}
+ul.tight li{margin:3px 0}
+.warn{border-left:3px solid var(--grey);padding:6px 12px;background:var(--zone);border-radius:0 4px 4px 0;font-size:14px}
+hr{border:0;border-top:1px solid var(--line);margin:40px 0}
+</style>
+
+<div class="wrap">
+<div class="eyebrow">CSEF / ISEF 2027 · trifold 48 × 36 in · plan as of 2026-09-11</div>
+<h1>Bloom Forecast Board</h1>
+<p class="lede">Every panel, its exact headline and body copy, which figure goes where, and the print size. Left wing sets up the question, the center carries the three results, the right wing closes with what did not matter, the live test, and the conclusion.</p>
+
+<div class="legend"><span class="lt">title band</span><span class="lz">text zone</span><span class="lf">figure</span><span class="lk">headline number or takeaway</span></div>
+<div class="board">
+  <div class="fold l"></div><div class="fold r"></div>
+
+  <div class="zone" style="left:1.2%;top:2%;width:22.6%;height:14%"><div class="zone-label"><span class="n">1</span>Question</div><small>3 lines · 30 pt</small></div>
+  <div class="zone" style="left:1.2%;top:17.5%;width:22.6%;height:21%"><div class="zone-label"><span class="n">2</span>Hypotheses H1–H4</div><small>4 numbered lines · 24 pt</small></div>
+  <div class="zone" style="left:1.2%;top:40%;width:22.6%;height:23%"><div class="zone-label"><span class="n">3</span>Data</div><small>two bays + world map strip · 22 pt</small></div>
+  <div class="zone fig" style="left:1.2%;top:64.5%;width:22.6%;height:12%"><div class="zone-label"><span class="n">3b</span>Map strip</div><small>nar_fig11 cropped · 10 × 4 in</small></div>
+  <div class="zone" style="left:1.2%;top:78%;width:22.6%;height:20%"><div class="zone-label"><span class="n">4</span>Method</div><small>label · features · scoring rules · 20 pt</small></div>
+
+  <div class="zone title" style="left:26%;top:2%;width:48%;height:11%"><div class="zone-label"><span class="n">T</span>Title band</div><small>Blooms can be forecast. Precision is set by rarity. · 110 pt / 40 pt sub</small></div>
+  <div class="zone key" style="left:26%;top:14.5%;width:48%;height:9%"><div class="zone-label"><span class="n">5</span>Three headline numbers</div><small>2.5× lift · 67 of 74 sites · 15.4 → 8.3 visits per bloom</small></div>
+  <div class="zone fig" style="left:26%;top:25%;width:23.2%;height:24%"><div class="zone-label"><span class="n">6</span>Result 1: it works</div><small>nar_fig4 precision comparison · 11 × 8 in</small></div>
+  <div class="zone fig" style="left:50.8%;top:25%;width:23.2%;height:24%"><div class="zone-label"><span class="n">7</span>Result 2: why LIS is capped</div><small>fig_lr_geometry, panels c + d · 11 × 8 in</small></div>
+  <div class="zone" style="left:26%;top:50.5%;width:48%;height:10%"><div class="zone-label"><span class="n">8</span>Rarity table</div><small>thin cadence → 0.52 · re-threshold to 5 % → 0.14 · 22 pt</small></div>
+  <div class="zone fig" style="left:26%;top:62%;width:23.2%;height:22%"><div class="zone-label"><span class="n">9</span>Result 3: it transfers</div><small>nar_fig11 coverage map · 11 × 7.5 in</small></div>
+  <div class="zone fig" style="left:50.8%;top:62%;width:23.2%;height:22%"><div class="zone-label"><span class="n">10</span>Decision value</div><small>fig_decision_value · 11 × 7.5 in</small></div>
+  <div class="zone key" style="left:26%;top:85.5%;width:48%;height:12.5%"><div class="zone-label"><span class="n">11</span>One-sentence conclusion</div><small>In a bloom-rare system no cadence or model gives high-precision alerts; the value is 2–3× lift over calendar sampling.</small></div>
+
+  <div class="zone" style="left:76.2%;top:2%;width:22.6%;height:22%"><div class="zone-label"><span class="n">12</span>What did not matter</div><small>table of 6 variables tested · 20 pt</small></div>
+  <div class="zone key" style="left:76.2%;top:25.5%;width:22.6%;height:20%"><div class="zone-label"><span class="n">13</span>Prospective test</div><small>frozen protocol · 20 stations · results box (Jan)</small></div>
+  <div class="zone" style="left:76.2%;top:47%;width:22.6%;height:24%"><div class="zone-label"><span class="n">14</span>Conclusions</div><small>5 numbered claims · 22 pt</small></div>
+  <div class="zone" style="left:76.2%;top:72.5%;width:22.6%;height:14%"><div class="zone-label"><span class="n">15</span>Limitations</div><small>4 bullets · 18 pt</small></div>
+  <div class="zone" style="left:76.2%;top:88%;width:22.6%;height:10%"><div class="zone-label"><span class="n">16</span>Reproduce · QR</div><small>two repos, one command each</small></div>
+</div>
+<div class="dims"><span>left wing 12 in</span><span>center 24 in</span><span>right wing 12 in</span></div>
+
+<div class="tiles">
+  <div class="tile o"><b>2.5×</b><span>onset lift over climatology, Narragansett, nine test years</span></div>
+  <div class="tile b"><b>67 / 74</b><span>sites where the exported model beats always-alert, CI clear of 1</span></div>
+  <div class="tile o"><b>15.4 → 8.3</b><span>station visits per confirmed bloom, LIS, calendar vs alert-directed</span></div>
+  <div class="tile b"><b>0.44 vs 0.52</b><span>class overlap LIS vs Narragansett: separability is not the gap</span></div>
+</div>
+
+<p class="note">Type sizes assume a 6 ft viewing distance: title 110 pt, section headers 48 pt, body 22–30 pt, captions 18 pt, nothing under 16 pt. Figures print at 300 dpi from the repo PNGs; all are currently 150 dpi at 11 in wide, so regenerate at <code>dpi=300</code> before printing.</p>
+
+<hr>
+
+<h2>Left wing: the question</h2>
+<div class="panel">
+
+<div class="block"><div class="head"><h3>1 · Question</h3><span class="spec">12 × 5 in · 30 pt</span></div>
+<div class="copy"><span class="h">Can a coastal station forecast its own harmful algal bloom a week ahead, and what sets the limit?</span>
+<p>Harmful blooms close shellfish beds and beaches with days of warning at best. Every monitoring station already logs chlorophyll, oxygen, temperature and salinity. Is the run-up to a bloom visible in that record, and if so, why are forecasts in some bays sharp and in others blunt?</p></div>
+</div>
+
+<div class="block"><div class="head"><h3>2 · Hypotheses</h3><span class="spec">12 × 7.5 in · 24 pt</span></div>
+<div class="copy"><ul>
+<li><b>H1</b> A 7-day bloom-onset probability can be forecast from a station's own recent record with AUC above 0.7 and precision above the base rate.</li>
+<li><b>H2</b> What limits precision is bloom rarity, not model class, features, data volume or sampling frequency. <i>Pre-registered 2026-09-01.</i></li>
+<li><b>H3</b> A model trained in Narragansett Bay transfers to other water bodies with no retraining, after rescaling chlorophyll to the site's own distribution.</li>
+<li><b>H4</b> Skill holds on forecasts issued before the outcome is known. <i>Protocol frozen 2026-09-06.</i></li>
+</ul></div>
+<p class="note">Keep the italics: judges look for pre-registration, and the dates prove it.</p>
+</div>
+
+<div class="block"><div class="head"><h3>3 · Data</h3><span class="spec">12 × 8 in text + 10 × 4 in map strip · 22 pt</span></div>
+<div class="copy"><span class="h">Two bays, two sampling regimes, then the world</span>
+<ul>
+<li><b>Long Island Sound</b> (CT DEEP): 50 stations, 1993–2025, boat visits every 2–3 weeks, 11,447 station-days, lab chlorophyll.</li>
+<li><b>Narragansett Bay</b> (RIDEM sondes): 18 stations, 2005–2023, readings every 15 minutes, 4.5 million rows aggregated to 42,315 station-days, fluorescence chlorophyll.</li>
+<li><b>Transfer set</b>: six foreign networks (Chesapeake, NERRS, UK shelf, Australia, Lake Erie, SF Bay; 144,475 station-days) and 87 public ERDDAP sonde sites on three continents.</li>
+</ul></div>
+<div class="figref"><span class="tag">Map strip</span><span>Crop the top of <code>nar_fig11_coverage_map.png</code> to the site dots only; caption "87 sites the exported model runs on today".</span></div>
+</div>
+
+<div class="block"><div class="head"><h3>4 · Method</h3><span class="spec">12 × 7 in · 20 pt</span></div>
+<div class="copy"><ul>
+<li><b>Label</b>: daily chlorophyll above 10 µg/L (or the site's own 75th percentile) within the next 7 days; 21 days for boat data.</li>
+<li><b>Features</b>: the station's own history only. Chlorophyll lags and rolling means, trend, anomaly versus climatology, oxygen, temperature, salinity, month. Nothing from the future.</li>
+<li><b>Models</b>: logistic regression and gradient boosting, trained on early years, tested on years never touched during development.</li>
+<li><b>Scoring</b>: onset rows only (today below threshold), so persistence cannot inflate skill. Precision always beside its base rate. Lift = precision ÷ base rate. 95 % CIs by station-year clustered bootstrap.</li>
+<li><b>Every test pre-registered</b>: criterion written down before the run, negative results kept.</li>
+</ul></div>
+</div>
+</div>
+
+<h2>Center: three results and one sentence</h2>
+<div class="panel">
+
+<div class="block"><div class="head"><h3>T · Title band</h3><span class="spec">24 × 4 in · 110 pt / 40 pt</span></div>
+<div class="copy"><span class="h">Blooms can be forecast. Precision is set by rarity.</span>
+<p>A 7-day harmful-algal-bloom forecast from a station's own sensors, tested in two bays, six networks and 87 sites worldwide.</p></div>
+<p class="note">Name and school go in 24 pt under the subtitle, right-aligned. No logos.</p>
+</div>
+
+<div class="block"><div class="head"><h3>5 · Three headline numbers</h3><span class="spec">24 × 3 in · 72 pt numerals, 20 pt labels</span></div>
+<div class="tablewrap"><table>
+<tr><th>Numeral</th><th>Label under it</th><th>Source</th></tr>
+<tr><td class="mono">2.5×</td><td>more blooms caught per alert than calendar sampling (Narragansett, nine test years)</td><td>fork §7–8</td></tr>
+<tr><td class="mono">67 of 74</td><td>sites worldwide where the exported model beats always-alert, no local training</td><td>fork §24</td></tr>
+<tr><td class="mono">15 → 8</td><td>station visits per confirmed bloom in Long Island Sound, calendar vs alert-directed</td><td>decision_value.py</td></tr>
+</table></div>
+</div>
+
+<div class="block"><div class="head"><h3>6 · Result 1: it works</h3><span class="spec">11 × 8 in figure · 22 pt caption</span></div>
+<div class="figref"><span class="tag">Figure</span><span><code>nar_fig4_precision_comparison.png</code> (model vs always-alert, climatology, chlorophyll rules; onset rows, with CIs). Alternative if it prints cleaner: <code>nar_fig5_skill_vs_horizon.png</code>.</span></div>
+<div class="copy"><span class="h">Narragansett: precision 0.66 [0.62, 0.69] at onset, nine held-out years</span>
+<p>Lift 2.5 over the base rate; beats every trivial rule. Long Island Sound with the same recipe: AUC 0.875, but precision 0.14 at 0.875 recall. The ranking skill is real in both bays. The precision is not.</p></div>
+</div>
+
+<div class="block"><div class="head"><h3>7 · Result 2: why the Sound is capped</h3><span class="spec">11 × 8 in figure · 22 pt caption</span></div>
+<div class="figref"><span class="tag">Figure</span><span><code>fig_lr_geometry.png</code>, bottom two panels only (densities along the decision axis, and stacked counts). Re-export those two panels side by side at 11 × 5.5 in; the scatter panels are for the paper, not the board.</span></div>
+<div class="copy"><span class="h">Same separability, ten times rarer</span>
+<p>Project every test day onto the model's own decision axis. The bloom and no-bloom classes overlap by 0.44 in the Sound and 0.52 in Narragansett: the Sound separates <i>better</i>. But blooms are 3.6 % of onset days there against 35 %, so any cut that catches most Sound blooms also catches hundreds of quiet days. Precision 0.11 vs 0.64 from the same geometry.</p></div>
+</div>
+
+<div class="block"><div class="head"><h3>8 · Rarity table</h3><span class="spec">24 × 3.5 in · 22 pt</span></div>
+<div class="tablewrap"><table>
+<tr><th>Pre-registered test (Narragansett data)</th><th class="num">Onset precision</th><th>Reading</th></tr>
+<tr><td>Daily sondes, as measured</td><td class="num">0.86</td><td>reference</td></tr>
+<tr><td>Thinned to boat cadence, one visit per 21 days</td><td class="num">0.52</td><td>cadence costs 0.3, not 0.7</td></tr>
+<tr><td>Re-thresholded so blooms are 5 % of days, like the Sound</td><td class="num">0.14</td><td>rarity alone reproduces the Sound</td></tr>
+<tr><td>Long Island Sound, actual</td><td class="num">0.14</td><td></td></tr>
+</table></div>
+<p class="note">This table is the H2 verdict. Say the cadence thesis failed its own test; judges reward that.</p>
+</div>
+
+<div class="block"><div class="head"><h3>9 · Result 3: it transfers</h3><span class="spec">11 × 7.5 in figure · 22 pt caption</span></div>
+<div class="figref"><span class="tag">Figure</span><span><code>nar_fig11_coverage_map.png</code> (world map, every site colored by onset lift).</span></div>
+<div class="copy"><span class="h">One bay's model, 74 sites, no retraining</span>
+<p>Exported once, chlorophyll rescaled to each site's own distribution. Median lift 1.58, AUC 0.74; the confidence interval clears 1.0 at 67 sites across the Gulf of Mexico, California, the Great Lakes, Alaska, British Columbia and the Pacific islands. Refitting on a site's own data did not beat it at 8 of 11 tries.</p></div>
+</div>
+
+<div class="block"><div class="head"><h3>10 · Decision value</h3><span class="spec">11 × 7.5 in figure · 22 pt caption</span></div>
+<div class="figref"><span class="tag">Figure</span><span><code>fig_decision_value.png</code> (visits per confirmed bloom, calendar vs alert-directed, both bays).</span></div>
+<div class="copy"><span class="h">What a manager gets: half the boat trips per bloom found</span>
+<p>At eight station visits a month, one confirmed bloom costs 15.4 calendar visits in the Sound and 8.3 alert-directed; 3.8 versus 1.4 in Narragansett. The forecast is a triage tool, and that is the unit to sell it in.</p></div>
+</div>
+
+<div class="block"><div class="head"><h3>11 · The sentence</h3><span class="spec">24 × 4.5 in · 36 pt, orange rule above</span></div>
+<div class="copy"><span class="h">In a bloom-rare system, no sampling cadence and no model class produces high-precision alerts, because precision is bounded by rarity. The actionable quantity is lift over the calendar, and it is 2 to 3× in both bays.</span></div>
+</div>
+</div>
+
+<h2>Right wing: what did not matter, the live test, and the close</h2>
+<div class="panel">
+
+<div class="block"><div class="head"><h3>12 · What did not matter</h3><span class="spec">12 × 8 in · 20 pt table</span></div>
+<div class="tablewrap"><table>
+<tr><th>Variable</th><th>Tested how</th><th>Effect</th></tr>
+<tr><td>Model class</td><td>LR, boosting, forests, SVM, MLP, 1-D CNN on 15-min data, pooled site-embedding net</td><td>none; CNN reliably worse (ΔAUC −0.017)</td></tr>
+<tr><td>Input resolution</td><td>daily means vs raw 15-minute windows</td><td>none</td></tr>
+<tr><td>More features</td><td>13 candidate families in the Sound; stratification, pH, diel oxygen in Narragansett</td><td>none beyond noise</td></tr>
+<tr><td>Training volume</td><td>14k → 34k station-days</td><td>none</td></tr>
+<tr><td>Sampling cadence</td><td>thinning daily to 21-day</td><td>0.3 of precision, not the gap</td></tr>
+<tr><td>Satellites as input</td><td>300 m to 4 km chlorophyll</td><td>no skill at any resolution</td></tr>
+</table></div>
+<p class="note">This is the panel that answers "did you try X". Every row has a pre-registered section behind it.</p>
+</div>
+
+<div class="block"><div class="head"><h3>13 · Prospective test</h3><span class="spec">12 × 7 in · 20 pt + results box</span></div>
+<div class="copy"><span class="h">Forecasts issued before the outcome is known</span>
+<p>Protocol frozen 2026-09-06 (version 1.2): one model, threshold 0.50, 20 live stations in four groups, per-station bloom definition fixed in advance, expected lift band written down per group. Weekly forecasts logged to a public ledger.</p>
+<p><b>Results box:</b> leave a 12 × 3 in white space for the fall-season pooled lift per group, filled in January. Until then the box reads "n = __ forecasts, __ positives, lift __ [__, __]".</p></div>
+<div class="warn">First real issuance waits on Form 1A sign-off. If the season is short, show the dry-run health check (10 of 20 feeds live) and say so.</div>
+</div>
+
+<div class="block"><div class="head"><h3>14 · Conclusions</h3><span class="spec">12 × 8.5 in · 22 pt</span></div>
+<div class="copy"><ul>
+<li>Bloom onset is forecastable a week ahead from a station's own record; ranking skill is 0.81–0.88 AUC in both bays.</li>
+<li>Alert precision is set by bloom rarity, not by model, features, data volume or cadence. Every one of those was tested and excluded.</li>
+<li>The Sound's blooms became rare in the lab record in 2014; satellite chlorophyll shows no such step, so the record, not the water, is the likelier cause. Under review with CT DEEP.</li>
+<li>The precursor signature exports: 67 of 74 sites worldwide gain from a model that never saw them.</li>
+<li>The right unit for a manager is visits per confirmed bloom, and the forecast roughly halves it.</li>
+</ul></div>
+</div>
+
+<div class="block"><div class="head"><h3>15 · Limitations</h3><span class="spec">12 × 5 in · 18 pt</span></div>
+<div class="copy"><ul>
+<li>Sonde fluorescence reads 1.3–1.6× above lab chlorophyll; both bays use the same 10 µg/L cut.</li>
+<li>Findings are correlational: low oxygen marks bloom-prone water, it does not cause blooms.</li>
+<li>Sound decision-value numbers rest on 48 blooms and carry wide intervals.</li>
+<li>Nothing is prospective until the ledger fills.</li>
+</ul></div>
+</div>
+
+<div class="block"><div class="head"><h3>16 · Reproduce</h3><span class="spec">12 × 3.5 in · 18 pt + two QR codes</span></div>
+<div class="copy"><p>Two public repositories. Every number on this board maps to one script in a reproducibility table; the environment rebuilds from one file. QR left: Long Island Sound repo. QR right: Narragansett repo with the frozen model and <code>predict_anywhere.py</code>.</p></div>
+</div>
+</div>
+
+<hr>
+
+<h2>Print list</h2>
+<div class="tablewrap"><table>
+<tr><th>Zone</th><th>File</th><th>Repo</th><th>Print size</th><th>Note</th></tr>
+<tr><td>3b</td><td class="mono">figures/nar_fig11_coverage_map.png</td><td>fork</td><td>10 × 4 in</td><td>crop to map only</td></tr>
+<tr><td>6</td><td class="mono">figures/nar_fig4_precision_comparison.png</td><td>fork</td><td>11 × 8 in</td><td>regenerate at dpi=300</td></tr>
+<tr><td>7</td><td class="mono">figures/fig_lr_geometry.png</td><td>parent</td><td>11 × 5.5 in</td><td>bottom two panels only</td></tr>
+<tr><td>9</td><td class="mono">figures/nar_fig11_coverage_map.png</td><td>fork</td><td>11 × 7.5 in</td><td>full figure</td></tr>
+<tr><td>10</td><td class="mono">figures/fig_decision_value.png</td><td>parent</td><td>11 × 7.5 in</td><td></td></tr>
+<tr><td>backup</td><td class="mono">figures/fig_cliff_satellite.png</td><td>parent</td><td>8 × 6 in</td><td>only if DEEP confirms the 2014 record change before the fair; else keep in the binder</td></tr>
+</table></div>
+
+<h2>What stays off the board</h2>
+<div class="two">
+<div class="block"><h3 style="margin-top:0">In the binder, not on the board</h3>
+<ul class="tight">
+<li>The neural-network figures 12 and 13. One row in zone 12 carries them.</li>
+<li>The 2014 cliff satellite cross-check, until the DEEP answer arrives.</li>
+<li>The SHAP and feature-importance plots. They invite a feature conversation the thesis has already closed.</li>
+<li>The full station table and the ERDDAP catalog. Bring printed.</li>
+</ul></div>
+<div class="block"><h3 style="margin-top:0">Judge walk-through, 90 seconds</h3>
+<ul class="tight">
+<li>Title sentence, then zone 5: three numbers.</li>
+<li>Zone 6: it works in Narragansett; the Sound has the same ranking skill and a tenth of the precision.</li>
+<li>Zone 7 and 8: the geometry and the rarity table. This is the thesis.</li>
+<li>Zone 9: it exports. Zone 10: what it is worth in boat trips.</li>
+<li>Zone 12: "did you try…" answered in advance. Zone 13: it is being tested live.</li>
+</ul></div>
+</div>
+
+<p class="note" style="margin-top:28px">Open items for Sunday: sponsor for Form 1A; whether zone 13 shows real forecasts or the dry run by February; whether to print the board at a shop (foam core, matte) or mount panels on a standard trifold.</p>
+</div>
