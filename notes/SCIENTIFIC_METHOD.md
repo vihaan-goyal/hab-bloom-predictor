@@ -2,7 +2,7 @@
 
 **Update this file at the end of every work session.** It is the single place
 where the project's question, hypotheses, variables, controls, results, and
-conclusion are kept current. Last updated: 2026-09-06 (end of session).
+conclusion are kept current. Last updated: 2026-09-18 (end of session).
 
 ## Overarching question
 
@@ -657,7 +657,55 @@ index T33/T20. H11c's MVP dose screen adds 0.4 g/L (12 jars). H11a, H11b and
 H11c bands do not move. Predicted recovery under A1: ~95%
 magnetite-equivalent, upper bound.
 
+**Analysis frozen before the data exists (2026-09-18/19).** The whole of the
+Phase 11 analysis is now code, written and verified months before the first
+measurement: `src/lab/lab_schema.py` (the s9 row contract and a validator),
+`src/lab/synth_lab_data.py` (a synthetic season generated under a known planted
+truth) and `src/lab/analyze_lab.py` (control-corrected removal, the t-interval at
+t = 4.30, H11a including the "consistent, underpowered" reading, recovery and the
+H11b three-part test, the magnetite mass balance with the s7 8 mg / 20 mg floors,
+the resuspension index, H11c with D90 interpolated only when bracketed, and
+counter agreement by MARD and Lin's concordance). No band was touched.
+
+Verified on four synthetic seasons whose truth was planted in advance, so the
+code's answers can be scored rather than trusted: with a planted removal of 92.0%
+and recovery of 88.0% it returned 92.1% and 91.9%; the `underpowered` scenario
+(seeds 99 and 101) returned "consistent, underpowered"; the `fail` scenario
+returned the pre-registered rerun at 0.6 g/L; the `unbracketed` scenario refused
+to report a D90 and printed "not testable". Six deliberately corrupted rows each
+drew a readable complaint from the validator and nothing raised. Figure:
+`figures/lab/fig_lab_results.png`. What this buys is narrow and worth stating
+plainly: in December the numbers go into a pipeline fixed before anyone knew what
+they would be, so no choice in the analysis can be made to flatter the result.
+
 **Result.** _pending_
+
+### Session log, 2026-09-18/19 (desk work, no lab access)
+
+UConn replied: J. O'Donnell is interested in the work and offered a slot to
+present to his group once he is back from a conference; availability was sent the
+same day. A 15-slide talk and a spoken script were built for it
+(`notes/TALK_UCONN.md`), with two constraints carried from the thread: results
+stop at 2025, and nothing is claimed about 2026 observations until his student
+publishes.
+
+Two errors in the record were found and fixed while building it. First, the
+research plan that attaches to ISEF Form 1A still claimed "no hazardous
+materials" and "no fieldwork", which stopped being true when the bench
+workstream was added; sections B, C, D, E, F and G were rewritten so a sponsor
+asked to sign Form 3 reads an accurate hazard list
+(`notes/ISEF_RESEARCH_PLAN.md`). Second, `notes/COMPETITION_CHECKLIST.md` said
+Form 3 was "not needed - no hazards" and dated the forms to Oct 5; both are
+corrected, and the Sep 25 hard stop is now a row of its own. Also written:
+`notes/SPONSOR_ASK.md` (the sponsor is still unnamed and is the critical path)
+and `notes/ORDER_LIST.md`.
+
+One inconsistency is recorded and not resolved: the repository carries two
+operating points for the same model, a 28-day label at threshold 0.60 with
+precision 0.500, and a 21-day label at t* = 0.35 with precision 0.125 and POD
+0.875. Both are correct for their own label and neither file mentions the other.
+The talk uses the first and states the second out loud. Which one is the headline
+needs deciding before February.
 
 ## Conclusion (current)
 

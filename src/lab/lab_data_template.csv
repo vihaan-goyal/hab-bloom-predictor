@@ -1,0 +1,3 @@
+date,batch,vessel,arm,dose_g_L,route,T_min,measure,value,unit,counter,notes
+2026-11-12,B1,jar1,untreated,0.0,,300,cell_count,9120,cells_per_mL,VG,EXAMPLE row - delete before use; untreated control jar at 5 h
+2026-11-12,B1,jar3,magnetic,0.2,S,300,cell_count,1180,cells_per_mL,VG,EXAMPLE row - delete before use; round=1 magnetic jar at 5 h

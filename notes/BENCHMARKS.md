@@ -1,7 +1,10 @@
 # Benchmarks: LIS EWS vs Reference HAB Forecast Systems
 
-Task 3 of the August 2026 plan. Status: draft. C-HARM numbers still TBD
-(need Anderson et al. 2016 full text; see Open Items).
+Task 3 of the August 2026 plan. Status (2026-09-18): benchmark table, positioning
+table and operational-products comparison are complete and sourced to primary
+documents. The C-HARM POD/FAR item is **done** — pulled from the Anderson et al.
+2016 NOAA IR manuscript. Two items remain genuinely open: the Florida HAB-OFS
+(CO-OPS 073) numbers and where the table sits in the paper. See Open Items.
 
 ## Why this comparison is framed in POD / FAR / CSI
 
