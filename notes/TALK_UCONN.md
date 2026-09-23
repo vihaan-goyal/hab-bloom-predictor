@@ -94,8 +94,8 @@ lab-consistent label unless I say "original".
 On the original sensor label the training years looked like 22.7 percent blooms.
 On the lab-consistent label they are 5.5 percent. Before re-running anything I
 wrote down the plan: DEEP's lab-corrected chlorophyll becomes the headline
-whichever way the numbers move, with a lab-only version as a check, and five
-predictions graded afterwards. All of them came out right. Test AUC went from
+whichever way the numbers move, with a lab-only version as a check, and seven
+predictions graded afterwards. All seven came out right. Test AUC went from
 0.815 to 0.804, so the ranking survived. Precision at 0.60 went from 0.50 to 0.32,
 so about one alert in three is right instead of one in two, and lift went from
 about seven to five. The lab-only version gives AUC 0.78, but on only fifteen test
