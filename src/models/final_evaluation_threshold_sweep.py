@@ -38,8 +38,10 @@ _ap.add_argument('--preds-out', default=None,
                  help='where to dump per-row test predictions '
                       '(default data/test_predictions{tag}.csv)')
 # Label rebuild (notes/LABEL_REBUILD_PREREG.md). Defaults leave every path unchanged.
-_ap.add_argument('--input', default='data/hab_features_tidal.csv',
-                 help='feature file; the rebuilt series are data/hab_features_tidal_S*.csv')
+_ap.add_argument('--input',
+                 default=__import__('os').environ.get('HAB_FEATURES_CSV', 'data/hab_features_tidal_S1.csv'),
+                 help='feature file (default: lab-consistent S1; the raw-fluorometer original '
+                      'is data/hab_features_tidal.csv)')
 _ap.add_argument('--label-col', default=None,
                  help='use this prebuilt column as the label instead of bloom_28d (S3)')
 _ap.add_argument('--tag', default='',

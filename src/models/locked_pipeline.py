@@ -6,7 +6,8 @@ final_evaluation_threshold_sweep.py so that evaluation, deployment, and any
 future script share one implementation instead of copies.
 
 Locked spec:
-  data    : data/hab_features_tidal.csv
+  data    : data/hab_features_tidal_S1.csv (lab-consistent label, default since 2026-09-23;
+            the raw-fluorometer original is data/hab_features_tidal.csv)
             + percent_saturation merged from data/raw/deep_wq_extra/deep_wq_S_*.csv
             + max_gust_3d merged from data/gust_features_daily.csv (date-only join;
               regional wind signal, deliberately not per-station)
@@ -31,10 +32,11 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 
-# Label rebuild (notes/LABEL_REBUILD_PREREG.md): HAB_FEATURES_CSV points every locked
-# script at a rebuilt feature file, and HAB_OUT_TAG suffixes their outputs so the
-# canonical files are never overwritten. Unset, both leave everything unchanged.
-BASE_CSV = os.environ.get("HAB_FEATURES_CSV", "data/hab_features_tidal.csv")
+# Label rebuild (notes/LABEL_REBUILD_PREREG.md). Since 2026-09-23 the default input is the
+# lab-consistent S1 file written by src/models/label_rebuild.py. The original raw-fluorometer
+# file is reproducible with HAB_FEATURES_CSV=data/hab_features_tidal.csv; HAB_OUT_TAG
+# suffixes outputs so a non-default run never overwrites the canonical files.
+BASE_CSV = os.environ.get("HAB_FEATURES_CSV", "data/hab_features_tidal_S1.csv")
 OUT_TAG = os.environ.get("HAB_OUT_TAG", "")
 
 

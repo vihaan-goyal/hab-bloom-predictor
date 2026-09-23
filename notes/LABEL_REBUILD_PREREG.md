@@ -326,3 +326,55 @@ climatology the model's point lift is now nearly equal (1.57 against 1.50, inter
 overlapping), and its AUC is now slightly *below* climatology's. Honest statement: the
 frozen model transfers to a second agency's lab record better than chance, and no better
 than a station-by-month calendar.
+
+## 14b. Defaults switched to S1, and the remaining re-runs (2026-09-23)
+
+**Defaults.** `locked_pipeline.py`, `final_evaluation_threshold_sweep.py`,
+`station_specific_models.py` and `rolling_origin_cv.py` now read
+`data/hab_features_tidal_S1.csv` by default. `HAB_FEATURES_CSV=data/hab_features_tidal.csv`
+reproduces the sensor label.
+
+- Gate: the default run gives AUC 0.8036 and 31 TP of 65 at 0.60 (S1). The env-var run gives
+  0.8150 (the original).
+- Every overwritten canonical output was first copied to `data/archive_sensor_label/` (36 files).
+- The canonical `reference_baselines`, `decision_value` and `lr_geometry_summary` are identical to
+  their `_S1` copies (max difference 0), and so is the IEC primary row (lift 1.571).
+
+| Result | Sensor label (archived) | S1 (now default) |
+|---|---|---|
+| **Rolling-origin CV, 21 d** (`rolling_origin_cv.py --horizon 21`), README headline | pooled AUC **0.852**, 4,040 rows / 156 events, 2015-2025 | pooled AUC **0.772**, 3,653 rows / 121 events, 2016-2025 (2015 fold skipped: too few validation positives) |
+| Rolling-origin CV, 28 d (default) | not comparable (the archived file came from a different run: 2,650 rows) | pooled AUC 0.717, 4,040 rows / 180 events |
+| **Frozen t*=0.35**, test 2023-25 (`warning_robustness.py`) | POD 0.875, precision 0.125 | POD **0.791** [0.636, 0.906], precision **0.114** [0.063, 0.163], FAR 0.886, 34 TP / 265 FP / 9 FN |
+| **Pre-registered selection rule** (highest t with CV-selection POD ≥ 0.8, `warning_operating_point.py --test-from-cv`) | t* = 0.35 | **t* = 0.20**; at 0.20 test POD 0.907, precision 0.072 |
+| Point of no return (`point_of_no_return.py`) | 617 pre-onset obs; analogue risk peak 0.62, median 0.04; model counterfactual 65% summer events locked → 0% | 544 obs / 153 events; analogue peak **0.42**, median 0.02; summer M1 counterfactual 42% → **0%** once physics moves. Conclusion unchanged, and stronger |
+| Daily inference | trains through the last labelled date | trains on 11,357 S1 rows (bloom rate 3.3%). Every station is stale on 2026-09-23 (newest visit 2025-08-28), so nothing is scored |
+
+**Open decision (for the user, not made here):** re-applying the pre-registered
+POD ≥ 0.8 rule on S1 moves t* from 0.35 to 0.20. `daily_inference.py` keeps the frozen
+0.35 until the user decides. Both are reported.
+
+**IEC lab change (K. O'Brien-Clayton, 2026-09-22).** From `data/iec_wqp_raw.csv`
+(`ResultAnalyticalMethod/MethodIdentifier`; `LaboratoryName` is blank): IEC chlorophyll
+used Standard Methods 10200H through 2016, both methods in 2017, and EPA 445.0 in every
+year 2018-2025. The primary transfer window (2020-2025) and the 2018-2025 variant sit
+entirely on EPA 445.0, so the change does not touch them. Only the secondary
+"1991-2017 summer-only" scenario spans it. No re-score is needed; this is noted beside
+that scenario.
+
+## 15. The live season: label from the lab, inputs from sensors (2026-09-23)
+
+- **The label is lab.** Every retrospective LIS evaluation uses the lab-consistent label (S1, with
+  S4 as the lab-only check).
+- **Real-time inputs are necessarily sensor inputs.** DEEP's lab chlorophyll arrives months after
+  sampling, so a forecast issued in season can't use it. The DEEP CTD fluorometer has sat at
+  0.80-1.31× the lab since 2016, so in-season sensor features are near lab scale. That is a
+  measured property of 2016-2024, not a guarantee.
+- **The prospective season is unaffected.** It is the fork's `src/deploy/prospective_forecast.py`:
+  the frozen Narragansett model on the LISICOS buoys (WLIS, EXRX), each site at its own frozen p75
+  from `data/prospective/site_p75.csv`. It never uses the DEEP CTD, so DEEP's advice doesn't
+  change its pre-registered scoring rule.
+- **Added now, before the season:** once DEEP lab samples from stations near the buoys exist
+  for the prospective window, report the share of buoy alerts followed within 7 days by a lab
+  exceedance (>10 µg/L) at the nearest DEEP station. It is secondary and descriptive, and never
+  replaces the primary score.
+- **Unchanged:** nothing is issued before ISEF Form 1A is signed.

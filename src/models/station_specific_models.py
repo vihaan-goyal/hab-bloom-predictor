@@ -44,9 +44,10 @@ FIXED_THRESH = 0.60
 # ---------------------------------------------------------------------------
 # 1. Load + merge sal_lag2/3/4
 # ---------------------------------------------------------------------------
-# Label rebuild: same switches as src/models/locked_pipeline.py (unset = unchanged)
+# Label rebuild: same switches as src/models/locked_pipeline.py. Default is the
+# lab-consistent S1 file; HAB_FEATURES_CSV=data/hab_features_tidal.csv gives the original.
 import os
-_IN = os.environ.get('HAB_FEATURES_CSV', 'data/hab_features_tidal.csv')
+_IN = os.environ.get('HAB_FEATURES_CSV', 'data/hab_features_tidal_S1.csv')
 _TAG = os.environ.get('HAB_OUT_TAG', '')
 print(f"Loading {_IN}...")
 df = pd.read_csv(_IN)

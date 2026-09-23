@@ -15,10 +15,14 @@ For a target date D:
      selected out-of-sample on 2020-2022; see warning_operating_point.py).
   5. Writes data/daily_predictions.csv for the dashboard.
 
-Operating characteristics at t*=0.35 (out-of-sample test 2023-2025):
-  POD 0.875 [0.750, 0.962] | FAR 0.875 | precision 0.125 [0.077, 0.172]
+Operating characteristics at t*=0.35 (out-of-sample test 2023-2025, lab-consistent
+label S1 since 2026-09-23; warning_robustness.py):
+  POD 0.791 [0.636, 0.906] | FAR 0.886 | precision 0.114 [0.063, 0.163]
 An alert means: sample this station within the next 3 weeks. Roughly 1 in
-8 alerts precedes a verified exceedance, a 2.7x lift over the base rate.
+9 alerts precedes a verified exceedance, a 2.7x lift over the 4.2% base rate.
+(On the original sensor label: POD 0.875, precision 0.125. Re-applying the
+pre-registered POD >= 0.8 selection rule on S1 picks t*=0.20, not 0.35; the
+frozen 0.35 is kept here pending that decision, see notes/LABEL_REBUILD_PREREG.md.)
 
 Aeration scoring from the previous version is intentionally omitted until
 the intervention framework rerun on corrected data is complete.
