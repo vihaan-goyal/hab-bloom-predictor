@@ -70,7 +70,8 @@ same-visit chlorophyll into both the features and the label. The corrected
 dataset is one row per station-date: eleven thousand four hundred and
 forty-seven station-days. That aggregation dropped my headline AUC from 0.936 to
 0.815, and I mention it because the 0.936 is still sitting in some of my older
-figures and I'd rather tell you about it than have you find it. The other thing
+figures and I'd rather tell you about it than have you find it. A second fix this
+month, to the label itself, moved it again, to 0.804; that's slide six. The other thing
 to know about this record is the cadence: the median gap between visits at a
 station is twenty-one days. That number governs everything downstream.
 
@@ -82,14 +83,24 @@ exceeds ten micrograms per litre. Ten is CT DEEP's own working threshold, not
 mine — I did not tune it, and I want to be clear that it is a biomass proxy, not
 a toxin and not a species. A p75 exceedance or a ten-microgram day is a
 top-quartile day; it is not automatically a harmful bloom. The base rate on the
-2023 to 2025 test years is about seven percent of station-days. One thing I have
-to flag up front: the chlorophyll behind that label is the CTD fluorometer, not
-DEEP's lab chlorophyll. Before 2014 the fluorometer read about two to three times
-the lab value on the same samples; from 2016 on it matches. So my older training
-years have inflated exceedances. The numbers in this talk use the original label,
-and I've written down exactly how I'll rebuild it before re-running anything.
-I'll come back to how I found this, because it's the most useful thing I learned
-this month.
+2023 to 2025 test years is about six percent of station-days. One thing I have to
+flag up front, and it gets its own slide next: the chlorophyll behind my original
+label was the CTD fluorometer, not DEEP's lab chlorophyll, and before 2014 it read
+two to three times high. Every number in this talk uses the rebuilt,
+lab-consistent label unless I say "original".
+
+## 4b. The label, rebuilt (1:00) — slide 06
+
+On the original sensor label the training years looked like 22.7 percent blooms.
+On the lab-consistent label they are 5.5 percent. Before re-running anything I
+wrote down the plan: DEEP's lab-corrected chlorophyll becomes the headline
+whichever way the numbers move, with a lab-only version as a check, and five
+predictions graded afterwards. All of them came out right. Test AUC went from
+0.815 to 0.804, so the ranking survived. Precision at 0.60 went from 0.50 to 0.32,
+so about one alert in three is right instead of one in two, and lift went from
+about seven to five. The lab-only version gives AUC 0.78, but on only fifteen test
+blooms, so its interval runs from 0.60 to 0.92 and I don't lean on it yet. DEEP is
+sending the 2024 and 2025 lab data that will settle it.
 
 ## 5. The model, and why logistic regression (1:00)
 
@@ -126,32 +137,34 @@ that is the mistake I would look for first in somebody else's pipeline.
 
 ## 7. Headline test performance (1:00)
 
-On the 2023 to 2025 test years: AUC 0.815. At the operating threshold of 0.60,
-precision 0.500, recall 0.486, F1 0.493 — thirty-six true positives,
-thirty-six false alarms, thirty-eight misses out of seventy-four test blooms in
-just over a thousand station-days. If I tune a threshold per station on the
-validation years, the best five stations run from F1 0.50 to F1 0.73. One
-station, C1, has perfect precision, four for four, and I put that on the slide
-only so I can tell you not to believe it: seven test positives is not a sample,
-it's an anecdote. The number I'd defend is the global one.
+On the 2023 to 2025 test years: AUC 0.804, interval 0.71 to 0.88. At the
+operating threshold of 0.60, precision 0.32, recall 0.48 — thirty-one true
+positives, sixty-seven false alarms, thirty-four misses out of sixty-five test
+blooms in just over a thousand station-days. The table shows the five western
+stations at that same threshold: precision 0.33 to 0.50, each on three to eight
+blooms. On the original label one station, C1, had perfect precision; on the
+rebuilt label that's gone, which is a good example of why I never quote a station
+number without its counts. The number I'd defend is the global one.
 
 ## 8. Precision-recall and the geometry of the problem (1:15)
 
-Here is the part I actually find interesting. Precision around one half looks
-mediocre until you put the base rate next to it: the event happens on about
-seven percent of station-days, so one alert in two being right is a large
-multiple of what you get by guessing. But I could not push it further, and I
+Here is the part I actually find interesting. Precision around a third looks
+poor until you put the base rate next to it: the event happens on about six
+percent of station-days, so one alert in three being right is about five times
+what you get by guessing. But I could not push it further, and I
 spent a year trying. What finally explained it was projecting the test rows onto
 the logistic regression's log-odds axis and looking at the class overlap
 directly. Because every model family lands at the same AUC, the decision surface
 is effectively a plane, so that one-dimensional projection is the whole problem.
-In Long Island Sound the overlap between the bloom and no-bloom densities is
-0.44; in Narragansett Bay, where I have continuous sonde data, it's 0.52 — so
-the Sound actually separates the classes slightly better. But the bloom share is
-3.6 percent in the Sound against 34.7 percent in Narragansett, and precision at
-the operating point is 0.11 against 0.64. About three quarters of blooms in both
-bays sit inside the central band where the no-bloom days live. Rarity sets
-precision. Model class does not.
+On the rebuilt label, the overlap between the bloom and no-bloom densities is
+0.62 in Long Island Sound and 0.52 in Narragansett Bay, where I have continuous
+sonde data. The bloom share is 2.6 percent in the Sound against 34.7 percent in
+Narragansett, and precision at the operating point is 0.06 against 0.64. So the
+Sound's low precision is mostly rarity, but not only: it separates the classes
+less well too. On the original label I had it the other way round, the Sound
+separating slightly better, and I was saying "precision follows rarity, not
+skill". I've withdrawn the "not skill". What does hold is that model class isn't
+the lever; every family lands in the same place.
 
 ## 9. Decision value (1:30)
 
@@ -163,18 +176,18 @@ alert-directed top-V within the month, and a causal variant that spends day by
 day above the shipped threshold. A visit counts as confirming a bloom if the
 station-day's label is one, and the intervals come from resampling months,
 two thousand draws. At eight visits a month in Long Island Sound, calendar
-rotation costs 15.4 station-visits per confirmed bloom, with a wide interval,
-8.4 to 44. Alert-directed costs 8.3, interval 4.9 to 21.6. So the forecast
+rotation costs 17.8 station-visits per confirmed bloom, with a wide interval,
+9.6 to 55. Alert-directed costs 9.7, interval 5.5 to 26.6. So the forecast
 roughly halves the cost of a confirmed bloom. In Narragansett the same
 comparison is 3.8 against 1.4, a factor of 2.6, and the intervals are tight.
 Two caveats I want to state rather than bury. First, in Long Island Sound
 station-by-month climatology — which is free, and needs no model at all — gets
-you to 9.3 visits per bloom, and its interval overlaps the model's. The model's
+you to 11.2 visits per bloom, and its interval overlaps the model's. The model's
 marginal value over "just use the season" is small in the bloom-rare Sound and
 only clearly positive in Narragansett, where the intervals are disjoint. Second,
 the causal variant looks best on cost per bloom precisely because alerts are
 sparse and it leaves about half its budget unspent, so it catches fewer blooms
-overall. These numbers rest on forty-eight blooms, and that is why the interval
+overall. These numbers rest on forty-three blooms, and that is why the interval
 is as wide as it is.
 
 ## 10. Benchmarks against operational systems (1:00)
@@ -205,11 +218,12 @@ Environmental Commission samples the western Narrows with its own boat, its own
 crew and its own lab — different lab methods, Standard Methods 10200H and EPA
 445.0 — and posts to the EPA Water Quality Portal. I froze the LIS model, trained
 on DEEP rows through 2019, and scored it on 949 IEC onset station-days from 2020
-to 2025 with no retraining at all. Lift 1.84, interval 1.59 to 2.11, entirely
-above one; AUC 0.73, interval 0.68 to 0.78. Both pre-registered hypotheses hold.
-The honest caveat is that station-by-month climatology reaches the same AUC of
-0.73 on those rows, so the model's edge is in lift at a fixed operating point,
-not in ranking. And then the unplanned part. My label's exceedance share fell
+to 2025 with no retraining at all. On the rebuilt label: lift 1.57, interval
+1.41 to 1.75, entirely above one, inside the pre-registered band of 1.2 to 1.8;
+AUC 0.71, interval 0.66 to 0.76. The honest caveat is that station-by-month
+climatology gets AUC 0.73 and lift 1.50 on those rows. So the model transfers to
+another agency's lab record better than chance, and no better than a calendar.
+And then the unplanned part. My label's exceedance share fell
 from forty-two to fifty-nine percent of station-days in 2009 to 2013 to three to
 eleven percent from 2014 on. IEC's lab at the same four stations fell far less,
 and MODIS saw no step at all, ratio 1.08. I assumed DEEP's lab had changed. DEEP
@@ -219,9 +233,8 @@ label comes from the CTD fluorometer. On matched surface samples it read 1.8 to
 record has no 2014 cliff. It does have a real low period: exceedances around 3 to
 7 percent in 2012 to 2017, against 10 to 23 before and after, which matches what
 DEEP remembers. So a scale change in the sensor turned a real, temporary dip into
-what looked like a permanent cliff. The rebuild of the label is pre-registered,
-and the question I'd most like this room's help with is whether
-Corrected_Chlorophyll is the right field to rebuild it from.
+what looked like a permanent cliff. DEEP's Matt Lyman confirmed the corrected
+chlorophyll was calibrated against the lab, which is what the rebuilt label uses.
 
 ## 12. Pre-registered negatives and limitations (1:15)
 
@@ -243,7 +256,8 @@ paired delta-lift minus 0.21, interval minus 0.45 to minus 0.05 — wrong direct
 on every bar. Limitations, briefly: sonde fluorescence reads 1.3 to 1.6 times
 above lab chlorophyll across 734 paired samples; the buoy work rests on two
 buoys, one of which has a fluorometer gain that drifts by a factor of seven; the
-decision-value numbers rest on forty-eight blooms; nothing has been tested
+decision-value numbers rest on forty-three blooms; the lab-only label has
+fifteen test blooms; nothing has been tested
 prospectively yet; and every finding here is correlational — low dissolved oxygen
 marks bloom-prone water, it does not cause blooms.
 
@@ -322,22 +336,23 @@ pipeline *did* leak, in a different way: it never aggregated the depth profiles,
 so the same visit's chlorophyll appeared in both feature and label rows. That
 leak is what produced AUC 0.936, and fixing it gave 0.815.
 
-**Why is precision around 0.5 not the same as guessing?**
-Because the base rate is about seven percent. If you alerted at random you'd be
-right seven percent of the time; the model is right half the time, which is a
-lift of roughly seven over chance on these rows. I always report the base rate
+**Why is precision around 0.3 not the same as guessing?**
+Because the base rate is about six percent. If you alerted at random you'd be
+right six percent of the time; the model is right about a third of the time,
+which is a lift of about five over chance on these rows. I always report the base rate
 next to the precision for exactly this reason, and I'd note that none of the
 eight operational products I tabulated reports theirs, so their POD-FAR pairs
 cannot be compared against their own climatology. What I will not claim is that
-0.5 is good in an absolute sense. It means one alert in two sends a boat
+0.32 is good in an absolute sense. It means two alerts in three send a boat
 somewhere nothing happens.
 
 **Why logistic regression rather than gradient boosting or a neural net, and
 what did the neural network experiments actually show?**
 Because they all lose or tie, and I have the paired tests. On Long Island Sound,
-XGBoost validates higher and tests lower — 0.850 validation, 0.774 test against
-LR's 0.824 and 0.815 — which is overfitting to eleven thousand rows with
-seventy-four test events. On Narragansett, where there's far more data, I ran a
+XGBoost validated higher and tested lower on the original label — 0.850
+validation, 0.774 test against LR's 0.824 and 0.815 — which is overfitting to
+eleven thousand rows with seventy-four test events. I haven't re-run that
+comparison on the rebuilt label, and I'd say so if asked. On Narragansett, where there's far more data, I ran a
 pre-registered two-by-two: input, daily features versus a seven-day window of 672
 fifteen-minute steps, crossed with model, GB versus neural, plus a hybrid. Five
 seeds each, the five-seed mean-probability ensemble as the primary object, and a
@@ -382,7 +397,11 @@ in every year it exists, with two sensitivity versions, one calibrated directly
 to the lab and one labelled from lab samples only. The corrected version becomes
 the headline whichever way the numbers move, and I wrote predictions down first:
 the training base rate should fall by at least 40 percent, and AUC should stay
-within 0.05. Every LIS number in this talk will be re-reported after that run.
+within 0.05. Both came out right: 22.7 to 5.5 percent, and 0.815 to 0.804.
+Precision at 0.60 fell from 0.50 to 0.32. Every LIS number in this talk is from
+the rebuilt label. Then DEEP told me to use the lab data directly, so I added a
+lab-only version before running it: AUC 0.78 on fifteen test blooms, consistent
+but too small to stand alone until their 2024-2025 lab data arrive.
 The script is `src/models/experiments/sensor_vs_lab_chl.py`, and the plan is
 `notes/LABEL_REBUILD_PREREG.md`.
 
@@ -405,12 +424,12 @@ need an instrument in the water.
 That the precursor signature is a property of the western Sound rather than of
 DEEP's dataset. Same instrument class — bottle chlorophyll from boat visits, so
 no sonde rescaling is involved — but a different agency, different crew,
-different lab methods, and winter coverage DEEP never had. Lift 1.84, interval
-1.59 to 2.11, entirely above one, pre-registered band 1.2 to 1.8, so it came in
-at the top of the band. What it does *not* demonstrate is that the model is the
-best available tool on those rows: station-month climatology reaches the same
-AUC, 0.73, and the model's margin is in lift at a fixed operating point, 1.84
-against 1.50 with intervals that touch. It also isn't prospective — IEC posts
+different lab methods, and winter coverage DEEP never had. On the rebuilt label,
+lift 1.57, interval 1.41 to 1.75, entirely above one and inside the
+pre-registered band of 1.2 to 1.8. (On the original label it was 1.84.) What it
+does *not* demonstrate is that the model is the best available tool on those rows:
+station-month climatology gets AUC 0.73 against the model's 0.71, and lift 1.50
+against 1.57, with overlapping intervals. It also isn't prospective — IEC posts
 with a lag of months. And there's a sobering detail in the cross-lab check: at
 paired stations within three days, the two labs agree on the ten-microgram label
 about two times in three, with Spearman 0.38. The label is noisy at the visit
@@ -436,12 +455,12 @@ likely reading of H11a with three batches is "consistent but underpowered" — a
 t-interval on three replicates has a multiplier of 4.30.
 
 **What's the sample size, and are the intervals honest?**
-The uncomfortable numbers, in order. Seventy-four bloom events in the LIS test
-years across just over a thousand station-days; forty-eight events underlying the
-decision-value work, which is why that interval runs 4.9 to 21.6. Seven test
-positives at station C1, which is why I tell people not to believe the
-precision-1.000 cell. Twelve events in the basin-level test, where the advantage
-over always-alert has an interval that touches zero and I report it that way. For
+The uncomfortable numbers, in order. Sixty-five bloom events in the LIS test
+years across just over a thousand station-days on the rebuilt label; forty-three
+events underlying the decision-value work, which is why that interval runs 5.5
+to 26.6. Fifteen test events in the lab-only check. Three to eight test events
+per western station. Nine events in the basin-level test, where the advantage
+over always-alert has an interval that crosses zero and I report it that way. For
 the device, n equals three batches and three tank runs, with one plain-clay blank
 at n equals one, reported as a description rather than a test. On the method: all
 intervals are station-year clustered bootstrap, two thousand draws, seed 42, so
@@ -452,11 +471,12 @@ rather than rows. I've tried to report the interval rather than the point
 estimate wherever the point estimate would flatter me.
 
 **(If asked) Your README says precision 0.125 and lift 2.7. Which is it?**
-Two operating points on the same model spec. The headline here is the 28-day
-label at threshold 0.60, where precision is 0.500 on a 7.2 percent base rate. The
-README reports a 21-day label at threshold 0.35, chosen by a pre-registered
-high-recall rule, which excludes right-censored windows and gives POD 0.875 at
-precision 0.125 on a 4.6 percent base rate. Different horizon, different
+Two operating points on the same model spec, and both moved when I rebuilt the
+label. The headline here is the 28-day label at threshold 0.60: precision 0.32 on
+a 6.3 percent base rate (0.50 on 7.2 percent originally). The README's 21-day
+label at threshold 0.35, chosen by a pre-registered high-recall rule, now gives
+POD 0.74 at precision 0.117 on a 4.5 percent base rate (0.875 and 0.125
+originally). Different horizon, different
 threshold, different row set — the 21-day version is the one the decision-value
 and benchmark work uses. I should give you both rather than pick the flattering
 one.
@@ -502,4 +522,9 @@ constraint.
   The step is in the CTD fluorometer's ratio to the lab.
 - **Not** "Long Island Sound chlorophyll crashed in 2014." The lab shows a
   temporary low period, 2012 to 2017, then a recovery.
-- **Not** any rebuilt-label number until `notes/LABEL_REBUILD_PREREG.md` has run.
+- **Not** the original sensor-label numbers (0.815, precision 0.50, 7×, 15.4 → 8.3,
+  IEC 1.84, C1 precision 1.000, overlap 0.44) except as "original" on slide 06.
+- **Not** "precision follows rarity, not skill." On the rebuilt label the Sound also
+  separates the classes less well. Say "mostly rarity, not only".
+- **Not** "the model beats climatology" on the IEC record. It's level with it.
+- **Not** the lab-only AUC 0.78 without its interval and "fifteen test blooms".
