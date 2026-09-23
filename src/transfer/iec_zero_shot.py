@@ -29,16 +29,16 @@ warnings.filterwarnings("ignore")
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from src.models.locked_pipeline import (  # noqa: E402
     FEATURES_ALL, load_locked_dataframe, add_forward_label,
-    fit_locked_model, predict_proba, BLOOM_THRESHOLD, HORIZON_DAYS)
+    fit_locked_model, predict_proba, BLOOM_THRESHOLD, HORIZON_DAYS, tagged)
 
 RAW = "data/iec_wqp_raw.csv"
 STATIONS = "data/iec_stations.csv"
 TIDAL = "data/tidal_features_monthly.csv"
 GUST = "data/gust_features_daily.csv"
-OUT_ROWS = "data/iec_station_days.csv"
-OUT_RES = "data/iec_zero_shot_results.csv"
-OUT_PAIRS = "data/iec_crosslab_pairs.csv"
-OUT_FIG = "figures/fig_iec_zero_shot.png"
+OUT_ROWS = tagged("data/iec_station_days.csv")
+OUT_RES = tagged("data/iec_zero_shot_results.csv")
+OUT_PAIRS = tagged("data/iec_crosslab_pairs.csv")
+OUT_FIG = tagged("figures/fig_iec_zero_shot.png")
 
 TRAIN_END = "2019-12-31"      # LIS training cut, locked
 PRIMARY_START = "2018-01-01"  # IEC year-round period

@@ -24,7 +24,8 @@ from sklearn.preprocessing import StandardScaler
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from locked_pipeline import (  # noqa: E402
-    BLOOM_THRESHOLD, HORIZON_DAYS, add_forward_label, fit_locked_model, load_locked_dataframe)
+    BLOOM_THRESHOLD, HORIZON_DAYS, add_forward_label, fit_locked_model, load_locked_dataframe,
+    tagged)
 
 # Narragansett recipe, copied verbatim from the fork's train_narragansett.py (tier A)
 NAR_TIER_A = ['chl', 'chl_lag1', 'chl_lag2', 'chl_lag3', 'chl_lag4',
@@ -35,8 +36,8 @@ NAR_TIER_A = ['chl', 'chl_lag1', 'chl_lag2', 'chl_lag3', 'chl_lag4',
               'sal', 'sal_lag1', 'sal_lag2', 'sal_lag3', 'sal_lag4', 'month']
 NAR_TRAIN_MAX, NAR_VAL, NAR_TEST = 2020, (2021, 2022), 2023
 LIS_TRAIN_END, LIS_TEST_YEARS, LIS_T_STAR = "2019-12-31", (2020, 2025), 0.35
-OUT_SUMMARY = "data/lr_geometry_summary.csv"
-FIG = "figures/fig_lr_geometry.png"
+OUT_SUMMARY = tagged("data/lr_geometry_summary.csv")
+FIG = tagged("figures/fig_lr_geometry.png")
 BLUE, ORANGE, GRAY = "#2a78d6", "#eb6834", "#8a8f98"
 
 
@@ -181,7 +182,7 @@ def main():
     S["lis"], R["lis"], D["lis"] = lis()
     os.makedirs("data", exist_ok=True); os.makedirs("figures", exist_ok=True)
     for bay, key in (("narragansett", "nar"), ("lis", "lis")):
-        R[bay].to_csv("data/lr_geometry_rows_%s.csv" % key, index=False)
+        R[bay].to_csv(tagged("data/lr_geometry_rows_%s.csv" % key), index=False)
     summ = pd.DataFrame([S["narragansett"], S["lis"]])
     summ.to_csv(OUT_SUMMARY, index=False)
     pd.set_option("display.width", 220)

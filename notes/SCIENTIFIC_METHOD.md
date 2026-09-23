@@ -2,7 +2,7 @@
 
 **Update this file at the end of every work session.** It is the single place
 where the project's question, hypotheses, variables, controls, results, and
-conclusion are kept current. Last updated: 2026-09-18 (end of session).
+conclusion are kept current. Last updated: 2026-09-23 (label rebuilt on the lab scale).
 
 ## Overarching question
 
@@ -823,3 +823,23 @@ output (added 2026-09-05 after an audit found §7–13 and §15 named none; §15
 `src/models/experiments/bloom_rate_by_period.py`, which reproduces the 2014-cliff table exactly). Cross-repo
 dependencies: fork §12 and §17 read this repo's `src/models/experiments/{lis_buoy_recipe,prob_before_onset_lis}.py`
 outputs; fork §15 reads this repo's `data/hab_features_tidal.csv`. Cefas is the one manual download.
+
+**Downstream results on the rebuilt label (2026-09-23; `notes/LABEL_REBUILD_PREREG.md`
+§14).**
+- **21-day operating point** (t*=0.35): precision 0.117, POD 0.744, lift 2.59, against
+  0.132, 0.917 and 2.63 on the old label. Still clearly better than always-alert. Against
+  climatology it was not tested fairly: climatology's own threshold degenerated to t=0.
+- **Decision value** (8 visits/month): 17.8 → 9.7 visits per confirmed bloom, against
+  15.4 → 8.3.
+- **Per-station:** no western station clears P>0.5 with R>0.4. The C1 precision of 1.000
+  no longer holds.
+- **IEC transfer:** lift 1.57 [1.41, 1.75], against 1.84; AUC 0.707, against 0.732.
+  Better than chance, level with climatology.
+- **Rarity/overlap flips.** The Sound's OVL is now 0.620 against Narragansett's 0.516
+  (it was 0.445). Lower precision in the Sound is rarity **and** weaker separation, so
+  "not skill" is withdrawn.
+
+*Overall:* the Sound model is a modest forecaster. Its ranking survives (AUC about 0.80)
+and it roughly halves the visits per bloom. Its alerts are right about one time in three
+at 0.60, and it does not beat a calendar climatology on another agency's data. That is
+what the evidence supports. Narragansett and the 74-site transfer are unaffected.

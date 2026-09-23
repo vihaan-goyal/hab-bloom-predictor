@@ -76,6 +76,7 @@ from sklearn.ensemble import HistGradientBoostingClassifier  # noqa: E402
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from reference_baselines import build_station_day, TEST_START, TRAIN_END  # noqa: E402
+from locked_pipeline import tagged  # noqa: E402
 from reference_baselines import T_STAR as T_STAR_LIS  # noqa: E402
 
 BUDGETS = (4, 8, 12)
@@ -104,9 +105,9 @@ STRATEGY_LABEL = {"calendar_fixed": "Calendar (fixed rotation)",
 STRATEGY_COLOR = {"calendar_fixed": "#2a78d6", "random_uniform": "#eb6834",
                   "climatology": "#1baf7a", "alert_greedy": "#eda100",
                   "alert_causal": "#4a3aa7"}
-OUT_CSV = "data/decision_value.csv"
-OUT_ROWS = "data/decision_value_rows.csv"
-OUT_FIG = "figures/fig_decision_value.png"
+OUT_CSV = tagged("data/decision_value.csv")
+OUT_ROWS = tagged("data/decision_value_rows.csv")
+OUT_FIG = tagged("figures/fig_decision_value.png")
 
 
 # --------------------------------------------------------------------------
@@ -473,7 +474,7 @@ def main():
     f = full_budget_precision(lis, T_STAR_LIS)
     print(f"{'LIS':<13}{'this script, test 2023-25, t*=0.35':<38}{f['n']:>6}{f['n_alert']:>8}"
           f"{f['base_rate']:>8.3f}{f['precision']:>8.3f}{f['lift']:>7.2f}")
-    ref_path = "data/reference_baselines.csv"
+    ref_path = tagged("data/reference_baselines.csv")
     if os.path.exists(ref_path):
         r = pd.read_csv(ref_path)
         r = r[(r.level == "station-day") & r.forecaster.str.startswith("MODEL")].iloc[0]

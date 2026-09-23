@@ -24,13 +24,26 @@ Import from repo root:
 """
 
 import glob
+import os
 
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 
-BASE_CSV = "data/hab_features_tidal.csv"
+# Label rebuild (notes/LABEL_REBUILD_PREREG.md): HAB_FEATURES_CSV points every locked
+# script at a rebuilt feature file, and HAB_OUT_TAG suffixes their outputs so the
+# canonical files are never overwritten. Unset, both leave everything unchanged.
+BASE_CSV = os.environ.get("HAB_FEATURES_CSV", "data/hab_features_tidal.csv")
+OUT_TAG = os.environ.get("HAB_OUT_TAG", "")
+
+
+def tagged(path):
+    """Insert HAB_OUT_TAG before the extension; unchanged when the tag is empty."""
+    if not OUT_TAG:
+        return path
+    root, ext = os.path.splitext(path)
+    return f"{root}{OUT_TAG}{ext}"
 PS_GLOB = "data/raw/deep_wq_extra/deep_wq_S_*.csv"
 GUST_CSV = "data/gust_features_daily.csv"
 

@@ -48,7 +48,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from bloom_precursor_events import doy_bin  # noqa: E402
 from locked_pipeline import (  # noqa: E402
     BLOOM_THRESHOLD, HORIZON_DAYS, add_forward_label, fit_locked_model,
-    load_locked_dataframe, predict_proba)
+    load_locked_dataframe, predict_proba, tagged)
 
 TRAIN_END = pd.Timestamp("2019-12-31")
 VAL_START, VAL_END = pd.Timestamp("2020-01-01"), pd.Timestamp("2022-12-31")
@@ -59,7 +59,7 @@ WEST_LON = -73.4         # matches basin_alert.py default
 GRID = np.round(np.arange(0.0, 1.001, 0.05), 3)
 N_BOOT = 2000
 SEED = 42
-OUT_CSV = "data/reference_baselines.csv"
+OUT_CSV = tagged("data/reference_baselines.csv")
 
 
 def contingency(y, a):

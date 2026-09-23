@@ -44,8 +44,12 @@ FIXED_THRESH = 0.60
 # ---------------------------------------------------------------------------
 # 1. Load + merge sal_lag2/3/4
 # ---------------------------------------------------------------------------
-print("Loading data/hab_features_tidal.csv...")
-df = pd.read_csv('data/hab_features_tidal.csv')
+# Label rebuild: same switches as src/models/locked_pipeline.py (unset = unchanged)
+import os
+_IN = os.environ.get('HAB_FEATURES_CSV', 'data/hab_features_tidal.csv')
+_TAG = os.environ.get('HAB_OUT_TAG', '')
+print(f"Loading {_IN}...")
+df = pd.read_csv(_IN)
 df['date'] = pd.to_datetime(df['date'])
 
 # sal_lag2/3/4 live in hab_features_daily.csv. The current tidal CSV already
@@ -321,8 +325,9 @@ out_tbl = (pd.DataFrame({'station': list(thr_map.keys()),
                          'threshold': list(thr_map.values())})
            .sort_values('station')
            .reset_index(drop=True))
-out_tbl.to_csv(THRESH_CSV, index=False)
-print(f"\nUpdated {THRESH_CSV}: Strategy B thresholds written for {updated} "
+_THRESH_OUT = THRESH_CSV.replace('.csv', f'{_TAG}.csv')
+out_tbl.to_csv(_THRESH_OUT, index=False)
+print(f"\nUpdated {_THRESH_OUT}: Strategy B thresholds written for {updated} "
       f"({len(out_tbl)} stations total).")
 
 # ---------------------------------------------------------------------------

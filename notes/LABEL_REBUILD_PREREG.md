@@ -254,3 +254,75 @@ to DEEP's answer, or for the UConn talk.
 If DEEP's answer changes the definition of S1 (for example, a different correction for the
 gap years), that change is logged in §9 **before** S1 is run, or, if S1 has already run,
 as a new series S4 with S1 kept and reported.
+
+## 13. Amendment A2: DEEP lab data through July 2026 (2026-09-23, before any is received)
+
+M. Lyman (DEEP) offered lab chlorophyll-a through July 2026 for all stations; requested
+the same day. These rules are fixed now, before a single new value has been seen.
+
+- **Where the new values are used.** DEEP's file is used **only for sample dates after
+  2024-06-04**, the last ERDDAP lab date. Before that, ERDDAP stays the sole source, so
+  training (≤2019) and validation (2020-2022) rows are unchanged, and the model is not
+  refit. It is the same S4 model as in §12.
+- **The 2026 wall.** No 2026 value enters any feature, label or test row. S4 test rows are
+  2023-01-01 to 2025-12-03 (the last date whose 28-day window closes by 2025-12-31).
+  2026 samples are saved to `data/holdout_2026/`, untouched, and are not analysed or shown
+  until J. O'Donnell agrees, because his student publishes 2026 observations first. Any
+  later use gets its own pre-registration.
+- **Overlap check.** Wherever DEEP's file and ERDDAP both have a value before
+  2024-06-04, the number of disagreements greater than 0.1 µg/L is reported. ERDDAP is not
+  replaced there.
+- **Code.** Same `label_rebuild.py` and evaluation script; the only change is the lab
+  input, which gets a second file. No parameter, threshold or feature changes.
+- **Predictions.** P8: extended S4 test AUC is within ±0.07 of S1's 0.804. P9: its 95%
+  interval is narrower than 0.30, which lifts the §11 "too small" flag. If P9 fails, S4
+  stays "consistent with S1, not measurable on its own".
+
+## 14. Downstream re-runs on S1 (§8), 2026-09-23
+
+How they were run: `HAB_FEATURES_CSV=data/hab_features_tidal_S1.csv HAB_OUT_TAG=_S1` in
+`locked_pipeline.py` and `station_specific_models.py`. Unset, both leave every path
+unchanged. Plumbing check: `reference_baselines.py` run through the rebuilt S0 file
+reproduces `data/reference_baselines.csv` exactly (max difference 0.0). Outputs are the
+`*_S1.csv` / `*_S1.png` files beside the originals, and none of the originals, including
+`data/station_thresholds.csv`, which the deployed pipeline reads, were overwritten.
+
+| Result | Original (sensor label) | S1 (lab-consistent label) |
+|---|---|---|
+| **21-day operating point**, station-day, t*=0.35 (frozen), test 2023-25 | precision 0.132, POD 0.917, lift 2.63, base 5.0% (48 events) | precision 0.117, POD 0.744, lift 2.59, base 4.5% (43 events) |
+| Model vs always-alert, lift difference [CI] | +1.65 [1.20, 2.23] | +1.59 [1.07, 2.22], still clearly better |
+| Model vs station×month climatology | +0.33 [-0.01, 0.71], not clearly better | +1.59 [1.07, 2.22], **but see note** |
+| Basin-day | lift 1.37, 12 events | lift 2.14, 9 events; vs always-alert +0.43 [-1.00, 1.77], not clear |
+| **Decision value**, V=8 visits/month: calendar → alert (top-V) | 15.4 → 8.3 visits per bloom | **17.8 [9.6, 55.0] → 9.7 [5.5, 26.6]**; causal t* 7.8 [3.9, 40.4] |
+| **Per-station** (western five, test 2023-25) | C1 1.000, 02 0.625, 01 0.500, A4 0.625, B3 0.556 precision | none clears P>0.50 with R>0.40; pooled global @0.60 P 0.375, R 0.724 |
+| **Rarity/overlap** (onset rows, 21 d): LIS base, AUC, OVL | 0.036, 0.855, **0.445** | 0.026, 0.770, **0.620** (Narragansett unchanged: 0.347, 0.810, 0.516) |
+
+**Note on the climatology row.** Under S1, the climatology baselines' own
+validation-chosen threshold went to t=0, which alerts on everything and makes them
+identical to always-alert. The "+1.59, clearly better" against climatology is therefore
+an artefact of that selection rule degenerating, **not** evidence that the model beats
+climatology. It is reported as "not tested fairly under S1". The original finding (no
+clear advantage over climatology) stands as the honest statement.
+
+**The rarity finding changes.** Under the sensor label, the Sound separated the two
+classes slightly *better* than Narragansett (OVL 0.445 against 0.516), which supported
+"precision follows rarity, not skill". Under S1 the Sound separates them *worse* (OVL 0.620
+against 0.516) and is also rarer (base 0.026 against 0.347). Lower precision in the Sound
+is now rarity **and** weaker separation. "Not skill" is withdrawn; "mostly rarity" needs
+the matched-rarity test re-run before it can be said.
+
+**IEC zero-shot transfer** (`data/iec_zero_shot_results_S1.csv`; the model is refit on S1
+DEEP rows ≤2019; IEC's labels are IEC lab values and don't change):
+
+| Primary: 2020-25 IEC onset rows, >10 µg/L, 21 d (949 rows, 126 events) | Original | S1 |
+|---|---|---|
+| Model at t=0.60: lift [CI] | 1.84 [1.59, 2.11] | **1.57 [1.41, 1.75]** |
+| Model AUC [CI] | 0.732 [0.680, 0.782] | **0.707 [0.656, 0.760]** |
+| Station-month climatology: lift, AUC | 1.50, 0.733 | 1.50, 0.733 (unchanged) |
+
+The transfer still holds against always-alert: the whole lift interval is above 1, and it
+sits inside the originally pre-registered band of 1.2-1.8 rather than at its top. Against
+climatology the model's point lift is now nearly equal (1.57 against 1.50, intervals
+overlapping), and its AUC is now slightly *below* climatology's. Honest statement: the
+frozen model transfers to a second agency's lab record better than chance, and no better
+than a station-by-month calendar.
