@@ -82,11 +82,14 @@ exceeds ten micrograms per litre. Ten is CT DEEP's own working threshold, not
 mine — I did not tune it, and I want to be clear that it is a biomass proxy, not
 a toxin and not a species. A p75 exceedance or a ten-microgram day is a
 top-quartile day; it is not automatically a harmful bloom. The base rate on the
-2023 to 2025 test years is about seven percent of station-days. It was not
-always that: exceedances ran forty-two to fifty-nine percent of station-days in
-2009 to 2013, and then dropped to three to eleven percent from 2014 onward. I'll
-come back to that 2014 step, because it turns out to be the most interesting
-thing in the whole project, and I don't think it's ecology.
+2023 to 2025 test years is about seven percent of station-days. One thing I have
+to flag up front: the chlorophyll behind that label is the CTD fluorometer, not
+DEEP's lab chlorophyll. Before 2014 the fluorometer read about two to three times
+the lab value on the same samples; from 2016 on it matches. So my older training
+years have inflated exceedances. The numbers in this talk use the original label,
+and I've written down exactly how I'll rebuild it before re-running anything.
+I'll come back to how I found this, because it's the most useful thing I learned
+this month.
 
 ## 5. The model, and why logistic regression (1:00)
 
@@ -206,14 +209,19 @@ to 2025 with no retraining at all. Lift 1.84, interval 1.59 to 2.11, entirely
 above one; AUC 0.73, interval 0.68 to 0.78. Both pre-registered hypotheses hold.
 The honest caveat is that station-by-month climatology reaches the same AUC of
 0.73 on those rows, so the model's edge is in lift at a fixed operating point,
-not in ranking. And then the unplanned part. At the four stations where DEEP and
-IEC sample within a kilometre of each other, the summer exceedance share from
-2005-2013 to 2014-2025 goes from 0.50 to 0.07 in DEEP's record and from 0.66 to
-0.47 in IEC's. DEEP's share at those stations is zero in every year from 2014 to
-2017; IEC's is 55, 50, 100 and 25 percent in the same years at the same
-stations. Combined with a MODIS check that shows no step either — ratio 1.08,
-interval 1.01 to 1.16 — I think the 2014 cliff is in the lab record, not in the
-water. That is the single question I would most like this room's help with.
+not in ranking. And then the unplanned part. My label's exceedance share fell
+from forty-two to fifty-nine percent of station-days in 2009 to 2013 to three to
+eleven percent from 2014 on. IEC's lab at the same four stations fell far less,
+and MODIS saw no step at all, ratio 1.08. I assumed DEEP's lab had changed. DEEP
+told me it hasn't, in thirty years, so I went back to my own data and found my
+label comes from the CTD fluorometer. On matched surface samples it read 1.8 to
+3.2 times the lab value in 2009 to 2013 and 0.8 to 1.05 from 2016 on. DEEP's lab
+record has no 2014 cliff. It does have a real low period: exceedances around 3 to
+7 percent in 2012 to 2017, against 10 to 23 before and after, which matches what
+DEEP remembers. So a scale change in the sensor turned a real, temporary dip into
+what looked like a permanent cliff. The rebuild of the label is pre-registered,
+and the question I'd most like this room's help with is whether
+Corrected_Chlorophyll is the right field to rebuild it from.
 
 ## 12. Pre-registered negatives and limitations (1:15)
 
@@ -287,10 +295,10 @@ scored against LISICOS buoy feeds with someone outside the project checking the
 evaluation?
 
 **Fallback ask if that's too much:** If a standing commitment isn't possible,
-could you point me to the right person at UConn or CT DEEP to answer one
-question — whether the chlorophyll method, lab or protocol changed in 2014 —
-because a single email reply would resolve the largest open question in the
-project.
+could you point me to whoever handles the DEEP CTD data on ERDDAP, to confirm
+whether the fluorometer or its calibration changed around 2014, and why
+Corrected_Chlorophyll is empty for 2022 to 2024? (Skip this if DEEP has already
+answered by the talk date; then say what they said.)
 
 Thank you. I'm happy to take methods questions.
 
@@ -360,6 +368,23 @@ zero in this pipeline rather than excluded, which is conservative for precision.
 The 21-day locked pipeline excludes them instead, and reports a verifiable-window
 false-alarm rate alongside the all-window one; that's the same convention NOAA
 uses in the Gulf HAB-OFS skill assessments.
+
+**Your label comes from a sensor. How do you know it's right, and what happens to
+your numbers when you fix it?**
+It wasn't right, and I found that out this month. The model's chlorophyll column is
+the CTD fluorometer. Matched to DEEP's lab chlorophyll on the same station and day,
+it read 1.8 to 3.2 times high in 2009 to 2013, 2 to 5 times high in the late
+nineties, and about 1 from 2016 on. The test years sit near 1 (0.86 to 1.31), so
+the test labels are close to lab scale; the training labels are not. Before
+re-running anything I wrote down the fix: rebuild the label and every chlorophyll
+feature from DEEP's Corrected_Chlorophyll, which tracks the lab at 0.82 to 1.35
+in every year it exists, with two sensitivity versions, one calibrated directly
+to the lab and one labelled from lab samples only. The corrected version becomes
+the headline whichever way the numbers move, and I wrote predictions down first:
+the training base rate should fall by at least 40 percent, and AUC should stay
+within 0.05. Every LIS number in this talk will be re-reported after that run.
+The script is `src/models/experiments/sensor_vs_lab_chl.py`, and the plan is
+`notes/LABEL_REBUILD_PREREG.md`.
 
 **How does this compare to NOAA's operational products?**
 Different question, stricter evaluation — I won't say better. NOAA's Lake Erie
@@ -472,3 +497,9 @@ constraint.
   All from the pre-aggregation pipeline.
 - **Not** "the TMDL caused the 2014 drop." Withdrawn 2026-09-05; the satellite
   and IEC records both contradict it.
+- **Not** "the 2014 cliff is in DEEP's lab record." Withdrawn 2026-09-23: DEEP
+  says its lab and methods haven't changed, and the lab record has no 2014 step.
+  The step is in the CTD fluorometer's ratio to the lab.
+- **Not** "Long Island Sound chlorophyll crashed in 2014." The lab shows a
+  temporary low period, 2012 to 2017, then a recovery.
+- **Not** any rebuilt-label number until `notes/LABEL_REBUILD_PREREG.md` has run.

@@ -110,6 +110,70 @@ adjacency), so matched-day n is modest (43–155 per year). Written to
 draft email to CT DEEP / UConn (`notes/EMAIL_DRAFT_2014_CLIFF.md`) should now
 ask specifically about a 2014 chlorophyll method change.
 
+**The cliff is in the sensor, not the lab (2026-09-23).** CT DEEP replied on
+2026-09-22: same sampling procedures, analysis methods and analytical laboratory
+for 30+ years; they recall a region-wide change in chlorophyll and blooms
+"around 2011". That ruled out the lab-change reading above, so the label source
+was checked. `bloom_28d` is built from `Chlorophyll`, the CTD fluorometer, not
+lab CHLA. Matched to surface lab CHLA on the same station-date
+(`src/models/experiments/sensor_vs_lab_chl.py`, `data/sensor_vs_lab_chl.csv`),
+sensor ÷ lab (median per year) is 2.08-4.79 in 1994-1999, 0.96-1.37 in
+2003-2008, 1.77-3.22 in 2009-2013, 0.80-1.05 in 2016-2021 and 0.86-1.31 in
+2022-2024. `Corrected_Chlorophyll` is 0.82-1.35 of lab in every year 1995-2021,
+and empty for 2022-2024. Lab exceedance share (>10 µg/L) has no 2014 step: it is
+0.10-0.23 in 2008-2011, 0.03-0.07 in 2012-2017 and 0.10-0.19 in 2018-2021, a
+real temporary low that fits DEEP's recollection (lab n is low in 2012-2013).
+*Meaning:* the 2014 label cliff is mostly a sensor scale change on top of a
+smaller real dip. Training labels are inflated in 1994-1999 and 2009-2013; the
+test years are near lab scale. The "cliff lives in the lab record" sentence
+above is withdrawn. *Next:* the label rebuild is pre-registered in
+`notes/LABEL_REBUILD_PREREG.md` (primary S1 = Corrected_Chlorophyll with a
+documented gap fill; S1 becomes the headline whichever way it moves). All LIS
+headline numbers stand as "original sensor-scale label" until it runs. The user
+replied to the whole thread on 2026-09-23, asking whether the fluorometer or its
+calibration changed around 2014 and whether the corrected field is the one to use;
+the 2022-2024 gap question is held for the next reply.
+
+**Label rebuilt on the lab scale (2026-09-23), per `notes/LABEL_REBUILD_PREREG.md`.**
+`src/models/label_rebuild.py` rebuilds `Chlorophyll` and every chlorophyll-derived
+feature for each series. Gate G1 passed: rebuilding the original sensor series (S0)
+reproduced all 14 columns to 2e-13, and test AUC 0.8150 / precision 0.500 exactly.
+The headline, S1 (DEEP's `Corrected_Chlorophyll`, gap-filled), gives test AUC
+**0.804 [0.706, 0.878]**, base rate 6.3%, and at t=0.60 precision **0.316
+[0.179, 0.424]**, recall 0.477, lift **5.03 [3.50, 6.88]**. The original label gave
+0.815, 7.2%, 0.500, 0.486 and 6.99. The training positive rate falls from 22.7% to
+5.5%. S2 (sensor divided by the yearly sensor/lab ratio) agrees: AUC 0.799, lift 4.05
+[3.17, 5.32]. S3 (label from lab samples only, 161 test rows, 15 events): AUC 0.760
+[0.52, 0.92]. All five pre-registered predictions were right. *Meaning:* ranking
+skill survives the correction almost unchanged, but alert precision at the old 0.60
+threshold drops from one in two to about one in three. Lift stays around 4-5×
+because the base rate barely moves. The old precision was partly the model learning
+the sensor's inflated scale. S1 now replaces S0 as the headline. Still to re-run on
+S1: per-station operating points, the 21-day operating point, decision value, IEC
+zero-shot, the rarity/overlap comparison, then KEY_NUMBERS, CLAUDE.md, the README,
+the deck and the board.
+
+**DEEP: use the lab data (2026-09-23, 11:52).** O'Brien-Clayton: "I would not use
+the in situ fluorometer data at this point. Use the lab data." The CTD changed from a
+SeaBird to a YSI EXO2 around 2009/2010, which fits sensor ÷ lab rising from 1.37 in
+2008 to 1.84-2.25 in 2009-2010. A DEEP seasonal is comparing lab and in-situ values. So
+Amendment A1 added S4 before it was run: chlorophyll features and label both from lab
+surface CHLA only. Its result is test AUC **0.782 [0.595, 0.921]**, lift 5.0
+[0.0, 9.9], on 161 rows with 15 events. ERDDAP lab data end 2024-06-04, so the test
+covers only 2023 to May 2024. Both predictions were right (P6, P7). The interval is
+wider than 0.30, so under the pre-registered rule S4 is "consistent with S1, not yet
+measurable on its own". **Reporting from now on:** the label definition is the lab
+(S4). The skill estimate is S1's, AUC 0.804 [0.706, 0.878] and lift 5.0 [3.5, 6.9], on
+the full 2023-2025 test, with S4's interval beside it. S4 becomes final when DEEP
+releases lab chlorophyll after June 2024. *Open design question:* lab chlorophyll
+arrives months after sampling, so a real-time forecast can't use lab-based
+chlorophyll features. The label should be lab. Real-time features will have to come
+from sensors (LISICOS buoys for the prospective season), which is a separate question
+from the one settled here. M. Lyman (DEEP) then confirmed that the corrected
+chlorophyll "has been corrected against the lab data", which supports using S1 as the
+full-coverage skill estimate. The one gap still open is 2022-2024, where the corrected
+field is empty.
+
 ### Session addenda (2026-09-01, evening)
 - Pre-registered 360-config tuning search: the reference model is the
   optimum at its bloom definition; lift-maximising selection chases rarity.

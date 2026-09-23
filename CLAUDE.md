@@ -35,6 +35,17 @@ Requires `data/gust_features_daily.csv` — generate with:
 
 Test AUC: 0.815 | Precision @0.60: 0.500 | Recall @0.60: 0.486 | F1 @0.60: 0.493
 
+**Superseded 2026-09-23 as the headline (label rebuild, notes/LABEL_REBUILD_PREREG.md).**
+The numbers above use the raw CTD-fluorometer `Chlorophyll`, which read 2-3x DEEP's lab
+values in 1994-1999 and 2009-2013. On the lab-consistent S1 series
+(`data/hab_features_tidal_S1.csv`; run with `--input data/hab_features_tidal_S1.csv --tag _S1`):
+Test AUC 0.804 [0.706, 0.878] | base rate 6.3% | Precision @0.60 0.316 | Recall 0.477 |
+Lift 5.03 [3.50, 6.88]. The station table below is still on the old label until re-run.
+CT DEEP (2026-09-23) advises against the in-situ fluorometer: "Use the lab data." The
+lab-only series S4 (`--input data/hab_features_tidal_S4.csv --label-col bloom_28d_lab --tag _S4`)
+gives AUC 0.782 [0.595, 0.921] on 161 test rows / 15 events (lab data end 2024-06-04):
+consistent with S1, too small to stand alone. Report S1 as the skill estimate with S4 beside it.
+
 **Station-specific best operating points (test 2023–2025):**
 
 | Station | Rate | Strategy | Threshold | Prec | Rec | F1 | TP | FP | FN |

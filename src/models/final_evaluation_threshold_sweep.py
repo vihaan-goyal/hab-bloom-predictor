@@ -34,16 +34,26 @@ import argparse
 _ap = argparse.ArgumentParser()
 _ap.add_argument('--bloom-threshold', type=float, default=10.0,
                  help='chlorophyll-a ug/L cutoff defining a bloom day (locked value: 10)')
-_ap.add_argument('--preds-out', default='data/test_predictions.csv',
-                 help='where to dump per-row test predictions')
+_ap.add_argument('--preds-out', default=None,
+                 help='where to dump per-row test predictions '
+                      '(default data/test_predictions{tag}.csv)')
+# Label rebuild (notes/LABEL_REBUILD_PREREG.md). Defaults leave every path unchanged.
+_ap.add_argument('--input', default='data/hab_features_tidal.csv',
+                 help='feature file; the rebuilt series are data/hab_features_tidal_S*.csv')
+_ap.add_argument('--label-col', default=None,
+                 help='use this prebuilt column as the label instead of bloom_28d (S3)')
+_ap.add_argument('--tag', default='',
+                 help='suffix for every output file, e.g. _S1')
 _args, _ = _ap.parse_known_args()
 BLOOM_THRESHOLD = _args.bloom_threshold
+TAG = _args.tag
+PREDS_OUT = _args.preds_out or f'data/test_predictions{TAG}.csv'
 
 # ---------------------------------------------------------------------------
 # Load + recompute features
 # ---------------------------------------------------------------------------
-print("Loading data/hab_features_tidal.csv...")
-df = pd.read_csv("data/hab_features_tidal.csv")
+print(f"Loading {_args.input}...")
+df = pd.read_csv(_args.input)
 df['date'] = pd.to_datetime(df['date'])
 
 
@@ -93,10 +103,16 @@ for n, min_p in [(3, 2), (6, 3), (9, 5), (14, 7), (21, 10)]:
           .transform(lambda x: x.rolling(n, min_periods=min_p).mean())
     )
 
+def _slope(v):
+    """Slope over the window's positions, skipping missing values; identical to
+    np.polyfit when the window has no gaps (the lab-only S4 series has gaps)."""
+    m = np.isfinite(v)
+    return np.polyfit(np.arange(len(v))[m], v[m], 1)[0] if m.sum() >= 2 else np.nan
+
+
 df['chl_trend'] = (
     df.groupby('station_name')['Chlorophyll']
-      .transform(lambda x: x.rolling(4, min_periods=3)
-                 .apply(lambda v: np.polyfit(range(len(v)), v, 1)[0]))
+      .transform(lambda x: x.rolling(4, min_periods=3).apply(_slope, raw=True))
 )
 
 df['bloom_28d'] = 0
@@ -110,6 +126,10 @@ for station, grp in df.groupby('station_name'):
         if mask.any() and (chl[mask] > BLOOM_THRESHOLD).any():
             labels[i] = 1
     df.loc[idx, 'bloom_28d'] = labels
+
+if _args.label_col:
+    print(f"Label: {_args.label_col} (rows where it is empty are dropped)")
+    df['bloom_28d'] = df[_args.label_col]
 
 # ---------------------------------------------------------------------------
 # Feature set
@@ -182,12 +202,18 @@ pd.DataFrame({
     "date":         _test_meta['date'].values,
     "y_true":       y_test.values,
     "y_prob":       lr_test_p,
-}).to_csv(_args.preds_out, index=False)
-print(f"Saved {_args.preds_out} ({len(y_test):,} rows)")
+}).to_csv(PREDS_OUT, index=False)
+print(f"Saved {PREDS_OUT} ({len(y_test):,} rows)")
 
 print(f"\nLR Val AUC  (2020-2022):      {roc_auc_score(y_val,  lr_val_p):.4f}")
 print(f"LR Test AUC (2023-2025): {roc_auc_score(y_test, lr_test_p):.4f}")
 print(f"LR Test AP  (2023-2025): {average_precision_score(y_test, lr_test_p):.4f}")
+
+# Threshold chosen on VALIDATION only (the sweep below picks best_t on test, for display)
+_grid = np.round(np.arange(0.10, 0.91, 0.05), 2)
+_val_f1 = [f1_score(y_val, (lr_val_p >= t).astype(int), zero_division=0) for t in _grid]
+VAL_T = float(_grid[int(np.argmax(_val_f1))])
+print(f"Validation-F1 threshold (2020-2022): {VAL_T:.2f}")
 
 # ---------------------------------------------------------------------------
 # Threshold sweep -- LR on test set
@@ -234,7 +260,7 @@ for _, r in sweep.iterrows():
           f"{r['f1']:>6.3f}  {r['TP']:>5,}  {r['FP']:>5,}  {r['FN']:>5,}  "
           f"{r['false_alarm_rate']:>7.3f}{marker}")
 
-sweep.to_csv("data/threshold_sweep_results.csv", index=False)
+sweep.to_csv(f"data/threshold_sweep_results{TAG}.csv", index=False)
 print("\nSaved data/threshold_sweep_results.csv")
 
 # ---------------------------------------------------------------------------
@@ -277,8 +303,8 @@ ax2.set_xlim(0, 1)
 ax2.set_ylim(0, 1)
 
 plt.tight_layout()
-plt.savefig("figures/threshold_sweep.png", dpi=150, bbox_inches='tight')
-print("Saved figures/threshold_sweep.png")
+plt.savefig(f"figures/threshold_sweep{TAG}.png", dpi=150, bbox_inches="tight")
+print(f"Saved figures/threshold_sweep{TAG}.png")
 
 # ---------------------------------------------------------------------------
 # Summary
