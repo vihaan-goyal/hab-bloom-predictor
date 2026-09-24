@@ -66,10 +66,10 @@ deliverables row below (now also corrected)._
 
 | Who | For | Sent | Reply | Next nudge |
 |---|---|---|---|---|
-| CT DEEP (K. O'Brien-Clayton) + UConn (J. O'Donnell, T. Fake) | 2014 method/column change (corrected-to-raw ratio 0.4 -> 0.8 in 2014, corrected empty 2022-24); 2026 cruises to ERDDAP | 2026-09-14 (reply on June thread) | UConn replied 2026-09-17 (see the UConn row below); DEEP silent so far | Sept 28, DEEP only |
-| UConn (J. O'Donnell) | same 2014 question; presenting the work to his team | 2026-09-14 (on the joint DEEP/UConn thread) | **2026-09-17 — replied, interested in the work, offered a slot to present to his team once he is back from a conference** | Vihaan replied 2026-09-17 with availability (Mondays, Thursdays, Fridays); waiting on a time. Follow up if no time proposed by **Sep 25** |
+| CT DEEP (K. O'Brien-Clayton) + UConn (J. O'Donnell, T. Fake) | 2014 method/column change (corrected-to-raw ratio 0.4 -> 0.8 in 2014, corrected empty 2022-24); 2026 cruises to ERDDAP | 2026-09-14 (reply on June thread) | UConn replied 2026-09-17 (see the UConn row below). **DEEP answered 2026-09-22/23**: the 2014 step is a CTD instrument change (SeaBird to YSI EXO2 around 2009/2010), the lab is unchanged; use the lab data. M. Lyman (DEEP) is providing lab chl-a through July 2026. Label rebuilt on the lab scale (notes/LABEL_REBUILD_PREREG.md) | Done; watch for Lyman's lab chl-a file |
+| UConn (J. O'Donnell) | same 2014 question (now answered by DEEP); presenting the work to his team | 2026-09-14 (on the joint DEEP/UConn thread) | **2026-09-17 — replied, interested in the work, offered a slot to present to his team once he is back from a conference** | Vihaan replied 2026-09-17 with availability (Mondays, Thursdays, Fridays); waiting on a time. Follow up if no time proposed by **Sep 25** |
 | IEC (S. Wilder, cc E. Powers) | 2026 posting date / early share; IEC chlorophyll method stable through 2014? | 2026-09-14 | — | Sept 28 |
-| CT DEEP (M. Becker, E. Marquis) | same 2014 question | not sent (drafts gone) | — | only if the thread above is silent by Sept 28 |
+| CT DEEP (M. Becker, E. Marquis) | same 2014 question | not sent (drafts gone) | — | not needed: DEEP answered 2026-09-22/23 on the thread above |
 | College counselor | sponsor referral | 2026-09-05 | — | Sept 12 |
-| UConn LISICOS PI | fallback for buoy data questions | — | — | Oct 1 if DEEP silent |
+| UConn LISICOS PI | fallback for buoy data questions | — | — | not needed for the 2014 question (DEEP answered 2026-09-22/23) |
 | RIDEM Narragansett Bay program | training-bay confirmation | — | — | Oct 1 |

@@ -1,4 +1,5 @@
 > **SUPERSEDED — do not write from this file.** Marked 2026-08-30.
+> **Superseded 2026-09-23: the LIS label was rebuilt on the lab scale (the CTD fluorometer read 2-3x high before 2016); current numbers in notes/S1_NUMBERS_SHEET.md, rationale in notes/LABEL_REBUILD_PREREG.md.**
 > Written on the old MODIS + 28-day + aeration framing. It shares **no headline number**
 > with the current README. Specifically stale: MODIS as a contribution (tested and
 > rejected, -7.8pp), the 28-day horizon (standardised at 21), AUC 0.814 (now 0.852

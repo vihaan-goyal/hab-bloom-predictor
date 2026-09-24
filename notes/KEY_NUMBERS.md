@@ -1,7 +1,9 @@
 # KEY_NUMBERS.md — HAB Bloom Predictor Reference
 
 Corrected pipeline. Do NOT use numbers from the OLD docs listed in Section 6.
-Last updated: 2026-06-04
+Last updated: 2026-09-23 (label rebuilt on the lab scale, S1 now the default; current numbers
+in notes/S1_NUMBERS_SHEET.md, rationale in notes/LABEL_REBUILD_PREREG.md). Numbers not in that
+sheet are marked "(sensor label; not re-run)".
 
 ---
 
@@ -9,7 +11,7 @@ Last updated: 2026-06-04
 
 | Model | Val AUC | Test AUC | Notes |
 |---|---|---|---|
-| **LR (deployed, 35 feat, C=0.05)** | **0.824** | **0.815** | **Final locked deployed model** |
+| **LR (deployed, 35 feat, C=0.05)** | 0.824 (sensor label; not re-run) | **0.804** [0.706, 0.878] | **Final locked deployed model; S1 label (was 0.815 on the original sensor label)** |
 | Ensemble (LR 80% + XGB 20%) | 0.862 | 0.827 | Older experiment; not deployed |
 | Logistic Regression (baseline, 26 feat) | 0.847 | 0.824 | Baseline before tidal/sal/saturation features |
 | XGBoost (baselines_corrected.py) | 0.843 | 0.774 | lr=0.03, depth=3 |
@@ -17,14 +19,17 @@ Last updated: 2026-06-04
 | LSTM | 0.832 | 0.784 | Confirmed ~0.829/0.802 on latest run |
 | Random Forest | ~0.783 | ~0.794 | Used for feature importances (fig7) |
 
+All rows except the deployed LR test AUC: sensor label; not re-run.
+
 **Temporal split:** Train 1993–2019 | Val 2020–2022 | Test 2023–2025
 
-**Bloom rates:** train 22.7% | val ~6–7% | test 7.2%
+**Bloom rates (S1):** train 5.5% | val 3.1% | test 6.3% (was 22.7% / ~6–7% / 7.2% on the original sensor label)
 
-**Precision (test set, deployed LR 35-feat model):**
-- Global threshold 0.60: **0.500** (TP=36, FP=36, FN=38)
-- Global threshold 0.55: 0.377 (TP=40, FP=66, FN=34)
-- Station-specific (best operating point per station): 0.50–1.00 (C1=1.000, 02=0.625, 01=0.500, A4=0.625, B3=0.556)
+**Precision (test set, deployed LR 35-feat model, S1):**
+- Global threshold 0.60: **0.316** [0.179, 0.424] (TP=31, FP=67, FN=34); recall 0.477; lift 5.03 [3.50, 6.88] (was 0.500, 36/36/38 on the original sensor label)
+- Global threshold 0.55: 0.377 (TP=40, FP=66, FN=34) (sensor label; not re-run)
+- Western five at global t=0.60: 0.333–0.500 (A4=0.333, B3=0.333, C1=0.444, 01=0.500, 02=0.429); none clears precision > 0.50 with recall > 0.40. The old C1=1.000 is gone.
+- Lab-only check S4: AUC 0.782 [0.595, 0.921] on 161 test rows / 15 events (too small to stand alone)
 - Note: older pre-correction results quoted 0.17–0.29 globally and 0.32–0.40 for station models — these are from the wrong pipeline
 
 **Prediction horizon:** 28 days (forward calendar window from observation date)
@@ -46,7 +51,10 @@ Scripts: `final_evaluation_threshold_sweep.py`, `daily_inference.py`.
 | Baseline (30 feat, incl. tidal anomalies) | 0.449 | 0.419 | 0.434 | 0.816 | 31/38/43 |
 | + sal_lag2/3/4 (33 feat) | 0.446 | 0.446 | 0.446 | 0.814 | 33/41/41 |
 | + percent_saturation (34 feat) | 0.465 | 0.446 | 0.455 | 0.814 | 33/38/41 |
-| **+ max_gust_3d (35 feat) — FINAL DEPLOYED** | **0.500** | **0.486** | **0.493** | **0.815** | **36/36/38** |
+| + max_gust_3d (35 feat) — deployed, original sensor label | 0.500 | 0.486 | 0.493 | 0.815 | 36/36/38 |
+| **Same 35 feat on the S1 label — CURRENT** | **0.316** | **0.477** | — | **0.804** | **31/67/34** |
+
+Rows above the last: sensor label; not re-run.
 
 **sal_lag2/3/4** — salinity trajectory lags (2/3/4 prior observations), 97–98%
 coverage in `hab_features_tidal.csv`. Each correlates r≈−0.21 with bloom_28d
@@ -76,22 +84,23 @@ cost recall (0.365), a precision-for-recall trade — not integrated. Adding
 
 | Threshold | Prec | Rec | F1 | TP | FP | FN | AUC |
 |-----------|------|-----|-----|-----|-----|-----|-----|
-| 0.60 (balanced) | **0.500** | **0.486** | **0.493** | 36 | 36 | 38 | 0.815 |
-| 0.55 (high recall) | 0.377 | 0.541 | 0.444 | 40 | 66 | 34 | 0.815 |
+| 0.60 (balanced), S1 | **0.316** | **0.477** | — | 31 | 67 | 34 | 0.804 |
+| 0.55 (high recall), sensor label; not re-run | 0.377 | 0.541 | 0.444 | 40 | 66 | 34 | 0.815 |
 
-**Station-specific best operating points (test 2023–2025):**
+(The 0.60 row was 0.500 / 0.486 / 0.493, 36/36/38, AUC 0.815 on the original sensor label.)
 
-| Station | Rate | Strategy | Threshold | Prec | Rec | F1 | TP | FP | FN | n_pos |
-|---------|------|----------|-----------|------|-----|-----|-----|-----|-----|-------|
-| C1 | 17.5% | B (global) | 0.60 | **1.000** | 0.571 | 0.727 | 4 | 0 | 3 | 7 |
-| 02 | 33.3% | B (global) | 0.60 | 0.625 | 0.833 | 0.714 | 5 | 3 | 1 | 6 |
-| 01 | 16.7% | B (global) | 0.60 | 0.500 | 1.000 | 0.667 | 3 | 3 | 0 | 3 |
-| A4 | 20.0% | A (station-only) | 0.60 | 0.625 | 0.625 | 0.625 | 5 | 3 | 3 | 8 |
-| B3 | 27.5% | A (station-only) | 0.50 | 0.556 | 0.455 | 0.500 | 5 | 4 | 6 | 11 |
+**Per-station, western five, global t=0.60 (test 2023–2025, S1; `data/rerun_station_specific_models.log`):**
 
-Note: C1 precision=1.000 is genuine (4 TP, 0 FP) but small sample (7 test positives over 2023–2025).
-Strategy B = global model (all stations) + per-station threshold tuned on 2020–2022 val set.
-Strategy A = station-only model trained on that station's 1993–2019 data.
+| Station | Base rate | Precision | Recall | TP/FP/FN |
+|---------|-----------|-----------|--------|----------|
+| A4 | 20.0% | 0.333 | 0.875 | 7/14/1 |
+| B3 | 20.0% | 0.333 | 0.625 | 5/10/3 |
+| C1 | 12.5% | 0.444 | 0.800 | 4/5/1 |
+| 01 | 16.7% | 0.500 | 0.667 | 2/2/1 |
+| 02 | 27.8% | 0.429 | 0.600 | 3/4/2 |
+
+No western station and strategy clears precision > 0.50 with recall > 0.40. The old C1
+precision 1.000 (sensor label) is gone.
 
 ---
 
@@ -234,18 +243,21 @@ Zero high-risk days outside Jun–Sep.
 
 ## Section 5 — Numbers that did NOT change
 
-These findings came from the EDA and are unaffected by the bloom-label or
-aggregation corrections:
+These findings came from the EDA and are unaffected by the aggregation
+corrections (all on the sensor label; not re-run on S1):
 
 - **Spatial gradient:** western stations (A4, C2, B3) have consistently
   higher bloom rates than eastern stations (M3, N3), consistent with
   nutrient loading from the Connecticut and Housatonic rivers.
 
 - **Long-term trend (fig3):** bloom frequency shows a weak declining trend
-  (~−0.1–0.2 %/yr) across 1993–2025, with a visible inflection after ~2014.
+  (~−0.1–0.2 %/yr) across 1993–2025 (sensor label; not re-run).
 
-- **TMDL inflection (fig3):** visible step-change in annual bloom frequency
-  near 2014, coinciding with the Long Island Sound TMDL nitrogen reductions.
+- **2014 step (fig3), re-explained 2026-09-23:** the step in the sensor-label bloom share
+  (0.42–0.59 in 2009–2013 → 0.03–0.11 from 2014) is mostly a CTD sensor scale change (SeaBird
+  to YSI EXO2 around 2009/2010, confirmed by CT DEEP). The lab record has no 2014 step; it has a
+  real, temporary low in 2012–2017 (lab exceedance share 0.03–0.07, against 0.10–0.23 before
+  and 0.10–0.19 after). It is not the nitrogen TMDL and not a DEEP lab change.
 
 - **Seasonal peak:** bloom probability peaks in Aug–Sep (confirmed in both
   old and corrected pipelines).

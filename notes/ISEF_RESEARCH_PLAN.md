@@ -64,6 +64,9 @@ daily-feature gradient-boosting model on identical rows (paired ΔAUC −0.017
 embedding transferred worse than pooled boosting (AUC 0.70 vs 0.76). Model
 class, features, data volume and sampling frequency are all now excluded;
 rarity stands.
+Outcome 2026-09-23 (rebuilt lab-scale LIS label): mostly rarity, not only; the
+Sound also separates the classes less well (overlap 0.62 against 0.52). See
+notes/S1_NUMBERS_SHEET.md and notes/LABEL_REBUILD_PREREG.md.
 
 Q3. Does a model trained on Narragansett Bay transfer to other water bodies
 with no retraining?
@@ -197,6 +200,9 @@ s9):
     calendar sampling vs alert-directed sampling, in visits per confirmed bloom.
 15. Independent check of the 2014 LIS chlorophyll step using MODIS satellite
     chlorophyll at the same stations (criterion pre-registered in the script).
+    DONE / RESOLVED 2026-09-23: DEEP confirmed the step is a CTD sensor scale
+    change (SeaBird to YSI EXO2 around 2009/2010), not the TMDL and not a lab
+    change; the label was rebuilt on the lab scale (notes/LABEL_REBUILD_PREREG.md).
 
 ### D.5 New work under this plan: bench test of forecast-triggered clay (Oct–Dec 2026)
 

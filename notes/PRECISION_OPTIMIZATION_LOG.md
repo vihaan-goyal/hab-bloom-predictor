@@ -1,4 +1,5 @@
-> **PARTLY SUPERSEDED.** Marked 2026-08-30. This log is on the **28-day** label and the
+> **PARTLY SUPERSEDED.** Marked 2026-08-30.
+> **Superseded 2026-09-23: the LIS label was rebuilt on the lab scale (the CTD fluorometer read 2-3x high before 2016); current numbers in notes/S1_NUMBERS_SHEET.md, rationale in notes/LABEL_REBUILD_PREREG.md.** This log is on the **28-day** label and the
 > retired single-split framing. Its "LOCKED BASELINE (June 2026)" block — precision
 > 0.500 / recall 0.486 / AUC 0.815 at t=0.60 — is the inflated headline killed in
 > `PRECISION_PUSH_TRACKER.md`; the honest h21 value at t=0.60 is **0.175**. The demo

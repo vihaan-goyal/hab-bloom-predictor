@@ -843,3 +843,25 @@ outputs; fork §15 reads this repo's `data/hab_features_tidal.csv`. Cefas is the
 and it roughly halves the visits per bloom. Its alerts are right about one time in three
 at 0.60, and it does not beat a calendar climatology on another agency's data. That is
 what the evidence supports. Narragansett and the 74-site transfer are unaffected.
+
+**Migration completed (2026-09-23, later).** S1 is now the default input for every locked
+script. `HAB_FEATURES_CSV=data/hab_features_tidal.csv` reproduces the sensor label, and the old
+outputs are archived in `data/archive_sensor_label/`. Gate: the default run gives 0.8036, the
+env-var run 0.8150.
+
+Re-runs on S1:
+- Pooled 21-day rolling CV: AUC 0.772 (was 0.852).
+- Frozen t*=0.35: POD 0.791, precision 0.114. The pre-registered POD ≥ 0.8 rule now selects
+  t*=0.20. **Open decision for the user**; deploy keeps 0.35.
+- Basin search: validation lift 2.05× at the 70.5th percentile of the null. Still noise, conclusion
+  unchanged.
+- Point of no return: analogue risk peak 0.42. Still no point of no return.
+- The fork's matched-rarity tests are unchanged on the Narragansett side. At 5% rarity precision is
+  0.09-0.14, and the Sound's 0.117 sits inside.
+- IEC's chlorophyll method switched from 10200H to EPA 445.0 in 2017-18, before the 2020-25
+  transfer window, so no re-score was needed.
+- Live-season rule written down (prereg §15): lab label, sensor inputs, prospective buoy scoring
+  unchanged, and a secondary lab cross-check.
+
+All documents in both repos now take current LIS numbers from `notes/S1_NUMBERS_SHEET.md`. History
+files keep their old numbers under a dated pointer.

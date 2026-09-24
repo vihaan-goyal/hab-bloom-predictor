@@ -1,5 +1,7 @@
 # Draft email — the 2014 chlorophyll cliff (written 2026-09-01)
 
+> **Superseded 2026-09-23: DEEP answered; the cliff is a CTD instrument/scale change, not the TMDL. See notes/LABEL_REBUILD_PREREG.md.**
+
 Recipient: CT DEEP Long Island Sound water quality monitoring program lead,
 or Dr. Jamie Vaudrey (UConn Marine Sciences; cited in notes/BENCHMARKS.md).
 Purpose: confirm the 2014 step change is ecological (nitrogen TMDL), not a

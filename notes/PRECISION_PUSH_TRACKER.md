@@ -1,5 +1,7 @@
 # Precision Push Tracker  (refreshed)
 
+> **Superseded 2026-09-23: the LIS label was rebuilt on the lab scale (the CTD fluorometer read 2-3x high before 2016); current numbers in notes/S1_NUMBERS_SHEET.md, rationale in notes/LABEL_REBUILD_PREREG.md.**
+
 Status key: DONE / DEAD / OVERTAKEN / OPEN
 
 Powered backbone for all inference: rolling-origin CV, 156 pooled positives (h21)

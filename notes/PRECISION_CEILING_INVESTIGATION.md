@@ -1,5 +1,7 @@
 # Precision Ceiling Investigation: Results
 
+> **Superseded 2026-09-23: the LIS label was rebuilt on the lab scale (the CTD fluorometer read 2-3x high before 2016); current numbers in notes/S1_NUMBERS_SHEET.md, rationale in notes/LABEL_REBUILD_PREREG.md.**
+
 Canonical record of the powered, leakage-free investigation into the HAB precision
 ceiling. Supersedes the original planning version of this document. Every hypothesis
 below was tested under rolling-origin expanding-window cross-validation (11 folds,
