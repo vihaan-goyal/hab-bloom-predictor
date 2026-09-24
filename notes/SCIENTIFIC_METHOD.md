@@ -865,3 +865,19 @@ Re-runs on S1:
 
 All documents in both repos now take current LIS numbers from `notes/S1_NUMBERS_SHEET.md`. History
 files keep their old numbers under a dated pointer.
+
+**Mitigation pivot and Layer 1 (2026-09-24).** The counselor rejected clay flocculation: it changes
+the environment and can't be retrieved in open water. The literature review in
+`notes/HAB_MITIGATION_LITERATURE.md` has 245 agent-read entries and a 3,352-paper citation
+snowball. From it, the forecast-triggered process is specified for five low-impact methods in
+`notes/mitigation/` (a shared on/off control loop, rules fixed before any run); bubbles and
+seaweed are the leads. Layer 1 (`src/models/control_loop_sim.py`) replayed the loop on untreated
+history:
+- **Narragansett, daily sensors:** the loop was ON at 79-81% of bloom starts (a median 3 days
+  early). 24-29% of episodes were false alarms, at 13 (bubbles) to 19 (seaweed) treatment-days per
+  bloom caught. Its ON days were better placed than random (39.7% vs 33.7% [33.1, 34.2] pre-bloom).
+- **Long Island Sound, boat visits every ~17 days:** ON at 27-35% of bloom starts, with 91-93%
+  false-alarm episodes, and no better than random (6.4% vs 5.5% [4.3, 6.7]).
+- **Conclusion:** the loop needs a continuous sensor at the site. The off rule can't be judged
+  on untreated water (79-90% of episodes hit the time cap). Details in
+  `notes/mitigation/LAYER1_RESULTS.md`.
