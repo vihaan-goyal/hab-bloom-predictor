@@ -378,3 +378,19 @@ that scenario.
   exceedance (>10 µg/L) at the nearest DEEP station. It is secondary and descriptive, and never
   replaces the primary score.
 - **Unchanged:** nothing is issued before ISEF Form 1A is signed.
+
+**Late re-runs (after a memory-pressure stop and restart, 2026-09-23):**
+- `basin_search.py` (912 cells, 200-shuffle null). Selected on validation: t=0.35, west of
+  -73.2, no season gate, ≥1 station, mean aggregation, validation lift **2.05×**. That sits at
+  the **70.5th percentile** of the null (median 1.79×, 95th percentile 2.86×, max 3.71×), so it
+  is still INSIDE the null and the conclusion is unchanged ("the search found noise"). The sensor
+  label gave 1.84× at the 52nd percentile of a null with median 1.83× and 95th percentile 3.01×.
+  Test: 75 basin-days, 20 events, POD 0.500, precision 0.417, lift 1.56× (+0.56× over
+  always-alert).
+- Fork `cadence_thinning_matched.py` and `lift_at_rarity_cv.py`: `LIS_REF` updated to S1
+  (precision 0.117, AUC 0.825, base 0.045, lift 2.59). The Narragansett-side results are
+  unchanged, as expected. At matched 5% rarity with daily sampling, precision is 0.09-0.14 (the
+  Sound's S1 value, 0.117, sits inside that range). Over nine CV years at T=52.5 µg/L, lift is
+  8.48× [5.98, 12.81], and at T=39, 6.92× [5.32, 9.31]; both lower bounds are above the Sound's
+  2.59. "At matched rarity, precision falls to the Sound's level" still holds. Together with the
+  OVL flip (0.62 against 0.52), the honest wording is "mostly rarity, not only".
