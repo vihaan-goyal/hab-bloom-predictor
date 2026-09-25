@@ -148,7 +148,7 @@ convention as `src/lab/analyze_lab.py`. With n = 3 a result can be "consistent b
 report it that way rather than over-claiming.
 
 ## Organisms (non-toxic stand-ins)
-- **Dinoflagellate:** *Prorocentrum micans* (used as the non-toxic control in Mardones et al. 2023).
+- **Dinoflagellate:** *Prorocentrum micans* (used as the non-toxic control in Mardones et al. 2023). **Not as the main test organism for bubbles:** bubbling *promoted* *Prorocentrum* in Sung & Gobler 2026, so for bubbles it's only an "expected to resist" comparison (see `01_BUBBLES.md`).
 - **Diatom:** *Phaeodactylum tricornutum* or *Thalassiosira*. Long Island Sound blooms are mostly diatoms.
 - **Source:** the National Center for Marine Algae and Microbiota (NCMA, Bigelow Laboratory, Maine) sells cultures.
 - **Do not use *Scrippsiella*:** Northwest Atlantic strains harm shellfish larvae.
