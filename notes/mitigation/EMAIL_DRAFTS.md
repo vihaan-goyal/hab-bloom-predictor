@@ -6,6 +6,7 @@ Written 2026-09-26. Vihaan sends every email himself. Each draft has one ask.
 - Fill in the teacher's name in #1.
 - If there's no sponsor yet, add "(sponsor to be confirmed)" to #2-4.
 - Send #4b (permits) **before** ordering oysters.
+- Oyster count updated 2026-09-26 from 30 to **~50**. Shellfish is now full run #2, stocked to clear 2 tank volumes a day: about 4 per 20 L tank × 9 treated tanks, plus a holding tank, plus 10 for the clearance test.
 
 ## Contacts
 
@@ -90,7 +91,7 @@ Written 2026-09-26. Vihaan sends every email himself. Each draft has one ask.
 
 ## 4a. Copps Island Oysters (contact form)
 
-> Hi, I'm a Westhill High School student in Stamford. For a science fair experiment I'm measuring how fast oysters filter algae in tanks. Could I buy about 30 oyster seed (~40 mm) in late October? They'd stay in school tanks and never be eaten or released.
+> Hi, I'm a Westhill High School student in Stamford. For a science fair experiment I'm testing whether oysters filtering algae in tanks can keep a bloom from building. Could I buy about 50 oyster seed (~40 mm) in late October? They'd stay in school tanks and never be eaten or released.
 >
 > Thank you,
 > Vihaan Goyal
@@ -102,7 +103,7 @@ Written 2026-09-26. Vihaan sends every email himself. Each draft has one ask.
 
 > Hello,
 >
-> I'm a high school student planning a science fair experiment: about 30 farm-raised oyster seed from a licensed CT grower, kept only in indoor school tanks for a few weeks to measure filtration, then disposed of as you advise (never released or eaten).
+> I'm a high school student planning a science fair experiment: about 50 farm-raised oyster seed from a licensed CT grower, kept only in indoor school tanks for about 8 weeks to test whether their filtering keeps an algal bloom down, then disposed of as you advise (never released or eaten).
 >
 > Do I need a permit or license for this?
 >
