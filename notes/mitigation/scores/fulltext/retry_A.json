@@ -1,0 +1,277 @@
+{
+ "peroxide-02": {
+  "status": "no_access",
+  "source_url": "https://doi.org/10.1016/j.hal.2013.10.017",
+  "updates": {},
+  "key_details": "",
+  "discrepancy": ""
+ },
+ "peroxide-07": {
+  "status": "no_access",
+  "source_url": "https://doi.org/10.1016/j.hal.2022.102347",
+  "updates": {},
+  "key_details": "",
+  "discrepancy": ""
+ },
+ "peroxide-08": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.jhazmat.2023.131279",
+  "updates": {
+   "scale": "lab; 100 mL subcultures in natural Cadiz Bay seawater + f/2, started at ~10^4 cells/mL (ballast-water context)",
+   "dose": "dose-response per oxidant; H2O2 EC50 6.67-7.08 mg/L",
+   "result": "H2O2 gave a moderate growth inhibition sustained over 14 d with similar effect on both species (EC50 6.67-7.08 mg/L); PMS and PAA were stronger but depleted within 24 h, and PDS failed to inhibit growth.",
+   "env_effects": "H2O2 half-life in the cultures 0.2-0.3 days at 7.5 mg/L."
+  },
+  "key_details": "Cultured Prymnesium parvum and Heterosigma akashiwo (Spanish isolates) were grown to ~10^4 cells/mL and split into 100 mL subcultures dosed with H2O2, peracetic acid, peroxymonosulfate, peroxydisulfate or hypochlorite, with untreated negative controls. Cell density was tracked by calibrated fluorescence every 2 days and oxidant decay daily for 14 d; EC50s came from integrated growth curves. H2O2 EC50 was 6.67-7.08 mg/L with a sustained effect and similar potency on both species; PMS (EC50 0.40-1.99 mg/L) and PAA (0.32-2.70 mg/L) were stronger but short-lived; PDS had negligible effect. The authors warn that concentration-response readings before day 7 can mislead. Replicate numbers were not stated in the text read.",
+  "discrepancy": ""
+ },
+ "peroxide-10": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.3390/w18010052",
+  "updates": {
+   "scale": "four 40 L tanks of Gliwice Canal bloom water (one control + one tank per dose, no replication), continuous light",
+   "dose": "14, 28, 42 mg/L H2O2 nominal, single dose",
+   "duration": "12 d stage 1 + 15 d stage 2 (after 15 L re-inoculation with bloom water)",
+   "result": "P. parvum fell 98.6%, 98.8% and 99.0% within 24 h at 14, 28 and 42 mg/L, with no living cells by day 3 and no recovery through day 12; after re-inoculation with bloom water P. parvum in the 14 and 28 mg/L tanks rose above the control.",
+   "effect_pct": 98.6,
+   "env_effects": "Total phytoplankton biomass dropped 83%, 84% and 81% in 24 h; filamentous cyanobacteria (Planktothrix agardhii, Pseudanabaena limnetica) disappeared, green algae then dominated (~80% in T1). H2O2 was below 1 mg/L by day 3. Prymnesins decomposed rather than being released abruptly; a shift toward PRM 990 and higher per-cell toxin after re-inoculation."
+  },
+  "key_details": "Water from a P. parvum bloom in the Gliwice Canal (Poland, April 2023) was split into four 40 L tanks: a control and single doses of 14, 28 and 42 mg/L H2O2; each treatment is a single unreplicated tank. P. parvum declined 98.6-99.0% within 24 h and no living cells remained by day 3 in any treated tank; total phytoplankton biomass fell 81-84% in 24 h. H2O2 dropped to about 3, <10 and 30 mg/L after 24 h and was undetectable after day 3. On day 12, 15 L of each tank was replaced with fresh bloom water (4.6 x 10^7 cells/L): P. parvum in T1 and T2 then exceeded the control, while T3 tracked the control. Prymnesins were degraded along with the cells, but the regrown population had a more toxic profile.",
+  "discrepancy": "Record's duration was 'Not reported'; the lab setting was actually 40 L tanks of natural canal bloom water with no replication, and the 14 mg/L dose already gave 98.6% kill in 24 h."
+ },
+ "peroxide-11": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.hal.2024.102707",
+  "updates": {
+   "scale": "lab; 500 mL K. brevis cultures (~26,000 cells/mL) and 30 mL settling columns with PAC + CaO2 (~4,500 cells/mL)",
+   "dose": "CaO2 10, 30, 50 mg/L (30 mg/L releases about 8 mg/L H2O2; 10 mg/L about 2.8 mg/L), with polyaluminum chloride",
+   "duration": "72 h (cells lysed within 3 h at 50 mg/L)",
+   "result": "30 and 50 mg/L CaO2 killed K. brevis with no recovery, and with PAC removed >98% of cells from the water column in 72 h vs control; 10 mg/L gave ~80% removal at 24 h followed by partial recovery.",
+   "effect_pct": 98,
+   "env_effects": "CaO2 alone cut PbTx-2 by 90% and PbTx-3 by 80% at 24 h vs control; PAC alone did not degrade toxins, and PAC+CaO2 degraded them less than CaO2 alone. Off-target effects were not tested."
+  },
+  "key_details": "Lab study with cultured K. brevis (CCMP 2281 at Tulane; CCMP 2228 at Mote). CaO2 converted about 82% to H2O2 in seawater. In 500 mL cultures, 10 mg/L CaO2 cut cells at first but they recovered by 48 h while the control grew 81%; 30 and 50 mg/L caused lasting loss of viability and falling Fv/Fm. Combined with PAC flocculation in 30 mL columns, 30-50 mg/L removed >98% of cells vs control in 72 h, while PAC alone removed 76% in 24 h but the column was repopulated by 72 h. Toxin data are described by the authors as preliminary; replication was not clearly stated in the text read, and no non-target organisms were tested despite the 'minimal off-target impact' claim.",
+  "discrepancy": "Abstract-based record gave no removal percentage or toxin numbers; the 10 mg/L dose failed (recovery by 48 h), and the 'targeted, minimal off-target' claim is untested."
+ },
+ "peroxide-12": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1016/s0304-4203(96)00072-2",
+  "updates": {},
+  "key_details": "Access via the library works, but the 1997 Marine Chemistry article's HTML page shows only the abstract; the body is a scanned PDF that could not be scraped as HTML.",
+  "discrepancy": ""
+ },
+ "peroxide-13": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1139/facets-2019-0011",
+  "updates": {
+   "dose": "8.5, 17, 85, 170 mg/L H2O2 (plus 340 and 1700 mg/L in a preliminary test); 1h-LC50 214.1 (CV) / 48.3 adult in Table 2 (48.6 in abstract); 25h-LC50 77.1 / 30.6 mg/L; 25h-LC10 10.9 (CV) / 11.6 (adult) mg/L",
+   "result": "Total mortality after a 1 h pulse + 24 h recovery was 30% (CV) and 14% (adults) at 17 mg/L, 34% and 89% at 85 mg/L, and 92% and 100% at 170 mg/L; none at 8.5 mg/L, but escape performance was already impaired at 8.5 and 17 mg/L and absent at 85 mg/L."
+  },
+  "key_details": "Wild Calanus spp. (copepodite V and adult females) from Austevoll, Norway were given 1 h H2O2 exposures then 24 h recovery; the mortality test was run in triplicate (Table 1 N = 324 copepodite V and 327 adults), with no control mortality. Mortality rose steeply with dose: 0% at 8.5 mg/L, 14-30% at 17 mg/L, up to 100% at 170 mg/L. The 25h-LC10 was about 11 mg/L for both stages, i.e. within the 14 mg/L-plus range used on HABs. Escape distance fell 1.4 mm per 10 mg/L and oxygen consumption fell with dose. Context is salmon-lice treatment (1700 mg/L), so the doses and pulse design are not a HAB treatment.",
+  "discrepancy": "Adult 1h-LC50 is 48.3 in the paper's Table 2 but 48.6 in the abstract (the record used 48.6). The 25h-LC10 of ~11 mg/L is the more relevant non-target threshold for HAB dosing."
+ },
+ "peroxide-14": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.ecoenv.2019.05.045",
+  "updates": {
+   "scale": "lab flow-through tanks, 6.8 C; Exp 1-2: 6 replicate tanks x 10 shrimp per treatment; Exp 3: 4 tanks x 6 shrimp",
+   "dose": "PARAMOVE H2O2 at 0.15, 1.5, 15 mg/L",
+   "duration": "1-2 h pulses (once, or on 3 consecutive days); 2-12 d recovery",
+   "result": "Three 2 h pulses of 15 mg/L killed 46% after the third pulse and 80% two days later; three pulses of 1.5 mg/L killed 33%; a single 2 h pulse of 15 mg/L killed 50% with deaths starting on day 3; 0.15 mg/L caused no deaths.",
+   "env_effects": "Gill swelling, haemocyte infiltration, fusion and necrosis after a single 1 h pulse of 1.5 or 15 mg/L; feeding 66% below control 12 days after three 1.5 mg/L pulses."
+  },
+  "key_details": "Female Northern shrimp in a continuous-flow seawater system were given PARAMOVE (H2O2 anti-sea-lice product) pulses with clean-water recovery. Exp 1-2 used 6 replicate tanks of 10 shrimp; Exp 3 used 4 tanks of 6 shrimp; no control mortality in any experiment. Mortality was delayed: none immediately after pulses, then 80% for 3 x 15 mg/L, 33% for 3 x 1.5 mg/L and 50% for one 2 h 15 mg/L pulse (one-pulse differences at lower doses not significant). Gills were progressively damaged at 1.5 and 15 mg/L, and feeding stayed depressed through 12 d of recovery. Delayed effects mean short-term toxicity tests underestimate harm.",
+  "discrepancy": "Record omitted the 80% mortality after three 15 mg/L pulses and the sublethal effects (gill necrosis, feeding -66%) at 1.5 mg/L, a dose far below HAB treatment doses."
+ },
+ "peroxide-17": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.3390/w12051304",
+  "updates": {
+   "scale": "lab microcosms: ten 1 L containers of lake water (3 controls, one container per SP dose), 1944 zooplankton counted (1610 Daphnia)",
+   "dose": "sodium percarbonate 5, 10, 20, 30, 40, 50, 60 mg/L (1.4-16.6 mg/L H2O2)",
+   "duration": "24 h",
+   "result": "Daphnia survival was 97.9% in controls, fell slightly at 5-10 mg/L SP, dropped ~50 percentage points between 20 and 30 mg/L SP (5.5-8.3 mg/L H2O2), was 3% at 40 mg/L SP (11.1 mg/L H2O2), 1.1% at 50 and 0% at 60 mg/L SP (16.6 mg/L H2O2)."
+  },
+  "key_details": "Surface water from a shallow Polish lake (phytoplankton dominated by cryptophytes and chlorophytes; cyanobacteria ~3%) was split into ten 1 L containers: three controls and single, unreplicated containers at 5-60 mg/L sodium percarbonate. Survival was counted after 24 h; percarbonate concentration and Daphnia survival were strongly inversely correlated (Spearman r = -0.976). The authors recommend keeping doses below 10 mg/L SP (2.8 mg/L H2O2) to protect zooplankton. Algal effects were not measured, and the design has no replication of treatments.",
+  "discrepancy": "Record says large Daphnia died more; the paper found no significant size difference in survival (0.2-2.0 mm), only a suggestion that larger ones may be more vulnerable. Duration (24 h) was missing."
+ },
+ "peroxide-18": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.watres.2022.119169",
+  "updates": {
+   "setting": "field",
+   "scale": "24-h lab tests on 26 taxa (species sensitivity distribution) + two whole-lake H2O2 treatments of Lake Oosterduinse Meer (June and August 2018)",
+   "dose": "lab graded; lake treatment 1 mean 1.13 mg/L (0.2-2.7 mg/L for 5.5 h), treatment 2 mean 2.19 mg/L (1.7-3.7 mg/L for at least 13 h)",
+   "result": "Cyanobacteria were most sensitive (24-h EC50 1.39 mg/L for Planktothrix to 3.49 mg/L for Anabaena; green algae ~20x higher, 27.7-74.4 mg/L). The first lake treatment cut cyanobacterial biovolume 85.1% in two days with little non-target effect; the second, stronger and longer, collapsed Dolichospermum by 96.8% but also rotifers by 82.0%.",
+   "effect_pct": 85.1,
+   "env_effects": "Second lake treatment: 82.0% collapse of rotifers and fewer small cladocerans. Authors' dose classes: <=2 mg/L mild (no non-target effects); 2-4 mg/L harms rotifers and small cladocerans; 4-10 mg/L harms many zooplankton and some macroinvertebrates; 10-100 mg/L suppresses most zooplankton and other eukaryotic phytoplankton."
+  },
+  "key_details": "24-h toxicity tests on 3 cyanobacteria, 6 green algae, 8 zooplankton and 9 macroinvertebrate taxa (controls kept >=90% yield or survival) fed a species sensitivity distribution, which was then checked against two treatments of the same Dutch lake. Treatment 1 (mean 1.13 mg/L, gone after 6.5 h; predicted 8 +/- 5% of species affected) cut an Aphanizomenon-dominated bloom by 85.1% of cyanobacterial biovolume in two days without significant effects on most eukaryotic phytoplankton. Treatment 2 (mean 2.19 mg/L, lasting >=13 h; 14 +/- 2% of species affected) collapsed Dolichospermum flos-aquae by 96.8% but also caused an 82.0% rotifer collapse. The SSD predictions matched the lake responses. Only one lake, two treatments, before/after comparison with no control lake.",
+  "discrepancy": "Record listed setting 'lab'; the paper includes two whole-lake field treatments with measured cyanobacterial reductions (85.1%) and a rotifer collapse (82.0%)."
+ },
+ "peroxide-21": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.watres.2023.119811",
+  "updates": {
+   "organism": "12 freshwater strains: cyanobacteria (Synechococcus, Microcystis aeruginosa, Dolichospermum flosaquae), chlorophytes, diatoms, mixotrophs (Cryptomonas, Dinobryon, Prymnesium parvum)",
+   "scale": "lab; 30 mL cultures in 55 mL tubes, triplicates",
+   "dose": "H2O2 and CuSO4.5H2O at 0, 0.5, 2.5, 5, 10, 20 mg/L",
+   "duration": "48 h",
+   "result": "Mean H2O2 EC50 was 2.18 mg/L for mixotrophs, 4.38 for cyanobacteria, 18.7 for diatoms and 93.26 for chlorophytes (CuSO4 lower for all but chlorophytes); H2O2 is not selective, since mixotrophs and some diatoms were as sensitive as cyanobacteria."
+  },
+  "key_details": "Twelve culture-collection strains in four divisions were exposed in triplicate to six concentrations (0-20 mg/L) of H2O2 or copper sulfate, with photosynthetic yield (Phyto-PAM) giving 48-h EC50s. H2O2 EC50s: Dolichospermum 1.25, Microcystis 4.74, Synechococcus 7.15 mg/L; Cryptomonas 1.80, P. parvum 4.4 mg/L; Navicula 7.8, Cyclotella 11.8 mg/L; chlorophytes 30.14-166.57 mg/L. Copper was more potent than H2O2 in every division except chlorophytes. The authors conclude that H2O2 and CuSO4 give comparable outcomes and that H2O2's selectivity for cyanobacteria is debatable. Monocultures in culture media, not natural communities.",
+  "discrepancy": "Duration (48 h) and the dose range were missing; the ranking in the record matches."
+ },
+ "peroxide-23": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1021/acsestwater.5c01257",
+  "updates": {
+   "organism": "Lake Erie cyanobacteria (Microcystis-dominated community, Sept 2023)",
+   "scale": "lab microcosm: six 1 L beakers of Lake Erie water diluted to 2.0-2.5 ug/L Chl-a (3 with a 20 mL buoy, 3 controls), 10% daily water exchange",
+   "dose": "small buoy with 1 cm gel loaded with diluted Oximycin P5 (6 g/L H2O2), targeting ~1 mg/L H2O2 in the beaker",
+   "result": "Buoy release cut Chl-a to 0.07 ug/L after 14 d, about 5% of the control average, with significant reductions at all time points except days 1 and 3; the effect grew over time.",
+   "effect_pct": 95,
+   "env_effects": "16S rRNA: cyanobacteria fell from ~9% of the bacterial community to 0.24% (day 7) and 1.8% (day 14) vs 1.9% and 5.9% in controls. Biofouling of the buoys needs further work; non-target organisms were not assessed."
+  },
+  "key_details": "Reusable PVC buoys release a commercial H2O2 algaecide through a polyacrylate hydrogel disk; release followed first-order kinetics set by gel thickness, area and internal concentration, lasting more than a month. The only biological test was a 14-day microcosm: three 1 L beakers with the smallest buoy vs three untreated beakers of Lake Erie water diluted to an early-bloom level (2.0-2.5 ug/L Chl-a), with 10% daily lake-water replacement. Treated Chl-a fell to 0.07 ug/L at day 14, ~5% of the control, significant at all times except days 1 and 3. The starting bloom was deliberately minor (prevention scenario), and medium and large buoys were not tested on algae.",
+  "discrepancy": "Record gave no number; the full text reports Chl-a at ~5% of control after 14 d, but only in 1 L beakers at a very low starting Chl-a (2.0-2.5 ug/L), not a real bloom."
+ },
+ "peroxide-25": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.envpol.2018.05.012",
+  "updates": {
+   "setting": "mesocosm",
+   "scale": "lab EC50 tests on 4 cyanobacteria + twelve 1500 L limnocorrals in a 1.5 ha hyper-eutrophic catfish pond (Auburn, AL, May 2017), 3 replicates per dose (one enclosure lost)",
+   "dose": "0, 1.3, 6.7, 20 mg/L H2O2, single application",
+   "duration": "7 d (enclosures)",
+   "result": "6.7 and 20 mg/L gave rapid, sustained cuts in Microcystis and phycocyanin, with day-7 cyanobacterial biovolume 16.4 and 1.5 million um3/mL vs 202.8 million in controls (Table 2); 1.3 mg/L cut Planktothrix but not Microcystis, and chlorophyll a recovered to control levels in all treatments by day 7.",
+   "effect_pct": 91.9,
+   "env_effects": "Chlorophytes increased. Extracellular microcystin rose 1 day after treatment then fell to control levels by day 7; intracellular microcystin stayed low at 6.7 and 20 mg/L. Zooplankton were significantly suppressed only at 20 mg/L; 6.7 mg/L was similar to control."
+  },
+  "key_details": "Lab EC50s were ~0.41 mg/L for three filamentous cyanobacteria vs 5.06 mg/L for Microcystis. In the field, twelve 1500 L enclosures of a Planktothrix/Microcystis bloom were dosed once with 0, 1.3, 6.7 or 20 mg/L H2O2 (triplicates; one enclosure damaged) and sampled over 7 days. Phycocyanin stayed very low at 6.7 and 20 mg/L but recovered at 1.3 mg/L; chlorophyll a recovered everywhere by day 7 as chlorophytes replaced cyanobacteria. Day-7 cyanobacterial biovolume at 6.7 mg/L was 91.9% below control (computed from Table 2 means; 99.3% at 20 mg/L). Zooplankton were harmed only at 20 mg/L.",
+  "discrepancy": "The 'field' work was 1500 L enclosures (mesocosm) inside the pond, not a whole-pond treatment; the record gave no reduction figure. effect_pct 91.9 is computed from Table 2, not stated by the authors."
+ },
+ "curcumin-02": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1002/lom3.10731",
+  "updates": {
+   "scale": "1,400 L fiberglass mesocosms at the Mote RTMTDI facility, Sarasota FL (6 tanks in March 2022, 12 in January 2024; 3 curcumin-treated tanks each year), cultured K. brevis",
+   "duration": "up to 72 h (both runs cut short by bacterial blooms, K. brevis crashes and hypoxia at 48-72 h)",
+   "result": "2022: cells -86% at 24 h and -99% at 48 h, total brevetoxins -65% and -74%; 2024: cells only -32% at 24 h and -47% at 48 h, toxins -46% and -7%; no measured effects on clams, urchins or crabs within 72 h.",
+   "effect_pct": 99,
+   "env_effects": "No measured impacts on hard clams, sea urchins or blue crabs within 72 h (2024 run; 4 clams, 4 urchins, 3 crabs per tank). Bacterial blooms and hypoxia (<2 mg/L) appeared in all groups including controls, attributed to a facility-wide problem."
+  },
+  "key_details": "Two pilot runs in 1,400 L mesocosms dosed with 5 mg/L curcumin, three treated tanks per run; only 2024 had curcumin-only and seawater controls. Changes were measured relative to each tank's time-0 value and compared with Karenia controls (Kruskal-Wallis). In 2022 cells fell 86.34% at 24 h (control +18.52%) and 99.22% at 48 h (control +70.79%); in 2024 the reduction was significant only at 6 h (-27.35%) and reached just 47% at 48 h, with toxin reduction fluctuating (-5.39% to -45.66%) and ending at -7.56%. Both runs were cut short by bacterial blooms, Karenia control crashes to 0 cells/L and hypoxia; affected tanks were discarded, and one 2024 treated tank crashed, leaving n = 2 at 48 h. The authors frame the study as lessons learned about mesocosm methods; the year-to-year inconsistency and small n make the efficacy estimate weak.",
+  "discrepancy": "Abstract-based record said percentages were not given and implied consistent drops; the full text shows a 99% cell cut in 2022 but only 47% (and 7% toxin) in 2024, with runs compromised by bacterial blooms and hypoxia."
+ },
+ "curcumin-18": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.2166/wst.2019.357",
+  "updates": {
+   "freshwater_or_marine": "freshwater",
+   "scale": "lab cultures in BG11, triplicates, 12:12 light-dark vs constant dark",
+   "dose": "4 mg/L berberine (growth tests); 24 h-EC50 on M. aeruginosa 0.47 mg/L",
+   "duration": "9 d",
+   "result": "Under light-dark, 4 mg/L berberine drove M. aeruginosa cell density to zero by day 6, with Fv/Fm and ETR near zero after 1 day; it had no effect in constant darkness and no effect on Chlorella pyrenoidosa in either condition.",
+   "effect_pct": 100
+  },
+  "key_details": "Lab monocultures of Microcystis aeruginosa and Chlorella pyrenoidosa were exposed to 4 mg/L berberine (an allelochemical) in triplicate for 9 days under 12:12 light-dark or constant dark, with untreated controls. In light, M. aeruginosa density fell to zero by day 6 and Fv/Fm dropped to 0.04 within 10 h; in darkness there was no algicidal effect. The 24 h-EC50 for M. aeruginosa was 0.47 mg/L, which cut true photosynthesis (131.20 to 107.82 umol O2/mg Chl a/h) but not dark respiration. C. pyrenoidosa growth and photosynthesis were unaffected. Single strains in culture medium; no natural community, toxin or non-target animal data.",
+  "discrepancy": "Record listed dose and duration as 'Not reported'; the paper used 4 mg/L for 9 days (EC50 0.47 mg/L) and reached complete Microcystis elimination by day 6."
+ },
+ "shellfish-11": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.hal.2024.102745",
+  "updates": {
+   "setting": "field",
+   "scale": "60-min clearance tests in 1 L stirred beakers of whole bloom water (10 bivalves per species, 3 bivalve-free control beakers) at Cold Spring Harbor and Jockey Creek, plus field-deployed bivalves at 3 NY sites (2021-2022)",
+   "duration": "60 min clearance trials; toxins tracked for ~6 weeks in deployed bivalves",
+   "env_effects": "M. edulis DST loads (265 ng OA + DTX1 per g) exceeded the FDA closure guideline (160 ng/g) for three weeks in 2022; oysters accumulated the most PTX2; toxins persisted ~6 weeks."
+  },
+  "key_details": "Bivalves starved 24 h were placed individually in 1 L beakers of raw Dinophysis bloom water (10 per species, 3 control beakers without bivalves) and cleared for 60 min, with Chl-a and Dinophysis counts at 0 and 60 min. All species cleared D. acuminata faster than Chl-a; oysters (1.69 +/- 1.34 L/h/g) were significantly faster than mussels (0.46 +/- 0.32) and hard clams (0.41 +/- 0.24). Separately deployed bivalves plus wild ribbed mussels accumulated DSTs and pectenotoxins, with blue mussels over the FDA guideline for three weeks. The study measures grazing and toxin risk, not bloom reduction.",
+  "discrepancy": ""
+ },
+ "shellfish-17": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.hal.2022.102236",
+  "updates": {
+   "freshwater_or_marine": "both (freshwater Asian clam, estuarine oyster)",
+   "scale": "lab 1 L beakers: cultured Microcystis LE-3 (10^6 cells/mL) for 3 d and Lake Agawam NY bloom water (cyanobacteria 118 and 71 ug Chl-a/L; microcystin 38 and 29 ug/L) for 4 d",
+   "dose": "10^6 cells/mL cultured Microcystis (single and double cells) vs colonial bloom water",
+   "duration": "3 d (culture) and 4 d (bloom water)",
+   "result": "On cultured Microcystis, clam tissue microcystin fell from 3668 ng/g at 24 h to 719 ng/g at 72 h as clearance dropped, while oyster tissue rose to 4905 ng/g at 72 h with steady clearance; on colonial bloom water accumulation was only up to 2 ng/g.",
+   "env_effects": "Both bivalves exceeded the California guidance value (10 ng/g) by orders of magnitude on cultured cells; oysters did not depurate over 3-4 days and are the likelier vector of hepatotoxic shellfish poisoning."
+  },
+  "key_details": "Lab clearance, particle-selection and toxin-accumulation experiments with Asian clams (Corbicula fluminea) and eastern oysters using toxic Microcystis culture (Lake Erie LE-3) and bloom water from Lake Agawam, NY. Clams cleared Microcystis faster than a green alga in culture, but in bloom water both bivalves cleared more slowly and clams selected green algae over cyanobacteria. Clams accumulated microcystin rapidly (3668 ng/g at 24 h) and then depurated to 719 ng/g by 72 h while clearance fell; oysters kept a steady ~0.11 L/h clearance and rose to 4905 ng/g by 72 h. On colonial bloom water accumulation stayed at or below 2 ng/g. The focus is shellfish safety, not bloom control.",
+  "discrepancy": ""
+ },
+ "shellfish-16": {
+  "status": "blocked",
+  "source_url": "https://doi.org/10.2307/1542308",
+  "updates": {},
+  "key_details": "Publisher page (Biological Bulletin, 1995) shows only the abstract; the Biodiversity Heritage Library copy is behind a Cloudflare bot check that did not clear.",
+  "discrepancy": ""
+ },
+ "shellfish-02": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.3354/meps281093",
+  "updates": {},
+  "key_details": "Inter-Research (MEPS) publishes full text only as PDF; the HTML page has just the abstract. The PDF opened in Chrome's viewer (no bot check), but in-page text extraction froze the tab, so the body could not be read.",
+  "discrepancy": ""
+ },
+ "shellfish-03": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.3354/meps07289",
+  "updates": {},
+  "key_details": "Inter-Research (MEPS) publishes full text only as PDF; the HTML page has just the abstract. The PDF opened in Chrome's viewer (no bot check), but in-page text extraction froze the tab, so the body could not be read.",
+  "discrepancy": ""
+ },
+ "shellfish-04": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.3354/meps031265",
+  "updates": {},
+  "key_details": "Inter-Research (MEPS) publishes full text only as PDF; the HTML page has just the abstract. The PDF opened in Chrome's viewer (no bot check), but in-page text extraction froze the tab, so the body could not be read.",
+  "discrepancy": ""
+ },
+ "shellfish-08": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.3354/meps211275",
+  "updates": {},
+  "key_details": "Inter-Research (MEPS) publishes full text only as PDF; the HTML page has just the abstract. The PDF opened in Chrome's viewer (no bot check), but in-page text extraction froze the tab, so the body could not be read. The companion Coughlan 1969 paper (doi:10.1007/BF00355716) did not load through the library proxy.",
+  "discrepancy": ""
+ },
+ "shellfish-13": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.3354/meps050073",
+  "updates": {},
+  "key_details": "Inter-Research (MEPS) publishes full text only as PDF; the HTML page has just the abstract. The PDF opened in Chrome's viewer (no bot check), but in-page text extraction froze the tab, so the body could not be read.",
+  "discrepancy": ""
+ },
+ "shellfish-14": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.3354/meps063177",
+  "updates": {},
+  "key_details": "Inter-Research (MEPS) publishes full text only as PDF; the HTML page has just the abstract. The PDF opened in Chrome's viewer (no bot check), but in-page text extraction froze the tab, so the body could not be read.",
+  "discrepancy": ""
+ },
+ "shellfish-15": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.3354/meps074033",
+  "updates": {},
+  "key_details": "Inter-Research (MEPS) publishes full text only as PDF; the HTML page has just the abstract. The PDF opened in Chrome's viewer (no bot check), but in-page text extraction froze the tab, so the body could not be read.",
+  "discrepancy": ""
+ },
+ "shellfish-20": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.3354/meps10331",
+  "updates": {},
+  "key_details": "Inter-Research (MEPS) publishes full text only as PDF; the HTML page has just the abstract. The PDF opened in Chrome's viewer (no bot check), but in-page text extraction froze the tab, so the body could not be read.",
+  "discrepancy": ""
+ },
+ "shellfish-22": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.3354/meps009203",
+  "updates": {},
+  "key_details": "Inter-Research (MEPS) publishes full text only as PDF; the HTML page has just the abstract. The PDF opened in Chrome's viewer (no bot check), but in-page text extraction froze the tab, so the body could not be read.",
+  "discrepancy": ""
+ }
+}

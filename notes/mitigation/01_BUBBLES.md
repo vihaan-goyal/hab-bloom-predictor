@@ -4,7 +4,10 @@ Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/ph
 `notes/snowball/marine.md` #33.
 
 ## Why this method
-- **Evidence:** Sung & Gobler (2026), *Journal of Environmental Management*, [doi:10.1016/j.jenvman.2026.129015](https://doi.org/10.1016/j.jenvman.2026.129015). Coarse bubbles cut *Margalefidinium polykrikoides* cell density **by more than 60%**, against under 20% for nanobubbles, and lowered its photosynthetic efficiency. Fish survived **100%** where unbubbled controls had **100% mortality**.
+- **Evidence:** Sung & Gobler (2026), *Journal of Environmental Management*, [doi:10.1016/j.jenvman.2026.129015](https://doi.org/10.1016/j.jenvman.2026.129015). Full text read 2026-09-26 (through Columbia Libraries).
+  - At the high rate, coarse bubbles cut *Margalefidinium polykrikoides* **21-58% (strain CPSB-1G) and 34-63% (strain CP1)** against unaerated controls; 78% by day 10 in the screening test. The ">60%" in the paper's highlights is the top of these ranges.
+  - Photosynthetic efficiency (Fv/Fm) fell at both rates.
+  - Larval fish survived **100%** under high-rate bubbling where controls had **100% mortality** within 1.5 h.
 - ***Margalefidinium* matters locally:** it's the fish-killing "rust tide" dinoflagellate of Long Island's bays.
 - **No chemicals, and switching it off removes it completely.** That answers the counselor's objection most cleanly of any method.
 - **Caveats:**
@@ -19,7 +22,12 @@ Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/ph
 - **Two warnings that change the design:**
   1. **Diatoms may be *helped* by bubbling.** The paper's introduction notes that moderate turbulence can promote diatom growth, with damage only above a threshold. Long Island Sound blooms are mostly diatoms, so bubbles are a **dinoflagellate** method, and the bench must include a diatom check arm.
   2. **Bubbling promoted *Prorocentrum*** in bloom water. So *Prorocentrum micans*, the stand-in suggested in `00_CONTROL_LOOP.md`, is the **wrong test organism** for this method: it may grow *better*. Use it only as an "expected to resist" comparison. Pick the main stand-in dinoflagellate after asking the Gobler lab or NCMA which non-toxic species responds most like *Margalefidinium*.
-- **Still unknown from this paper:** flow rates, vessel volumes, bubbling duration. The sources below cover most of this, so the Gobler PDF is **optional**, not blocking.
+- **Setup from the full text (2026-09-26):**
+  - 500 mL cultures in 1 L Erlenmeyer flasks, bubbled continuously through an **air stone** at **25 mL/min (low) or 300 mL/min (high)**. Per litre of culture that is **0.05 and 0.6 L/min per L**.
+  - n = 4 flasks per treatment; lab runs of about 10-15 days.
+  - Bloom-water tests used 500 mL flasks on an outdoor flow-through table (24 h and 2 days). That is still flasks, not bubbling in open water.
+  - **In one bloom-water test the low rate beat the high rate (55% vs 29% by day 2).** So "more air = more effect" is not guaranteed.
+  - Orbital shaking at 240 rpm also slowed growth significantly (days 6-12).
 
 ## Other sources (added 2026-09-25, in place of the paywalled PDF)
 
@@ -40,7 +48,9 @@ Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/ph
   - superficial gas velocity = airflow ÷ column cross-section;
   - entrance velocity = airflow ÷ outlet area.
   - Example: 2 L/min through a 4 mm tube into an 8 cm column gives an entrance velocity of ~2.7 m/s and a superficial velocity of ~0.007 m/s. Both are far below the lethal levels in Barbosa, so an aquarium pump won't shred cells, and any effect is turbulence stress on division. Log both numbers for every column.
-- **Pilot flow rates:** 0.5 and 2 L/min per column (a 4× contrast, both within a cheap pump's range).
+- **Pilot flow rates (updated 2026-09-26 to match Sung & Gobler per litre):** the earlier plan of 0.5 and 2 L/min per 5 L column is only 0.1 and 0.4 L/min per L, below the paper's high rate. Two options:
+  - **Copy the paper exactly (preferred for the screen):** 500 mL cultures in 1 L flasks, air stone, 25 and 300 mL/min, n = 4. Cheap and directly comparable.
+  - **Columns:** 5 L columns at 0.25 and 3 L/min (the same 0.05 and 0.6 L/min per L). Check that one pump manifold can deliver 3 L/min per column.
 - **The choice of species matters more than the flow rate.** Several dinoflagellates grow *faster* when stirred, so the stand-in must be screened in the pilot. The first candidate is a species published as "inhibited" (*Ceratium fusus*-type, or a *Lingulodinium* strain from NCMA).
 - **Diatom warning confirmed in the field** (Huang 2022): mixing swapped dinoflagellates for diatoms. Keep the diatom check arm.
 
@@ -49,7 +59,7 @@ Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/ph
 | Loop step | What happens |
 |---|---|
 | **Trigger** | Narragansett model `p ≥ 0.50` on the column's daily sensor means (backup: the rule trigger in `00_CONTROL_LOOP.md`) → relay switches the air pump ON |
-| **Treatment** | coarse bubbles (> 100 µm; large-bore outlet, not a fine airstone) from the bottom of the column, at the **higher** of the two pilot flow rates (the paper: higher flow = stronger effect) |
+| **Treatment** | coarse bubbles (> 100 µm) from a standard aquarium **air stone** (what Sung & Gobler used) at the bottom of the vessel, at **0.6 L/min per litre** (the paper's high rate). The screen also tests 0.05 L/min per L, because the low rate won in one bloom-water test |
 | **`X` (ON time)** | **48 h**, then re-measure. This is a starting value; the bench's arm-B pilot also tests 24 h and 96 h |
 | **Re-measure** | chlorophyll, cell count, DO, pH, temperature, non-target survival |
 | **OFF rule** | the shared rule (`p < T_off`, `chl < C_ok`, not rising) → relay OFF |
@@ -96,4 +106,4 @@ of their effect, and it's long enough to separate a real effect from a 1-day art
 ## Before building
 - Answered from other sources: dose units, pilot flow rates, rebound risk (see "Other sources").
 - Settle in the pilot, not from papers: which stand-in species is inhibited at 0.5 and 2 L/min.
-- Nice to have: the Sung & Gobler 2026 numbers, to compare our flow per litre with theirs.
+- Done 2026-09-26: Sung & Gobler flow per litre (0.05 and 0.6 L/min per L) read from the full text; the screen now matches it.

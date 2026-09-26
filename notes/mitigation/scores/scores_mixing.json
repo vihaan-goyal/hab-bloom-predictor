@@ -1,0 +1,407 @@
+[
+ {
+  "paper_id": "mixing-01",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 4,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Aquarium air stones in 0.5 L flasks are simple, but it needs a purchased ichthyotoxic M. polykrikoides culture and larval fish for the toxicity arm.",
+   "effectiveness": "High-rate bubbling cut cells 21-63% vs unaerated controls (n=4; 78% in screening at day 10), but bloom water gave only 26-55% and the low rate beat the high rate once.",
+   "cost": "Air pumps and stones are cheap, but Margalefidinium cultures, media and fish put it at roughly $150-500.",
+   "time": "Bloom-water reductions showed within 1-2 days, while culture differences built over ~10 days.",
+   "environment": "Only air is added, but in Meetinghouse Creek water bubbling let Polykrikos and the HAB Prorocentrum cordatum increase."
+  }
+ },
+ {
+  "paper_id": "mixing-02",
+  "reproducibility": 2,
+  "effectiveness": 3,
+  "cost": 2,
+  "time": 3,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Needs Couette cylinders with a controlled shear rate, which is specialist, custom-built gear.",
+   "effectiveness": "Growth went to zero at shear ~8 s^-1 and negative above it, but no percent reduction is given and the source is secondary.",
+   "cost": "A Couette device costs roughly $500-5,000 to build or buy, on top of a purchased Lingulodinium culture.",
+   "time": "Continuous shear over an unspecified number of days, so scored as 1-3 weeks.",
+   "environment": "Only water motion is applied; nothing is added."
+  }
+ },
+ {
+  "paper_id": "mixing-03",
+  "reproducibility": 2,
+  "effectiveness": 3,
+  "cost": 2,
+  "time": 3,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Needs a Couette device run in daily pulses at ~9 s^-1, which is specialist equipment.",
+   "effectiveness": "0.25-2.5 h/day of shear gave negative growth, but 5 min/day had no effect and no percent reduction is reported.",
+   "cost": "Couette apparatus plus culture puts it at roughly $500-5,000.",
+   "time": "Daily pulses over an unreported total period, so scored as 1-3 weeks.",
+   "environment": "Only water motion is applied; nothing is added."
+  }
+ },
+ {
+  "paper_id": "mixing-04",
+  "reproducibility": 3,
+  "effectiveness": 2,
+  "cost": 3,
+  "time": 3,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Rotating bottles are doable at school, but the Couette part and pigment/photosynthesis measurements need a sponsor.",
+   "effectiveness": "Reports physiology (photosynthesis less sensitive than growth, respiration up) rather than a quantified cell reduction.",
+   "cost": "Rotating bottles, culture and pigment analysis likely $150-500.",
+   "time": "Duration not reported, so scored conservatively at 1-3 weeks.",
+   "environment": "Only water motion (up to 26.6 s^-1) is applied; nothing is added."
+  }
+ },
+ {
+  "paper_id": "mixing-05",
+  "reproducibility": 4,
+  "effectiveness": 4,
+  "cost": 4,
+  "time": 3,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Flasks on an orbital shaker at 100 rpm is a clear bench protocol; only the Akashiwo culture must be purchased.",
+   "effectiveness": "Shaking stopped division entirely and >20 d gave total death, but after 10 d cells resumed at ~2/3 the control rate.",
+   "cost": "A non-toxic dinoflagellate culture (~$100) plus a borrowed shaker is about $50-150.",
+   "time": "Division stopped within the 10-day run and death took >20 d, so 1-3 weeks.",
+   "environment": "Only shaking is applied; nothing is added."
+  }
+ },
+ {
+  "paper_id": "mixing-06",
+  "reproducibility": 2,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 4,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Needs an orbital shaker plus toxic Alexandrium minutum and two other dinoflagellate cultures, with ADV turbulence calibration.",
+   "effectiveness": "Shaking cut growth ~67% (A. minutum) and ~72% (P. triestinum) vs still controls, but n=2 flasks, no effect on Gymnodinium, and growth recovered once shaking stopped.",
+   "cost": "An orbital shaker and three dinoflagellate cultures put it around $150-500 if a shaker is borrowed.",
+   "time": "Growth-rate differences appeared over a few days of exponential growth.",
+   "environment": "Shaking adds nothing to the water."
+  }
+ },
+ {
+  "paper_id": "mixing-07",
+  "reproducibility": 2,
+  "effectiveness": 3,
+  "cost": 2,
+  "time": 3,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Requires a toxic Alexandrium minutum culture, an orbital shaker and flow cytometry for the cell-cycle work.",
+   "effectiveness": "Final abundance was ~51% of still cultures and growth 75% of control (P=0.005), a moderate effect with only n=2 flasks and no measurable mortality rate.",
+   "cost": "Flow cytometry and cell-cycle analysis push repetition of the full study into the $500-5,000 range.",
+   "time": "Shaking ran from day 7 to 21 and the abundance gap was read at days 16-21, i.e. about two weeks.",
+   "environment": "Mechanical shaking adds no material."
+  }
+ },
+ {
+  "paper_id": "mixing-08",
+  "reproducibility": 2,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 3,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Two toxic Alexandrium species plus an orbital grid system and shaker make this specialist work needing a sponsor.",
+   "effectiveness": "Continuous high-epsilon shaking left A. catenella at 22-25% and A. minutum at 55% of control (n=2), but 4-day shaking gave only 4-14% and low turbulence raised A. minutum 27%.",
+   "cost": "Shaker, cultures and media cost roughly $150-500; the grid system and toxin analysis would add more.",
+   "time": "The strong effects needed continuous shaking for ~16-17 days.",
+   "environment": "Nothing is added; shaking also lowered cellular GTX toxin."
+  }
+ },
+ {
+  "paper_id": "mixing-09",
+  "reproducibility": 2,
+  "effectiveness": 1,
+  "cost": 2,
+  "time": 3,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "20 L tanks with motor-driven oscillating rods calibrated by acoustic Doppler velocimeter and ten dinoflagellate cultures need a custom rig.",
+   "effectiveness": "Only 3 of 10 species were inhibited; the HAB taxa Alexandrium, Lingulodinium and G. catenatum were unaffected or grew 30-40% faster.",
+   "cost": "Building the rod rig and buying ten cultures lands in the $500-5,000 range.",
+   "time": "Growth rates were fitted over 1-2 weeks of continuous mixing.",
+   "environment": "Mixing adds no material."
+  }
+ },
+ {
+  "paper_id": "mixing-10",
+  "reproducibility": 2,
+  "effectiveness": 3,
+  "cost": 2,
+  "time": 4,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Needs a Couette device delivering a set stress (0.004 Pa, 1 h/day), which is specialist gear.",
+   "effectiveness": "Growth cut depended on light, timing and growth phase; no percent reduction given, so moderate and conditional.",
+   "cost": "Couette apparatus puts the cost at $500-5,000.",
+   "time": "Runs lasted 5-8 d, so mostly 4-7 days.",
+   "environment": "Only flow is applied; nothing is added."
+  }
+ },
+ {
+  "paper_id": "mixing-11",
+  "reproducibility": 2,
+  "effectiveness": 3,
+  "cost": 2,
+  "time": 4,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Couette-flow chambers, multiwell tracking of isolated cells and flow-cytometric DNA analysis are specialist equipment.",
+   "effectiveness": "Shear cut L. polyedrum net growth 26-67%, with added mortality at higher shear, but statistics rested on within-experiment replicates and one shaker table.",
+   "cost": "Couette chambers and flow cytometry push costs to $500-5,000.",
+   "time": "Growth inhibition was measured over multi-day runs with daily 1-24 h shear.",
+   "environment": "Shear adds no material."
+  }
+ },
+ {
+  "paper_id": "mixing-12",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 2,
+  "time": 4,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Needs purpose-built oscillatory Couette chambers with analytically characterised shear.",
+   "effectiveness": "Unsteady flow at 4 s-1 gave 93.5% growth inhibition vs 46.5% steady (4 replicate chambers plus 4 paired still controls), though variance was large (+/-35%) and the difference vanished at 1.8 s-1.",
+   "cost": "Twelve custom Couette chambers and drives cost $500-5,000.",
+   "time": "Inhibition showed in multi-day growth experiments with 2 h/day flow.",
+   "environment": "Flow adds no material."
+  }
+ },
+ {
+  "paper_id": "mixing-13",
+  "reproducibility": 3,
+  "effectiveness": 1,
+  "cost": 3,
+  "time": 3,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "2 L grid-stirred containers with one purchased Heterocapsa culture are doable with a sponsor.",
+   "effectiveness": "Turbulence did not suppress H. triquetra; at high density it grew faster (0.17 vs 0.07 per day) because mixing lowered pH.",
+   "cost": "A culture, grid stirrers and f/2 medium cost roughly $150-500.",
+   "time": "Differences appeared only late in the 10-day runs at high cell density.",
+   "environment": "Turbulence adds nothing, though it relieved CO2 limitation for the alga."
+  }
+ },
+ {
+  "paper_id": "mixing-14",
+  "reproducibility": 1,
+  "effectiveness": 2,
+  "cost": 2,
+  "time": 3,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Dinophysis must be fed Mesodinium prey in a three-species culture chain and produces DSP toxins.",
+   "effectiveness": "Mixed: turbulence slowed 2 species but sped up D. caudata.",
+   "cost": "Three linked cultures plus toxin analysis is $500-5,000.",
+   "time": "Duration not reported, so scored conservatively at 1-3 weeks.",
+   "environment": "Turbulence raised toxin content in D. acuminata and caused toxin leakage from D. ovum."
+  }
+ },
+ {
+  "paper_id": "mixing-15",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 3,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "The typical reviewed experiment is a shaker or grid culture test with purchased phytoplankton, doable with a sponsor.",
+   "effectiveness": "Across published lab data growth generally fell under turbulence, strongly for dinoflagellates but not distinguishable from zero for other groups, often at unrealistic epsilon.",
+   "cost": "A typical shaker/grid culture experiment costs $150-500.",
+   "time": "Typical lab turbulence experiments run one to two weeks.",
+   "environment": "Turbulence adds no material."
+  }
+ },
+ {
+  "paper_id": "mixing-16",
+  "reproducibility": 3,
+  "effectiveness": 1,
+  "cost": 3,
+  "time": 4,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "15 L microcosms of natural coastal water with oscillating grids need a built rig but no special organisms.",
+   "effectiveness": "Turbulence raised chlorophyll about fourfold with nutrients (19.0 vs 4.2 ug/L) and had no effect without them, the opposite of control.",
+   "cost": "Twelve microcosms with grids and nutrient analyses cost roughly $150-500.",
+   "time": "Turbulent chlorophyll exceeded still controls from day 2 of the 8-day run.",
+   "environment": "Nothing is added, but mixing shifted the community toward larger cells and diatoms."
+  }
+ },
+ {
+  "paper_id": "mixing-17",
+  "reproducibility": 3,
+  "effectiveness": 1,
+  "cost": 3,
+  "time": 4,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "2.5 L bottles on an orbital shaker with two purchased diatom cultures are doable with a sponsor.",
+   "effectiveness": "Turbulence raised Coscinodiscus growth and density and only slightly lowered T. pseudonana growth, with n=2 bottles.",
+   "cost": "Shaker access plus two cultures and P-limited medium cost about $150-500.",
+   "time": "Each experiment ran about 5 days.",
+   "environment": "Shaking adds nothing."
+  }
+ },
+ {
+  "paper_id": "mixing-18",
+  "reproducibility": 4,
+  "effectiveness": 1,
+  "cost": 4,
+  "time": 3,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Orbital shaker at 0-180 rpm with easy, non-toxic diatom cultures is a clear bench protocol.",
+   "effectiveness": "Negative result: T. pseudonana rose from 33.5 to 46-58 x10^5 cells/mL; only Skeletonema was inhibited at 180 rpm after day 7.",
+   "cost": "Three cheap diatom cultures and a borrowed shaker are about $50-150.",
+   "time": "11-day experiment, so 1-3 weeks.",
+   "environment": "Only shaking is applied; nothing is added."
+  }
+ },
+ {
+  "paper_id": "mixing-19",
+  "reproducibility": 2,
+  "effectiveness": 2,
+  "cost": 1,
+  "time": 2,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Continuous culture in a 5 L BioFlo III stirred photobioreactor with CO2 pH control is bioprocess equipment.",
+   "effectiveness": "Agitation raised biomass up to a threshold and only damaged cells above very high tip speeds (>1.56-2.45 m/s), in non-HAB production strains.",
+   "cost": "A controlled stirred-tank photobioreactor costs well over $5,000.",
+   "time": "Stepwise steady states at a dilution rate of 0.0139 per hour (~3-day residence) need weeks to months.",
+   "environment": "Agitation adds no material; Pluronic F68 was only a protective additive."
+  }
+ },
+ {
+  "paper_id": "mixing-20",
+  "reproducibility": 4,
+  "effectiveness": 1,
+  "cost": 4,
+  "time": 5,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Bubbling Dunaliella or Chlamydomonas in a lab bubble column is simple with cheap cultures.",
+   "effectiveness": "Bubbling up to 0.085 m/s did not kill walled cells; only a wall-less mutant died, so aeration is ineffective against walled algae.",
+   "cost": "A column, aquarium air supply and cultures cost about $50-150.",
+   "time": "Death rates were measured per hour.",
+   "environment": "Air bubbling adds nothing."
+  }
+ },
+ {
+  "paper_id": "mixing-21",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 1,
+  "time": 5,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Needs a microfluidic contraction device with CFD-estimated dissipation rates and LDH assays.",
+   "effectiveness": "No lysis at any flow; motility loss from flagellar shedding was reversible, in a non-HAB heterotrophic dinoflagellate.",
+   "cost": "Microfluidic fabrication, pumps and assays exceed what a school can obtain cheaply.",
+   "time": "Effects were measured after single passes lasting seconds.",
+   "environment": "Only flow is applied."
+  }
+ },
+ {
+  "paper_id": "mixing-22",
+  "reproducibility": 2,
+  "effectiveness": 3,
+  "cost": 1,
+  "time": 5,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Needs rheometer-calibrated Couette cylinders and FDA viability staining.",
+   "effectiveness": "Above 1.3 Pa viability fell to 52-66% in triplicate, a moderate effect on a non-HAB diatom at shear far above field levels.",
+   "cost": "A rheometer or precision Couette cylinder costs more than $5,000.",
+   "time": "Most of the viability loss occurred within 1 minute.",
+   "environment": "Shear adds no material (locust bean gum was only a lab thickener)."
+  }
+ },
+ {
+  "paper_id": "mixing-23",
+  "reproducibility": 1,
+  "effectiveness": 3,
+  "cost": 1,
+  "time": 3,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Eight water-lifting aerators in a 57 million m3 drinking-water reservoir are industrial field infrastructure.",
+   "effectiveness": "Surface dinoflagellates fell 96.8-97.8%, but there was no unmixed control, a single event, and part of the drop is dilution through the water column.",
+   "cost": "Reservoir aerators and compressors cost far more than $5,000.",
+   "time": "The reduction appeared within the two weeks of operation.",
+   "environment": "Only air is added, but the water cooled, stratification broke and the community shifted to small diatoms."
+  }
+ },
+ {
+  "paper_id": "mixing-24",
+  "reproducibility": 1,
+  "effectiveness": 2,
+  "cost": 1,
+  "time": 1,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "The reviewed interventions are whole-lake bubble-plume systems.",
+   "effectiveness": "Of 13 applications several reduced cyanobacteria but others had no effect, and chlorophyll per m2 often rose.",
+   "cost": "Lake-scale aeration costs far more than $5,000.",
+   "time": "Lake mixing outcomes are judged over seasons to years.",
+   "environment": "Air only, but mixing can entrain nutrients and did not stop sediment anoxia or internal P cycling in one 10-year case."
+  }
+ },
+ {
+  "paper_id": "mixing-25",
+  "reproducibility": 1,
+  "effectiveness": 2,
+  "cost": 1,
+  "time": 5,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "A 7.5 kW compressor and bubble diffuser in a hypereutrophic lake is field-scale work.",
+   "effectiveness": "Chlorophyll was only 5-20% lower inside the plume than 2 m outside after 120 min, with no control lake and chl-a rising in one of four tests.",
+   "cost": "Compressor, diffuser and field sampling cost over $5,000.",
+   "time": "Each test lasted 120 minutes.",
+   "environment": "Only air is added, but killing cyanobacteria (pheophytin rise) may release cell-bound toxins."
+  }
+ },
+ {
+  "paper_id": "mixing-26",
+  "reproducibility": 1,
+  "effectiveness": 2,
+  "cost": 1,
+  "time": 2,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "2,000 L mesocosms, an ozone nanobubble generator and an embayment trial are field-scale.",
+   "effectiveness": "Ozone nanobubbles cut chl-a 98-99% in mesocosms, but oxygen-only nanobubbles did nothing and the embayment trial had no effect.",
+   "cost": "Nanobubble/ozone generators and mesocosms exceed $5,000.",
+   "time": "Duration not reported, so scored conservatively at 1-3 months.",
+   "environment": "Ozone is a short-lived oxidant; non-target effects not reported."
+  }
+ },
+ {
+  "paper_id": "mixing-27",
+  "reproducibility": 3,
+  "effectiveness": 2,
+  "cost": 3,
+  "time": 3,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "The typical reviewed cosm is a grid, shaker or Couette experiment under 1 m3, doable with a sponsor.",
+   "effectiveness": "This methods review of 102 studies gives no pooled algal reduction, only how turbulence is generated and quantified.",
+   "cost": "A typical lab turbulence cosm costs $150-500.",
+   "time": "Typical reviewed experiments run one to two weeks.",
+   "environment": "Turbulence adds nothing, though the authors warn acrylic cosms can leach toxins under UV."
+  }
+ }
+]

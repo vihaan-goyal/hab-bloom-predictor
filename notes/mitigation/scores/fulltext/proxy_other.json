@@ -1,0 +1,334 @@
+{
+  "algicidal_microbes-02": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1111/j.1550-7408.2004.tb00538.x",
+    "updates": {},
+    "key_details": "Narrative review (Mayali & Azam) with sections on definition, taxonomy, mode of action, algicidal compounds, prey specificity and ecosystem considerations; no new data. Evidence that algicidal bacteria end blooms rests on MPN counts showing algicidal bacteria increase during bloom decline (e.g. Cytophaga during a Chattonella bloom), which the authors call 'no conclusive causal evidence'. In co-culture, algal lysis was seen only after the algicidal bacterium exceeded 10^6 cells/mL, about the abundance of the whole bacterial assemblage in seawater, raising doubt that a single species reaches that level in the ocean. Other bacteria in algal cultures can partly or fully block algicidal activity (e.g. against Karenia brevis). The authors suggest bloom decline may start from nutrient limitation, viruses or other pathogens, with algicidal bacteria as secondary colonizers.",
+    "discrepancy": ""
+  },
+  "algicidal_microbes-05": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.aquaculture.2020.735625",
+    "updates": {
+      "scale": "One treatment and one control 15,000 L floating 'cage' mesocosm in Lake Kamo (saltwater lake connected to the sea), Sado Island, Japan, plus lab tests; n = 3 refers to replicate samples, not replicate mesocosms",
+      "dose": "1.4 kg of local surface sediment containing HcRNAV (frozen at -20 °C for one day) sprayed into 15,000 L, i.e. ~0.093-0.1 g sediment/L, at a bloom density of ~3800 cells/mL (October 2016)",
+      "duration": "Monitored six days",
+      "result": "H. circularisquama in the sediment-treated mesocosm fell to ~1% of the initial density after five days, while the untreated control also fell, to 20-30%; the treatment was significantly lower than control from day 3 onward (GLM, p < .01), and HcRNAV in water rose significantly by day 2.",
+      "env_effects": "Sediment addition (0.093 g/L) judged negligible for bacteria, nutrients and turbidity; temperature, salinity and nutrients did not differ between treatment and control. Unpublished tests: sediment (1-10 g/L) and HcRNAV did not affect survival of juvenile oysters, pearl oysters or clams, and HcRNAV strains did not infect Karenia mikimotoi, Chattonella or Heterosigma strains. Freezing inactivated cysts in the sediment so no other HAB species emerged."
+    },
+    "key_details": "Paired floating mesocosms (one treatment, one control, 15,000 L each) during a natural H. circularisquama bloom (~3800 cells/mL) in Lake Kamo, October 2016, plus lab dose tests. Treatment received 1.4 kg of HcRNAV-bearing lake sediment (~0.1 g/L). Density fell to ~1% of initial after five days versus 20-30% in the untreated control, so much of the decline also happened without treatment; treatment-control difference significant from day 3 (GLM, p < .01). The design has no mesocosm replication (one of each), and the bloom was already declining in the control. Environmental safety claims rest partly on unpublished results.",
+    "discrepancy": "The record's 'n = 3' implies replicated mesocosms; there was one treatment and one control mesocosm (n = 3 was sample replication). The record omits that the control bloom also dropped to 20-30% of initial in five days, so the ~99% headline overstates the treatment effect relative to control. The site is a saltwater lake (Lake Kamo), not an oyster farm as such."
+  },
+  "algicidal_microbes-07": {
+    "status": "no_access",
+    "source_url": "https://doi.org/10.1016/j.hal.2007.12.010",
+    "updates": {
+      "organism": "Three Cochlodinium (Margalefidinium) polykrikoides strains vs six algicidal bacteria: Cytophaga J18/M01 and AA8-2 (direct attack), Alteromonas S, K, D and Pseudoalteromonas R (indirect attack), all isolated using Chattonella antiqua as prey",
+      "duration": "At least 10 days needed before any C. polykrikoides death",
+      "result": "Neither Cytophaga strain showed algicidal activity; Alteromonas and Pseudoalteromonas killed some C. polykrikoides cultures but only after 10 or more days, and C. polykrikoides survived bacterial densities up to 10^6-10^7 cells/mL that kill other red-tide algae (C. antiqua was killed within a few days)."
+    },
+    "key_details": "Columbia does not subscribe; details above come from the full abstract visible on the publisher page, not the full text. Lab culture experiments exposed three C. polykrikoides strains to six algicidal bacterial strains, with Chattonella antiqua as a susceptible comparison. Resistance was partial rather than total: indirect-attack strains eventually killed some cultures after at least 10 days. Authors attribute resistance possibly to mixotrophy.",
+    "discrepancy": "Record's effect_pct 0 and 'resistant to all six' is slightly too absolute: some C. polykrikoides cultures were killed by Alteromonas/Pseudoalteromonas, but only after 10+ days (from abstract)."
+  },
+  "algicidal_microbes-10": {
+    "status": "no_access",
+    "source_url": "https://doi.org/10.1016/j.jhazmat.2020.123662",
+    "updates": {
+      "scale": "Three pilot-scale reactors (1200 x 600 x 500 mm, 312 L working volume each): R1 control without packing, R2 high-density and R3 low-density coconut packing carriers (1200 g and 1000 g), fed eutrophic reservoir water"
+    },
+    "key_details": "Columbia does not subscribe; only the abstract and ScienceDirect section snippets were visible. The snippets show three 312 L reactors, one per condition (control, high-density packing, low-density packing), so there is no replication of treatments. Operation was split into a start-up period and a stable period after four cycles. Removal was attributed jointly to algicidal bacteria enriched on the carriers and shading by the fillers.",
+    "discrepancy": "Record does not note that the design is one reactor per treatment (n = 1) with a single unpacked control; the scale detail comes from snippets, not the full text."
+  },
+  "barley_straw-01": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.1007/BF02179780",
+    "updates": {
+      "duration": "Four seasons: no effect in the first season after straw introduction, algae reduced in the three subsequent years",
+      "result": "Filamentous algae were reduced in the three years after the first season (no effect in the first season). Algal growth on slides downstream of the straw was reduced by 90% compared with slides upstream; Cladophora glomerata in chambers in the canal gave a similar result.",
+      "effect_pct": 90,
+      "env_effects": "Phosphate, nitrate and ammonium not significantly changed; nitrite increased in summer. Authors noted no obvious deleterious environmental effects."
+    },
+    "key_details": "Springer page is PDF-only (1990 article) with access, but the HTML shows only the abstract, so the full text was not read. The full abstract gives the numbers: no effect in the first season, then reduced filamentous algae for three years; slides downstream of the straw had 90% less algal growth than upstream slides. Cladophora glomerata was also inhibited in cages excluding macro-invertebrate grazers, so grazing was not the mechanism. The upstream/downstream comparison is within one canal, not a replicated control.",
+    "discrepancy": "Record said 'No numbers seen'; the full abstract reports a 90% reduction (downstream vs upstream slides) and a one-season lag before any effect."
+  },
+  "barley_straw-02": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.1016/0043-1354(95)00192-1",
+    "updates": {
+      "dose": "Approximately 50 g/m3 rotting barley straw"
+    },
+    "key_details": "ScienceDirect shows access but only a scanned PDF (1996) with no HTML full text, so the body was not read. The abstract states rotting straw at about 50 g/m3 'appeared to significantly reduce' phytoplankton productivity and cyanobacterial dominance, without nutrient removal. The authors attribute the effect partly to encouraging grazers and mainly to phytotoxic compounds released from decomposing straw; no numbers are given in the abstract. No short-term deleterious impact in receiving watercourses.",
+    "discrepancy": "Dose in the abstract is ~50 g/m3, not a 25-50 g/m3 range; the abstract uses hedged wording ('appeared to') for the reduction."
+  },
+  "barley_straw-03": {
+    "status": "no_access",
+    "source_url": "https://doi.org/10.1080/09583159730983",
+    "updates": {},
+    "key_details": "Taylor & Francis page offered only 'Add to Cart' through the proxy; Columbia has no access and no abstract text was shown.",
+    "discrepancy": ""
+  },
+  "barley_straw-05": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.biortech.2005.01.021",
+    "updates": {
+      "scale": "Lab bioassays of 12 unialgal cultures (nutrient media vs unfiltered or sterile-filtered barley straw liquor, replicate cultures) plus 6 central-Maryland ponds (0.2-1.6 ha, 1.8-4.3 m deep): 4 randomly assigned to straw, 2 untreated controls",
+      "dose": "Ponds: 112 kg straw/ha in loosened, netted bales near the surface; lab: barley straw liquor",
+      "duration": "Lab: two-week incubations; ponds: 21 May to 10 September 1998, sampled biweekly",
+      "result": "Straw liquor significantly inhibited Microcystis aeruginosa, Dinobryon and Synura petersenii (Synura undetectable after two weeks) but stimulated Selenastrum, Spirogyra, Oscillatoria and Navicula. In ponds, biomass declined in both treated and control ponds after application and did not differ significantly between them on any date."
+    },
+    "key_details": "Lab: two-week bioassays with replicate cultures; initial Chl a was not measured, so algistatic vs algicidal action could not be separated except for Synura (disappeared). Anabaena flos-aquae, Chlorella, Ulothrix, Synedra and Scenedesmus were not significantly affected. Field: four treated (112 kg/ha) vs two control ponds in 1998, Chl a from pooled samples biweekly. Variation among ponds was very large (coefficients of variation 36-157% treated, 33-141% control), so the field test had low power; biomass fell in all ponds right after the first sampling.",
+    "discrepancy": "Record lists Anabaena flos-aquae among target species without noting it was unaffected; field dose (112 kg/ha) and low statistical power (4 treated vs 2 control ponds, CVs up to 157%) were missing. Spirogyra was stimulated by unfiltered liquor but inhibited by sterile-filtered liquor."
+  },
+  "barley_straw-06": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.watres.2012.08.040",
+    "updates": {
+      "organism": "Microcystis PCC 7806 (Pasteur collection) and Microcystis SD053 (Yorkshire reservoir isolate, not axenic)",
+      "dose": "Lab doses far above field rates: 40 g wet (~4 g dry) straw/L in the activation time course; fresh finely chopped straw 0.1-5 g dry/L; whole straw up to 40 g dry/L; catalase 5 mg/mL",
+      "result": "Whole fresh straw (~4 g dry/L) did not inhibit Microcystis at first; inhibition rose as straw decomposed, peaking at ~1000 h, then declined, and liquor alone only cut growth to ~80% of control. Finely chopped fresh straw inhibited at 5 g dry/L at 20 °C and down to 1 g/L (PCC 7806) or above 0.1 g/L (SD053) at 27 °C, while whole fresh straw gave no inhibition even at 20 g dry/L."
+    },
+    "key_details": "Series of flask bioassays (triplicate, three no-straw controls each, 7-14 days, Chl a daily) on two Microcystis strains. Autoclaved straw in sterile dialysis packages had no effect on Microcystis SD053 over two weeks, showing microbial decomposition is needed to activate whole straw. Straw decomposed under UV-supplemented light was more inhibitory than under visible light, and daily catalase reduced inhibition, consistent with a hydrogen peroxide role. Outcome depended on temperature (stronger at 27 than 20 °C) and strain (PCC 7806 more resistant, partly recovered after ~200 h). In some bioassays only two of three replicates were inhibited.",
+    "discrepancy": "Record gives no doses; the effective lab doses (grams of straw per litre) are roughly 20-100 times the ~25-50 g/m3 used in the field, which matters for any field inference."
+  },
+  "barley_straw-07": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.watres.2007.03.025",
+    "updates": {
+      "scale": "Lab batch cultures, complete 5 x 3 factorial (control, low/high ammonium, low/high BSE x 10, 20, 30 °C), each combination in duplicate, plus fathead minnow (P. promelas) toxicity tests",
+      "dose": "Weekly on days 0, 7, 14, 21: barley straw extract 0.015 mL/L (manufacturer's highest recommended pond dose) or 0.75 mL/L (50x); ammonium +0.4 or +40 µmol/L",
+      "duration": "23 days at 10, 20 and 30 °C",
+      "result": "No barley straw extract dose significantly reduced P. parvum growth, endpoint density or fish toxicity; low BSE at 30 °C raised growth rate ~10%. High ammonium (40 µmol/L weekly) cut endpoint density by about 50% and abolished fish toxicity, although it raised early exponential growth rate by 0.065 per day.",
+      "effect_pct": 0
+    },
+    "key_details": "Factorial lab test (duplicates) of a commercial barley straw extract and ammonium against Prymnesium parvum at three temperatures for 23 days. Fish toxicity at day 23 appeared only in 20 °C cultures without high ammonium (LC50 4-17% culture dilution over 48 h); toxic cultures all had >6x10^5 cells/mL and pH >9.0. BSE contained phenolics but negligible nutrients. BSE also raised day-23 pH by about 0.5 units at 30 °C. Replication was only duplicate per treatment-temperature cell.",
+    "discrepancy": "Record's ammonium note is incomplete: high ammonium reduced endpoint density by ~50% but increased early exponential growth rate. BSE was not just ineffective; the low dose slightly increased growth (~10%) at 30 °C."
+  },
+  "barley_straw-10": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/S0960-8524(00)00148-6",
+    "updates": {
+      "dose": "Chopped straw 1% w/v (1 g in 200 mL lake water); extracts 1% down to 0.005% v/v (Microcystis) and 0.01% or 0.001% (Scenedesmus)",
+      "result": "In lake water, controls rose ~10-fold to ~400 µg/L Chl a and wheat straw to 1160 µg/L, while no algal growth was detected with barley straw over 28 days. Decomposed-barley extract held Microcystis at 226-457 µg/L vs 3710 µg/L in controls (about 10-fold lower at every dose down to 0.005%), whereas fresh-barley extract slightly increased growth; Scenedesmus was fully inhibited at 0.01% but not at 0.001%.",
+      "effect_pct": 90
+    },
+    "key_details": "Flask experiments, triplicate, 20 °C, continuous light (375 µmol/m2/s), up to 28 days. Lake water (initial Chl a ~40 µg/L) with 1% chopped barley or wheat straw vs control; then Microcystis and Scenedesmus cultures in Bold's basal medium with fresh vs decomposed-barley extract. Decomposed straw had 33% lignin. Decomposed-barley extract at 1% gave 351 vs 3710 µg/L Chl a (about 91% lower); at 0.005% it gave 386 µg/L. Wheat straw stimulated algae, presumably by nutrient leaching; fresh-barley extract gave no inhibition. No field test.",
+    "discrepancy": ""
+  },
+  "barley_straw-11": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1002/j.1551-8833.2011.tb11458.x",
+    "updates": {
+      "scale": "Lab bioassays (triplicate tubes, 14 days) of seven algae plus field trial in nine 300 m2 earthen ponds (20 x 15 x 1 m) in Iran: 3 ponds at 400 kg/ha, 3 at 800 kg/ha, 3 untreated controls",
+      "dose": "Lab: straw liquor from 360 g chopped straw in 18 L water rotted 60 days, 10 mL per 30 mL tube; field: 400 and 800 kg/ha straw bales",
+      "duration": "Lab 14 days; ponds April-August 2008 (about four months)",
+      "result": "In ponds, control Chl a rose to 1,180 µg/L after four months while both straw treatments peaked at ~460 µg/L after one month and fell to 223 (400 kg/ha) and 106 µg/L (800 kg/ha); mean total phytoplankton density was 76.51 vs 32.08 and 30.26 x10^4 units/mL, and cyanobacteria 40.99 vs 7.16 and 6.47 x10^4 units/mL. In the lab, M. aeruginosa Chl a was almost undetectable after two weeks, and Scenedesmus and Anabaena were eight and five times lower than controls.",
+      "effect_pct": 81,
+      "env_effects": "Nitrate-N significantly higher in treated ponds (1.65-1.72 vs 0.83 mg/L); reactive P slightly lower and dissolved oxygen not significantly different. Diatoms became dominant (>56% by August) in treated ponds while cyanobacteria stayed dominant (69%) in controls; Chrysophyceae significantly reduced. Hydrodictyon (and non-significantly Oscillatoria) stimulated in the lab."
+    },
+    "key_details": "Replicated pond trial (three ponds per treatment, randomly assigned) in problem ponds in Iran, April-August 2008, with lab bioassays of seven species in triplicate. Final Chl a was 81% (400 kg/ha) and 91% (800 kg/ha) below controls; total phytoplankton density was about 58-60% lower and cyanobacteria about 83-84% lower. The 800 kg/ha dose was not significantly better than 400 kg/ha for density. Both treatments reached ~460 µg/L Chl a after one month, so the effect built up after a lag. effect_pct 81 = final Chl a reduction at 400 kg/ha vs control.",
+    "discrepancy": "Record had no numbers or duration; full text gives a replicated pond trial (n = 3 per arm) with 81-91% lower final Chl a and a rise in nitrate in treated ponds."
+  },
+  "barley_straw-12": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1111/j.1472-765X.2006.01951.x",
+    "updates": {
+      "scale": "Lab flasks of M. aeruginosa in natural water from Daechung Reservoir and two field ponds (Korea), duplicate experiments",
+      "result": "All rice straw extract doses (0.01-10 mg/L) significantly reduced M. aeruginosa cells over 8 days, and 10 mg/L gave 98% inhibition on day 8. Singly, salicylic acid at 0.1 mg/L was the best allelochemical (26%), while a mixture of p-coumaric, salicylic and benzoic acids at 0.01 mg/L gave 66% inhibition.",
+      "effect_pct": 98
+    },
+    "key_details": "M. aeruginosa grown in natural waters and treated with 0.01, 0.1, 1 and 10 mg/L rice straw extract; cells counted by haemacytometer every 2 days for 8 days; experiments in duplicate. Autoclaved and filtered extracts behaved alike, and inhibition was weaker in the more nutrient-rich pond water (pond I: 630 µg/L NO3-N, 120 µg/L PO4-P) and stronger by day 7 than day 3. Several single phenolics slightly stimulated growth at one of the two doses. No field application.",
+    "discrepancy": "Record omits the headline 98% inhibition at 10 mg/L and the 66% inhibition of the three-phenolic mixture; replication was only duplicate."
+  },
+  "barley_straw-13": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1007/s10811-009-9492-z",
+    "updates": {
+      "result": "Narrative review: early barley field studies lacked controls and replication and relied on visual assessment, lab results are species-dependent (inhibition, stimulation or no change) and not comparable because liquor preparation methods vary; lignin-derived phenolics are proposed as the driver. Cites field rates of 50 and later 25 g/m3 (Everall and Lees) and lab inhibition down to 1 g/m3 and 0.005% liquor.",
+      "env_effects": "Cites other mechanisms: straw supplying carbon to bacteria that compete for P, and bales trapping sediment, improving clarity and allowing Elodea canadensis to replace algae."
+    },
+    "key_details": "Review in sections on early work, further research, and lignin as the driving force, with an updated table of species responses and a table of liquor preparation methods. The authors stress that early field work had no controls or replication and was based on visual assessment prone to sampler bias. They recommend documenting barley variety, lignin content through rotting, liquor preparation, and testing multiple liquor ages and extraction methods. No quantitative synthesis of effect sizes.",
+    "discrepancy": ""
+  },
+  "biomanipulation-02": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1007/s10021-008-9193-5",
+    "updates": {
+      "dose": "41-1360 kg fish/ha removed over 1-19 years (mostly within 2-4 years); 27 lakes >~200 kg/ha within 3 years (mean 410, range 190-706 kg/ha), 9 lakes <200 kg/ha (mean 91, range 41-160 kg/ha)",
+      "result": "In the 27 lakes with >200 kg/ha removed in 3 years, Chl a and suspended solids fell to 50-70% of pre-removal and Secchi depth nearly doubled over the first 8-10 years, with an effect in >75% of lakes; total algal biovolume fell 30-50% and cyanobacteria by >50% after 3-7 years (significant only in years 2-5). Chl a 'survival' was only ~10% after 5 years, and most variables drifted back toward pre-removal after ~10 years.",
+      "env_effects": "Cryptophytes increased substantially (significant in years 3-4); submerged macrophytes increased; Secchi depth and SS changes were the most durable (mean survival >90% after 10 years). Lakes with <200 kg/ha removal showed no clear effects on nutrients or turbidity."
+    },
+    "key_details": "Before-after analysis of 36 mainly small, shallow, eutrophic Danish lakes (median 32 ha, median mean depth 1.8 m, pre-removal TP 0.061-0.437 mg/L) where planktivorous and benthivorous fish were removed; no untreated control lakes. Phytoplankton composition data came from only 10 lakes. Survival analysis showed Chl a and TP improvements were short-lived (mean survival ~10% after 5 years, wide confidence intervals), while Secchi depth and SS changes lasted longer. Long-term (>10-14 year) conclusions rest on 1-3 lakes. Pike fingerling stocking in some lakes was judged to have no significant effect.",
+    "discrepancy": "Record says Chl a, TP, TN and SS all fell to 50-70%; the paper gives 50-70% for Chl a and SS only (TP and TN 'substantial' but lower). Phytoplankton and cyanobacteria results are from 10 lakes, not 36, and Chl a gains were short-lived (~10% survival at 5 years) rather than lasting 6-10 years."
+  },
+  "biomanipulation-04": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.1111/j.1440-1770.1998.tb00035.x",
+    "updates": {},
+    "key_details": "Wiley shows Full Access but the 1998 article is PDF-only (no HTML full text); the ePDF reader renders as images, so the body could not be read. Record remains abstract-based.",
+    "discrepancy": ""
+  },
+  "biomanipulation-05": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.1002/iroh.19950800404",
+    "updates": {},
+    "key_details": "Wiley shows Full Access but the 1995 article is PDF-only (no HTML full text), so the body could not be read. Record remains abstract-based.",
+    "discrepancy": ""
+  },
+  "biomanipulation-06": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.watres.2012.12.038",
+    "updates": {
+      "scale": "Exp. 1: 4200 L enclosures in MSU Lake 2, Michigan (2 Daphnia vs 4 control enclosures after two Daphnia enclosures were invaded by fish); Exp. 2: 160 L enclosures in two hypereutrophic Auburn, Alabama catfish ponds (F19, F20), 2 Daphnia vs 2 control per pond",
+      "dose": "Daphnia pulicaria stocked at ~0.3 animals/L (Exp. 1) or ~0.15 animals/L as an equal mix of three clones (Exp. 2); all four clones came from southern Michigan lakes; Exp. 2 enclosures fertilized biweekly with N and P",
+      "duration": "Exp. 1: 2 July-6 August 2007 (~5 weeks); Exp. 2: 22 September-24 November 2010 (~50 days after stocking)",
+      "result": "In Michigan (initial Chl a 130 µg/L, microcystin >3 rising to ~6 µg/L), Daphnia cut total phytoplankton 74% vs controls by week 3 (P = 0.010), and Microcystis 4-fold, Oscillatoria 56-fold, Anabaena 20-fold by day 28. In Alabama (microcystin 40 and 180 µg/L), mean effect sizes were 4.5 and 7.4 (about 78% and 86% less phytoplankton) and Microcystis fell 3.8- and 19.6-fold, but cyanobacteria still dominated all enclosures.",
+      "env_effects": "Daphnia marginally reduced microcystin in Michigan (P = 0.063) and significantly reduced it in both Alabama ponds; microcystin rose in the Michigan enclosures overall. Community stayed cyanobacteria-dominated (no shift in relative composition)."
+    },
+    "key_details": "Two enclosure experiments testing whether very high microcystin prevents Daphnia pulicaria grazing control. Replication was low: Exp. 1 had only 2 Daphnia enclosures (fish invaded two others), Exp. 2 had 2 per treatment per pond. Daphnia grew exponentially (r = 0.24/day) despite microcystin and reduced absolute biomass of all cyanobacteria, but relative dominance by cyanobacteria (Microcystis) was unchanged. Microcystis colonies were of edible size (ESD 28 and 70 µm). The Alabama experiment was in autumn and fertilized to maintain the bloom.",
+    "discrepancy": "Record says 'mixture of three cyanobacteria-adapted clones (Alabama)'; the clones came from Michigan lakes and were stocked into Alabama ponds. Record implies Daphnia raised microcystin; it rose in the Michigan enclosures but Daphnia marginally lowered it vs controls and significantly lowered it in Alabama. Only 2 Daphnia enclosures in Exp. 1."
+  },
+  "biomanipulation-11": {
+    "status": "no_access",
+    "source_url": "https://doi.org/10.1016/j.hal.2007.12.004",
+    "updates": {
+      "duration": "2 days (grazing rates measured over the first 30 h)",
+      "result": "Mass-cultured S. jeokjo added to ~60 L in-situ mesocosms of natural red-tide water cut C. polykrikoides from approximately 1000 cells/mL to below 10 cells/mL within 2 days. In mesocosms its growth (0.72 per day) and ingestion (51 ng C per grazer per day) were 84% and 44% of lab bottle values.",
+      "effect_pct": 99
+    },
+    "key_details": "Columbia does not subscribe; numbers are from the full abstract shown on the publisher page. S. jeokjo introduced into ~60 L mesocosms deployed in situ with natural red-tide water dominated by C. polykrikoides, with control mesocosms; temperature 20.5-21.8 °C, salinity 29.8-31.7 psu, pH 7.5-7.8 did not differ markedly. The authors propose large-scale ciliate cultures only for 'small areas'. Replicate number and grazer dose were not visible.",
+    "discrepancy": "Record said exact numbers not seen; the abstract gives ~1000 to <10 cells/mL within 2 days (>99% reduction)."
+  },
+  "clay-01": {
+    "status": "no_access",
+    "source_url": "https://doi.org/10.1016/j.hal.2017.09.004",
+    "updates": {},
+    "key_details": "Columbia does not subscribe; only the abstract and section snippets were visible. Snippets state modified clay was first used in the field in 2005 against a cyanobacteria bloom in Xuanwu Lake, has since been applied in more than 20 waters along the Chinese coast, and since 2014 is a standard method in China's red-tide treatment guidelines (GB/T 30743-2014). The review notes that low removal efficiency of unmodified clays demands 'an exorbitant amount of clay' in the field.",
+    "discrepancy": ""
+  },
+  "clay-02": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1111/j.1550-7408.2004.tb00541.x",
+    "updates": {
+      "dose": "Lab/mesocosm 0.10-4 g/L clay (0.25-0.5 g/L in the scaled tests), some with PAC; field: Japan montmorillonite/kaolinite 1.3-400 g/m2 (200 g/m2 near fish pens); South Korea 1996 ~60,000 t yellow loess over 260 km2 at 400 g/m2",
+      "result": "Scale-up table: K. brevis removal 97% in lab (0.5 g/L) and 90% in settling columns (0.25 g/L); Heterocapsa triquetra 85% (Texas mesocosms), 68% (Florida mesocosms), and 100%, 89% and 41% in a flume at 3, 10 and 20 cm/s (0.25 g/L). In Korea, C. polykrikoides removal was calculated at 90-99% to 2 m depth and fisheries losses fell from $100 million to $1 million in the first year.",
+      "env_effects": "Turbidity returned near background within ~4 h. Phosphatic clay with or without PAC was not lethal to four benthic species (amphipods, sheepshead minnow, grass shrimp) in 4-28 d tests, and settled clay/K. brevis flocs were no more toxic than K. brevis alone. Juvenile hard clams: no mortality, no growth effect when flocs settled, but ~90% lower shell and tissue growth when clay stayed resuspended at 0.25 g/L for two weeks. PAC made settled flocs more erodible. Extracellular brevetoxins were removed by up to 70%; cell mortality rose with clay dose and time in the settled layer."
+    },
+    "key_details": "Symposium review (Sengco & Anderson) summarizing US lab, mesocosm, limnocorral and flume work plus Japanese and Korean field use. Removal efficiency fell as scale and flow increased (97% lab to 68% in Florida mesocosms and 41% in a 20 cm/s flume). Korean field removal numbers (90-99%) and the $100M to $1M loss reduction are secondhand reports without controls. Benthic tests found no acute toxicity from clay itself, but prolonged resuspension cut clam growth ~90%. Several cited results were unpublished or in press at the time.",
+    "discrepancy": "Record's '>80% removal' hides the drop with scale and flow (68% in Florida mesocosms, 41% in the fastest flume) and omits the ~90% clam growth reduction under resuspended clay."
+  },
+  "clay-11": {
+    "status": "no_access",
+    "source_url": "https://doi.org/10.1016/j.hal.2021.102151",
+    "updates": {},
+    "key_details": "Columbia does not subscribe (ScienceDirect abstract page only); the record is already based on the detailed abstract.",
+    "discrepancy": ""
+  },
+  "copper-01": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.1111/j.1752-1688.1984.tb04797.x",
+    "updates": {},
+    "key_details": "Wiley shows Full Access but the 1984 article is PDF-only (only the summary is in HTML), so the body could not be read. Record remains abstract-based.",
+    "discrepancy": ""
+  },
+  "copper-02": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.watres.2004.01.036",
+    "updates": {
+      "scale": "Modified Luria-Delbrück fluctuation analysis: 198 set-1 and 198 set-2 replicate cultures of M. aeruginosa strain MaM1, plus fitness dose-response (n = 3)",
+      "dose": "10 µM free Cu2+ for selection; fitness tested across 1-10.5 µM Cu2+",
+      "duration": "About 4 weeks to 1 month under copper for resistant cells to regrow",
+      "result": "10 µM Cu2+ destroyed sensitive cells within days, but 32 of 198 set-1 cultures (and all 198 set-2 cultures) regrew from rare copper-resistant cells; the spontaneous mutation rate was 1.76x10^-6 mutants per cell division. Wild-type fitness fell to zero at 3.2-10.5 µM Cu2+, where resistant mutants grew best."
+    },
+    "key_details": "Lab fluctuation analysis distinguishing pre-existing spontaneous mutations from induced adaptation: set-1 variance/mean was >50 (set 2 ~1), showing resistance arises randomly before copper exposure. Repeatability 96%, reproducibility 100%. Without copper, resistant mutants had 20% lower Malthusian fitness and were smaller (3.99 vs 4.54 µm diameter). Authors conclude repeated copper sulphate dosing of supply reservoirs can select persistent resistant toxic populations. Single strain, lab only.",
+    "discrepancy": "Record's 'above 5.8 µM' threshold was not found in the full text; the results give wild-type fitness zero and resistant fitness maximal at 3.2-10.5 µM Cu2+."
+  },
+  "copper-03": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.aquatox.2006.09.004",
+    "updates": {
+      "scale": "Nine 85 L indoor glass aquaria filled with Lake Pontalage (France) water, 200 µm-screened; triplicate controls, 80 and 160 µg Cu/L; run separately in spring and summer 2004",
+      "duration": "27 days per experiment (sampled days 0-27)",
+      "result": "Biomass fell until day 5 (80 µg/L) or day 8 (160 µg/L), then regrew; in summer, biomass stayed significantly below controls from day 12 to 27 at 80 µg/L and until day 27 at 160 µg/L, while in spring the 80 µg/L treatment ended higher than controls (days 16-20). Cyanobacteria biomass was significantly lower than controls at both doses in both seasons (p < 0.001), but cyanobacteria were at low density (7.5% of summer biomass) with no bloom present.",
+      "env_effects": "160 µg/L gave Chlorophyceae dominance (>85% of biomass) and nanophytoplankton >90% of biomass, with microphytoplankton significantly suppressed; diatoms, Chrysophyceae and Cryptophyceae (spring) also reduced. The lake had never been treated with algicide."
+    },
+    "key_details": "Replicated (n = 3) indoor mesocosm test of copper sulphate on natural phytoplankton sampled before any bloom formed; no nutrients added, zooplankton >200 µm removed. In untreated controls cyanobacteria rose to 40% (spring) and 30% (summer) of biomass, while copper significantly suppressed them at both doses. Total biomass responses were season-dependent. Because the starting community had low cyanobacteria and no bloom, this tests preventive dosing rather than bloom control.",
+    "discrepancy": "Record says total biomass 'recovered within a few days'; it declined for 5-8 days, and in summer stayed significantly below controls for most of the 27 days. Record omits that no bloom was present (cyanobacteria ~7.5% of summer biomass) and the 85 L, n = 3 design."
+  },
+  "copper-04": {
+    "status": "no_access",
+    "source_url": "https://doi.org/10.1016/j.chemosphere.2015.12.070",
+    "updates": {},
+    "key_details": "Columbia does not subscribe (ScienceDirect abstract page only); the record is already based on the detailed abstract.",
+    "discrepancy": ""
+  },
+  "copper-09": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.1127/1864-1318/2003/0109-0067",
+    "updates": {},
+    "key_details": "The DOI resolves through an Ingenta OpenURL link that failed under the proxy (connection error, then 404), so the paper could not be reached. Record remains abstract-based.",
+    "discrepancy": ""
+  },
+  "copper-10": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1007/s00267-014-0339-2",
+    "updates": {
+      "organism": "Microcystis aeruginosa (culture, 5 psu) and Anabaenopsis sp. bloom water (21 psu) from a brackish stormwater pond",
+      "dose": "Captain (chelated copper carbonate; label 0.4 ppm), K-Tea (copper-triethanolamine; label 0.5 ppm) and Pak 27 (85% sodium percarbonate; label 6.5 lb/acre-ft), each at 0.5x, 1x and 2x label dose",
+      "scale": "1 L flasks in triplicate per algaecide x dose, starting at ~5x10^5 cells/mL",
+      "result": "After 7 days, both copper algaecides left significantly fewer cells than Pak 27 or controls at 1x and 2x (and for Anabaenopsis at all doses); Captain at 0.5x did not differ from control, and 0.5x Pak 27 cells were slightly more than double. Total microcystin (initially 11-30 ppb) generally rose over the experiments, often ending 2-10x above initial, with toxin shifting to the dissolved phase."
+    },
+    "key_details": "Lab flask exposures (n = 3) of three commercial algaecides at half, label and double doses, sampled at 4, 8, 24, 48, 72 h and 7 days. Toxin analysis was done only for the M. aeruginosa culture because the Anabaenopsis bloom had microcystin <0.1 ppb. The copper products controlled cell numbers but no product reduced overall toxin; particulate:dissolved microcystin ratios dropped, meaning toxin moved into the water. The percarbonate product was the least effective on cell numbers.",
+    "discrepancy": "Record omits that total microcystin often increased 2-10x above initial during the experiments, and that toxin results come from the culture only (bloom water had <0.1 ppb)."
+  },
+  "nutrient_reduction-02": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1021/es503744q",
+    "updates": {
+      "scale": "Six in-situ 1 L Cubitainer dilution bioassays (triplicate, 30-70% dilution, 2-day incubations; spring 2009-2012, August 2009, October 2010) plus an August 2013 N and P gradient bioassay in 100 L buckets (up to 10 days), Lake Taihu; mass-balance load model",
+      "dose": "Dilution with N- and P-free major-ion solution, then N and/or P added back; August 2013: P 0-0.08 mg/L at fixed N 2.00 mg/L and N 0-1.00 mg/L at fixed P 0.20 mg/L, pulsed daily for 5 days",
+      "result": "P limited phytoplankton in spring (DIN could be diluted 70% without reducing growth) and N limited it during the summer bloom. Recommended bloom-free targets (Chl a <20 µg/L) are 1.26 mg/L TN and 0.082 mg/L TP, which by mass balance require cutting external loads by 61-71% for TN and 20-46% for TP."
+    },
+    "key_details": "Nutrient-threshold study, not a test of an actual load reduction: short in-situ bioassays with natural phytoplankton, triplicate treatments, then a mass-balance model to convert in-lake targets into load targets (TN 15,707 and TP 1,640 x10^3 kg/yr vs current means of 46,000 and 2,170 x10^3 kg/yr). Microcystis made up 60-90% of bloom biomass. Internal sediment loading was estimated at 13-20% (TN) and 12-19% (TP) of external loads, and legacy sediment P is expected to delay recovery. Bottle/bucket incubations may not reflect continuous field nutrient supply, which the authors address with daily nutrient pulses.",
+    "discrepancy": "Record's thresholds (TN <0.80, TP <0.05 mg/L) are not the recommended management targets; the paper recommends 1.26 mg/L TN and 0.082 mg/L TP to keep Chl a below 20 µg/L. Setting is bioassays plus modelling, not mesocosm treatment of the lake."
+  },
+  "nutrient_reduction-03": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1021/es0352350",
+    "updates": {
+      "dose": "P-detergent ban (January 1988) and wastewater P-discharge limits in the late 1980s; later N reductions mandated by the Neuse River Basin TMDL",
+      "duration": "Monitoring 1978-2003",
+      "result": "After the late-1980s P controls, upstream freshwater Chl a and nuisance cyanobacterial blooms dropped (very low mean annual Chl a in 1989) and upstream blooms stayed absent, with cyanobacteria giving way to chlorophytes and diatoms. But TN/TP rose most in the mid-estuary, where Chl a and blooms of dinoflagellates and cryptomonads grew larger in 1989-1992, 1994-1996 and 2000-2003, so the bloom zone moved downstream."
+    },
+    "key_details": "Long-term monitoring analysis (1978-2003) of the Neuse River Estuary, not a controlled experiment. Upstream P-only control succeeded locally against cyanobacteria but the eutrophication gradient and Chl a maximum migrated downstream to N-limited mesohaline waters. Hurricanes and floods added large variability but, the authors argue, did not change the long-term pattern. Similar downstream shifts are cited for the Potomac/Chesapeake and Swedish Baltic fjords. Authors recommend dual N and P reductions starting upstream.",
+    "discrepancy": "Record frames the P-only outcome as 'likely shifted'; the paper documents a clear upstream success against cyanobacterial blooms plus larger mid-estuary blooms of dinoflagellates and cryptomonads (not cyanobacteria) afterwards."
+  },
+  "nutrient_reduction-06": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1007/s00267-005-0079-4",
+    "updates": {
+      "dose": "Advanced wastewater treatment (TN <=3 mg/L, cutting that source's TN load by 90%), 1980s stormwater rules and port-facility BMPs; estimated total N load fell 60% (1985-2003 vs mid-1970s); later 'hold the line' at 1992-1994 load levels",
+      "duration": "Mid-1970s to 2004",
+      "result": "Estimated N loading fell 60% from the mid-1970s to 1985-2003; Chl a declined significantly from 1985, most in Hillsborough Bay (25-35 µg/L in the mid-1970s to typically <15 µg/L), and Secchi depth there rose from <0.6 m to 1.0-1.4 m. Seagrass grew by 2127 ha from 1982 to 1996, lost 839 ha in 1996-1999 (El Niño) and regained 883 ha by 2004, the highest cover since 1950 but still 5512 ha below the 1950 extent.",
+      "env_effects": "Reduced extent and duration of hypoxia; seagrass recovery. Projected 20% population growth and 7% higher N loading by 2010 require ~15.4 metric tons TN/yr of further reductions to hold the line."
+    },
+    "key_details": "Case study of Tampa Bay management using monthly sampling at >50 fixed sites since 1974 and biennial seagrass mapping since 1988. Point sources had made up 55% of N load before advanced wastewater treatment. Water-quality gains followed load cuts with no control estuary, so attribution is observational. Seagrass targets are set by the depth receiving 20.5% of surface light for Thalassia testudinum. Phytoplankton here is general Chl a, not a specific HAB taxon.",
+    "discrepancy": "Record lacks the 60% N-load reduction and the Chl a drop (25-35 to <15 µg/L in Hillsborough Bay); '25% seagrass increase since 1982' was not found as such, the text gives +2127 ha (1982-1996), -839 ha, +883 ha (to 2004), still 5512 ha below 1950."
+  },
+  "nutrient_reduction-09": {
+    "status": "no_access",
+    "source_url": "https://doi.org/10.1080/20442041.2017.1368881",
+    "updates": {},
+    "key_details": "Taylor & Francis page showed 'Add to Cart'/'Get Access' through the proxy; Columbia has no access. Record remains abstract-based.",
+    "discrepancy": ""
+  },
+  "nutrient_reduction-12": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1002/lno.11700",
+    "updates": {
+      "dose": "External loading 2005-2018: tributaries 16.6-24.1 g TN/m2/yr (mean 19.3) and 0.73-1.20 g TP/m2/yr (mean 0.89), plus atmospheric 3.8 g TN and 0.09 g TP/m2/yr; loads rose after 2007 to 2010, fell to 2013 and rose again to 2016, tracking inflow",
+      "result": "Over 2005-2018, lake TN concentration fell 40% (p < 0.01) but TP did not decline, and annual mean Chl a rose slightly, peaking at 44 µg/L in 2017; annual TN and TP loading showed no relationship with Chl a. Internal P release supplied 23-90% of bloom P demand and water-column regeneration 38-58% of summer-fall demand."
+    },
+    "key_details": "Whole-lake nutrient mass balance for Lake Taihu (2005-2018) from monitoring data, with estimates of burial, denitrification, water-column regeneration and internal P loading; observational, no control. Tributaries supplied 83% of TN and 91% of TP inputs, atmospheric deposition 16% and 9%, N2 fixation only 0.38% of TN. Authors expect a lag between load cuts and bloom decline because of legacy internal N and P, and argue that cutting N along with P gives faster recovery since denitrification removes N. Warming is expected to lower bloom nutrient thresholds.",
+    "discrepancy": "Record implies steady external load reductions; the paper shows external loads fluctuated with inflow (up 2007-2010, down to 2013, up to 2016) rather than declining steadily, TN concentration fell 40% while TP did not decline, and Chl a slightly increased."
+  }
+}

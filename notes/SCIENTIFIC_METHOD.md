@@ -881,3 +881,16 @@ history:
 - **Conclusion:** the loop needs a continuous sensor at the site. The off rule can't be judged
   on untreated water (79-90% of episodes hit the time cap). Details in
   `notes/mitigation/LAYER1_RESULTS.md`.
+
+**Evidence reviews, scoreboard and full texts (2026-09-25/26).**
+- **Evidence reviews:** each of the five loop methods now has 20-27 sourced papers in `notes/mitigation/evidence/`, and `notes/mitigation/EXECUTION_PLAN.md` sets out five short screens followed by two full loop runs.
+- **Scoreboard:** 256 papers across 15 methods (`notes/mitigation/scores/`, built by `src/lit/build_scoreboard.py`). Separate agents rated each paper 1-5 on reproducibility, effectiveness, cost, time and environment. A method's score uses only papers that test it on algae; safety, mechanism, feeding and misfiled papers are listed but not counted.
+  - Scorer agreement on 6 shared papers: 87% of scores within 1 point.
+  - A Crossref check found 20 of 20 DOIs real.
+- **Full texts:** 197 of 256 papers were read in full (open-access copies, plus paywalled papers through Columbia Libraries), merged by `src/lit/merge_fulltext.py` and re-scored.
+- **Ranking:** unchanged at the top. Seaweed 3.55, peroxide 3.25 (equal weights); phosphorus inactivation is last at 1.63.
+- **What the full texts corrected:**
+  - Abstracts often overstated effects: some reported the share remaining as if it were the reduction, and some headline "%" figures came from highlights or single tanks.
+  - Sung & Gobler 2026 (bubbles): 21-58% and 34-63% cuts at 300 mL/min into 500 mL (0.6 L/min per L). The bubble screen now copies that setup.
+  - Seaweed stimulated the target alga at low dose in one study.
+  - Curcumin's 99% kill fell to 47% when the trial was repeated.

@@ -1,0 +1,341 @@
+{
+  "peroxide-02": {
+    "status": "failed",
+    "source_url": "https://research.wur.nl/en/publications/termination-of-a-toxic-alexandrium-bloom-with-hydrogen-peroxide",
+    "updates": {},
+    "key_details": "Not read: Only the WUR landing page (abstract) was reachable; no accepted-manuscript file link; Nottingham repository copy returned 403. Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "peroxide-07": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.1016/j.hal.2022.102347",
+    "updates": {},
+    "key_details": "Not read: Elsevier OA article; ScienceDirect blocked automated access (403 bot check); no Europe PMC copy. Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "peroxide-08": {
+    "status": "failed",
+    "source_url": "https://ars.els-cdn.com/content/image/1-s2.0-S0304389423005617-ga1_lrg.jpg",
+    "updates": {},
+    "key_details": "Not read: OpenAlex link was only the graphical-abstract JPG; repository copies (addi.ehu.es 404, digital.csic.es HTML) and ScienceDirect blocked (403). Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "peroxide-10": {
+    "status": "failed",
+    "source_url": "https://www.mdpi.com/2073-4441/18/1/52/pdf",
+    "updates": {},
+    "key_details": "Not read: MDPI (gold OA) blocked automated access (403 bot check) for PDF and HTML. Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "peroxide-11": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.1016/j.hal.2024.102707",
+    "updates": {},
+    "key_details": "Not read: Elsevier OA article; ScienceDirect blocked automated access (403 bot check); no Europe PMC copy. Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "peroxide-12": {
+    "status": "failed",
+    "source_url": "https://www.sciencedirect.com/science/article/pii/S0304420396000722/pdf",
+    "updates": {},
+    "key_details": "Not read: ScienceDirect open-archive PDF blocked automated access (403 bot check). Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "peroxide-13": {
+    "status": "failed",
+    "source_url": "https://www.facetsjournal.com/doi/pdf/10.1139/facets-2019-0011",
+    "updates": {},
+    "key_details": "Not read: FACETS (gold OA) blocked automated access (403 bot check). Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "peroxide-14": {
+    "status": "failed",
+    "source_url": "https://www.sciencedirect.com/science/article/pii/S014765131930586X/pdf",
+    "updates": {},
+    "key_details": "Not read: ScienceDirect PDF blocked automated access (403 bot check). Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "peroxide-15": {
+    "status": "full_read",
+    "source_url": "https://europepmc.org/article/PMC/PMC7648738",
+    "updates": {
+      "dose": "1.7, 8.5, 17, 170, 850 and 1700 mg/L H2O2 for 1 h (0.1-100% of the 1700 mg/L salmon-delousing dose)",
+      "duration": "1 h exposure, then 48 h post-exposure in clean seawater (checks at 6, 24, 48 h)",
+      "result": "1 h at 170 mg/L killed 100% of krill; acute 1h-LC50 32.5 mg/L (16.8-48.2), falling to 14.11 mg/L at 6 h, 4.92 mg/L at 24 h and 0.86 mg/L at 48 h post-exposure.",
+      "env_effects": "Non-target delayed mortality; 48 h post-exposure LC50 0.86 mg/L after only a 1 h pulse. No mortality at 1.7 mg/L or in controls. Authors call krill the most sensitive species tested so far."
+    },
+    "key_details": "Wild Meganyctiphanes norvegica caught by light trap in Norway, exposed for 1 h to six H2O2 concentrations in 500 mL glassware at 8 C, then moved to clean seawater. 140 krill: 7 groups (incl. control) x 4 replicates x 5 krill. LC50s from probit GLM. Acute 1h-LC50 32.5 mg/L; delayed LC50 fell to 0.86 mg/L at 48 h. Context is salmon-lice bath treatment (1500-2100 mg/L), not HAB treatment, but the 48 h LC50 is below common HAB H2O2 doses.",
+    "discrepancy": "Record gave only the acute LC50; the delayed 48 h LC50 (0.86 mg/L) is ~38x lower and is the key number."
+  },
+  "peroxide-17": {
+    "status": "failed",
+    "source_url": "https://www.mdpi.com/2073-4441/12/5/1304/pdf?version=1590663699",
+    "updates": {},
+    "key_details": "Not read: MDPI (gold OA) blocked automated access (403 bot check). Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "peroxide-18": {
+    "status": "failed",
+    "source_url": "https://www.sciencedirect.com/science/article/pii/S0043135422011149/pdf",
+    "updates": {},
+    "key_details": "Not read: ScienceDirect PDF and pure.eur.nl repository PDF both blocked (403 bot check). Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "peroxide-21": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.1016/j.watres.2023.119811",
+    "updates": {},
+    "key_details": "Not read: Elsevier OA article; ScienceDirect blocked automated access (403 bot check). Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "peroxide-22": {
+    "status": "full_read",
+    "source_url": "https://ktisis.cut.ac.cy/bitstream/20.500.14279/28993/1/1-s2.0-S2666821122000783-main.pdf",
+    "updates": {
+      "scale": "bench; 200 mL surface water (Kouris dam) spiked with cultured Microcystis to 8000 RFU; CaO2 granules in 4 fabric types",
+      "dose": "0.5, 1.0, 2.0 g/L CaO2 granules (loose or enclosed in fabric)",
+      "duration": "48 h (Ft/QY at 0, 6, 24, 48 h)",
+      "result": "2.0 g/L CaO2 in fabric types B and C cut phycocyanin fluorescence 87.5-91% and quantum yield 77.8-82.5% by 48 h; lower doses mostly recovered (QY), fabric A barely worked. Granules released up to 12 mg/L H2O2 by 24 h, but residual H2O2 during treatment stayed <0.5 mg/L.",
+      "effect_pct": 89,
+      "env_effects": "Loose granules raised pH above 11; fabric-enclosed systems kept pH at or below ~10 (starting pH 9.5). Toxin release not measured during treatment. No non-target organisms tested."
+    },
+    "key_details": "Lab bench study, all runs in triplicate at 20 C with continuous light. Artificial bloom: cultured Microcystis added to dam water to Ft 8000 RFU (intracellular MC-RR 4.66 ug/L, MC-YR 1.45 ug/L). Treatments 0-2.0 g/L CaO2 enclosed in fabric types A-C vs no-fabric; control = 0 g/L. Endpoint is fluorescence (Ft) and PSII quantum yield, not cell counts. Only 2.0 g/L (types B, C) and 1 g/L type C gave lasting suppression.",
+    "discrepancy": "Record effect_pct was null; full text gives 87.5-91% Ft reduction at 48 h. Record's pH note ('not in abstract') now filled: loose granules pushed pH >11."
+  },
+  "peroxide-23": {
+    "status": "failed",
+    "source_url": "https://pubs.acs.org/doi/pdf/10.1021/acsestwater.5c01257?ref=article_openPDF",
+    "updates": {},
+    "key_details": "Not read: ACS open PDF blocked automated access (403 bot check). Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "peroxide-24": {
+    "status": "full_read",
+    "source_url": "https://europepmc.org/article/PMC/PMC7405413",
+    "updates": {
+      "organism": "Cyanobacteria (Planktothrix, Microcystis, Dolichospermum, Cylindrospermopsis, Aphanizomenon) in bloom water from four Long Island lakes/ponds",
+      "freshwater_or_marine": "freshwater (one brackish site, Georgica Pond 0-20 PSU)",
+      "setting": "mesocosm",
+      "scale": "4 L bottles of field bloom water, incubated outdoors; 11 experiments, 4 water bodies",
+      "dose": "4 mg/L H2O2, single dose",
+      "duration": "4-7 days",
+      "result": "Cyanobacteria fell significantly in 10 of 11 experiments, from on average 85% to 29% of the phytoplankton; cyanobacterial Chl-a was 43-99.8% below controls (e.g. Mill Pond 93-99%, Roth Pond 82%, Lake Agawam 43-52%, one Agawam run not significant).",
+      "effect_pct": 82,
+      "env_effects": "Green algae rose in 6 of 8 experiments (up to 400% above control); heterotrophic bacteria fell 44%; Actinobacteria, Planctomycetes, Verrucomicrobia strongly reduced. Planktothrix most sensitive, Cylindrospermopsis most resistant; Microcystis share of cyanobacteria rose in one run. No fecal-bacteria or whole-pond data in this paper."
+    },
+    "key_details": "Bottle incubations: each experiment had an unamended control and a 4 mg/L H2O2 treatment, 3 replicate 4 L bottles each, incubated 4-7 d in an outdoor flow-through table. 8 first-round experiments by FluoroProbe; 3 detailed experiments added microscopy, flow cytometry and 16S sequencing. Initial cyanobacterial Chl-a 45-394 ug/L; treatment brought levels below the 25 ug/L NYSDEC threshold only in some runs. Authors conclude H2O2 reduces but does not eliminate cyanobacteria in high-biomass water. The abstract's '4 ug/L' is a typo for 4 mg/L.",
+    "discrepancy": "Record conflated this bottle study with a different Gobler pond-dosing paper: this paper has no whole-pond treatment, no 8 mg/L dose, no 2-week rebound and no fecal-indicator bacteria. Setting should be bottle/mesocosm, not field. effect_pct 82 is a median-ish headline (range 43-99.8%)."
+  },
+  "peroxide-25": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.1016/j.envpol.2018.05.012",
+    "updates": {},
+    "key_details": "Not read: Elsevier bronze OA; ScienceDirect blocked automated access (403 bot check). Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "peroxide-26": {
+    "status": "full_read",
+    "source_url": "https://europepmc.org/article/PMC/PMC12724209",
+    "updates": {
+      "scale": "400 m2 semi-enclosed area below Franklin Lock (S-79), Caloosahatchee River, FL; Lake Guard Oxy spread over 2,023 m2",
+      "dose": "Liquid: 12 L of 3% H2O2 sprayed, nominal 20 mg/L over top 10 cm (measured peak 73.7 mg/L at 0 min, 4.3 mg/L at 1 h). Lake Guard Oxy (sodium percarbonate): 65 kg on day 2 and day 7 (label max; measured 37.3 mg/L peak at 15 min, 12.6 mg/L at 1 h)",
+      "duration": "14 days; 3 treatments (day 0 liquid, days 2 and 7 granules)",
+      "result": "Short-term: liquid H2O2 vs LGOxy cut cyanobacterial 16S share 79% vs 46%, Chl-a 81% vs 90%, Microcystis colony density 91% vs 97%; effects did not persist beyond ~1 day to a week and the bloom was not eliminated by day 14 (Chl-a still 447 ug/L).",
+      "env_effects": "H2O2 back to background within 24 h. Alligators, manatees, birds and fish seen in the area with no mortalities in 14 d (visual only). Total microcystin peaked at 35.6 ug/L on day 2; nitrogen-fixation gene expression in diazotrophs rose after LGOxy. Water exchange with the river undid treatments."
+    },
+    "key_details": "Single-site field trial in a flowing, tidally influenced river; no replicated treatment plots. A reference site outside the treatment area was sampled only on days 0, 1 and 14. H2O2, nutrients, Chl-a, microcystin (ELISA), colony counts, 16S amplicons and transcriptomics measured; triplicate samples from 3 points. Treatment scheme was opportunistic (two organizations working at the same site). Measured H2O2 differed strongly from nominal dose.",
+    "discrepancy": "Record swapped the two Chl-a numbers: liquid H2O2 gave -81% and the percarbonate granules (LGOxy) gave -90%, not the reverse. Doses were given in the paper (nominal 20 mg/L liquid; 65 kg LGOxy per application), not 'not given'."
+  },
+  "peroxide-27": {
+    "status": "full_read",
+    "source_url": "https://edepot.wur.nl/699487",
+    "updates": {
+      "organism": "Microcystis aeruginosa PCC 7820 (lab culture)",
+      "scale": "lab; 200 mL cultures in 300 mL flasks; 5 products (liquid H2O2, CaO2, Lake Guard Oxy, Phycomycin SCP, Oximycin P5)",
+      "dose": "0, 1, 3, 5, 10, 20 mg H2O2-equivalent/L (series 1); 0, 1, 3, 10 mg/L (series 2 and 3)",
+      "duration": "9 days (series 1, 150 ug/L Chl-a) and 15 days (series 2 and 3, 300 and 600 ug/L Chl-a)",
+      "result": "At 150 ug/L Chl-a, Oximycin P5, Phycomycin SCP and liquid H2O2 kept Chl-a undetectable at 1 mg/L, CaO2 and Lake Guard Oxy needed 3 mg/L; at 600 ug/L, CaO2 and Lake Guard Oxy let Chl-a recover at 3 mg/L while the others did not; all products worked at 10 mg/L with no recovery.",
+      "effect_pct": 100,
+      "env_effects": "Extracellular microcystin rose after 1 day in all treatments, then fell below control by day 9. CaO2 raised pH in a dose-dependent way. No non-target organisms tested."
+    },
+    "key_details": "Three lab series with triplicate flasks per product x dose, at 20 C, 100 umol photons m-2 s-1, 16:8 light. Chl-a and PSII efficiency by PHYTO-PAM; H2O2 by test strips; intra/extracellular microcystins by LC-MS/MS (series 1). Biomass yield analysed by two-way ANOVA (OECD 201 approach). A co-author works for SePRO, which makes two of the tested products.",
+    "discrepancy": "Record duration 'Not reported' -> 9 and 15 days. Record omitted that Chl-a was driven to zero (effective 100%) at >=3 mg/L for most products, and the transient extracellular-toxin rise."
+  },
+  "curcumin-02": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.1002/lom3.10731",
+    "updates": {},
+    "key_details": "Not read: Wiley OA article blocked automated access (403 bot check). Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "curcumin-04": {
+    "status": "full_read",
+    "source_url": "https://europepmc.org/article/PMC/PMC13198884",
+    "updates": {
+      "organism": "Recombinant Karenia brevis thioredoxin reductase (KbTrxR, expressed in E. coli)",
+      "result": "Curcumin inhibited KbTrxR in a time-dependent way: IC50 fell from 111.0 uM to 3.0 uM after 60 min pre-incubation (~20x more potent than PbTx-2); inhibition also seen with H2O2 as substrate; covalent adduct at Cys53."
+    },
+    "key_details": "Purely in vitro enzyme study on synthetic recombinant KbTrxR; no live K. brevis cells were treated. DTNB-reduction and H2O2-reduction assays run in triplicate; IC50 by nonlinear regression. LC-MS/MS located the curcumin adduct at N-terminal Cys53. Authors cite prior work that 0.1-5 mg/L curcumin reduces K. brevis 2-89% in 24 h, and note enzyme IC50 is not comparable with whole-cell toxicity.",
+    "discrepancy": "Record's 3.0 uM IC50 is only after 60 min pre-incubation; without it the IC50 was 111.0 uM. Enzyme was recombinant, not from cells."
+  },
+  "curcumin-05": {
+    "status": "full_read",
+    "source_url": "https://europepmc.org/article/PMC/PMC8402306",
+    "updates": {
+      "scale": "lab; mussels in 6 L seawater; digestive glands of 6 mussels pooled per sample, n = 3 samples per group",
+      "dose": "Prorocentrum lima 2 x 10^6 cells/L; curcumin 0, 1, 5, 10, 20, 50 umol/L (step I); 20 umol/L (step II)",
+      "duration": "48 h (sampled at 12 and 48 h)",
+      "result": "Curcumin at 10 and 20 umol/L significantly lowered DST (okadaic acid-eq) in the digestive gland vs no curcumin (p<0.05), with more DST found in the water instead; gill DST unchanged. Curcumin reduced P. lima-induced digestive-gland damage.",
+      "env_effects": "Curcumin alone (20 uM) caused no visible digestive-gland damage in mussels. Curcumin was dissolved in NaOH; solvent given to controls. Does not reduce the algae; it is a shellfish-detox approach."
+    },
+    "key_details": "Two-step lab design with Perna viridis (8-10 cm) fed Tetraselmis plus toxic P. lima (CCMP 2579). Step I: curcumin dose series, DST by ELISA at 48 h. Step II: 4 groups (control, curcumin, P. lima, P. lima + curcumin at 20 uM), sampled at 12 and 48 h for DST, qPCR (AhR, HR96, CYP3A4) and histology. Pooled samples give only n = 3 per group; % reductions are shown only in figures. Mechanism proposed: curcumin blocks toxin-induced transcription of AhR/HR96/CYP3A4.",
+    "discrepancy": "Record dose/duration 'not in abstract' -> 1-50 uM curcumin, 48 h. Effective doses were 10-20 uM (~3.7-7.4 mg/L). Toxin appears to be moved to the water, not destroyed."
+  },
+  "curcumin-13": {
+    "status": "full_read",
+    "source_url": "https://www.jstage.jst.go.jp/article/bpb/30/7/30_7_1336/_pdf",
+    "updates": {
+      "dose": "5, 7.5, 10, 12.5, 15 uM curcumin (DMSO stock)",
+      "duration": "24 h LD50; embryos followed daily to hatching, larvae exposed from 3 d old",
+      "result": "24 h LD50 7.5 uM for embryos and 5 uM for larvae; 15 uM killed all embryos within 2 d and 10 uM killed all larvae; embryos at >=5 uM developed bent/hooked tails, spinal curvature, pericardial edema, retarded yolk resorption."
+    },
+    "key_details": "Zebrafish embryos (from 30 min post-fertilization) and 3-day-old larvae exposed in 6-well plates, 10 embryos per well; 30 animals x 4 replicates per concentration. Survival judged by heartbeat. Resveratrol, quercetin and rutin up to 100 uM had no effect. Curcumin decomposed in water over 2-3 d, which the authors used to explain survival differences. No DMSO-only solvent control is described.",
+    "discrepancy": "Record essentially correct; adds that teratogenic effects began at 5 uM and no solvent control is reported."
+  },
+  "curcumin-16": {
+    "status": "full_read",
+    "source_url": "https://europepmc.org/article/PMC/PMC9324867",
+    "updates": {
+      "dose": "native curcumin 1-100 uM vs NanoCUR (Pluronic F127) 1-100 uM; Pluronic F127 alone to 2% w/v",
+      "duration": "24-96 h post-fertilization",
+      "result": "Native curcumin LC50 fell from 8.077 uM at 24 hpf to 6.302 uM at 96 hpf; NanoCUR LC50 was >100 uM through 72 hpf and 28.4 uM at 96 hpf; 10 uM native curcumin left 41% survival at 24 hpf and 20% at 72 hpf; >30 uM killed 100% by 24 hpf.",
+      "env_effects": "Native curcumin toxic to zebrafish embryos at ~6 uM (~2.3 mg/L); nano-encapsulation cut toxicity ~4.5x at 96 h; carrier alone non-toxic."
+    },
+    "key_details": "Zebrafish embryo toxicity test comparing native curcumin, curcumin-loaded Pluronic F127 micelles and the carrier alone; endpoints survival, hatching, heart rate, malformations (yolk-sac edema, scoliosis) and ROS. At least three independent experiments. 1 uM native curcumin gave 100% survival. Drug-delivery context, not HAB treatment.",
+    "discrepancy": "Record had no numbers; full text gives native curcumin 96 h LC50 6.302 uM vs 28.4 uM for NanoCUR."
+  },
+  "curcumin-18": {
+    "status": "failed",
+    "source_url": "https://iwaponline.com/wst/article-pdf/80/6/1155/629220/wst080061155.pdf",
+    "updates": {},
+    "key_details": "Not read: IWA Publishing PDF blocked automated access (403 bot check). Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "curcumin-21": {
+    "status": "full_read",
+    "source_url": "https://europepmc.org/article/PMC/PMC5068738",
+    "updates": {
+      "dose": "dihydroartemisinin 6, 12, 24 mg/L; artemether results reported at 6 mg/L",
+      "result": "After 120 h, growth inhibition peaked at 16.67%, 35.94% and 42.17% for 6, 12 and 24 mg/L dihydroartemisinin and 55.72% for 6 mg/L artemether; with artemether Fv/Fm, PhiPSII, ETR and rETRmax fell to 0.",
+      "effect_pct": 55.72
+    },
+    "key_details": "Axenic lab culture of Microcystis aeruginosa in 300 mL BG11, treated vs untreated controls, three replicates. Measured cell density (0-120 h), chlorophyll a, protein, MDA, alkaline phosphatase and chlorophyll fluorescence. Partial growth inhibition only (max ~56%). Compounds are artemisinin derivatives, not curcumin.",
+    "discrepancy": "This paper is about dihydroartemisinin and artemether, not curcumin; it probably belongs in a different method bucket. Effect_pct can be set to 55.72 (artemether) or 42.17 (dihydroartemisinin)."
+  },
+  "shellfish-02": {
+    "status": "failed",
+    "source_url": "https://www.int-res.com/articles/meps2004/281/m281p093.pdf",
+    "updates": {},
+    "key_details": "Not read: Inter-Research (MEPS) free PDF returned HTTP 401 bot check to curl and WebFetch; no Europe PMC copy. Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "shellfish-03": {
+    "status": "failed",
+    "source_url": "https://www.int-res.com/articles/meps2008/357/m357p165.pdf",
+    "updates": {},
+    "key_details": "Not read: Inter-Research (MEPS) free PDF returned HTTP 401 bot check to curl and WebFetch; no Europe PMC copy. Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "shellfish-04": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.3354/meps031265",
+    "updates": {},
+    "key_details": "Not read: Inter-Research PDF returned 401 (bot check); URI digitalcommons PDF returned 403. Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "shellfish-08": {
+    "status": "failed",
+    "source_url": "https://www.int-res.com/articles/meps/211/m211p275.pdf",
+    "updates": {},
+    "key_details": "Not read: Inter-Research (MEPS) free PDF returned HTTP 401 bot check to curl and WebFetch; no Europe PMC copy. Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "shellfish-11": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.1016/j.hal.2024.102745",
+    "updates": {},
+    "key_details": "Not read: Elsevier OA article; ScienceDirect blocked automated access (403 bot check). Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "shellfish-13": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.3354/meps050073",
+    "updates": {},
+    "key_details": "Not read: Inter-Research (MEPS) free PDF returned HTTP 401 bot check to curl and WebFetch; no Europe PMC copy. Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "shellfish-14": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.3354/meps063177",
+    "updates": {},
+    "key_details": "Not read: Inter-Research (MEPS) free PDF returned HTTP 401 bot check to curl and WebFetch; no Europe PMC copy. Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "shellfish-15": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.3354/meps074033",
+    "updates": {},
+    "key_details": "Not read: Inter-Research (MEPS) free PDF returned HTTP 401 bot check to curl and WebFetch; no Europe PMC copy. Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "shellfish-16": {
+    "status": "failed",
+    "source_url": "https://www.biodiversitylibrary.org/partpdf/8095",
+    "updates": {},
+    "key_details": "Not read: Biodiversity Heritage Library PDF blocked automated access (403 bot check). Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "shellfish-17": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.1016/j.hal.2022.102236",
+    "updates": {},
+    "key_details": "Not read: Elsevier OA article and NOAA repository copy both blocked (403). Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "shellfish-20": {
+    "status": "failed",
+    "source_url": "https://www.int-res.com/articles/feature/m480p001.pdf",
+    "updates": {},
+    "key_details": "Not read: Inter-Research (MEPS) free PDF returned HTTP 401 bot check to curl and WebFetch; no Europe PMC copy. Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "shellfish-21": {
+    "status": "full_read",
+    "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/5784850",
+    "updates": {
+      "result": "System-scale model: oyster aquaculture removes 1.31% (current) and 2.68% (expanded, 1,340 t N/yr) of annual N inputs to Long Island Sound; modelled Chl reduction by filtration averaged 1.3% (current) and 2.1% (expanded), max 5.3% in one box; farm-scale model showed 0.3% Chl drop.",
+      "effect_pct": 1.3,
+      "env_effects": "N-removal valued at $8.5M (current) to $470M (max expanded) per year in avoided costs. Optimistic all-lease estimate incl. denitrification: 10-30% of N inputs."
+    },
+    "key_details": "Modelling study (EcoWin/EWN system model, FARM local model, ASSETS eutrophication index) for Connecticut oyster leases in Long Island Sound, plus avoided-cost valuation. No field manipulation. Oysters cleared 0.95x (current) to 2.08x (expanded) the cultivated-box volume per year. Model overestimates Chl because it lacks zooplankton grazers. Clams, NY leases and denitrification excluded from the base numbers.",
+    "discrepancy": "Record lacked the chlorophyll outcome: filtration lowered modelled Chl only 1.3-2.1% on average, the relevant bloom-control number."
+  },
+  "shellfish-22": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.3354/meps009203",
+    "updates": {},
+    "key_details": "Not read: Inter-Research PDF returned 401 (bot check); URI digitalcommons PDF returned 403. Link appears free; retry with a browser.",
+    "discrepancy": ""
+  },
+  "shellfish-23": {
+    "status": "full_read",
+    "source_url": "https://link.springer.com/content/pdf/10.1007/s43621-025-01104-0.pdf",
+    "updates": {
+      "organism": "blood clam Tegillarca granosa, oyster Crassostrea madrasensis, green mussel Perna viridis feeding on Thalassiosira sp. (microcosm) and shrimp-farm wastewater (mesocosm)",
+      "scale": "9 x 5 L microcosms (1 bivalve per 2 L) and 9 x 300 L tanks with 50 L shrimp wastewater (2 bivalves per 50 L)",
+      "env_effects": "Mesocosm: similar clearance of ammonia, nitrite, phosphate, BOD, TDS across species; oysters removed more COD and TSS; total bacteria lowest with green mussels."
+    },
+    "key_details": "Lab study from Kakinada, India, 5 days, each species in triplicate (3 species x 3 = 9 units in each setting). Plankton counted daily (Sedgewick-Rafter) and Chl-a measured; filtration and clearance rates calculated. Plankton filtration efficiency 94% (clam), 87.1% (oyster), 77.0% (mussel), not significantly different. There is no bivalve-free control, so settling or die-off of Thalassiosira is not separated from filtration.",
+    "discrepancy": "Record correct on numbers; key caveat missing: no no-bivalve control, so the 77-94% removals are not controlled."
+  }
+}

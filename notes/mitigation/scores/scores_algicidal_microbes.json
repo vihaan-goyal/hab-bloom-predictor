@@ -1,0 +1,182 @@
+[
+  {
+    "paper_id": "algicidal_microbes-01",
+    "reproducibility": 2,
+    "effectiveness": 2,
+    "cost": 3,
+    "time": 3,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Review; the typical application study is a sterile lab co-culture needing purchased algicidal strains and microbiology gear.",
+      "effectiveness": "Evidence is almost all lab culture; the only field trials (P. fluorescens SK09 in river enclosures) gave inconsistent results.",
+      "cost": "Typical lab co-culture needs purchased bacterial and algal strains plus media, roughly $150-500.",
+      "time": "Lab algicidal effects in the summarized studies typically show over one to three weeks of co-culture.",
+      "environment": "Authors say 'environmentally neutral' claims are untested and live-bacteria dispersal raises biosafety concerns."
+    }
+  },
+  {
+    "paper_id": "algicidal_microbes-02",
+    "reproducibility": 2,
+    "effectiveness": 1,
+    "cost": 3,
+    "time": 3,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Review; repeating a typical co-culture needs sterile technique and purchased marine algicidal bacteria and algae.",
+      "effectiveness": "Authors call the evidence that bacteria end blooms circumstantial; lysis needed >10^6 bacteria/mL and other bacteria blocked it.",
+      "cost": "Typical co-culture needs purchased strains and culture media, about $150-500.",
+      "time": "Co-culture lysis in the reviewed work typically takes one to three weeks to appear.",
+      "environment": "Algicidy is framed as community-wide regulation, so non-target effects on other algae are uncertain."
+    }
+  },
+  {
+    "paper_id": "algicidal_microbes-03",
+    "reproducibility": 2,
+    "effectiveness": 4,
+    "cost": 3,
+    "time": 4,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Needs Shewanella IRI-160 plus dinoflagellate cultures and alginate beads; sterile microbiology with a sponsor.",
+      "effectiveness": "Bead-immobilized bacteria controlled Karlodinium and P. minimum as well as free bacteria; no percentage given.",
+      "cost": "Cultures and alginate ~$150-500.",
+      "time": "Growth assays over days; 12-day retention test.",
+      "environment": "Beads retained >99% of bacteria after 12 days and spared Rhodomonas."
+    }
+  },
+  {
+    "paper_id": "algicidal_microbes-04",
+    "reproducibility": 2,
+    "effectiveness": 1,
+    "cost": 2,
+    "time": 3,
+    "environment": 5,
+    "reasons": {
+      "reproducibility": "Five ~400 L recirculating systems with live fish under diel hypoxia/pH cycling need animal-use approval.",
+      "effectiveness": "No algal endpoint; non-target safety study only.",
+      "cost": "Recirculating systems and cortisol assays ~$500-5,000.",
+      "time": "Exposure length not reported; scored conservatively at weeks.",
+      "environment": "No cortisol stress response in two estuarine fish at the algicidal dose."
+    }
+  },
+  {
+    "paper_id": "algicidal_microbes-05",
+    "reproducibility": 1,
+    "effectiveness": 3,
+    "cost": 1,
+    "time": 5,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Two 15,000 L floating mesocosms in a saltwater lake with a native algal virus; field-scale and not school-repeatable.",
+      "effectiveness": "Cells fell to ~1% vs 20-30% in the untreated control, significant from day 3, but only one treatment and one control mesocosm on an already-declining bloom.",
+      "cost": "Floating 15,000 L mesocosms, boat work and virus assays cost well over $5,000.",
+      "time": "Treatment differed from control by day 3 (GLM p<.01) and reached ~1% by day 5.",
+      "environment": "0.1 g/L sediment had no measured effect on water chemistry and HcRNAV is host-specific, but shellfish safety rests partly on unpublished tests."
+    }
+  },
+  {
+    "paper_id": "algicidal_microbes-06",
+    "reproducibility": 1,
+    "effectiveness": 2,
+    "cost": 1,
+    "time": 2,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Observational field time series of a natural bloom in Hiroshima Bay with virus isolation; not school-repeatable.",
+      "effectiveness": "No virus was added and there is no control; the crash is only correlated with HaV and a resistant 10^1-10^2 cells/mL population survived.",
+      "cost": "Ship sampling, virus isolation and cross-infection assays cost far over $5,000.",
+      "time": "The bloom-to-crash sequence played out over the May-July season, i.e. weeks to months.",
+      "environment": "Natural virus is host-specific with no added material, though resistance emerges (susceptibility fell 59% to 18%)."
+    }
+  },
+  {
+    "paper_id": "algicidal_microbes-07",
+    "reproducibility": 2,
+    "effectiveness": 1,
+    "cost": 3,
+    "time": 4,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Co-culture of six bacteria with Cochlodinium needs sterile technique and cultures.",
+      "effectiveness": "Negative: Cochlodinium resisted all six algicidal bacteria.",
+      "cost": "Cultures ~$150-500.",
+      "time": "Duration not reported; co-culture tests usually take days.",
+      "environment": "Efficacy test only; not reported."
+    }
+  },
+  {
+    "paper_id": "algicidal_microbes-08",
+    "reproducibility": 2,
+    "effectiveness": 5,
+    "cost": 3,
+    "time": 4,
+    "environment": 2,
+    "reasons": {
+      "reproducibility": "Phage work with Microcystis cultures in 96-well plates needs a microbiology lab and phage isolate.",
+      "effectiveness": "Cultures collapsed in 3 days at MOI 100 and 3-4 days at MOI 1-10, with controls; lab only.",
+      "cost": "Cultures and plates ~$150-500.",
+      "time": "3-4 days to total lysis.",
+      "environment": "Lysis releases intracellular microcystins into water; phage self-propagates."
+    }
+  },
+  {
+    "paper_id": "algicidal_microbes-09",
+    "reproducibility": 2,
+    "effectiveness": 2,
+    "cost": 3,
+    "time": 3,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Review; typical cyanophage infection assays need purchased host strains and phage isolation skills.",
+      "effectiveness": "Only lab infection assays exist, with no field or mesocosm trial and extreme strain specificity (e.g. Ma-LMM01 infects one strain).",
+      "cost": "Typical lab infection assay needs purchased cyanobacterial strains and culture supplies, about $150-500.",
+      "time": "Lab phage lysis assays typically show results over one to three weeks.",
+      "environment": "High specificity limits non-target harm, but field propagation and resistance are untested."
+    }
+  },
+  {
+    "paper_id": "algicidal_microbes-10",
+    "reproducibility": 2,
+    "effectiveness": 4,
+    "cost": 2,
+    "time": 2,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Pilot-scale reactors with enriched bacterial consortia on carriers need a sponsor lab.",
+      "effectiveness": "Algicidal ratio 87.69%, but 36.47% of inhibition was due to filler shading, not bacteria.",
+      "cost": "Pilot reactors ~$500-5,000.",
+      "time": "Duration not reported; scored conservatively.",
+      "environment": "Released DOM and disinfection by-product precursors were measured."
+    }
+  },
+  {
+    "paper_id": "algicidal_microbes-11",
+    "reproducibility": 3,
+    "effectiveness": 4,
+    "cost": 3,
+    "time": 5,
+    "environment": 1,
+    "reasons": {
+      "reproducibility": "Bench flask assays, but needs a purchased marine dinoflagellate culture and purified prodigiosin.",
+      "effectiveness": "Triplicate flasks: >=0.08 ug/mL killed 97% by 48 h with no recovery, though 0.03-0.05 ug/mL let cells regrow by 72 h; one species only.",
+      "cost": "Purified prodigiosin and a purchased P. donghaiense culture run roughly $150-500.",
+      "time": "Kill was >80% at 24 h and 97% at 48 h.",
+      "environment": "The algicidal 0.1 ug/mL dose killed 49% of Artemia and 20% of juvenile sea bass in 24 h; the safety margin is only ~1.2x."
+    }
+  },
+  {
+    "paper_id": "algicidal_microbes-12",
+    "reproducibility": 3,
+    "effectiveness": 3,
+    "cost": 3,
+    "time": 5,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Flask co-culture is bench-scale but needs a purchased Microcystis strain and T. versicolor culture with sterile technique.",
+      "effectiveness": "About 85% of M. aeruginosa removed in 30 h, but one strain at flask scale with two biological replicates and efficacy not the main aim.",
+      "cost": "Purchased fungal and algal cultures plus media cost about $150-500.",
+      "time": "Chl a fell to one sixth of initial within 30 h.",
+      "environment": "Live fungus added; non-target and environmental effects were not assessed."
+    }
+  }
+]

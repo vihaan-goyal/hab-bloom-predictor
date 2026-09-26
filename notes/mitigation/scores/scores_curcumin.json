@@ -1,0 +1,377 @@
+[
+ {
+  "paper_id": "curcumin-01",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 3,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Uses toxic K. brevis in beakers and 10 L aquaria; turmeric extract is common but the organism needs a sponsor lab.",
+   "effectiveness": "5 mg/L cut cells 89% at 24 h and toxin 60%; 0.1-2 mg/L did little.",
+   "cost": "Culture, curcumin and toxin assay about $150-500.",
+   "time": "89% reduction at 24 h; >90% by 4 h at 30-40 mg/L.",
+   "environment": "Water chemistry stable except the ethanol run (DO to 1.55 mg/L); water turned orange."
+  }
+ },
+ {
+  "paper_id": "curcumin-02",
+  "reproducibility": 1,
+  "effectiveness": 3,
+  "cost": 1,
+  "time": 5,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "1,400 L mesocosms with toxic K. brevis and live clams, urchins and crabs.",
+   "effectiveness": "5 mg/L cut cells 99% at 48 h in 2022 but only 47% in 2024 (toxins -7% at the end), with n = 2-3 tanks and runs compromised by bacterial blooms, control crashes and hypoxia.",
+   "cost": "Two runs of 1,400 L mesocosms at a marine lab with cultured K. brevis and animals exceed $5,000.",
+   "time": "Drop within 24 h.",
+   "environment": "No measured effects on clams, urchins or crabs within 72 h (2024 run); hypoxia appeared in all groups including controls."
+  }
+ },
+ {
+  "paper_id": "curcumin-03",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Purchased Chattonella culture with 10 mg/L compounds is sponsor-doable.",
+   "effectiveness": "Curcumin at 10 mg/L was only described as 'similar inhibitory rate as gramine' at 72 h (Fig. 1, no number); the 80% figure is secondary and there was no dose-response work (n = 3).",
+   "cost": "Culture and five compounds about $150-500.",
+   "time": "72-h endpoint.",
+   "environment": "Curcumin coloured the water; other non-target effects not reported."
+  }
+ },
+ {
+  "paper_id": "curcumin-04",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 2,
+  "time": 5,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Requires expressing recombinant KbTrxR in E. coli, enzyme kinetics and LC-MS/MS adduct mapping.",
+   "effectiveness": "Enzyme-only study: IC50 111 uM without pre-incubation, 3.0 uM after 60 min; no live algae treated.",
+   "cost": "Recombinant protein expression and LC-MS/MS put it at $500-5,000.",
+   "time": "Enzyme assay results within hours.",
+   "environment": "Mechanism study; nothing released to the environment."
+  }
+ },
+ {
+  "paper_id": "curcumin-05",
+  "reproducibility": 2,
+  "effectiveness": 1,
+  "cost": 2,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Needs mussels fed toxic Prorocentrum lima and toxin analysis.",
+   "effectiveness": "Measures DST in mussel glands (lower at 10-20 uM curcumin), not reduction of P. lima; toxin moved to the water rather than being destroyed.",
+   "cost": "Mussels, a toxic P. lima culture, ELISA, qPCR and histology run $500-5,000.",
+   "time": "DST differences were measured at 12 and 48 h.",
+   "environment": "20 uM curcumin caused no visible gland damage, but toxin shifted into the surrounding water and NaOH solvent was used."
+  }
+ },
+ {
+  "paper_id": "curcumin-06",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 5,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "A chemistry review; no experiment to repeat.",
+   "effectiveness": "Review of curcumin chemistry; no algal reduction.",
+   "cost": "No experiment cost; reading only.",
+   "time": "Degradation in 30 min is the headline timescale.",
+   "environment": "Breaks down fast to vanillin, ferulic acid and small phenols; short-lived residue."
+  }
+ },
+ {
+  "paper_id": "curcumin-07",
+  "reproducibility": 4,
+  "effectiveness": 1,
+  "cost": 4,
+  "time": 5,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Curcumin in phosphate buffer with a spectrophotometer is simple school chemistry.",
+   "effectiveness": "Stability study; no algae treated.",
+   "cost": "Curcumin, buffer and spectrophotometer use about $50-150.",
+   "time": "90% decomposed within 30 min.",
+   "environment": "Degrades to vanillin and ferulic acid quickly; minimal residue."
+  }
+ },
+ {
+  "paper_id": "curcumin-08",
+  "reproducibility": 4,
+  "effectiveness": 1,
+  "cost": 4,
+  "time": 3,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "40 uM curcumin in phosphate buffers read at 433/600 nm needs only a spectrophotometer and common chemicals; emulsions add MCT oil and Tween 80.",
+   "effectiveness": "Stability study; no algae treated.",
+   "cost": "Oils, emulsifier and curcumin about $50-150.",
+   "time": "Buffer degradation shows within 7 min at pH >= 7, but the emulsion arm ran 31 days.",
+   "environment": "Not reported; relevant finding is that free curcumin degrades within minutes at seawater pH ~8."
+  }
+ },
+ {
+  "paper_id": "curcumin-09",
+  "reproducibility": 3,
+  "effectiveness": 1,
+  "cost": 4,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Pluronic preparations and photostability tests need a spectrophotometer and light source.",
+   "effectiveness": "Stability study; no algae treated.",
+   "cost": "Pluronic and curcumin about $50-150.",
+   "time": "Photochemical half-life in minutes.",
+   "environment": "Not reported; Pluronic carrier is an added polymer."
+  }
+ },
+ {
+  "paper_id": "curcumin-10",
+  "reproducibility": 3,
+  "effectiveness": 1,
+  "cost": 3,
+  "time": 3,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Cyclodextrin complexation and photostability need analytical chemistry support.",
+   "effectiveness": "Stability study; no algae treated.",
+   "cost": "Cyclodextrins and analysis about $150-500.",
+   "time": "Photolysis half-lives were 20-46 min, but complexed curcumin's hydrolysis half-life (19.8 d) needs weeks of tracking.",
+   "environment": "Not reported; cyclodextrin carrier added."
+  }
+ },
+ {
+  "paper_id": "curcumin-11",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 1,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Laser flash photolysis is research-grade equipment.",
+   "effectiveness": "Photochemistry study; no algae treated.",
+   "cost": "Laser flash photolysis setup over $5,000.",
+   "time": "Photophysics measured in microseconds to minutes.",
+   "environment": "Not reported; forms peroxyl radicals, short-lived."
+  }
+ },
+ {
+  "paper_id": "curcumin-12",
+  "reproducibility": 2,
+  "effectiveness": 1,
+  "cost": 3,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Bacterial photodynamic inactivation with 435 nm light needs a microbiology lab.",
+   "effectiveness": "Targets bacteria (>6 log S. aureus kill), not algae.",
+   "cost": "PVP-curcumin, light source and culture about $150-500.",
+   "time": "Results within minutes of illumination.",
+   "environment": "Non-target (algal) effects not reported; curcumin photodegrades."
+  }
+ },
+ {
+  "paper_id": "curcumin-13",
+  "reproducibility": 3,
+  "effectiveness": 1,
+  "cost": 3,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Zebrafish embryo tests need an animal facility and approval.",
+   "effectiveness": "Non-target study; algal reduction not measured.",
+   "cost": "Zebrafish embryos about $150-500.",
+   "time": "24-h LD50.",
+   "environment": "24 h LD50 7.5 uM (embryos) and 5 uM (larvae), ~1.8-2.8 mg/L, below the 5 mg/L algal dose, with tail and spinal deformities from 5 uM (no solvent control reported)."
+  }
+ },
+ {
+  "paper_id": "curcumin-14",
+  "reproducibility": 3,
+  "effectiveness": 1,
+  "cost": 3,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Daphnia and zebrafish tests on three formulations; sponsor needed for fish.",
+   "effectiveness": "Non-target study; algal reduction not measured.",
+   "cost": "Daphnia, zebrafish and formulations about $150-500.",
+   "time": "Acute tests ran 24-48 h and larval tests 8 h of sunlight.",
+   "environment": "Sugar-carrier formulations were practically non-toxic to Daphnia and zebrafish at 100 mg/L, but the ethanol+DMSO form had a fish LC50 of 5.9 mg/L and Daphnia ROS rose 59% at 50 mg/L."
+  }
+ },
+ {
+  "paper_id": "curcumin-15",
+  "reproducibility": 3,
+  "effectiveness": 1,
+  "cost": 3,
+  "time": 3,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Aedes larvae in sunlight with curcumin-sucrose is sponsor-doable with insect handling.",
+   "effectiveness": "Targets mosquito larvae, not algae.",
+   "cost": "Synthetic curcumin and larvae about $150-500.",
+   "time": "21-d trial with LT50 of 3 d.",
+   "environment": "Light-gated animal toxicity (24-h LC50 0.04 mg/L in sun); photoproduct toxicity only predicted."
+  }
+ },
+ {
+  "paper_id": "curcumin-16",
+  "reproducibility": 3,
+  "effectiveness": 1,
+  "cost": 3,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Zebrafish embryo tests with Pluronic nanoformulation need animal facility.",
+   "effectiveness": "Non-target study; algal reduction not measured.",
+   "cost": "Embryos and Pluronic about $150-500.",
+   "time": "Embryo toxicity was read at 24-96 h post-fertilization.",
+   "environment": "Native curcumin 96 h LC50 was 6.3 uM (~2.3 mg/L), below the 5 mg/L algal dose; Pluronic encapsulation raised it to 28.4 uM."
+  }
+ },
+ {
+  "paper_id": "curcumin-17",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 4,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "50 mL beaker screens with purchased cultures and hemocytometer counts are sponsor-doable, though A. tamarense is a toxin producer.",
+   "effectiveness": "Berberine gave ~100% inhibition of K. mikimotoi in 24 h at 50 mg/L (LC50 3.1 mg/L) but was weak on the other two species (LC50 58-72 mg/L); replication not stated and no curcumin tested.",
+   "cost": "Three cultures and five compounds about $150-500.",
+   "time": "120-h (5-day) test.",
+   "environment": "Non-target effects not reported."
+  }
+ },
+ {
+  "paper_id": "curcumin-18",
+  "reproducibility": 4,
+  "effectiveness": 5,
+  "cost": 3,
+  "time": 4,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Berberine at 4 mg/L on Microcystis and Chlorella cultures with cell counts is a simple bench protocol with a purchased culture.",
+   "effectiveness": "4 mg/L berberine drove M. aeruginosa to zero by day 6 in triplicate vs untreated controls (light-dark), with no effect in constant dark; single strain.",
+   "cost": "Two cultures, berberine, PAM fluorometry about $150-500.",
+   "time": "Fv/Fm collapsed within a day and cells were gone by day 6.",
+   "environment": "Chlorella pyrenoidosa was unaffected; no toxin or animal data."
+  }
+ },
+ {
+  "paper_id": "curcumin-19",
+  "reproducibility": 3,
+  "effectiveness": 2,
+  "cost": 3,
+  "time": 4,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Microcystis with 10 mg/L berberine under varied conditions is sponsor-doable.",
+   "effectiveness": "Strong only when light and temperature favoured growth; 'hardly' algicidal in dark.",
+   "cost": "Culture and berberine about $150-500.",
+   "time": "Duration not reported; scored 4-7 days.",
+   "environment": "Raised extracellular microcystin by lysing cells."
+  }
+ },
+ {
+  "paper_id": "curcumin-20",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 4,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Prorocentrum minimum culture with tannic acid is sponsor-doable; gene expression needs qPCR.",
+   "effectiveness": "Slowed growth only above 2.5 mg/L; 10 mg/L halted photosynthesis.",
+   "cost": "Culture, tannic acid, qPCR about $150-500.",
+   "time": "7-d test.",
+   "environment": "Non-target effects not reported; tannic acid is a natural polyphenol."
+  }
+ },
+ {
+  "paper_id": "curcumin-21",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 4,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Microcystis with artemisinin derivatives is sponsor-doable.",
+   "effectiveness": "Partial inhibition only: 17-42% for dihydroartemisinin (6-24 mg/L) and 56% for 6 mg/L artemether at 120 h in triplicate; compounds are not curcumin.",
+   "cost": "Culture and compounds about $150-500.",
+   "time": "120-h (5-day) test.",
+   "environment": "Non-target effects not reported."
+  }
+ },
+ {
+  "paper_id": "curcumin-22",
+  "reproducibility": 3,
+  "effectiveness": 2,
+  "cost": 3,
+  "time": 4,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Microcystis and Chlorella with artemisinin plus molecular assays; sponsor needed.",
+   "effectiveness": "Mechanism study; inhibition shown but magnitude not reported.",
+   "cost": "Cultures and molecular assays about $150-500.",
+   "time": "Duration not reported; scored 4-7 days.",
+   "environment": "Chlorella resists; other non-targets not reported."
+  }
+ },
+ {
+  "paper_id": "curcumin-23",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 3,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Microcystis with luteolin and enzyme assays is sponsor-doable.",
+   "effectiveness": "Luteolin held 38-60%, 52-62% and 70-78% inhibition at 3.25, 6.5 and 13 mg/L over 14 d in triplicate; inhibition plateaued rather than collapsing.",
+   "cost": "Culture, luteolin, enzyme kits about $150-500.",
+   "time": "14-d test.",
+   "environment": "Extracellular microcystin fell 5-78% vs control; DMSO carrier; no non-target organisms tested."
+  }
+ },
+ {
+  "paper_id": "curcumin-24",
+  "reproducibility": 3,
+  "effectiveness": 2,
+  "cost": 3,
+  "time": 3,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Long-term Microcystis culture with tannic acid plus proteomics needs a sponsor lab.",
+   "effectiveness": "High doses inhibit, but an intermediate dose worsened toxin output.",
+   "cost": "Culture plus proteomics/toxin ELISA $150-500.",
+   "time": "≥15-d test.",
+   "environment": "Extracellular MC-LR rose to 1.91x control; toxin release."
+  }
+ },
+ {
+  "paper_id": "curcumin-25",
+  "reproducibility": 3,
+  "effectiveness": 2,
+  "cost": 3,
+  "time": 3,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Microcystis with gallic acid dilution series is sponsor-doable.",
+   "effectiveness": "Hormetic: up to 74% inhibition at 10 mg/L, but <=0.1 ug/L boosted growth up to 45% (opposite effect), and inhibition was not significant above 10 ug/L in the authors' model.",
+   "cost": "Culture and toxin ELISA about $150-500.",
+   "time": "Density differences appeared by day 9 of a ~32-day run.",
+   "environment": "At 0.1 ug/L total microcystins rose 55% (1.23 mg/L) with a risk quotient ~30x control, so diluted residues can worsen toxicity."
+  }
+ }
+]

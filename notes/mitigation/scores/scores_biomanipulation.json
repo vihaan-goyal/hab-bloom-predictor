@@ -1,0 +1,182 @@
+[
+  {
+    "paper_id": "biomanipulation-01",
+    "reproducibility": 1,
+    "effectiveness": 3,
+    "cost": 1,
+    "time": 1,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Review of whole-lake fish removal (>200 kg/ha, up to 213 t); needs permits and fishing gear.",
+      "effectiveness": "Short-term effects 'often successful' if strong enough, but long-term 'less positive' and repeats needed.",
+      "cost": "Removing hundreds of kg/ha of fish far exceeds $5,000.",
+      "time": "Effects judged over 1 to several years.",
+      "environment": "Restructures the food web; clear-water lakes store P that can be released if they revert."
+    }
+  },
+  {
+    "paper_id": "biomanipulation-02",
+    "reproducibility": 1,
+    "effectiveness": 3,
+    "cost": 1,
+    "time": 1,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Whole-lake fish removal of 41-1,360 kg/ha across 36 lakes; needs permits and commercial fishing gear.",
+      "effectiveness": "Chl a fell to 50-70% of pre-removal and cyanobacteria >50% (10 lakes only), but no control lakes and Chl a gains had ~10% survival after 5 years.",
+      "cost": "Multi-year netting of hundreds of kg of fish per ha costs far over $5,000.",
+      "time": "Effects emerged over 2-5 years of removal.",
+      "environment": "Macrophytes returned and no chemicals were added, though cryptophytes increased."
+    }
+  },
+  {
+    "paper_id": "biomanipulation-03",
+    "reproducibility": 1,
+    "effectiveness": 3,
+    "cost": 1,
+    "time": 1,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Whole-lake removal of 4 and 2.8 tons of fish with gill nets, trawls and electrofishing; not school-repeatable.",
+      "effectiveness": "Summer Chl a fell from 60-80 to 10-30 ug/L after each removal, but one lake with no control and the first benefit decayed within ~10 years.",
+      "cost": "Two multi-year fish removal campaigns cost far over $5,000.",
+      "time": "Clear water came after 2-3 year removal campaigns and was tracked over 30 years.",
+      "environment": "Macrophytes recovered and TP/TN fell; no chemicals added."
+    }
+  },
+  {
+    "paper_id": "biomanipulation-04",
+    "reproducibility": 1,
+    "effectiveness": 2,
+    "cost": 1,
+    "time": 1,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Review of whole-lake planktivore removals and piscivore stocking.",
+      "effectiveness": "Deep-lake removals often revert to pre-manipulation biomass; piscivore additions 'seldom' give more than short control.",
+      "cost": "Whole-lake manipulation exceeds $5,000.",
+      "time": "Multi-year.",
+      "environment": "Species substitutions, ungrazable algae and planktivore reinvasion."
+    }
+  },
+  {
+    "paper_id": "biomanipulation-05",
+    "reproducibility": 1,
+    "effectiveness": 1,
+    "cost": 1,
+    "time": 1,
+    "environment": 2,
+    "reasons": {
+      "reproducibility": "Long-term whole-lake piscivore stocking in Bautzen reservoir and Lake Grafenhain.",
+      "effectiveness": "Negative: phytoplankton 'mean biomass is not reduced', only composition changed.",
+      "cost": "Reservoir-scale stocking exceeds $5,000.",
+      "time": "Multi-year.",
+      "environment": "Stocked piscivore young hard to control; invertebrate predators compensated."
+    }
+  },
+  {
+    "paper_id": "biomanipulation-06",
+    "reproducibility": 2,
+    "effectiveness": 4,
+    "cost": 2,
+    "time": 3,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Daphnia culturing is simple, but the trials used 4,200 L lake enclosures and 160 L enclosures in catfish ponds.",
+      "effectiveness": "Daphnia cut phytoplankton 74-86% vs controls in three settings despite microcystin up to 180 ug/L, but only 2 enclosures per treatment and cyanobacteria stayed dominant.",
+      "cost": "Building and stocking field enclosures costs roughly $500-5,000.",
+      "time": "Total phytoplankton was significantly lower by week 3.",
+      "environment": "Native grazer with no chemical residue; Daphnia also lowered microcystin vs controls."
+    }
+  },
+  {
+    "paper_id": "biomanipulation-07",
+    "reproducibility": 4,
+    "effectiveness": 3,
+    "cost": 4,
+    "time": 5,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Six 10 L containers of filtered lake water with a Daphnia magna gradient is a school-doable bench setup.",
+      "effectiveness": "Grazing suppressed ~66% of bloom taxa, but Dolichospermum grew faster under grazing: mixed.",
+      "cost": "Containers and Daphnia magna ~$50-150.",
+      "time": "3-day incubations.",
+      "environment": "Daphnia native and retrievable, but grazing can favour ungrazed filamentous cyanobacteria."
+    }
+  },
+  {
+    "paper_id": "biomanipulation-08",
+    "reproducibility": 2,
+    "effectiveness": 1,
+    "cost": 2,
+    "time": 3,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Ten ~1000 L enclosures with juvenile perch and electrofishing need field gear and animal permits.",
+      "effectiveness": "Negative: 4 days of fish predation removed large zooplankton and phytoplankton escaped grazer control.",
+      "cost": "Enclosures, fish and electrofishing ~$500-5,000.",
+      "time": "4 d predation + 4 weeks recovery.",
+      "environment": "Shows fragile grazer control; community shift to small cladocerans and rotifers."
+    }
+  },
+  {
+    "paper_id": "biomanipulation-09",
+    "reproducibility": 1,
+    "effectiveness": 3,
+    "cost": 2,
+    "time": 2,
+    "environment": 2,
+    "reasons": {
+      "reproducibility": "Review; the typical trial stocks live silver/bighead carp in 6-100 m2 enclosures or whole lakes, needing permits.",
+      "effectiveness": "Carp cut cyanobacteria in 88% of 42 trials, but enclosures had 2-3 replicates, several trials raised filamentous cyanobacteria, and Donghu is an uncontrolled one-year comparison.",
+      "cost": "Typical enclosure carp trials cost $500-5,000; whole-lake stocking far more.",
+      "time": "Enclosure effects show over weeks to months; the Donghu result took a season.",
+      "environment": "Carp are non-native in many regions and low stocking or bighead carp raised Anabaena 4-70-fold in some trials."
+    }
+  },
+  {
+    "paper_id": "biomanipulation-10",
+    "reproducibility": 3,
+    "effectiveness": 1,
+    "cost": 3,
+    "time": 5,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Lab feeding and survival tests with Daphnia, but needs a purchased Microcystis strain and a knockout mutant plus 14C labelling.",
+      "effectiveness": "Negative for grazing control: wild-type Microcystis killed Daphnia (LT50 1.2-2.0 days) and ingestion was 75% below a harmless strain.",
+      "cost": "Cultures, mutant strain and radiolabel assays cost about $150-500.",
+      "time": "Daphnia mortality appeared within 1-2 days.",
+      "environment": "No chemical added, but the grazer itself is poisoned by the toxic cyanobacteria."
+    }
+  },
+  {
+    "paper_id": "biomanipulation-11",
+    "reproducibility": 2,
+    "effectiveness": 4,
+    "cost": 2,
+    "time": 4,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "~60 L in-situ mesocosms with mass-cultured ciliate need a sponsor lab and red-tide water.",
+      "effectiveness": "Ciliate 'eliminated most' Cochlodinium cells quickly, but no numbers seen (secondary access).",
+      "cost": "Mass culture and mesocosms ~$500-5,000.",
+      "time": "Short term (days); exact duration not reported.",
+      "environment": "Diatom and heterotrophic dinoflagellate concentrations changed vs controls."
+    }
+  },
+  {
+    "paper_id": "biomanipulation-12",
+    "reproducibility": 3,
+    "effectiveness": 3,
+    "cost": 3,
+    "time": 5,
+    "environment": 2,
+    "reasons": {
+      "reproducibility": "50 mL flask grazing tests with brine shrimp are simple, but need purchased HAB cultures (one toxic Alexandrium).",
+      "effectiveness": "Artemia cut bloom cells by a mean 48-57% (24-73% for Aureococcus) and less at high densities; moderate and variable.",
+      "cost": "HAB cultures, Artemia and counting supplies cost about $150-500.",
+      "time": "Reductions measured in 24-48 h incubations.",
+      "environment": "Artemia is non-native to NY estuaries and suffered 43-47% mortality on Alexandrium."
+    }
+  }
+]

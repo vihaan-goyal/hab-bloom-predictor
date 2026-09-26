@@ -1,0 +1,146 @@
+{
+ "curcumin-03": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1007/s11356-016-6755-5",
+  "updates": {
+   "scale": "100 mL flasks with 50 mL culture; initial 4.4 x 10^6 cells/L; n=3",
+   "dose": "each of 5 compounds at 10 mg/L (curcumin dissolved in ethanol; ethanol solvent control); gramine further at 0.32-3 mg/L",
+   "duration": "72 h (screen); gramine LC50 to 96 h",
+   "result": "At 10 mg/L curcumin was the second-strongest inhibitor of C. marina, with an inhibitory rate similar to gramine at 72 h, but it was dropped from further study because it turned the medium yellow. Gramine LC50 was 1.12, 0.77, 0.58 and 0.51 mg/L at 24, 48, 72 and 96 h.",
+   "env_effects": "Curcumin turned the culture medium yellow, which the authors flag as a potential adverse impact on the aquatic environment."
+  },
+  "key_details": "Batch cultures of C. marina in f/2 at 20 °C, 12:12 h light; five Chinese-herb compounds (evodiamine, 4-methoxysalicylaldehyde, gramine, esculin hydrate, curcumin) each added at 10 mg/L, with ethanol/acetone solvent controls, n=3, cell counts by hemocytometer at 24/48/72 h. Gramine had the highest inhibitory rate, curcumin a similar one; evodiamine gave 40% at 72 h and the other two little inhibition. Only gramine was studied further (Fv/Fm, Chl a, SOD/CAT, MDA); 3 mg/L gramine gave 80% inhibition within 150 min. The curcumin inhibition percentage is shown only in Fig. 1 and is not stated numerically in the text.",
+  "discrepancy": "The 80% at 10 mg/L (72 h) figure for curcumin comes from a secondary citation; the paper's text gives no number for curcumin (Fig. 1 only), just 'similar inhibitory rate as gramine'. The 96 h LC50 0.51 mg/L is gramine's, not curcumin's; curcumin had no dose-response work."
+ },
+ "curcumin-07": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1016/s0731-7085(96)02024-9",
+  "updates": {},
+  "key_details": "Proxy access worked, but ScienceDirect serves this 1997 article as abstract plus PDF only (no HTML full text), so methods and results could not be extracted without downloading the PDF.",
+  "discrepancy": ""
+ },
+ "curcumin-08": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1021/acs.jafc.6b04815",
+  "updates": {
+   "scale": "40 µM curcumin in 10 mM phosphate buffer (pH 2.0-8.0) in a cuvette; MCT oil-in-water emulsions (30 wt% oil, Tween 80, 0.285 mg/mL curcumin, pH 3.0-8.0)",
+   "duration": "buffer solutions: minutes to 60 min at 37 °C; emulsions: 31 days at 37 °C (plus other temperatures)",
+   "result": "In buffer at pH ≥7.0 curcumin degraded rapidly in the first 7 min (initial rates 92, 135 and 125 cm-1/min at pH 7.0, 7.4, 8.0), while at pH <7 it crystallized (10-50 µm crystals). In MCT emulsions 85-95% remained after 31 days at acidic pH but only 53-62% at pH ≥7.0."
+  },
+  "key_details": "Spectrophotometric (433 nm) degradation and turbidity (600 nm) assays of 40 µM curcumin (added from a DMSO stock) in phosphate buffers at 37 °C, with and without stirring; emulsion storage over 31 days at several pH values and temperatures. Stirring promoted crystallization and aggregation of crystals in acidic solutions; alkaline solutions stayed clear but faded fast. Oil solubility of pure curcumin in MCT was 2.90 mg/g; in bulk MCT at 55 °C for 31 days there was no significant loss, so degradation happens at the oil-water interface. Water solubility of curcumin is cited as 11 ng/mL. Caveat for HAB use: seawater pH (~8) is the regime where free curcumin degrades within minutes.",
+  "discrepancy": "Record is broadly correct. Retention after 31 days at 37 °C was 53-62% for pH 7.0-8.0 (the per-pH 62/60/53 split is from Fig. 3B, not stated in text). Crystals formed at pH 3, 5 and 7, not only below pH 7."
+ },
+ "curcumin-09": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1691/ph.2013.2136",
+  "updates": {},
+  "key_details": "DOI found via Crossref (Pharmazie 68(3), 2013). The publisher page (IMR Press, not proxied) shows only the abstract and a PDF link; no HTML full text, so methods and results were not extracted.",
+  "discrepancy": "Record lacks the DOI: 10.1691/ph.2013.2136 (Crossref also lists alias 10.31083/ph.2013.2136)."
+ },
+ "curcumin-10": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/s0378-5173(02)00323-x",
+  "updates": {
+   "scale": "aqueous buffer solutions with six cyclodextrins (HPαCD, HPβCD, HPγCD, RMβCD, SBβCD, HTAβCD), mostly 5% w/v; xenon-lamp photolysis; n=3",
+   "dose": "cyclodextrin 1-5%; hydrolysis tested at pH 8.0, complexation at pH 5",
+   "duration": "minutes (photolysis, hydrolysis of free curcumin) to days (complexed curcumin)",
+   "result": "Complexation raised curcumin's water solubility about 10^4-fold at pH 5 and dramatically improved hydrolytic stability at alkaline pH (free curcumin half-life a few minutes above pH 7; 5% HPβCD complex half-life 19.8 days at pH 5). Photostability fell: photolysis half-lives were 20.4-46.2 min in 5% cyclodextrins versus 70.7 min in ethanol-buffer and 133.3 min in methanol."
+  },
+  "key_details": "Phase-solubility and kinetic study of curcumin with six neutral or charged cyclodextrins at room temperature. RMβCD and HPγCD gave the highest affinity, cationic HTAβCD the lowest; neutral cyclodextrins protected against hydrolysis better than charged ones. The most stable pH 8 sample (5% HPβCD) degraded at 0.035 per day at pH 5 (half-life 19.8 d, n=3). Photodegradation followed first-order kinetics and was faster in every cyclodextrin than in organic solvent systems. No algae or organisms tested.",
+  "discrepancy": "Solubility gain is 'approximately 10^4', not '≥10^4'."
+ },
+ "curcumin-11": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.jphotobiol.2023.112756",
+  "updates": {
+   "scale": "curcumin in Pluronic micelles, microemulsions and zein nanoparticles; steady-state photolysis (anaerobic, visible light), 1O2 luminescence, laser flash photolysis; dioxane as reference solvent",
+   "result": "No singlet oxygen was detected from curcumin in any host (only in dioxane); the triplet of the diketo form abstracts hydrogen from the host, giving ketyl radicals that react with O2 to form peroxyl radicals. The authors argue curcumin is a poor photosensitizer and its phototoxicity is probably radical-mediated, not 1O2-mediated."
+  },
+  "key_details": "Spectroscopic study of curcumin encapsulated in three biocompatible hosts, which shifted its keto-enol equilibrium towards the diketo form. Photolysis was run anaerobically under visible light and 1O2 phosphorescence was measured in each host and in dioxane. A clear 1O2 signal appeared in dioxane but none in any host, partly because the triplet lifetime in the hosts is too short for oxygen quenching to compete. The authors note curcumin absorbs only blue light, has ISC/1O2 quantum yields of ca. 0.1 at most in organic solvents, reacts readily with 1O2 and is poorly water-soluble. No organisms tested.",
+  "discrepancy": ""
+ },
+ "curcumin-12": {
+  "status": "no_access",
+  "source_url": "https://doi.org/10.1039/c3pp50095k",
+  "updates": {},
+  "key_details": "Springer page for Photochem Photobiol Sci 12:1795-1802 (2013) showed only the abstract and an 'Access this article' paywall through the proxy.",
+  "discrepancy": ""
+ },
+ "curcumin-14": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1007/s11356-020-09210-4",
+  "updates": {
+   "organism": "Aedes aegypti larvae (target); Daphnia magna, Danio rerio (zebrafish) and Pseudokirchneriella subcapitata feeding (non-target)",
+   "dose": "three formulations: curcumin in 1% DMSO/99% ethanol (1.5 mg/mL stock), or 1% curcumin in 99% sucrose or 99% D-mannitol (w/w); non-target tests up to 100 mg/L; larvae 0.45-5.4 mg/L",
+   "duration": "Daphnia 24-48 h (acute), 6 h (sub-lethal); zebrafish 48 h; larvae up to 8 h natural sunlight",
+   "result": "The ethanol+DMSO formulation gave a zebrafish LC50 of 5.9 mg/L (2.55-13.6) and its solvents killed >10% of Daphnia in the solvent control; the sucrose and D-mannitol formulations were practically non-toxic to Daphnia and zebrafish even at 100 mg/L. Sugar formulations killed 100% of Aedes larvae at 0.45, 1.8 and 5.4 mg/L after 8 h of sunlight.",
+   "env_effects": "Daphnia at 50 mg/L showed a 59% rise in ROS; at 50 mg/L of the D-mannitol formulation algal growth in the Daphnia feeding test was 117% of control; curcumin adhered to Daphnia bodies and guts at 100 mg/L. Solvent carrier was more toxic than curcumin."
+  },
+  "key_details": "Tested a curcumin photolarvicide in three carriers on non-target D. magna (OECD 202, in dark and 16:8 light, n=35 for sub-lethal assays) and zebrafish (10 fish per replicate, n=20), plus target Aedes aegypti larvae in natural sunlight. The ethanol+DMSO formulation was judged unfeasible for field use and not tested on larvae. Sugar-carrier formulations showed no acute toxicity to Daphnia at 100 mg/L and were non-toxic to fish, while killing all larvae at 0.45 mg/L and above within 8 h of sunlight; larvae were lethargic after 1 h. Larval CAT and GSH changes were measured for the D-mannitol formulation. No harmful algae were tested; relevant to curcumin as an outdoor photosensitizer's non-target safety.",
+  "discrepancy": "Record omits the target organism (Aedes aegypti larvae) and the 100 mg/L no-effect level of the sugar formulations; 'Duration: Not reported' is wrong (24-48 h acute tests, 8 h sunlight larval tests)."
+ },
+ "curcumin-17": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1111/wej.12033",
+  "updates": {
+   "scale": "100 mL beakers with 50 mL culture; f/2, 20 °C, 12:12 h light; initial ~5-6, 3-4 and 7-8 x 10^6 cells/L (C. marina, A. tamarense, K. mikimotoi)",
+   "dose": "screen: ε-polylysine, berberine, stachydrine, betaine, chitosan each at 50 mg/L; LC50 series; berberine 10-30 mg/L short-term; 4 and 8 mg/L for TEM",
+   "duration": "120 h (screen and LC50); 5-120 min (berberine short-term)",
+   "result": "At 50 mg/L only berberine inhibited K. mikimotoi (IR nearly 100% in 24 h; LC50-120h 3.1 mg/L), ε-polylysine was best on C. marina (70.9% at 120 h; LC50-120h 29.2 mg/L), and betaine and stachydrine were best on A. tamarense (LC50-120h 17.8 and 20.0 mg/L). Chitosan's apparent effect matched its acetic-acid control.",
+   "effect_pct": 100
+  },
+  "key_details": "Screen of five natural products (no curcumin) against three marine HAB species with water and acetic-acid controls; cell counts at 24-120 h; means ± SD with t-tests (replicate number not stated in text). Selectivity was strong: berberine LC50-120h was 3.1 mg/L on K. mikimotoi but 71.9 mg/L on C. marina and 58.5 mg/L on A. tamarense. Berberine at 30 mg/L inhibited K. mikimotoi within 120 min; at 10 mg/L IR was ≤40% and at 20 mg/L nearly 60% in 120 min. TEM showed organelle dissolution at 4 mg/L and membrane rupture at 8 mg/L within 12 h. No non-target toxicity tests were done, though the authors call berberine environmentally safe.",
+  "discrepancy": "Dose was reported (50 mg/L screen), not missing. The paper contains no curcumin. Nearly 100% K. mikimotoi inhibition by berberine at 50 mg/L in 24 h was omitted."
+ },
+ "curcumin-19": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.2166/wst.2013.243",
+  "updates": {},
+  "key_details": "Proxy access worked, but IWA Publishing serves this article as 'only available as a PDF'; only the abstract was readable. The abstract names strain M. aeruginosa FACHB 905, berberine at 0.000 and 0.001% (w/v), and temperature, light and aeration as the factors tested.",
+  "discrepancy": ""
+ },
+ "curcumin-22": {
+  "status": "no_access",
+  "source_url": "https://doi.org/10.1016/j.jhazmat.2024.134241",
+  "updates": {},
+  "key_details": "ScienceDirect abstract page reported that the institution does not subscribe.",
+  "discrepancy": ""
+ },
+ "curcumin-23": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.ecoenv.2020.110540",
+  "updates": {
+   "organism": "Microcystis aeruginosa FACHB-915 (microcystin-producing)",
+   "scale": "250 mL flasks with 100 mL BG11, initial 4 x 10^5 cells/mL, 25 °C, 12:12 h; triplicate",
+   "dose": "luteolin (DMSO stock) 0.5-32 mg/L range-finding; then 3.25, 6.5 and 13 mg/L (0.5x, 1x, 2x IC50)",
+   "duration": "14 d",
+   "result": "IC50 was stable at 6.342-6.810 mg/L from day 8 to 14 (about 6.5 mg/L). Growth inhibition in the mid-late stage held at 38-60%, 52-62% and 70-78% for 3.25, 6.5 and 13 mg/L, and extracellular microcystin fell 5.26-78.35% below control, more at higher doses.",
+   "effect_pct": 78,
+   "env_effects": "Extracellular microcystin decreased at all doses versus control (26.13-61.93% day 4, 5.26-74.21% day 8, 42.99-78.35% day 14); MC-release percentage stayed below 10% early on."
+  },
+  "key_details": "Toxigenic M. aeruginosa FACHB-915 was exposed to luteolin in BG11 for 14 d with triplicate exposure and control flasks; IC50 was estimated by probit regression on days 8 and 14. At each dose inhibition rose until about day 4-6 then plateaued or fell slightly as cells upregulated CAT and GSH (late-stage stimulation 2.58x and 2.36x). Chlorophyll a was stimulated early (1.21-2.25x on day 4) then inhibited. The IC50 is higher than the 1.85 mg/L reported for a non-toxigenic strain (FACHB-469). Single strain, lab only, DMSO carrier.",
+  "discrepancy": "Record implies inhibition fell late; the text says it plateaued or dropped only slightly, holding 38-78% by dose. Record says 'Not reported' for microcystin effects, but extracellular MC fell 5-78% versus control."
+ },
+ "curcumin-24": {
+  "status": "no_access",
+  "source_url": "https://doi.org/10.1016/j.jhazmat.2025.137205",
+  "updates": {},
+  "key_details": "ScienceDirect abstract page reported that the institution does not subscribe.",
+  "discrepancy": ""
+ },
+ "curcumin-25": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.scitotenv.2023.169765",
+  "updates": {
+   "organism": "Microcystis aeruginosa FACHB 905",
+   "scale": "160 mL BG11 cultures, initial 7 x 10^5 cells/mL, 25 °C, 10:14 h light, shaken 120 rpm; triplicate",
+   "dose": "gallic acid 0 (control), 0.001, 0.1, 1, 10, 100, 1000, 10,000 µg/L",
+   "duration": "about 32 d, sampled every 4 d (transcriptomics at day 32)",
+   "result": "Gallic acid inhibited growth at ≥1 µg/L (maximum inhibition 73.79% at 10,000 µg/L) but stimulated it at ≤0.1 µg/L (maximum promotion 45.28% at 0.1 µg/L; growth rate 1.09x and maximum density 1.16x control). At 0.1 µg/L microcystin synthesis rose 1.85x and total MCs reached 1.23 mg/L (+54.73%).",
+   "effect_pct": -45.28,
+   "env_effects": "At 0.1 µg/L, total microcystins +54.73% (1.23 mg/L), intracellular MC per cell 1.77 times higher than control, and the ecological risk quotient was 0.3, about 30x control (moderate risk). At 10,000 µg/L intracellular MC per cell was lower than control."
+  },
+  "key_details": "Triplicate BG11 cultures of toxigenic M. aeruginosa exposed to eight gallic acid levels spanning 7 orders of magnitude, with cell density, Chl a, ATP, ROS, SYTOX viability, intra- and extracellular MCs and transcriptomics (0.1 and 10,000 µg/L at day 32). The response was hormetic: inhibition at ≥1 µg/L, stimulation at ≤0.1 µg/L, with the inhibitory effect no longer significant above 10 µg/L per the authors' model and peak promotion at 0.18 µg/L. On day 9 the 0.1 µg/L group was 15.5% denser than control; Chl a per cell peaked at +152.85% (day 17). MC-synthesis genes were upregulated at low dose. Caveat: a single strain in lab culture; the authors warn that dilution and degradation of an applied allelochemical can leave stimulating residues.",
+  "discrepancy": "The 1.09x is the growth-rate ratio; the text's headline promotion is 45.28% at 0.1 µg/L (max density 1.16x), so effect_pct -9 understates the stimulation. Duration (~32 d) was reported. High doses did inhibit (73.79% at 10 mg/L)."
+ }
+}

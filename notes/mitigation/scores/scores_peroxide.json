@@ -1,0 +1,407 @@
+[
+ {
+  "paper_id": "peroxide-01",
+  "reproducibility": 1,
+  "effectiveness": 5,
+  "cost": 1,
+  "time": 3,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Whole-lake H2O2 dosing with a water harrow needs permits and field equipment.",
+   "effectiveness": "Duplicate enclosures cut Planktothrix >98% vs control and the whole lake fell from 600,000 to <10,000 cells/mL against a rising reference lake, lasting 7 weeks.",
+   "cost": "Treating a 0.12 km2 lake with field gear costs over $5,000.",
+   "time": "The bloom collapsed within about 10 days of the single dose.",
+   "environment": "H2O2 was gone in 2 days and lake zooplankton held at 2 mg/L, but enclosures lost ~35% of zooplankton at 2.5 mg/L and ammonium spiked."
+  }
+ },
+ {
+  "paper_id": "peroxide-02",
+  "reproducibility": 1,
+  "effectiveness": 5,
+  "cost": 1,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Treating a whole brackish creek with a toxic Alexandrium bloom needs permits and field-scale dosing.",
+   "effectiveness": "Cells and cysts fell 99.8% in 48 h, though the bloom recurred at lower levels the next year.",
+   "cost": "A 50 mg/L dose across a whole creek is well over $5,000.",
+   "time": "Result visible within 48 h.",
+   "environment": "At 50 mg/L zooplankton were strongly affected, a clear non-target harm."
+  }
+ },
+ {
+  "paper_id": "peroxide-03",
+  "reproducibility": 3,
+  "effectiveness": 4,
+  "cost": 3,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Bench cultures and microcosms with purchased Aureococcus and 11 other strains are doable with a sponsor.",
+   "effectiveness": "1.6 mg/L cut Aureococcus chl-a >90% by 24 h, but most other species were barely touched.",
+   "cost": "Twelve purchased cultures plus H2O2 and fluorometry fall around $150-500.",
+   "time": "Aureococcus reduction seen within 24 h.",
+   "environment": "Diatoms and greens dipped then rebounded within 72 h, but cyanobacteria fell about 50%, a minor non-target effect."
+  }
+ },
+ {
+  "paper_id": "peroxide-04",
+  "reproducibility": 3,
+  "effectiveness": 5,
+  "cost": 3,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Single-species culture dosing at 0.4-1.6 mg/L is simple, but Aureococcus must be bought and grown.",
+   "effectiveness": "90% removal within 12 h at low doses, with a clear growth-phase effect.",
+   "cost": "One purchased culture, H2O2 and cell counting is roughly $150-500.",
+   "time": "90% removal inside 12 h.",
+   "environment": "Non-target effects not reported; H2O2 itself is short-lived, so scored as short-lived residue."
+  }
+ },
+ {
+  "paper_id": "peroxide-05",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 3,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Four dinoflagellate cultures (two toxic) plus a fish gill cell line need a cell-culture lab.",
+   "effectiveness": "50 mg/L killed all four dinoflagellates (viability 6.4%), a strong algal effect even though the paper is flagged negative.",
+   "cost": "Algal cultures plus RTgill-W1 cell culture reagents run $500-5,000.",
+   "time": "Duration not reported; photosynthesis and viability assays are short-term, scored as \u22643 days.",
+   "environment": "Lysed cells made the water more toxic to fish gill cells, and H2O2 itself was cytotoxic."
+  }
+ },
+ {
+  "paper_id": "peroxide-06",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 2,
+  "time": 5,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Uses a purchased ichthyotoxic Cochlodinium culture, an ozone generator, bromate analysis and fish LC50 tests.",
+   "effectiveness": "10 mg/L H2O2 completely inactivated 3,000 cells/mL within 3 h with triplicate sampling, though lower doses were weaker and H2O2 was the least potent oxidant.",
+   "cost": "Culture, ozone generator, fish and bromate analysis cost $500-5,000.",
+   "time": "Inactivation was complete within 3 hours.",
+   "environment": "H2O2 left no bromate or residual oxidant and its fish LC50 was 102.6 mg/L, far above the working dose."
+  }
+ },
+ {
+  "paper_id": "peroxide-07",
+  "reproducibility": 2,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Needs K. brevis, a toxic organism, grown at bloom density (1.79e7 cells/L).",
+   "effectiveness": "Peroxide products worked only at 4.89-7.08 mg/L, ~20x the copper dose; no percent reduction given.",
+   "cost": "Toxic culture plus three commercial products is about $150-500.",
+   "time": "Duration not reported; product decay measured per day, scored \u22643 days.",
+   "environment": "Decays at 0.467 mg/L/day, but marine non-target effects untested."
+  }
+ },
+ {
+  "paper_id": "peroxide-08",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 3,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Needs purchased ichthyotoxic Prymnesium and Heterosigma cultures and a calibrated fluorometer.",
+   "effectiveness": "H2O2 gave only moderate sustained inhibition (EC50 6.7-7.1 mg/L), and replicate numbers were not stated.",
+   "cost": "Two cultures, reagents and fluorescence readings cost $150-500.",
+   "time": "Effects were tracked over 14 days and the authors warn readings before day 7 mislead.",
+   "environment": "H2O2 half-life was 0.2-0.3 days, leaving little residue; non-targets were not tested."
+  }
+ },
+ {
+  "paper_id": "peroxide-09",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Three purchased ichthyotoxic cultures with motility tracking need a microscope camera but are sponsor-doable.",
+   "effectiveness": "24-h EC50s of 3.35-7.86 mg/L vary by species; no large percent reduction stated.",
+   "cost": "Three cultures plus video microscopy is about $150-500.",
+   "time": "24-h endpoint.",
+   "environment": "Non-target effects not reported; H2O2 is short-lived."
+  }
+ },
+ {
+  "paper_id": "peroxide-10",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "40 L tanks of natural toxic Prymnesium bloom water need access to a bloom and toxin analysis.",
+   "effectiveness": "P. parvum fell 98.6-99.0% in 24 h, but each dose was one unreplicated tank and after re-inoculation it regrew above the control.",
+   "cost": "H2O2 is cheap, but tanks and prymnesin analysis bring it to $150-500.",
+   "time": "The kill was visible within 24 hours.",
+   "environment": "Total phytoplankton fell 81-84% and regrown P. parvum had a more toxic profile, although H2O2 vanished by day 3."
+  }
+ },
+ {
+  "paper_id": "peroxide-11",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 3,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Handles brevetoxin-producing Karenia brevis cultures with CaO2 and PAC flocculant.",
+   "effectiveness": "30-50 mg/L CaO2 with PAC removed >98% of cells vs control in 72 h, but 10 mg/L failed with regrowth by 48 h and replication was not clearly stated.",
+   "cost": "Culture, CaO2, PAC and PAM measurements cost about $150-500.",
+   "time": "Cells lysed within 3 hours at 50 mg/L.",
+   "environment": "CaO2 cut brevetoxins 80-90%, but aluminium flocculant settles as residue, pH rises and off-target effects were never tested."
+  }
+ },
+ {
+  "paper_id": "peroxide-12",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 2,
+  "time": 5,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Ship-based sampling of coastal and offshore water is field-scale.",
+   "effectiveness": "A fate study of natural H2O2; no algae were treated.",
+   "cost": "Field cruises and H2O2 assays are $500-5,000 or more.",
+   "time": "Coastal half-life <10 h is measured within hours.",
+   "environment": "Nothing was added; it measures natural H2O2 decay."
+  }
+ },
+ {
+  "paper_id": "peroxide-13",
+  "reproducibility": 2,
+  "effectiveness": 1,
+  "cost": 3,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Needs wild-caught Calanus copepods and chilled seawater.",
+   "effectiveness": "Non-target copepod toxicity study; no algae were treated.",
+   "cost": "Copepod collection and seawater setup cost about $150-500.",
+   "time": "Mortality was read 25 hours after a 1 h pulse.",
+   "environment": "25 h LC10 was ~11 mg/L, within HAB dosing range, and escape responses were impaired even at 8.5 mg/L."
+  }
+ },
+ {
+  "paper_id": "peroxide-14",
+  "reproducibility": 2,
+  "effectiveness": 1,
+  "cost": 2,
+  "time": 4,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Needs Northern shrimp in a chilled (6.8 C) flow-through seawater system.",
+   "effectiveness": "Non-target shrimp toxicity study; no algae were treated.",
+   "cost": "A chilled flow-through system with replicate tanks costs $500-5,000.",
+   "time": "Deaths began on day 3 and reached 80% two days after the third pulse.",
+   "environment": "Three 2 h pulses of 15 mg/L killed 80% and 1.5 mg/L caused gill necrosis and 66% lower feeding."
+  }
+ },
+ {
+  "paper_id": "peroxide-15",
+  "reproducibility": 2,
+  "effectiveness": 1,
+  "cost": 3,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Needs light-trapped wild krill held at 8 C.",
+   "effectiveness": "Non-target krill toxicity study; no algae were treated.",
+   "cost": "Collection gear and cold seawater setup cost about $150-500.",
+   "time": "Mortality was read 6-48 h after a 1 h exposure.",
+   "environment": "The 48 h delayed LC50 was 0.86 mg/L after a 1 h pulse, below common HAB doses."
+  }
+ },
+ {
+  "paper_id": "peroxide-16",
+  "reproducibility": 4,
+  "effectiveness": 1,
+  "cost": 4,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Daphnia and Moina acute tests in filtered lake water are standard school-friendly bioassays.",
+   "effectiveness": "Non-target zooplankton toxicity study; algae were only food.",
+   "cost": "Daphnia, H2O2 and glassware cost about $50-150.",
+   "time": "48 h tests.",
+   "environment": "Moina LC50 was 2 mg/L with complete mortality at 3 mg/L, inside the cyanobacteria treatment range."
+  }
+ },
+ {
+  "paper_id": "peroxide-17",
+  "reproducibility": 5,
+  "effectiveness": 1,
+  "cost": 5,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Sodium percarbonate, lake water and 1 L containers with Daphnia counts are common school materials.",
+   "effectiveness": "Algal effects were not measured; only Daphnia survival.",
+   "cost": "Percarbonate and containers cost under $50 with a school microscope.",
+   "time": "24 hour exposure.",
+   "environment": "Daphnia survival fell ~50 points at 5.5-8.3 mg/L H2O2 and to 3% at 11 mg/L, doses used on blooms."
+  }
+ },
+ {
+  "paper_id": "peroxide-18",
+  "reproducibility": 1,
+  "effectiveness": 4,
+  "cost": 1,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Combines 24 h tests on 26 cultured taxa with two whole-lake H2O2 treatments.",
+   "effectiveness": "The lake treatments cut cyanobacterial biovolume 85.1% and 96.8% within days, matching lab EC50s, but only one lake with before/after comparison and no control lake.",
+   "cost": "Whole-lake dosing plus 26 cultures costs over $5,000.",
+   "time": "Cyanobacteria fell within two days.",
+   "environment": "At <=2 mg/L non-target effects were small, but the second treatment collapsed rotifers by 82%."
+  }
+ },
+ {
+  "paper_id": "peroxide-19",
+  "reproducibility": 4,
+  "effectiveness": 3,
+  "cost": 4,
+  "time": 5,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Bottles of lake water dosed with 2.5-50 mg/L H2O2 is simple bench work.",
+   "effectiveness": "Diluted water: 2.5 mg/L removed the cyanobacterial signal; dense water consumed H2O2 within 24 h, so mixed by density.",
+   "cost": "Lake water, H2O2 and a fluorometer loan about $50-150.",
+   "time": "24-h endpoint.",
+   "environment": "Greens and diatoms left intact in diluted water; H2O2 degraded within 24 h."
+  }
+ },
+ {
+  "paper_id": "peroxide-20",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 2,
+  "time": 5,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Three purchased cultures and a PAM fluorometer under controlled light are doable with a sponsor.",
+   "effectiveness": "Microcystis EC50 fell to 0.27 mg/L at high light, but the endpoint is 3 h photosynthetic yield, not cell death or growth.",
+   "cost": "A PAM fluorometer puts the cost at $500-5,000.",
+   "time": "Three-hour exposures.",
+   "environment": "H2O2 fell to <4% within 3 h in light and the green alga and diatom were 15-58x less sensitive."
+  }
+ },
+ {
+  "paper_id": "peroxide-21",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 2,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Twelve culture-collection strains and a Phyto-PAM are specialist but sponsor-feasible.",
+   "effectiveness": "Cyanobacterial EC50s were 1.25-7.15 mg/L on photosynthetic yield only, and copper beat H2O2 in most divisions.",
+   "cost": "Twelve strains plus Phyto-PAM access cost $500-5,000.",
+   "time": "48 hour tests.",
+   "environment": "H2O2 was not selective: mixotrophs and diatoms were nearly as sensitive as cyanobacteria."
+  }
+ },
+ {
+  "paper_id": "peroxide-22",
+  "reproducibility": 4,
+  "effectiveness": 4,
+  "cost": 4,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "CaO2 granules in fabric bags in 200 mL dam water with Microcystis are simple bench work.",
+   "effectiveness": "2 g/L CaO2 in fabrics B and C cut phycocyanin fluorescence 87.5-91% in triplicate, but lower doses mostly recovered and the endpoint is fluorescence, not counts.",
+   "cost": "CaO2, fabric and a culture cost about $50-150 plus fluorometer access.",
+   "time": "Effects were clear by 48 hours.",
+   "environment": "Fabric enclosure is retrievable and kept pH <=10 (loose granules >11); toxins and non-targets were not measured."
+  }
+ },
+ {
+  "paper_id": "peroxide-23",
+  "reproducibility": 3,
+  "effectiveness": 4,
+  "cost": 3,
+  "time": 4,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Building PVC buoys with a hydrogel disk and commercial H2O2 algaecide in 1 L beakers is feasible with a sponsor.",
+   "effectiveness": "Chl-a fell to ~5% of control after 14 d with 3 vs 3 beakers, but at a very low starting chlorophyll (2-2.5 ug/L), not a real bloom.",
+   "cost": "Buoy materials, algaecide and lake water cost $150-500.",
+   "time": "Significant reductions appeared after day 3 and grew through day 14.",
+   "environment": "Sustained H2O2 release cut cyanobacteria, but non-target organisms were not assessed."
+  }
+ },
+ {
+  "paper_id": "peroxide-24",
+  "reproducibility": 3,
+  "effectiveness": 4,
+  "cost": 2,
+  "time": 4,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "4 L bottles of bloom water dosed with 4 mg/L H2O2 are simple, but need bloom access and a FluoroProbe.",
+   "effectiveness": "Cyanobacteria fell significantly in 10 of 11 triplicated experiments, 43-99.8% below controls, though high-biomass water often stayed above thresholds.",
+   "cost": "FluoroProbe and sequencing put it at $500-5,000.",
+   "time": "Bottles were incubated 4-7 days.",
+   "environment": "Green algae rose up to 400% and heterotrophic bacteria fell 44%; H2O2 itself leaves no residue."
+  }
+ },
+ {
+  "paper_id": "peroxide-25",
+  "reproducibility": 1,
+  "effectiveness": 4,
+  "cost": 2,
+  "time": 4,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "1500 L limnocorrals in a hyper-eutrophic catfish pond need field access.",
+   "effectiveness": "6.7 mg/L cut cyanobacterial biovolume 91.9% vs controls at day 7 in triplicate enclosures, though total chlorophyll recovered as chlorophytes replaced them.",
+   "cost": "Twelve limnocorrals and analyses cost $500-5,000.",
+   "time": "Cuts were rapid and read over 7 days.",
+   "environment": "Extracellular microcystin briefly rose and zooplankton were harmed at 20 mg/L but not 6.7 mg/L."
+  }
+ },
+ {
+  "paper_id": "peroxide-26",
+  "reproducibility": 1,
+  "effectiveness": 3,
+  "cost": 2,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Spraying H2O2 and spreading 65 kg of percarbonate in a tidal river needs permits and field crews.",
+   "effectiveness": "Chl-a fell 81-90% short-term, but effects faded within a day to a week, the bloom persisted (447 ug/L at day 14) and there were no replicated plots.",
+   "cost": "Products, boat work and transcriptomics cost $500-5,000.",
+   "time": "Reductions were visible within hours to a day.",
+   "environment": "H2O2 was gone within 24 h and no wildlife deaths were seen, but microcystin peaked at 35.6 ug/L."
+  }
+ },
+ {
+  "paper_id": "peroxide-27",
+  "reproducibility": 3,
+  "effectiveness": 5,
+  "cost": 3,
+  "time": 4,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Microcystis flask cultures dosed with five commercial peroxide products, read by PHYTO-PAM, need a sponsor.",
+   "effectiveness": "At >=3 mg/L most products drove Chl-a to undetectable with no recovery, in triplicate at three biomass levels vs controls.",
+   "cost": "Cultures, products and PAM access cost $150-500 (LC-MS toxins extra).",
+   "time": "Declines appeared within days in the 9-15 day series.",
+   "environment": "Extracellular microcystin rose after 1 day before falling, and CaO2 raised pH."
+  }
+ }
+]

@@ -1,0 +1,362 @@
+[
+ {
+  "paper_id": "shellfish-01",
+  "reproducibility": 1,
+  "effectiveness": 4,
+  "cost": 1,
+  "time": 1,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Whole-bay restoration of 3.2 M adult clams across 64 plots of ~1,850 m2 in Shinnecock Bay needs permits and a restoration program.",
+   "effectiveness": "Brown tide fell from 0.3-1.9x10^6 to <10^4 cells/mL and filtration time from ~3 months to 10 days, a large drop but correlational with no concurrent control.",
+   "cost": "Buying and planting 3.2 million adult clams costs far over $5,000.",
+   "time": "Effects emerged over 2012-2019 with surveys to 2021, i.e. years.",
+   "environment": "Only native clams added; clams rose 18x, harvests 16x and chl a fell, with no non-target harm reported."
+  }
+ },
+ {
+  "paper_id": "shellfish-02",
+  "reproducibility": 3,
+  "effectiveness": 5,
+  "cost": 3,
+  "time": 5,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "300 L mesocosms of Peconic Bay water with live clams need a sponsor with tank space and a cell counter.",
+   "effectiveness": "High-clam tanks held Aureococcus ~100x lower than no-clam tanks (>600,000 cells/mL), a large controlled effect.",
+   "cost": "A few hundred litres of tank plus a few dozen hard clams is roughly $150-500.",
+   "time": "Differences appeared within the 8-9 day run; clearing ~40% of volume per day acts within days.",
+   "environment": "Only native clams added and retrievable; no rise in total biomass or species shift reported."
+  }
+ },
+ {
+  "paper_id": "shellfish-03",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 2,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Mesocosms with eelgrass and three bivalve species need outdoor tanks and sourced seagrass, doable with a sponsor.",
+   "effectiveness": "Chl a significantly lower with bivalves (p<0.05) but no magnitude reported and not HAB-specific.",
+   "cost": "Tanks, eelgrass and bivalves at realistic densities likely $150-500.",
+   "time": "Duration not reported; eelgrass growth endpoints imply weeks to months, scored conservatively.",
+   "environment": "Native bivalves only; light and eelgrass growth rose (+48%); no harm reported."
+  }
+ },
+ {
+  "paper_id": "shellfish-04",
+  "reproducibility": 1,
+  "effectiveness": 2,
+  "cost": 1,
+  "time": 2,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "13 m3 MERL mesocosms at Narragansett Bay are specialized facilities a school cannot reproduce.",
+   "effectiveness": "Measured +58% sedimentation, not an algal reduction; shows lab rates overestimate field removal by up to 10x.",
+   "cost": "Large mesocosm facility operation exceeds $5,000.",
+   "time": "Duration not reported; sedimentation budgets of this kind run weeks to months, scored conservatively.",
+   "environment": "Native clams only, but 21% of extra sediment became permanent biodeposits; no harm reported."
+  }
+ },
+ {
+  "paper_id": "shellfish-05",
+  "reproducibility": 4,
+  "effectiveness": 3,
+  "cost": 4,
+  "time": 5,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Lab particle-retention measurement with bivalves and a particle counter is a standard bench method, doable at school with a sponsor.",
+   "effectiveness": "Clams retain 100% of particles >4 um and oysters 100% >5-6 um, but no bloom reduction measured and abstract digits partly unreadable.",
+   "cost": "Six bivalve species plus tanks roughly $50-150 if a particle counter is borrowed.",
+   "time": "Filtration rates are measured in hours.",
+   "environment": "Nothing added to natural water; not reported otherwise."
+  }
+ },
+ {
+  "paper_id": "shellfish-06",
+  "reproducibility": 4,
+  "effectiveness": 2,
+  "cost": 4,
+  "time": 5,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Lab flow-through feeding with three common bivalves is a bench protocol a sponsor could supervise.",
+   "effectiveness": "Ranks feeding clam < oyster < mussel with clam removal falling at high food; no HAB reduction measured.",
+   "cost": "Bivalves, pumps and algal food roughly $50-150.",
+   "time": "Feeding and biodeposition measured over hours.",
+   "environment": "Nothing added; not reported, but a lab feeding study has no release."
+  }
+ },
+ {
+  "paper_id": "shellfish-07",
+  "reproducibility": 2,
+  "effectiveness": 2,
+  "cost": 3,
+  "time": 2,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Meta-analysis of >60 studies; the typical experiment is lab/field clearance measurement needing specialist gear.",
+   "effectiveness": "Most studies deplete <30% of particles, a weak removal effect.",
+   "cost": "Typical clearance-rate study with animals and counters ~$150-500.",
+   "time": "Summarized aquaculture-biofilter effects are seasonal; review scored at weeks to months.",
+   "environment": "Filter feeders add nothing; no harm reported."
+  }
+ },
+ {
+  "paper_id": "shellfish-08",
+  "reproducibility": 3,
+  "effectiveness": 1,
+  "cost": 4,
+  "time": 5,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Method review; the typical clearance experiment (beaker, bivalve, cell counts, Coughlan formula) is doable with a sponsor.",
+   "effectiveness": "No algal reduction reported; review of measurement methods only.",
+   "cost": "A clearance-rate setup is ~$50-150.",
+   "time": "Clearance runs take hours.",
+   "environment": "Nothing added in clearance tests; not reported."
+  }
+ },
+ {
+  "paper_id": "shellfish-09",
+  "reproducibility": 5,
+  "effectiveness": 2,
+  "cost": 5,
+  "time": 5,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "250 mL beakers with one 10-20 mm clam and cell counts over 1 h is a simple school bench protocol (culture purchase aside).",
+   "effectiveness": "Clams cleared Margalefidinium at <=1,000 cells/mL but clearance was ~0 at >=1,500 cells/mL, i.e. fails at bloom densities.",
+   "cost": "Small seed clams and beakers are under $50 beyond the cultures.",
+   "time": "Result visible in 1 h.",
+   "environment": "Clams only; no change in valve behaviour, nothing added."
+  }
+ },
+ {
+  "paper_id": "shellfish-10",
+  "reproducibility": 3,
+  "effectiveness": 2,
+  "cost": 3,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Five bivalve species and toxic Alexandrium, Prorocentrum and Heterosigma cultures need a sponsor.",
+   "effectiveness": "Bivalves cleared HAB cells as fast as or faster than Rhodomonas, but many cells came out intact and possibly viable in biodeposits and oysters stayed mostly closed.",
+   "cost": "Bivalves and three HAB cultures cost $150-500.",
+   "time": "1 h clearance incubations.",
+   "environment": "Viable HAB cells and Alexandrium temporary cysts were repackaged in feces and pseudofeces."
+  }
+ },
+ {
+  "paper_id": "shellfish-11",
+  "reproducibility": 2,
+  "effectiveness": 2,
+  "cost": 2,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "The 1 L beaker clearance test is simple, but it needs Dinophysis bloom water, field deployments and toxin LC-MS.",
+   "effectiveness": "Measures clearance rates (oysters 1.69 L/h/g) only, not any reduction of the bloom.",
+   "cost": "Toxin analysis and deployments cost $500-5,000.",
+   "time": "Clearance was measured in 60 min trials.",
+   "environment": "Blue mussels exceeded the FDA DST guideline for three weeks and toxins persisted ~6 weeks."
+  }
+ },
+ {
+  "paper_id": "shellfish-12",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 1,
+  "time": 2,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Monitors a commercial oyster FLUPSY in an estuary.",
+   "effectiveness": "Median chlorophyll removal across the nursery was 6.45%, sometimes negative, and too small to affect the embayment.",
+   "cost": "A commercial FLUPSY costs well over $5,000.",
+   "time": "Data spanned a four-month season.",
+   "environment": "Oysters released biodeposits (negative removal) and died more during a Cochlodinium bloom."
+  }
+ },
+ {
+  "paper_id": "shellfish-13",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 1,
+  "time": 2,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Observation of the 1985 Narragansett Bay brown tide cannot be repeated on demand.",
+   "effectiveness": "Negative: clearance fell above 5x10^5 cells/mL, so mussels did not control the ~10^6 cells/mL bloom.",
+   "cost": "Bay-wide field survey far exceeds $5,000.",
+   "time": "Over the course of a season-long bloom.",
+   "environment": "30-100% mussel mortality and complete reproductive failure."
+  }
+ },
+ {
+  "paper_id": "shellfish-14",
+  "reproducibility": 3,
+  "effectiveness": 2,
+  "cost": 3,
+  "time": 1,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Lab mussel feeding with a toxic Alexandrium culture needs purchased toxic cultures and toxin assays.",
+   "effectiveness": "Clearance on Alexandrium ~48% lower than on the diatom; grazing weakened on the HAB.",
+   "cost": "Toxic cultures and PST analysis ~$150-500 excluding assay lab.",
+   "time": "Ran 17 d; toxicity passed the limit in <1 h, but the removal question spans weeks.",
+   "environment": "Mussels kept 79% of ingested toxin and became unsafe to eat; no mortality."
+  }
+ },
+ {
+  "paper_id": "shellfish-15",
+  "reproducibility": 3,
+  "effectiveness": 1,
+  "cost": 3,
+  "time": 3,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Lab clams fed two Alexandrium isolates need toxic cultures and toxin analysis.",
+   "effectiveness": "Clams ate the high-toxicity strain only when diatom was added; little removal of the HAB itself.",
+   "cost": "Cultures, clams and toxin testing ~$150-500.",
+   "time": "~2 weeks uptake.",
+   "environment": "Tissues exceeded closure level by several orders of magnitude, with 3-6 week depuration."
+  }
+ },
+ {
+  "paper_id": "shellfish-16",
+  "reproducibility": 3,
+  "effectiveness": 1,
+  "cost": 3,
+  "time": 3,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Oyster life stages with a Prorocentrum culture plus histology needs sponsor lab access.",
+   "effectiveness": "Juveniles rejected most P. minimum as pseudofeces for ~2 weeks; little effective removal.",
+   "cost": "Oyster seed, cultures and histology ~$150-500.",
+   "time": "Effects over weeks.",
+   "environment": "Larvae grew poorly on P. minimum, a minor non-target effect on the oysters."
+  }
+ },
+ {
+  "paper_id": "shellfish-17",
+  "reproducibility": 3,
+  "effectiveness": 2,
+  "cost": 3,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Oysters, Asian clams and a toxic Microcystis culture in 1 L beakers need a sponsor and toxin assays.",
+   "effectiveness": "Clams cleared cultured Microcystis but in bloom water both bivalves cleared slowly and clams selected green algae over cyanobacteria.",
+   "cost": "Bivalves, culture and microcystin assays cost $150-500.",
+   "time": "Toxin accumulation was measurable at 24 h in 3-4 day trials.",
+   "environment": "Oysters accumulated up to 4905 ng/g microcystin, orders of magnitude over guidance, without depurating."
+  }
+ },
+ {
+  "paper_id": "shellfish-18",
+  "reproducibility": 1,
+  "effectiveness": 2,
+  "cost": 1,
+  "time": 5,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Upstream-downstream fluorometry over eight intertidal oyster reefs is field work.",
+   "effectiveness": "Reefs removed a mean of 12.9% of chlorophyll, ranging from -9.8% to 27.9%, with one short run per reef.",
+   "cost": "Field fluorometers and reef access cost over $5,000.",
+   "time": "Measurement runs lasted 0.3-1.3 h.",
+   "environment": "Natural reefs add nothing and bare shell removed no chlorophyll."
+  }
+ },
+ {
+  "paper_id": "shellfish-19",
+  "reproducibility": 4,
+  "effectiveness": 1,
+  "cost": 5,
+  "time": 1,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Model study; running a published eutrophication model is possible on a computer, though this Chesapeake model is specialist.",
+   "effectiveness": "Even 10x oyster biomass cut summer surface chl by only ~1 mg/m3.",
+   "cost": "Model runs cost nothing beyond a computer.",
+   "time": "Effect is a summer-season outcome of multi-year restoration.",
+   "environment": "Oysters add nothing; deep DO +0.25 g/m3 and SAV +20%."
+  }
+ },
+ {
+  "paper_id": "shellfish-20",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 1,
+  "time": 1,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Seasonal flux measurements on a restored reef in the Choptank River need field cores and nutrient analysis.",
+   "effectiveness": "Measured nutrient fluxes, not algae; no algal reduction reported.",
+   "cost": "Reef restoration and flux campaign exceed $5,000.",
+   "time": "All seasons measured.",
+   "environment": "Ammonium and phosphate release >=10x control, which can fuel algae."
+  }
+ },
+ {
+  "paper_id": "shellfish-21",
+  "reproducibility": 3,
+  "effectiveness": 1,
+  "cost": 5,
+  "time": 1,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Running the FARM and EcoWin ecosystem models requires specialist modelling software and data.",
+   "effectiveness": "Modelled chlorophyll fell only 1.3-2.1% on average (0.3% farm-scale).",
+   "cost": "A modelling study can be repeated with free or web tools.",
+   "time": "Model outcomes are annual.",
+   "environment": "Oyster aquaculture removes nitrogen with no added material."
+  }
+ },
+ {
+  "paper_id": "shellfish-22",
+  "reproducibility": 4,
+  "effectiveness": 1,
+  "cost": 5,
+  "time": 1,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Theoretical model comparing recycling and growth timescales is reproducible with a spreadsheet.",
+   "effectiveness": "Theory only: gives conditions for control, no measured algal reduction.",
+   "cost": "Free to repeat.",
+   "time": "No experimental time; the control acts over ecosystem timescales, scored conservatively.",
+   "environment": "Natural benthos, nothing added; not reported."
+  }
+ },
+ {
+  "paper_id": "shellfish-23",
+  "reproducibility": 4,
+  "effectiveness": 3,
+  "cost": 4,
+  "time": 4,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Bivalves in 5 L microcosms with a Thalassiosira culture and counting chamber are simple.",
+   "effectiveness": "Removal was 77-94% in triplicate, but with no bivalve-free control, settling or die-off cannot be separated from filtration.",
+   "cost": "Bivalves, culture and a counting chamber cost about $50-150.",
+   "time": "5 day experiment.",
+   "environment": "Bivalves are retrievable and also cleared nutrients and wastewater solids."
+  }
+ },
+ {
+  "paper_id": "shellfish-24",
+  "reproducibility": 4,
+  "effectiveness": 1,
+  "cost": 3,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Lab clearance with Rhodomonas plus yellow loess clay is bench-scale but uses seven invertebrate species.",
+   "effectiveness": "Tests clay interference with filtration, not algal removal; scallop clearance fell at 0.01 g/L.",
+   "cost": "Seven species, culture and loess ~$150-500.",
+   "time": "Clearance measured in hours.",
+   "environment": "Loess clay suppressed scallop and mussel clearance at 0.01-10 g/L, a non-target effect."
+  }
+ }
+]

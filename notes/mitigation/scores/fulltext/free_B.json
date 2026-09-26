@@ -1,0 +1,324 @@
+{
+ "mixing-07": {
+  "status": "full_read",
+  "source_url": "https://digital.csic.es/bitstream/10261/321589/3/17_Llaveria%202009.pdf",
+  "updates": {
+   "scale": "4 flasks: 2 shaken (orbital shaker, 120 rpm, 30 mm displacement) vs 2 still controls",
+   "dose": "ε = 27 cm² s⁻³ (2.7 × 10⁻³ W kg⁻¹), orbital shaker",
+   "duration": "Continuous shaking from day 7 to day 21 (~14 d)",
+   "result": "Shaken cultures grew at 0.52 ± 0.06 d⁻¹ vs 0.69 ± 0.11 d⁻¹ still (75% of control); final abundance (days 16-21) 27,852 vs 54,333 cells mL⁻¹ (~51% of still). Immediate transient G2/M arrest; mortality signals only after >4 d.",
+   "effect_pct": 49
+  },
+  "key_details": "Synchronised A. minutum cultures; on day 7 two flasks were randomly shaken and two kept still (n = 2 flasks per treatment). Turbulence came from an orbital shaker at 120 rpm, ε = 27 cm² s⁻³. Shaken exponential growth rate was 0.52 ± 0.06 d⁻¹ vs 0.69 ± 0.11 d⁻¹ in still cultures (P = 0.005), and final cell abundance was ~51% of the still cultures (27,852 ± 3,461 vs 54,333 ± 14,917 cells mL⁻¹). After 48 h of shaking, G2/M lasted ~75% longer and S phase was ~19% shorter. Mortality was estimated only qualitatively (Coulter size fractions of broken thecae); the authors state no rates could be estimated.",
+  "discrepancy": "The record gave ε ≈ 2 × 10⁻⁴; the paper states ε = 27 cm² s⁻³ = 2.7 × 10⁻³ W kg⁻¹. The record also left out the growth and abundance reductions (75% of the still growth rate; ~51% of final cells)."
+ },
+ "mixing-08": {
+  "status": "full_read",
+  "source_url": "https://bg.copernicus.org/articles/4/559/2007/bg-4-559-2007.pdf",
+  "updates": {
+   "scale": "Culture flasks, n = 2 per treatment; orbital shaker (high ε) and orbital grid system (low ε), 5 experiments",
+   "duration": "Shaking for 4 d (exponential or stationary phase) or continuously ('Always', ~16-17 d, days 4/5 to 21)",
+   "result": "At high ε, continuously shaken A. minutum grew at 0.19 ± 0.02 vs 0.25 ± 0.01 d⁻¹ and ended at 55.4% of control cell numbers; A. catenella ended at 24.7% and 21.6% of control (two experiments). Low ε (grids) did not suppress growth (A. minutum 127% of control).",
+   "effect_pct": 44.6,
+   "env_effects": "Ecdysal cyst production was inhibited during shaking and recovered when shaking stopped. Cellular GTX(1+4) toxin was lower under long shaking, e.g. A. catenella 109.2 vs 169.7 fmol cell⁻¹."
+  },
+  "key_details": "Two Alexandrium species were exposed to ε = 0.4 cm² s⁻³ (orbital grids) or 27 cm² s⁻³ (orbital shaker), for 4 d in exponential or stationary phase or continuously, against still controls (n = 2 flasks per treatment). Continuous shaking at high ε cut A. minutum growth from 0.25 to 0.19 d⁻¹ and final abundance to 55.4% of control (4,690 vs 8,458 cells mL⁻¹). A. catenella final abundance was 24.7% and 21.6% of control, with growth rate not markedly changed. Four-day shaking gave only 86.5-96.3% of control abundance. Low-ε grids favoured growth (A. minutum 127% of control), with cells escaping to calmer layers.",
+  "discrepancy": "The record reads the abstract's 'ca. 55.4%' and 'ca. 23%' as reductions. Table 1 shows them as the share of control that remained (%T/S): A. minutum was ~45% lower and A. catenella ~75-78% lower (24.7%/21.6% of control). The record understates the A. catenella effect by a factor of about 3."
+ },
+ "mixing-15": {
+  "status": "full_read",
+  "source_url": "https://digital.csic.es/bitstream/10261/184148/1/Peters_et_al_2000.pdf",
+  "updates": {
+   "result": "In a meta-analysis of normalized rates, growth was generally reduced by turbulence; dinoflagellates showed the strongest response (rate_x = -0.91 - 0.31 log ε, R = 0.55; bulk 121% decrease in normalized growth rate) and made up 53% of negative-effect cases."
+  },
+  "key_details": "Review and re-analysis of published lab data on small-scale turbulence effects on plankton growth, ingestion and energy expenditure, normalized as rate_x. Dinoflagellates (20-200 µm) showed the clearest negative growth response, with a bulk 121% decrease in normalized growth rate. Without dinoflagellates the growth-rate cloud was slightly positive and not distinguishable from 0. Ingestion rates mostly increased, especially below 10 cm² s⁻³. Many experiments used ε far above oceanic levels.",
+  "discrepancy": ""
+ },
+ "mixing-22": {
+  "status": "full_read",
+  "source_url": "https://europepmc.org/article/PMC/PMC2938456",
+  "updates": {
+   "scale": "Couette shear cylinders (rheometer-calibrated), laminar flow, medium thickened with locust bean gum (0, 0.3, 0.5%)",
+   "dose": "0-500 rpm (shear rate up to 1,079 s⁻¹; shear stress up to 19.4 Pa)",
+   "duration": "1 h exposure at 4 °C; time series 1-120 min at 100 rpm",
+   "effect_pct": null
+  },
+  "key_details": "Early-stationary C. muelleri was sheared in Couette cylinders, with viscosity raised by locust bean gum so flow stayed laminar. Viability was scored by FDA staining, and all exposures were run in triplicate. Shear stress up to 1 Pa had no effect; above 1.3 Pa viability dropped sharply to 52-66%. Most of the effect happened within 1 min, with a secondary effect up to 8 min. This is a bioreactor-engineering study, not a bloom-control test.",
+  "discrepancy": ""
+ },
+ "mixing-24": {
+  "status": "full_read",
+  "source_url": "https://pure.uva.nl/ws/files/2746583/179090_Artificial_mixing_to_control_cyanobacterial_blooms.pdf",
+  "updates": {
+   "result": "Table 1 lists 13 lake/reservoir mixing applications: reduced cyanobacteria in several (e.g. Lake Brooker, Solomon Dam, Nieuwe Meer, Dalbang, Bleiloch), no effect in others (East Sidney, Chaffey, Sheldon; Lake Yogo 0/?; North Pine -/0). Mixing shifts dominance to greens and diatoms when it is deep and entrains cells, but chl-a per m² often rises."
+  },
+  "key_details": "Narrative review of artificial mixing (mostly aeration/bubble plumes) aimed at cyanobacteria. The authors tabulate 13 lake/reservoir applications (Table 1). Mixing lowered surface temperature (e.g. Nieuwe Meer 23.4 → 19.1 °C), raised hypolimnetic O2 and often lowered surface pH by 0.5-1 unit. Chaffey Reservoir SRP release from sediment fell ~80%, but Gächter and Wehrli found 10 years of mixing did not stop sediment anoxia or internal P cycling. Standing crop (chl-a per m²) often increased as nutrients were entrained. The authors conclude mixing can shift composition away from cyanobacteria but external nutrient reduction should stay the main focus.",
+  "discrepancy": ""
+ },
+ "mixing-27": {
+  "status": "full_read",
+  "source_url": "https://purehost.bath.ac.uk/ws/files/217514901/Arnott_et_al_2020_revised_submitted.pdf",
+  "updates": {
+   "scale": "Review of 102 publications on lab turbulence cosms (grid 32, shaker 19, Couette 18, aeration 11, other 21 studies)"
+  },
+  "key_details": "Methods review of how lab studies generate and quantify turbulence for phytoplankton (102 publications). Grid-generated turbulence dominates (32 studies, 29 quantified). Couette cylinders (18) are usually quantified as shear rate, not ε. Shaker tables (19) and aeration (11) are often unquantified. Most cosms hold <1 m³, which limits the largest eddies. Dinoflagellates were the most studied group because of their HAB relevance. Read from the authors' accepted manuscript.",
+  "discrepancy": ""
+ },
+ "mixing-L06": {
+  "status": "full_read",
+  "source_url": "https://research-repository.griffith.edu.au/server/api/core/bitstreams/645f5f25-ea8e-545b-bb28-6a33dfb1df5c/content",
+  "updates": {
+   "scale": "North Pine Reservoir (21.8 km², destratification system since 1995) vs unmixed Somerset (42.1 km²) and Wivenhoe (107.5 km²); 4-5 sites each, fortnightly",
+   "duration": "6 years of monitoring (July 1997 - June 2003)"
+  },
+  "key_details": "Observational comparison of one artificially destratified reservoir with two adjacent unmixed reservoirs in SE Queensland. Phytoplankton was sampled fortnightly at 4-5 sites per reservoir, 1997-2003; nutrients were sampled monthly at the wall site. There was no treated-reservoir replication and no before-mixing baseline, since mixing began in 1995. Total phytoplankton density did not differ significantly among the three reservoirs (P > 0.05), and all three were cyanobacteria-dominated. Species composition at the wall site differed in North Pine (ANOSIM P < 0.01). Surface phosphate in North Pine sat near the detection limit (0.06 µM) and did not correlate with algal density there.",
+  "discrepancy": ""
+ },
+ "mixing-L08": {
+  "status": "full_read",
+  "source_url": "https://mdpi-res.com/d_attachment/water/water-13-03360/article_deploy/water-13-03360.pdf",
+  "updates": {
+   "scale": "Two urban ponds in Wenzhou, China: ZS pond (5 surge aerators, 1.5 kg O2 kW⁻¹ h⁻¹, 500 rpm, installed late 2018) and MA pond (9 aerators, 18 sites)",
+   "duration": "ZS: one June survey before (2018) vs one after (2019); MA: 10 surveys Mar 2018 - Mar 2019, two years after installation"
+  },
+  "key_details": "Uncontrolled before/after design in ZS pond: a single June 2018 survey vs a single June 2019 survey, with no reference pond. After aeration, DO rose from 1.8 ± 0.4 to 8.1 ± 1.2 mg/L and TP fell from 1.64 to 0.44 mg/L. Chl-a still rose from 29 to 51 µg/L, and Microcystis dominated in both years. MA pond was only surveyed after installation: 10 monthly visits at 18 sites, with DO always >5.7 mg/L, TP 0.03-0.07 mg/L, green algae and diatoms dominant and no blooms. Chl-a was higher on the north side, where aerator coverage differed.",
+  "discrepancy": ""
+ },
+ "clay-04": {
+  "status": "full_read",
+  "source_url": "https://repository.library.noaa.gov/view/noaa/59063/noaa_59063_DS1.pdf",
+  "updates": {
+   "scale": "48 adult blue crabs in individual 20 L static tanks; 4 treatments (seawater, clay only, K. brevis only, clay-treated K. brevis), n = 12 tanks per treatment",
+   "dose": "Modified Clay II (PAC-modified) 0.5 g/L, sprayed on the surface (authors note 0.1 g/L already removes cells); K. brevis 1 × 10⁶ cells/L; re-dosed on day 4 after a full water change",
+   "duration": "8 days (two 96 h dosing periods)",
+   "result": "Clay cut K. brevis cells in the water column by 95% at 24 h and 98% at 48 h, but total brevetoxin in the water did not differ from untreated K. brevis tanks. Crab deaths were 2 (seawater), 1 (clay), 1 (K. brevis), 0 (clay + K. brevis), with no significant differences in survival or reflexes.",
+   "env_effects": "Clay dropped tank pH to 7.25 vs 7.86 in seawater on day 1, recovering within 72 h. Water-column brevetoxin was not reduced by clay. No detectable effect on adult crab survival or reflexes, though K. brevis alone killed only 1 of 12 crabs, so power to detect harm or benefit was low."
+  },
+  "key_details": "Randomised tank experiment: 48 adult blue crabs, one per 20 L static tank, 12 tanks per treatment. Clay (Modified Clay II, 0.5 g/L) and K. brevis (10⁶ cells/L) were dosed twice, on days 0 and 4, over 8 days. Cell removal was 95% at 24 h and 98% at 48 h (removal efficiency vs untreated 93% at 24 h). Total water-column brevetoxins did not differ between clay-treated and untreated K. brevis tanks at any time (GLM p > 0.05). Only 4 of 48 crabs died, none in the first 48 h, and survival (Cox model) and reflexes did not differ. Clay lowered pH for ~72 h.",
+  "discrepancy": "The record left out that clay did not reduce dissolved/total brevetoxin in the water and caused a transient pH drop (7.25 vs 7.86). It also missed that the untreated K. brevis arm barely harmed crabs (1/12 died), so the 'no harm' result has low power."
+ },
+ "p_inactivation-03": {
+  "status": "full_read",
+  "source_url": "http://nora.nerc.ac.uk/id/eprint/512349/1/N512349PP.pdf",
+  "updates": {
+   "result": "LMB strongly binds phosphate (SRP cut >98% in 7-d core batch tests and 87-98% in 48-h water tests). Field and mesocosm results vary: e.g. Lake Varese mesocosm bottom-water TP 0.11 → 0.04 mg/L, but one 58-day trial showed treated TP (median 0.58 mg/L) not substantially different from control (0.69 mg/L). Efficacy is reduced by humic substances and pH > 9."
+  },
+  "key_details": "Narrative review (author accepted manuscript) of LMB/Phoslock in ~200 water bodies. Lab batch tests showed >98% SRP reduction in 7 days and 87-98% in 48 h. Mesocosms gave 94-100% SRP and 83-96% TP reductions over up to 73 days. Field outcomes varied: the Lake Varese mesocosm showed >80% TP/SRP reduction vs the untreated site over 11 months, but another 58-day study found no substantial TP difference from controls. Direct cyanobacteria or chlorophyll outcomes are reported only sparsely, e.g. no scums or algaecide needed in one lake in 2013. Much of the evidence is industry grey literature.",
+  "discrepancy": ""
+ },
+ "p_inactivation-04": {
+  "status": "full_read",
+  "source_url": "https://findresearcher.sdu.dk/ws/files/128916920/Longevity_and_effectiveness_of_aluminum_addition_to_reduce_sediment_phosphorus_release_and_restore_lake_water_quality.pdf",
+  "updates": {
+   "result": "Across 114 Al-treated lakes, short-term epilimnetic TP fell from 0.101 to 0.036 mg/L and chl-a from 42.7 to 16.3 µg/L, with Secchi rising 1.6 → 2.4 m. TP-based longevity averaged 11 years (Secchi 9.7 and chl-a 8.8 years); stratified lakes lasted longer than polymictic ones, and Al dose explained 47% of longevity variation.",
+   "effect_pct": 62
+  },
+  "key_details": "Multi-lake synthesis of 114 lakes (Denmark, Germany, Sweden, US) treated with Al salts, comparing ≥2 years of pre-treatment growing-season data with post-treatment data. Longevity was defined as years with ≥50% improvement in TP or chl-a, or a Secchi increase. Paired tests: TP 0.101 → 0.036 mg/L, chl-a 42.7 → 16.3 µg/L (~62% lower), Secchi 1.6 → 2.4 m. Longevity averaged 11 years for TP (15 using modelled values) and 8.8 years for chl-a. Stratified lakes averaged 15 years observed (21 modelled) vs 4.6-5.7 years for polymictic lakes. Dose, watershed:lake area and Osgood index explained 47%, 32% and 3% of longevity variance. There were no untreated control lakes.",
+  "discrepancy": "The record gave no algal outcome (effect_pct null). The full text reports the chl-a drop of 42.7 → 16.3 µg/L (~62%) and a chl-a longevity of 8.8 years."
+ },
+ "p_inactivation-05": {
+  "status": "full_read",
+  "source_url": "http://nora.nerc.ac.uk/id/eprint/511845/1/N511845JA.pdf",
+  "updates": {
+   "result": "Median TP fell 0.08 → 0.03 mg/L and SRP 0.019 → 0.005 mg/L in the 24 months after La-bentonite. Median annual chl-a barely changed (10.1 → 10.0 µg/L; the drop was significant only in Z-scores), spring chl-a fell 14.0 → 6.2 µg/L, and the summer 75th percentile fell 119 → 74 µg/L.",
+   "effect_pct": 1
+  },
+  "key_details": "Before-after meta-analysis of 18 lakes treated with La-bentonite (1.4-6.7 t/ha), comparing the 24 months before and after first application. There were no untreated control lakes: TP, chl-a and Secchi data came from 15 lakes, SRP from 14, macrophyte species from 6 and colonisation depth from 4. TP and SRP fell significantly. Median annual chl-a was essentially unchanged (10.1 → 10.0 µg/L), with the largest relative response in spring (14.0 → 6.2 µg/L). The 75th-percentile shifts (summer chl-a 119 → 74 µg/L, Secchi 398 → 506 cm) were not formally tested. Macrophyte species rose from a median of 5.5 to 7.0.",
+  "discrepancy": "The record's effect_pct of 37.8 came from the summer 75th-percentile chl-a (119 → 74 µg/L), which the paper says was not tested statistically. The median annual chl-a change was only 10.1 → 10.0 µg/L (~1%), significant only after Z-score transformation, so the record overstates the algal response."
+ },
+ "p_inactivation-06": {
+  "status": "full_read",
+  "source_url": "http://nora.nerc.ac.uk/id/eprint/504546/1/N504546PP.pdf",
+  "updates": {
+   "env_effects": "Surface filterable La exceeded the Ceriodaphnia dubia EC50 (0.08 mg/L) in Loch Flemington during application and in a Niedersachsen lake for 2 months afterwards, falling to 0.001-0.002 mg/L by month 6. In at least two lakes FLa never returned below the <0.001 mg/L baseline during monitoring. Modelled La³⁺ was <0.0004 mg/L at alkalinity >0.8 mEq/L but up to 0.12 mg/L in very low-alkalinity lakes."
+  },
+  "key_details": "Analysis of water-column lanthanum in 16 lakes treated with Phoslock, monitored up to 60 months after application; pre-application TLa and FLa were <0.001 mg/L everywhere. Maximum post-application surface TLa was 0.026-2.30 mg/L and FLa 0.002-0.14 mg/L. Generalised additive models showed 2nd-order decay, reaching an end-point 3-12 months after application. Product concentrations as suspended solids (0.62-46.0 mg/L) stayed below lab EC50s (e.g. Daphnia 871 mg/L). This is a safety/exposure paper with no algal-response data.",
+  "discrepancy": "The record left out that FLa exceeded the C. dubia EC50 (0.08 mg/L) in two lakes and did not return to baseline in at least two lakes."
+ },
+ "p_inactivation-09": {
+  "status": "full_read",
+  "source_url": "https://repository.ubn.ru.nl/bitstream/handle/2066/301745/1/301745.pdf",
+  "updates": {
+   "dose": "40% FeCl3 solution applied continuously at low doses over 1.5 years from 2010; total 0.5-1 mol Fe/m² (1 mol Fe/m² in the test area)",
+   "duration": "Treatment 1.5 years (2010-2011); sediment study ~10 years later (2021)",
+   "result": "Surface-water TP stayed below 0.5 µmol/L for ~1.5 years after treatment. Afterwards summer internal P loading returned stronger (whole-lake anoxic flux ~505 µmol P m⁻² d⁻¹; in situ ~420), producing the highest surface-water P since monitoring began in 1986."
+  },
+  "key_details": "Single-lake case study (Terra Nova, NL; shallow peat lake with filamentous cyanobacteria blooms 1987-2004) about 10 years after FeCl3 dosing. There was no control lake; the design is long-term monitoring plus sediment cores from 3 stations incubated oxic and anoxic for 26 days. Sediment released 10-84× more P under anoxic than oxic conditions. The added Fe still redox-cycles in the top 10 cm and binds up to 70% of sedimentary P, but organic matter keeps Fe²⁺ in the solid phase and limits re-capture. The authors could not fully explain why suppression lasted only 1.5 years.",
+  "discrepancy": "The treatment was a continuous low-dose application over 1.5 years, not a single dose, and P suppression lasted ~1.5 years; the record's 'two years' follows the abstract. The post-treatment P peak was the highest since 1986."
+ },
+ "mixing-12": {
+  "status": "failed",
+  "source_url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.4319/lo.2009.54.4.1243",
+  "updates": {},
+  "key_details": "Wiley pdfdirect returned HTTP 403 (bot protection); no alternative OA copy found.",
+  "discrepancy": ""
+ },
+ "mixing-13": {
+  "status": "failed",
+  "source_url": "https://www.int-res.com/articles/ame2005/42/a042p055.pdf",
+  "updates": {},
+  "key_details": "int-res.com served a 'Bot check' page (HTTP 401); the KU repository record has no file.",
+  "discrepancy": ""
+ },
+ "mixing-16": {
+  "status": "failed",
+  "source_url": "https://www.int-res.com/articles/ame2002/29/a029p051.pdf",
+  "updates": {},
+  "key_details": "int-res.com served a 'Bot check' page (HTTP 401); the AU repository record has no file.",
+  "discrepancy": ""
+ },
+ "mixing-14": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1016/j.hal.2024.102666",
+  "updates": {},
+  "key_details": "Elsevier (Harmful Algae) OA article; linkinghub/ScienceDirect blocked automated access (403); not in PMC.",
+  "discrepancy": ""
+ },
+ "mixing-25": {
+  "status": "failed",
+  "source_url": "http://www.repositorio.ufc.br/handle/riufc/73207",
+  "updates": {},
+  "key_details": "The UFC repository (repositorio.ufc.br) timed out on connect.",
+  "discrepancy": ""
+ },
+ "mixing-L07": {
+  "status": "failed",
+  "source_url": "https://www.tandfonline.com/doi/pdf/10.1080/10402381.2013.872739?needAccess=true&role=button",
+  "updates": {},
+  "key_details": "Taylor & Francis PDF returned HTTP 403 (bot protection) to both curl and WebFetch.",
+  "discrepancy": ""
+ },
+ "mixing-L11": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1016/j.scitotenv.2025.178738",
+  "updates": {},
+  "key_details": "Elsevier (Sci Total Environ) OA article; ScienceDirect blocked automated access; not in PMC.",
+  "discrepancy": ""
+ },
+ "mixing-L12": {
+  "status": "failed",
+  "source_url": "https://www.sciencedirect.com/science/article/pii/S1568988321001499/pdf",
+  "updates": {},
+  "key_details": "ScienceDirect PDF returned 403; the Minerva (Univ. Melbourne) handle page exposed no downloadable file.",
+  "discrepancy": ""
+ },
+ "seaweed-07": {
+  "status": "failed",
+  "source_url": "https://www.tandfonline.com/doi/pdf/10.1080/09670260400019741?needAccess=true&role=button",
+  "updates": {},
+  "key_details": "Taylor & Francis PDF returned HTTP 403 (bot protection).",
+  "discrepancy": ""
+ },
+ "seaweed-17": {
+  "status": "failed",
+  "source_url": "https://www.sciencedirect.com/science/article/pii/S0147651322006078/pdf",
+  "updates": {},
+  "key_details": "Elsevier (Ecotoxicol Environ Saf) gold OA; ScienceDirect returned 403 and DOAJ gave no file; not in PMC.",
+  "discrepancy": ""
+ },
+ "seaweed-19": {
+  "status": "failed",
+  "source_url": "https://www.int-res.com/articles/meps2015/531/m531p155.pdf",
+  "updates": {},
+  "key_details": "int-res.com served a 'Bot check' page (HTTP 401).",
+  "discrepancy": ""
+ },
+ "clay-03": {
+  "status": "failed",
+  "source_url": "https://www.int-res.com/articles/meps/210/m210p041.pdf",
+  "updates": {},
+  "key_details": "int-res.com served a 'Bot check' page (HTTP 401).",
+  "discrepancy": ""
+ },
+ "clay-05": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1016/j.hal.2024.102609",
+  "updates": {},
+  "key_details": "Elsevier OA; ScienceDirect blocked, and the WHOI repository (hdl 1912/70696) sits behind a 'Security Check' captcha (not bypassed).",
+  "discrepancy": ""
+ },
+ "clay-06": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1016/j.ecoenv.2023.114667",
+  "updates": {},
+  "key_details": "Elsevier (Ecotoxicol Environ Saf) gold OA; ScienceDirect and DOAJ gave no retrievable file; not in PMC.",
+  "discrepancy": ""
+ },
+ "clay-07": {
+  "status": "failed",
+  "source_url": "http://ir.rcees.ac.cn/handle/311016/23025",
+  "updates": {},
+  "key_details": "The RCEES repository (ir.rcees.ac.cn) returned no content and timed out.",
+  "discrepancy": ""
+ },
+ "clay-09": {
+  "status": "failed",
+  "source_url": "https://www.sciencedirect.com/science/article/pii/S014765132101246X/pdf",
+  "updates": {},
+  "key_details": "Elsevier (Ecotoxicol Environ Saf) gold OA; the ScienceDirect PDF returned 403; not in PMC.",
+  "discrepancy": ""
+ },
+ "clay-10": {
+  "status": "failed",
+  "source_url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/j.1365-2109.2003.00958.x",
+  "updates": {},
+  "key_details": "Wiley pdfdirect returned HTTP 403 (bot protection).",
+  "discrepancy": ""
+ },
+ "p_inactivation-08": {
+  "status": "failed",
+  "source_url": "https://www.tandfonline.com/doi/pdf/10.1080/07438141.2011.601400?download=true",
+  "updates": {},
+  "key_details": "Taylor & Francis PDF returned HTTP 403 (bot protection).",
+  "discrepancy": ""
+ },
+ "mixing-06": {
+  "status": "not_free",
+  "source_url": "https://figshare.com/articles/journal_contribution/Species-specific_physiological_response_of_dinoflagellates_to_quantified_small-scale_turbulence/24339937",
+  "updates": {},
+  "key_details": "The figshare record (24339937) has metadata only and no file attached (figshare API files = []).",
+  "discrepancy": ""
+ },
+ "mixing-20": {
+  "status": "not_free",
+  "source_url": "https://research.wur.nl/en/publications/hydrodynamic-stress-and-lethal-events-in-sparged-microalgae-cultu",
+  "updates": {},
+  "key_details": "The WUR research-portal page lists no full-text file; the Wiley original is paywalled.",
+  "discrepancy": ""
+ },
+ "mixing-L01": {
+  "status": "not_free",
+  "source_url": "https://archive-ouverte.unige.ch/unige:27393",
+  "updates": {},
+  "key_details": "The UNIGE archive-ouverte file (file1.pdf) is marked accessLevel RESTRICTED.",
+  "discrepancy": ""
+ },
+ "p_inactivation-01": {
+  "status": "not_free",
+  "source_url": "https://research.wur.nl/en/publications/controlling-eutrophication-by-combined-bloom-precipitation-and-se",
+  "updates": {},
+  "key_details": "The WUR and KNAW portal pages list no full-text file; the Elsevier original is paywalled.",
+  "discrepancy": ""
+ },
+ "p_inactivation-02": {
+  "status": "not_free",
+  "source_url": "https://research.wur.nl/en/publications/management-of-eutrophication-in-lake-de-kuil-the-netherlands-usin",
+  "updates": {},
+  "key_details": "The WUR and KNAW portal pages list no full-text file; the Elsevier original is paywalled.",
+  "discrepancy": ""
+ },
+ "p_inactivation-07": {
+  "status": "not_free",
+  "source_url": "https://research.wur.nl/en/publications/humic-substances-interfere-with-phosphate-removal-by-lanthanum-mo",
+  "updates": {},
+  "key_details": "The WUR and KNAW portal pages list no full-text file; the Elsevier original is paywalled.",
+  "discrepancy": ""
+ },
+ "p_inactivation-11": {
+  "status": "not_free",
+  "source_url": "https://www.tandfonline.com/doi/pdf/10.1080/10402381.2015.1133739?needAccess=true",
+  "updates": {},
+  "key_details": "The only 'OA' copy is a figshare item holding supplementary material (ulrm_a_1133739_sm8410.pdf), not the article; the T&F PDF returned 403.",
+  "discrepancy": ""
+ }
+}

@@ -1,0 +1,200 @@
+{
+  "algicidal_microbes-03": {
+    "status": "no_access",
+    "source_url": "https://doi.org/10.1016/j.hal.2020.101798",
+    "updates": {},
+    "key_details": "",
+    "discrepancy": ""
+  },
+  "algicidal_microbes-11": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.ecoenv.2021.112913",
+    "updates": {
+      "dose": "Prodigiosin (from Zooshikella sp. SZ14) 0.01-0.2 ug/mL; 0.05 ug/mL = inhibitory dose, 0.1 ug/mL = algicidal dose",
+      "duration": "12-72 h algicidal assays; 96 h fish test",
+      "result": "Prodigiosin 24 h LC50 was 0.046 ug/mL for P. donghaiense; >=0.08 ug/mL killed 97% of cells by 48 h with no recovery by 72 h, while 0.03-0.05 ug/mL cells recovered to initial density by 72 h. The 0.1 ug/mL control dose was toxic to Artemia (24 h LC50 0.123 ug/mL) and sea bass juveniles (24 h LC50 0.125 ug/mL; 19.6% killed at 0.1 ug/mL in 24 h).",
+      "effect_pct": 97,
+      "env_effects": "At the algicidal dose (0.1 ug/mL) prodigiosin killed 49.3% of Artemia salina nauplii in 24 h and 19.6% of Lateolabrax japonicus juveniles in 24 h; fish 96 h NOEC 0.05 ug/mL. Chlorella vulgaris unaffected up to 1 ug/mL (24 h LC50 31.8 ug/mL); Photobacterium growth slowed to ~74-76% of control at 0.05-0.1 ug/mL."
+    },
+    "key_details": "Lab flask assays, at least triplicate, with cell counts every 12 h after prodigiosin dosing of P. donghaiense cultures. 0.03 and 0.05 ug/mL killed 29% and 53% of cells at 24 h, but survivors regrew to initial density by 72 h (attributed to photodegradation); 0.08-0.2 ug/mL gave >80% kill at 24 h and 97% at 48 h. Fv/Fm fell 20.6% and 93.4% below control after 3 h at 0.05 and 0.1 ug/mL. Non-target tests: Artemia 24/48 h LC50 0.123/0.088 ug/mL, sea bass juveniles 24/48 h LC50 0.125/0.116 ug/mL, Chlorella 24 h LC50 31.8 ug/mL, Photobacterium 15 min EC50 0.505 ug/mL. The safety margin between the algicidal dose and animal LC50s is only about 1.2x.",
+    "discrepancy": "Record implies non-targets are safe ('less sensitive than the HAB'); in fact the 0.1 ug/mL algicidal dose killed 49.3% of Artemia nauplii and 19.6% of juvenile sea bass within 24 h, and LC50s for both are only ~1.2x the control dose. Dose was missing from the record."
+  },
+  "barley_straw-04": {
+    "status": "failed",
+    "source_url": "https://doi.org/10.1080/07438140309354091",
+    "updates": {},
+    "key_details": "Full text available only as a scanned 8-page PDF with no text layer (no HTML full text), so it could not be extracted.",
+    "discrepancy": ""
+  },
+  "biomanipulation-03": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.3390/w9010043",
+    "updates": {
+      "dose": "First removal 1986-1988: 4 tons fish (201,000 individuals; roach 98% by number, bream 62% by weight), ~50-70% of planktivorous/benthivorous biomass; second removal Oct 2007-May 2009: 2.8 tons",
+      "result": "After each removal summer Chl a fell from 60-80 to 10-30 ug/L and Secchi rose from 0.6 m to 1.3-1.6 m (and >1.5 m after 2010), but the first clear-water state lasted only about a decade: Chl a climbed from 9.4 ug/L (1991) to 85 ug/L (2006) before the second removal."
+    },
+    "key_details": "Whole-lake case study in shallow Lake Vaeng, Denmark (catchment 9 km2, retention 15-25 days, ~70% groundwater inflow), no control lake; 30 years of summer monitoring. Wastewater was diverted in 1981 but the lake stayed turbid (Chl a 76 ug/L in 1986). Fish removed with gill nets, traps, trawling and electrofishing. Clear periods 1989-1998 and 2009-2015 had significantly higher Secchi and lower Chl a than turbid years (t-tests, Bonferroni p<0.0025); summer TP 0.036-0.072 mg/L at high macrophyte cover vs 0.084-0.170 mg/L at low cover. After macrophytes returned, Chl a peaks shifted to winter/spring (up to 96 ug/L).",
+    "discrepancy": "Record's framing is correct; add that the first biomanipulation's benefit decayed after ~10 years (return to turbid 1999-2008), which is why a second removal was needed."
+  },
+  "biomanipulation-12": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.ecss.2013.05.034",
+    "updates": {
+      "scale": "50 mL flasks (n=5) with cultures, plus field bottle incubations of natural blooms from Long Island, NY estuaries",
+      "dose": "0.24 Artemia salina nauplii/mL (vs 0.48 Acartia tonsa copepodites/mL); culture HAB densities e.g. A. fundyense 290-1500 cells/mL",
+      "duration": "24 h grazing/mortality incubations (48 h for C. polykrikoides field tests)",
+      "result": "In natural bloom water, Artemia nauplii cut C. polykrikoides by an average 57 +/- 19% (max 78%) in 48 h, A. fundyense by 48 +/- 9%, and A. anophagefferens by 24-73% in five of six experiments. Artemia mortality was 47 +/- 2.4% in A. fundyense blooms versus 13-18% in the other blooms.",
+      "effect_pct": 57
+    },
+    "key_details": "Lab grazing experiments compared the non-native brine shrimp Artemia salina with the native copepod Acartia tonsa on cultured A. anophagefferens (2 strains), C. polykrikoides and A. fundyense, with Rhodomonas salina as the non-harmful control diet (n=5 flasks per treatment). Artemia clearance rates on C. polykrikoides (450-500 ul/ind/h) were the highest of any alga tested; Acartia did not feed on A. fundyense at all. Mortality on A. fundyense was 43% (Artemia) and 72% (Acartia), significantly above other diets. Field bottle tests with bloom water compared nauplii additions to no-grazer controls; reductions were smaller at high cell densities (31-35% above 1600 C. polykrikoides cells/mL). Artemia is non-native, and field-scale release was not tested.",
+    "discrepancy": "Record's '25 field experiments... six New York estuaries' was not verified in the text read; field results give mean reductions of 57% (C. polykrikoides), 48% (A. fundyense) and 24-73% (A. anophagefferens), so effect_pct can be filled."
+  },
+  "copper-05": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.ecoenv.2020.111233",
+    "updates": {
+      "organism": "Lake Okeechobee cyanobacterial assemblage (6.14 x 10^6 cells/mL; 71% Microcystis aeruginosa, 29% Pseudanabaena mucicola)",
+      "scale": "200 mL site water in 400 mL beakers, n=3 per concentration, 4 label-range concentrations per product",
+      "dose": "Minimum effective measured exposures: SeClear (copper sulfate) 0.51 mg Cu/L; chelated Cu (Algimycin PWF, Argos, Captain XTR, Cutrine Ultra) 0.63-0.74 mg Cu/L; GreenClean Liquid 5.0 11.4 mg H2O2/L; GreenClean Liquid 5.0 11.8 mg H2O2/L + Hydrothol 191 0.198 mg endothall acid/L",
+      "result": "At minimum effective doses, chelated copper cut cell density 77-90% and SeClear and GreenClean Liquid 5.0 (alone or with Hydrothol 191) >90-95% versus untreated controls at 3 days; granular peroxides (GreenClean Pro, PAK 27, Phycomycin SCP) and Hydrothol 191 alone achieved only 34-48%. Chelated copper kept most microcystin cell-bound at day 1 (10-23% aqueous vs 79-99% for SeClear and peroxide), and total microcystin fell below 10 ug/L by day 9 in all copper treatments.",
+      "effect_pct": 90
+    },
+    "key_details": "Lab exposures of Lake Okeechobee water collected August 7, 2019, with 10 USEPA-registered algaecides plus one combination, each at 4 label-range concentrations (n=3), and untreated controls (n=3). Controls grew from 6.14 to 8.06 x 10^6 cells/mL over 3 days. Cell density, chlorophyll-a and phycocyanin were measured 3 days after treatment; microcystin (cellular vs aqueous) at 1, 4 and 9 days. Control total microcystin was 787 ug/L at day 1 and 547 ug/L at day 9; by day 4, Algimycin PWF, Argos and Captain XTR treatments were at 11-28 ug/L. Measured peroxide and endothall exposures were 38% and 41% off target, so results use measured concentrations. Bench scale only.",
+    "discrepancy": "Record lists SeClear as a non-copper product; it is copper sulfate-based (0.51 mg Cu/L) and released 91% of microcystin into water at day 1. Granular peroxide products and Hydrothol 191 alone were only 34-48% effective, which the record omits."
+  },
+  "copper-06": {
+    "status": "no_access",
+    "source_url": "https://doi.org/10.1016/j.hal.2022.102347",
+    "updates": {},
+    "key_details": "",
+    "discrepancy": ""
+  },
+  "copper-08": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.hal.2021.102099",
+    "updates": {
+      "env_effects": "Over 90% of applied copper transfers to sediments; high mortality of fish and other fauna after Cu treatment has been linked to oxygen depletion or high doses. A whole-creek 50 mg/L H2O2 treatment cut zooplankton by 99% after 50 h, raised NH4+ 97%, and caused some fish kills.",
+      "result": "Review of in-lake chemical controls (Al, Fe, lanthanum-modified bentonite, Ca, H2O2, Cu, KMnO4) finds that algaecides act fast but blooms rebound; one site needed up to six monthly copper applications with an average rebound time of 14 days. The authors conclude no single chemical strategy is a complete solution and external nutrient reduction is fundamental."
+    },
+    "key_details": "Narrative critical review with tables of field and pilot-scale studies covering nutrient-inactivation agents and algaecides. Copper examples: >90% chlorophyll-a decline at 0.02-1 mg/L Cu at low/medium Microcystis densities but higher doses needed at 10^7 cells/mL; an Albay et al. (2003) Microcystis bloom rebounded despite daily Cu dosing under high nutrient inputs. H2O2 examples: 99% cell decline 10 days after whole-lake injection, with cells back to 2 x 10^5 cells/mL at 49 days; 99% A. ostenfeldii decline in 48 h with 50 mg/L H2O2. It also covers toxin release, dose timing and US regulations.",
+    "discrepancy": ""
+  },
+  "nutrient_reduction-04": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1111/j.1365-2427.2005.01415.x",
+    "updates": {
+      "scale": "35 shallow and deep lakes in North America and Europe (latitude 28-65 deg), recovery periods 5-35 years",
+      "duration": "Mean 15.6 years of recovery (typically 10-20)",
+      "result": "Summer chl a declined as TP fell in 71% of shallow and 69% of deep lakes; lake TP stayed above Vollenweider predictions for 5-10 years (internal loading) and reached a new equilibrium after 10-15 years. Cyanobacteria share declined in 80% of deep lakes, with no significant pattern in shallow lakes, where they stayed important down to ~50 ug TP/L."
+    },
+    "key_details": "Synthesis of 35 case studies built on a questionnaire plus loading and lake data at maximum loading and every 5 years afterwards (3-year averages). All lakes had P-loading reductions, mostly beginning in the 1970s-1980s; three also had fish removal (Balaton, Veluwemeer, Apopka). Summer TP fell in 76% of shallow lakes and all deep lakes; phytoplankton biomass declined in 71% of shallow and 70% of deep lakes (not significant in sign tests). N response time was typically <5 years versus 10-15 years for P. There were no untreated control lakes, and some lakes (Peipsi, Vortsjarv) saw chl a rise despite load cuts, attributed to warming.",
+    "discrepancy": ""
+  },
+  "nutrient_reduction-10": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.5268/iw-6.2.998",
+    "updates": {
+      "dose": "Catchment N and P load targets (target TLI 4.2 needs TN and TP loads well below current); 496 t Al added as alum to 2 tributaries June 2006-June 2015",
+      "result": "GAMs showed highly significant (p<0.001) declines in TP, TN and Chl-a in 2001-2015, and the target TLI of 4.2 was reached in 2012. Much of the improvement tracks tributary alum dosing: modelled TP fell from ~35 to 15 mg/m3 as dosing rose to 0.2 t Al/d, and Chl-a fell nearly 4-fold at the maximum 0.3 t Al/d."
+    },
+    "key_details": "Case study of Lake Rotorua (New Zealand) using two >10-year water-quality datasets with generalised additive models, plus comparison with a global lake dataset, to argue for dual N and P control. Alum dosing entered the models as an 18-month rolling mean and had a highly significant negative effect on TP and Chl-a (p<0.001). Agriculture covers ~45% of the catchment and supplies an estimated 75% of the N load and 45% of the P load. The authors do not advocate alum dosing in perpetuity; success means removing alum while holding TLI <=4.2. Observational, with no control lake.",
+    "discrepancy": "Record credits catchment nutrient-load reduction; the paper attributes much of the 2001-2015 Chl-a decline to in-stream alum dosing (a chemical P-inactivation measure), with catchment load targets not yet met."
+  },
+  "oxidation-11": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.watres.2016.11.050",
+    "updates": {
+      "scale": "10 mL cultures in 25 mL batch flasks with natural Busan seawater; 0.5-3.0 x 10^3 cells/mL",
+      "duration": "20 s to 5 min",
+      "result": "Ozone inactivated 40-95% of viable C. polykrikoides within 20 s; doses >1 mg/L removed all viable cells within 300 s, and 5 mg/L destroyed all cells within 100 s. Efficacy fell with higher cell density, humic acid, pH and temperature.",
+      "effect_pct": 100,
+      "env_effects": "Ozonation of seawater forms HOBr and carcinogenic bromate: 0.75 ug/L BrO3- at 0.5 mg/L ozone but 278 ug/L at 5 mg/L (WHO drinking-water guideline 10 ug/L); negligible below 1 mg/L. Possible release of intracellular toxins was not tested."
+    },
+    "key_details": "Bench batch experiments with cultured C. polykrikoides (NFRDI isolate) diluted in natural seawater, dosed with ozone at several concentrations; viable (motile) and total cells counted by microscope. Inactivation was two-stage: instant kill by molecular ozone, then slow kill by residual ozone and HOBr. Over 90% of the ozone decomposed within 20 s. Bicarbonate increased efficacy and humic acid reduced it. Bromate data came from Br- spiked DI water because the method failed in seawater. No field or aquaculture-scale test.",
+    "discrepancy": "Record omits the bromate byproduct risk (278 ug/L at 5 mg/L ozone)."
+  },
+  "shading-01": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1038/s41893-018-0092-2",
+    "updates": {
+      "scale": "Los Angeles reservoir (Sylmar, CA), surface area ~710,000 m2, >96 million 100 mm HDPE shade balls released August 2015",
+      "result": "Saving an estimated 1.15 million m3/yr of evaporation with 96 million HDPE balls costs 0.25-2.9 million m3 of water to make them (ball thickness 1-5 mm, water footprint 0.05-0.19 m3/kg HDPE), so the balls must stay 0.2-2.5 years for net water savings. The paper reports no algae or water-quality data and calls shade-ball control of water quality an open question."
+    },
+    "key_details": "Short perspective-style analysis using water-footprint accounting (consumptive use only) for HDPE production. The total HDPE mass needed to cover a given area depends only on ball thickness, not diameter. The balls were deployed partly to prevent algal-bloom water-quality deterioration, but whether they worked for that is stated as unresolved; some experts hypothesised a thermal-blanket effect promoting bacterial growth. Thin, lightweight balls may drift and expose warmed water, increasing evaporation. The water saving figure is the Los Angeles officials' estimate, not a measurement.",
+    "discrepancy": "Record's figures are rounded: 96 million balls (not ~100 million), 1.15 million m3/yr saved (not ~1.2), footprint 0.25-2.9 million m3, and payback 0.2-2.5 years depending on thickness."
+  },
+  "shading-09": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1111/are.15665",
+    "updates": {
+      "freshwater_or_marine": "both (freshwater prawn and tilapia ponds; milkfish pond in diluted seawater, 23 ppt)",
+      "scale": "One FPV-covered and one control pond at each of 3 Taiwan Fisheries Research Institute sites (Chupei and Lukang ~800 m2, 1 m deep; Cigu ~3000 m2, 1.75 m deep)",
+      "dose": "Hydrelio HDPE floating PV buoys covering 40% of the pond surface",
+      "result": "Mean plankton biomass in control ponds was at least twice that in FPV ponds at all three sites (p<0.05; e.g. 12,923 vs 5052 units/L at Chupei, 19,597 vs 7683 at Lukang, 136 vs 43 at Cigu), and BOD was lower under FPV. Final production was 1.1x (prawn), 1.2x (tilapia) and 1.41x (milkfish) higher in FPV ponds.",
+      "effect_pct": 61,
+      "env_effects": "FPV ponds had higher total ammonia nitrogen (significant at Chupei: 0.203 vs 0.037 ppm) and higher orthophosphate (significant at Chupei and Cigu), while total photosynthetic pigments were lower (significant at Lukang and Cigu)."
+    },
+    "key_details": "Paired-pond field comparison at three aquaculture sites: each site had one pond with 40% simulated floating-photovoltaic cover and one uncovered control, both aerated by paddle wheels and stocked identically (20,000 prawns, 5,000 tilapia or 3,700 milkfish). Water quality was sampled repeatedly (n=11, 12 and 6 sampling events), so replication is temporal only with one pond per treatment (pseudoreplication). Plankton biomass fell by about 61%, 61% and 68% (computed from Table 2 means) and total photosynthetic pigments by 35-88%. Survival was 30.9 vs 30.0% (prawn), 48 vs 40% (tilapia) and 66.4 vs 40.7% (milkfish).",
+    "discrepancy": "effect_pct was null; Table 2 gives about a 61% lower plankton biomass under 40% FPV cover (computed from means). The record also omits the higher ammonia and orthophosphate in FPV ponds, and the design has only one pond per treatment per site."
+  },
+  "shading-12": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1080/09670260801904822",
+    "updates": {
+      "dose": "Total darkness at 4 C",
+      "duration": "16-111 days",
+      "result": "After 58 days of cold darkness, filament viability ranged from 0% (strain 9307) to >50% (strains 9736 and 97112). In the hardiest strain viability was 93% at 34 days, 38% at 79 days and 0% at 111 days, with 50% mortality estimated at 70 days."
+    },
+    "key_details": "Six P. rubescens strains isolated from Lake Zurich (1993-1997) were stored at 4 C in the dark, then single filaments were transferred to 20 C light and scored for regrowth. Population-culture tests (Method A) were abandoned because many filaments lysed and could not be picked. Single-filament tests used 36 filaments per strain at 58 days, and 72 filaments per time point in the time course for strain 9736. Integrated mean survival over 111 days was 61%. The study concerns over-winter survival, not a mitigation treatment, and relevance to shading-based control is indirect.",
+    "discrepancy": "The record's '4-5 C' should be 4 C. Full loss of viability in the hardiest strain took 111 days (~16 weeks) of total darkness."
+  },
+  "ultrasound-01": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.ultsonch.2017.03.003",
+    "updates": {
+      "result": "Review concluding that field efficacy of ultrasound for HAB control 'is still debatable', with only a few full-scale field tests. The authors' own tests: a commercial LG Sonic e-tank reduced Microcystis 43% vs 5% in the control after 4.8 days in 50 L reservoir water, but both fell similarly after 11 days; sound pressure dropped 85.6% within 1 m in a lab tank and 91.3-95.8% within 1 m in Daechung reservoir.",
+      "env_effects": "Authors describe ultrasound as leaving no chemical residues; toxin release from lysed cells is discussed as a concern."
+    },
+    "key_details": "Narrative review of mechanisms (cavitation, gas-vesicle collapse), influencing factors (frequency, intensity, duration, cell morphology), toxin removal, pilot studies and scale-up challenges (flow, turbidity, HRT, light, nutrient loading). It adds original case studies. In the lab test, two 50 L containers of Daecheung reservoir water were inoculated with Microcystis (~300,000 cells/mL) with one control and no replication, run July 7-21, 2016; ultrasound improved reduction by 30-55.2% over control between 4.8 and 7.8 days, and the difference was gone by day 11. Hydrophone surveys showed stable frequencies but steep pressure attenuation (e.g. 53.73 Pa at the device to 6.79 Pa at 0.5 m and ~0.3 Pa at 10 m in the reservoir). The authors recommend multiple devices for large reservoirs.",
+    "discrepancy": "Record omits the paper's own unreplicated experiments: a transient 30-55% Microcystis reduction vs control that vanished by day 11, and >85% sound-pressure attenuation within 1 m."
+  },
+  "ultrasound-02": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.watres.2014.08.043",
+    "updates": {
+      "dose": "Four commercial Flexidal AL-10 pond transducers (square waves at ~20, 28 and 44 kHz; acoustic power 0.7 +/- 0.2 W) in 800 mL cultures",
+      "duration": "5-19 days (Anabaena 19 d, Cylindrospermopsis 10 d, Microcystis 7 d, Scenedesmus/Daphnia 5 d)",
+      "result": "Ultrasound did not kill Anabaena (biovolume growth rate cut from 0.28 to 0.02 /d, but filaments fragmented and chlorophyll kept rising) and had little effect on Cylindrospermopsis. Microcystis chlorophyll growth rate was actually higher under ultrasound (0.74 vs 0.59 /d), and all Daphnia died within 15 min of exposure.",
+      "env_effects": "All Daphnia magna exposed to ultrasound died within 15 min (all controls survived), removing grazing control of Scenedesmus."
+    },
+    "key_details": "Lab jar experiments (1 L jars, 800 mL, 25 C, 14:10 light-dark) run in 2007, with four transducer jars vs four untreated controls (n=4; Scenedesmus/Daphnia in duplicates). Endpoints were chlorophyll-a, biovolume, particle counts, particle volume and PSII efficiency, with t-tests on growth rates. Anabaena filaments shrank from 331 to 28 um (56 to 7 cells per filament), so particle counts rose. Scenedesmus biomass was lowered only by Daphnia alone; with ultrasound plus Daphnia it matched controls because the Daphnia died. The authors conclude the tested commercial devices are not a solution for cyanobacterial blooms.",
+    "discrepancy": "Record says Microcystis growth was unchanged; its chlorophyll-based growth rate was significantly higher under ultrasound (0.74 vs 0.59 /d). The record also omits the 100% Daphnia mortality within 15 min."
+  },
+  "ultrasound-07": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.ultsonch.2019.03.007",
+    "updates": {
+      "organism": "Natural Microcystis sp.-dominated (>99%) reservoir water (Chungju Dam), South Korea",
+      "scale": "Field test at Baekje weir, Geum River; 100 L pilot batch reactor; 4 m3 algal raceway pond with circulation",
+      "dose": "36, 108 and 175 kHz at 300-650 W; pilot power density 0.0030-0.0065 W/mL; raceway 7.5 x 10^-5 to 1.63 x 10^-4 W/mL",
+      "duration": "10-20 min in pilot tests; 60 min circulation (30 min cumulative exposure) in raceway",
+      "result": "In the 100 L pilot, 10 min of sonication cut Chl-a and Microcystis cells by about 80% at all frequencies, and 20 min gave 80-90% reduction out to 1.0 m; within 5 min, reduction fell from ~80% at 0.1 m to 15% (Chl-a) at 1.0 m. In the 4 m3 raceway, 108 kHz-450 W and 175 kHz-650 W gave >40% Chl-a and >60% cell reduction after 10 min, with efficiency falling after 60 min.",
+      "effect_pct": 80,
+      "env_effects": "Extracellular microcystin rose as Chl-a fell, more at 36 kHz and at higher power (650 vs 300 W at 175 kHz)."
+    },
+    "key_details": "Staged tests with a customized ultrasound system in natural Microcystis bloom water (initial pilot Chl-a 1,135 mg/m3, 4.89 x 10^6 cells/mL, microcystin 8.8 ug/L). Algal reduction was measured in the supernatant after 1 h of settling, so it counts damaged or sunk cells rather than confirmed kills. The pilot used gentle manual stirring; the distance test used no mixing; the raceway had 5.8 cm/s flow and initial densities varied between runs (222-1,016 mg/m3 Chl-a). Ultrasonication efficiencies were 0.8-15.2 m3/kWh. No untreated controls are described in the text read, and there is no long-term regrowth follow-up.",
+    "discrepancy": "Record's '50-90% in the 4 m3 pond' should be >40% (Chl-a) and >60% (cells) after 10 min in the raceway; the 80-90% figures come from the 100 L pilot within 1 m. Reductions are measured after 1 h settling, and microcystin release increased."
+  },
+  "ultrasound-11": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.jenvman.2025.125057",
+    "updates": {
+      "scale": "Five Ohio drinking-water reservoirs (3.8 x 10^5 to 5.4 x 10^6 m3) with 1-4 commercial ultrasound units from three manufacturers; at Del-Co, treated reservoir 3 vs untreated reservoirs 2 (upstream) and 4 (downstream)",
+      "duration": "Two field seasons (2022-2023); e.g. five sampling dates at Wilmington in 2022",
+      "result": "Sound pressure decayed exponentially from each unit, and turbidity, chlorophyll-a, phycocyanin and temperature showed no significant change with distance from the source (least-squares test, p=0.05). Chl-a and phycocyanin fell sequentially from upstream to downstream reservoirs regardless of treatment, which the authors attribute to settling; they conclude ultrasound had no effect.",
+      "effect_pct": 0
+    },
+    "key_details": "Field survey combining hydrophone sound-field mapping (plus anechoic-tank tests of unit directionality) with EXO2 sonde water-quality transects. Maximum transducer pressure was 11 kPa, two orders of magnitude below that needed to collapse gas vesicles, and kHz frequencies are three orders below the MHz needed for resonance; the units operate below the cavitation threshold. Attenuation coefficients varied within a water body by a factor of 2 (low frequency) and 7 (high frequency). Only one location had control reservoirs, and the others were sampled intensively at two sites and once at three.",
+    "discrepancy": "Record's claim that attenuation was '~10x faster than in pure water' was not found in the text read; the paper cites pure water alpha = 0.0022 dB/cm/MHz and reports within-reservoir variation of 2-7x."
+  }
+}
