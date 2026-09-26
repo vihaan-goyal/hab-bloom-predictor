@@ -46,12 +46,16 @@ PN2222A transistors, passive buzzer, bare 5 V relay, 1N4007 diode.
 
 | # | Item | For | Approx. |
 |---|---|---|---|
-| 1 | Male-to-female jumper wires (40-pack) | relay pins, sensor boards | $6 |
-| 2 | 12 V aquarium air pump + 12 V 1-2 A DC adapter + DC barrel-jack screw-terminal adapter | stage 2 (the real pump) | $20 |
-| 3 | DS18B20 **waterproof** temperature probe | stage 3 | $8 |
-| 4 | Analog pH probe kit (BNC probe + PH-4502C board) + pH 7.00 and 10.00 buffer packets | stage 4 | $30 |
-| 5 | Adafruit TSL2591 light sensor + red gel filter sheet + 4.5 mL square cuvettes + bright 470 nm blue LEDs | stage 5 | $20 |
-| | **Total** | | **~$85** |
+| 1 | Male-to-female jumper wires ([ELEGOO 120-pc M-F/M-M/F-F](https://www.amazon.com/dp/B01EV70C78)) | relay pins, sensor boards | $6 |
+| 2 | 12 V diaphragm air pump ([2 L/min, 0.5-0.7 A](https://www.amazon.com/dp/B01EC2OR0K)) + 12 V 2 A adapter with barrel-jack screw terminals ([bundle](https://www.amazon.com/dp/B08GX5Z4MR)) + air tubing and an air stone | stage 2 (the real pump) | $20 |
+| 3 | DS18B20 **waterproof** probe ([5-pack with 4.7 kΩ resistors](https://www.amazon.com/dp/B0C8J77NJR)) | stage 3 | $10 |
+| 4 | pH module + BNC probe ([PH-4502C type](https://www.amazon.com/dp/B07KDPQGYD)) + buffer powders 4.00/6.86/9.18 ([VIVOSUN 18-pack](https://www.amazon.com/dp/B0D4L8Y7BT)) | stage 4 | $35 |
+| 5 | [Adafruit TSL2591](https://www.amazon.com/dp/B00XW2OFWW) + [LEE 106 Primary Red gel](https://www.amazon.com/dp/B003DIGLV8) + cuvettes with **4 clear sides** ([Globe 4.5 mL, 100](https://www.amazon.com/dp/B08N5B5PL8)) + [470 nm blue LEDs](https://www.amazon.com/dp/B091SLR9SB) | stage 5 | $40 |
+| | **Total** | | **~$110** |
+
+Links found 2026-09-26; check the price, the rating and that it still matches before buying. The
+cuvettes must have 4 clear sides, because the sensor looks in at 90° to the LED. Calibrate the pH probe
+with the 6.86 and 9.18 buffers (they bracket seawater's ~8).
 
 Stage 6 (hand kits: DO kit, refractometer, counting slide, test strips, ~$90) can wait until mid-October;
 it's listed in stage 6 below and in `notes/mitigation/MATERIALS_LIST.md`.
@@ -174,19 +178,19 @@ sponsor's OK.
 
 **Parts:**
 - analog pH probe kit with a BNC probe and the blue PH-4502C board (or DFRobot Gravity pH);
-- pH 7.00 and 10.00 buffer powder packets (pH 4 optional);
+- pH 4.00, 6.86 and 9.18 buffer powder packets (calibrate with 6.86 and 9.18);
 - distilled water for rinsing.
 
 **Wiring:** board V+→5V, G→GND, Po→**A0**.
 
-**Code:** I'll add it when you get here: a two-point calibration (`cal7`, `cal10` commands) and pH in `status` and the log.
+**Code:** I'll add it when you get here: a two-point calibration (`cal686`, `cal918` commands) and pH in `status` and the log.
 
 **Tips:**
 - Store the probe tip wet (its cap with storage solution), never dry.
 - The probe can read noisily when the air pump shares the water. Compare readings with the pump on and off.
 
 **Done when:**
-- pH 7 and pH 10 buffers read within ±0.1 after calibration;
+- the 6.86 and 9.18 buffers read within ±0.1 after calibration;
 - seawater reads ~7.9-8.3 and agrees with a test strip.
 
 ## Stage 5: the fluorometer, chlorophyll (~$20, the hard part)
