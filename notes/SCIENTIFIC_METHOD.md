@@ -910,3 +910,11 @@ history:
   - curcumin capped at 2.5 mg/L;
   - H1 split into H1a (≥ 50% cut) and H1b (beats late treatment), because "less treatment than late" can't pass. The simulation showed late treatment is short and useless.
 - Details in `notes/mitigation/LAYER2_SIM_RESULTS.md`.
+
+**Alerter hardware, stages 1-2 built (2026-09-26).** `hardware/alerter_uno/alerter_uno.ino` runs
+the loop's ON/OFF rules on an Arduino Uno for one tank. It gets `day p chl` over USB and drives
+LEDs, a passive buzzer and a relay (PN2222A + 1N4007 flyback diode on D10).
+- **Check:** two test sequences give the same states as `src/sim/loop_controller.py`, and the bench build passed both, including the relay clicking.
+- **Build plan:** 9 stages in `hardware/alerter_uno/README.md`: temperature, pH, a DIY fluorometer, hand kits, the laptop link, then a 2-week dry run before the Nov 10 warm-up.
+- **Wiring pictures:** circuito.io, a Fritzing-art breadboard drawing, and a schematic.
+- **Materials:** a per-experiment list is in `notes/mitigation/MATERIALS_LIST.md`.
