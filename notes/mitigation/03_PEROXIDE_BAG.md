@@ -26,11 +26,11 @@ Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/pe
 | Loop step | What happens |
 |---|---|
 | **Trigger** | Narragansett model `p ≥ 0.50` on daily sensor means (backup: the rule trigger in `00_CONTROL_LOOP.md`) → a servo or winch **lowers the peroxide bag** |
-| **Dose** | chosen **from the measured chlorophyll at trigger**: target H₂O₂ = 0.06 mg/L per µg/L chlorophyll (the middle of 0.03-0.12), **capped at 2.8 mg/L**. The CaO₂ mass in the bag is sized from the Keliri release curve; the bench calibrates it |
+| **Dose** | **fixed target 0.8 mg/L H₂O₂** (updated 2026-09-26). The Layer 2 simulation gave the same ≥ 50% cut on a small-celled alga at 0.8 as at 1.6 mg/L, with no non-target harm; 1.6 mg/L harmed non-targets in about 36% of runs (`LAYER2_SIM_RESULTS.md`). The earlier dose-per-chlorophyll rule came from freshwater work at 82-371 µg/L. The bag is still pulled if the residual exceeds 2.8 mg/L. The CaO₂ mass in the bag is sized from the Keliri release curve; the bench calibrates it |
 | **`X` (ON time)** | **24 h** (release peaks by 24 h; brown-tide kill within 24 h), then **lift the bag out** and re-measure |
 | **Re-measure** | chlorophyll, cell count, **H₂O₂ residual** (test strips, 0.5-25 mg/L range), pH (CaO₂ raises pH), DO, non-target survival |
 | **OFF rule** | the shared rule. **Because the bag comes out after every X, "ON again" means a fresh bag** |
-| **`MAX_ON`** | 4 bags per event |
+| **`MAX_ON`** | 3 bags per event (evidence review, 2026-09-25) |
 | **Method safety limits** | H₂O₂ residual above 2.8 mg/L → pull the bag early; pH above 9.0; non-target survival more than 20 points below control |
 
 **Important difference from the other methods:** the bag is **pulled out after every 24 h

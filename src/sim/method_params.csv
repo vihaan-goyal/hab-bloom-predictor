@@ -1,0 +1,53 @@
+method,param,low,mid,high,unit,source_ids,note
+culture,mu_diatom,0.6,0.9,1.2,per day,EXECUTION_PLAN,diatom max growth (Phaeodactylum/Thalassiosira at 15-20 C)
+culture,mu_dino,0.25,0.4,0.6,per day,mixing-06;mixing-07;mixing-08,still-culture dinoflagellate growth 0.25-0.69/d
+culture,k_n,1,3,8,ug/L chl-eq,,nutrient half-saturation (nutrients in chl-equivalent units)
+culture,loss,0.03,0.07,0.12,per day,,background loss (respiration and death)
+culture,a0,0.5,1,2,ug/L,00_CONTROL_LOOP,starting chlorophyll
+culture,n0,2,4,6,ug/L chl-eq,00_CONTROL_LOOP,warm-up nutrients (low; no bloom)
+culture,n_pulse,60,100,150,ug/L chl-eq,00_CONTROL_LOOP,nutrients added on day 21 to arms A-C (sets the bloom peak)
+culture,tank_cv_mu,0.05,0.05,0.05,fraction,,tank-to-tank spread in growth rate
+culture,fluor_cv,0.05,0.10,0.15,fraction,,daily fluorometer noise
+seaweed,k_max,0.6,1.1,1.8,per day,seaweed-03;seaweed-01;seaweed-11,max drop in net growth at saturating dose; accepted only if the back-test matches seaweed-03
+seaweed,ec50,0.6,1.0,1.8,g/L wet,seaweed-03;seaweed-07;seaweed-17;seaweed-05,1 g/L n.s. in bloom water (seaweed-03); IC50 0.67 (seaweed-17); EC50 1.8-2.3 on P. micans (seaweed-07)
+seaweed,hill,1.0,2.0,3.0,,seaweed-03;seaweed-05,steepness of the dose response
+seaweed,tau_ramp,0.5,1.0,2.0,days,seaweed-03;seaweed-02;seaweed-13,effect small at 24-48 h and large at >= 72 h
+seaweed,tau_decay,0.2,0.5,1.0,days,seaweed-09;seaweed-10;seaweed-06,effect ends after removal: filtrate inhibition lasted ~2 d; PUFAs 98% gone by 48 h
+seaweed,ph_rise_max,0.5,0.9,1.2,pH units,seaweed-18;02_SEAWEED,saturating pH rise: kelp kept flasks at 8.1-8.9 up to 3 g/L (Sylvers & Gobler); +1.0 at 1 g/L from an acidified 7.44 start (seaweed-18)
+seaweed,ph_half,0.5,1.0,1.5,g/L wet,seaweed-18;02_SEAWEED,dose giving half the maximum pH rise
+seaweed,ph_base,7.9,8.0,8.1,pH,00_CONTROL_LOOP,seawater culture pH
+seaweed,dose,2,2,2,g/L wet,02_SEAWEED,design value (swept separately)
+seaweed,x_days,3,3,3,days,02_SEAWEED,design value (swept separately)
+bubbles,r_on_inhib,0.3,0.7,0.95,growth multiplier,mixing-06;mixing-07;mixing-08;mixing-11;mixing-01,while bubbling at 0.6 L/min per L for an inhibited species; accepted only if the back-test matches mixing-01
+bubbles,r_on_neutral,0.9,1.0,1.05,growth multiplier,mixing-09,4 of 10 dinoflagellates unaffected
+bubbles,r_on_stim,1.2,1.35,1.45,growth multiplier,mixing-09,3 of 10 dinoflagellates grew 30-40% faster
+bubbles,low_rate_factor,0.3,0.7,1.1,fraction of high-rate effect,mixing-01,0.05 L/min per L; the low rate beat the high rate once (55% vs 29%)
+bubbles,m_late,0.0,0.08,0.25,per day,mixing-07;mixing-05,extra mortality after > 4 d of continuous bubbling; total death after > 20 d
+bubbles,r_recover,0.46,0.6,0.67,growth multiplier,mixing-06;mixing-05,growth right after bubbling stops (46-67% of control)
+bubbles,tau_recover,0.5,1.5,3.0,days,mixing-06;mixing-05,time to return to full growth after OFF
+bubbles,rate,0.6,0.6,0.6,L/min per L,01_BUBBLES,design value (Sung & Gobler high rate)
+bubbles,x_days,2,2,2,days,01_BUBBLES,design value (swept separately)
+culture,mu_small,0.8,1.1,1.4,per day,peroxide-03,small-celled alga (Micromonas-type) growth; the peroxide target
+peroxide,target,1.6,1.6,1.6,mg/L,03_PEROXIDE_BAG,design H2O2 level from one bag (swept separately)
+peroxide,release_eff,0.6,1.0,1.3,fraction,peroxide-22;peroxide-11,achieved peak vs target (fabric and granule variation)
+peroxide,tau_release,0.1,0.25,0.5,days,peroxide-22,bag release time constant (peak by 24 h)
+peroxide,half_life,0.1,0.3,0.6,days,peroxide-19;03_PEROXIDE_EVIDENCE,H2O2 decay in bloom water (< 10 h in coastal water)
+peroxide,m_max,2,4,6,per day,peroxide-03,maximum kill rate of small cells; accepted only if the back-test matches peroxide-03
+peroxide,ec50,0.6,0.9,1.3,mg/L,peroxide-03,24-h EC50 0.91 mg/L (Aureococcus)
+peroxide,hill,1.5,2.5,4.0,,peroxide-03,steepness of the kill curve
+peroxide,nt_threshold,0.86,1.5,3.0,mg/L,peroxide-15;peroxide-13;03_PEROXIDE_EVIDENCE,non-target harm level: krill 48-h LC50 0.86; Moina no-effect 1.5; Daphnia no-effect 3
+peroxide,x_days,1,1,1,days,03_PEROXIDE_BAG,one bag per 24 h
+curcumin,ladder_top,5,5,5,mg/L,04_CURCUMIN,dose ladder 1 -> 2.5 -> 5 (cap); swept separately
+curcumin,m_max,2,8,30,per day,curcumin-01;curcumin-02,maximum kill rate; accepted only if the back-test matches curcumin-01/-02
+curcumin,ec50,2.5,3.5,4.5,mg/L,curcumin-01,3 mg/L -45%; 0.1-2 mg/L no effect; 5 mg/L -89% at 24 h
+curcumin,hill,3,5,8,,curcumin-01,steep threshold
+curcumin,half_life,0.05,0.2,1.0,days,curcumin-06;curcumin-08;curcumin-01,degrades in minutes to hours at seawater pH; Hall's effect still grew to 72-96 h
+curcumin,artefact,0.0,0.1,0.3,fraction,curcumin-06;04_CURCUMIN_EVIDENCE,fluorometer under-reads while curcumin is present (absorbs near 470 nm)
+curcumin,nt_threshold,1.8,3.0,6.0,mg/L,04_CURCUMIN_EVIDENCE;curcumin-02,zebrafish larval LD50 1.8-2.8; no harm to adult clams/crabs/urchins at 5 mg/L
+curcumin,x_days,1,1,1,days,04_CURCUMIN,one pulse per 24 h
+shellfish,clear_vol_per_day,1,1,1,tank volumes/day,05_SHELLFISH_EVIDENCE,design: animals sized to clear 1 tank volume per day (swept separately)
+shellfish,real_frac,0.2,0.6,1.2,fraction,shellfish-04;shellfish-07;shellfish-12,realised vs planning clearance: lab maxima overestimate up to 10x; most studies deplete < 30%
+shellfish,a_sat,20,50,120,ug/L,shellfish-06;shellfish-13;shellfish-09,clearance falls at high algal density (saturation and feeding shutdown)
+shellfish,tau_open,0.1,0.3,1.0,days,shellfish-16;05_SHELLFISH,time for moved animals to open and feed
+shellfish,recycle,0.3,0.5,0.7,fraction,shellfish-20,share of eaten algal nitrogen returned as ammonia (fluxes >= 10x controls)
+shellfish,x_days,1,1,1,days,05_SHELLFISH_EVIDENCE,bench X = 24 h

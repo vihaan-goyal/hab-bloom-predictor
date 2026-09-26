@@ -8,15 +8,20 @@ and the shared loop in `00_CONTROL_LOOP.md`. **Nothing hands-on starts until the
 
 | # | Method | Sources | Evidence strength | Will it work on *our* cultures? | Role in the project |
 |---|---|---|---|---|---|
-| 01 | Coarse bubbles | 27 | Moderate (bench) | Only on sensitive dinoflagellates. It pauses division (23-55% less growth) and cells regrow once it stops. 3 of 10 dinoflagellates grew *faster* when stirred. Diatoms are unaffected or helped | **Full loop run** if the species screen passes |
+| 01 | Coarse bubbles | 27 | Moderate (bench) | Only on sensitive dinoflagellates. It pauses division (23-55% less growth) and cells regrow once it stops. 3 of 10 dinoflagellates grew *faster* when stirred. Diatoms are unaffected or helped | **Screen only** (Layer 2: bubbles mostly delay the bloom; ≥ 50% cut in 3% of runs) |
 | 02 | Kelp panels | 20 | Moderate-strong (lab and mesocosm) | Likely: diatom −74-94% at ≥ 72 h (2 g/L); dinoflagellates need ~2 g/L for ~10 days. Untested on *Phaeodactylum* or *Thalassiosira* | **Full loop run** (lead method) |
 | 03 | Peroxide bag | 27 | Strong for small cells only | At a dose that is safe for non-targets (≤ 2.8 mg/L), only ~2 µm cells die. *P. micans* was hit 11% even at 6.4 mg/L, *T. weissflogii* 2.6% | **Screen only**, on a small-celled alga; shows the "selective" idea |
 | 04 | Curcumin | 25 | Weak-moderate (one organism, *K. brevis*) | Unknown: no diatom or *Prorocentrum* data. Works at ≥ 3 mg/L, but zebrafish larval LD50 is 1.8-2.8 mg/L. It also interferes with the 470 nm fluorometer | **Screen only**, as a comparison arm |
-| 05 | Shellfish bags | 24 | Strong in tanks, weak at larger scale | Yes for filtration (oysters ~1 L/h per 60 mm animal), but feeding stops at high HAB density, and every success had the animals in place *before* the bloom | **Clearance test**; loop run only if permits and animals come easily |
+| 05 | Shellfish bags | 24 | Strong in tanks, weak at larger scale | Yes for filtration (oysters ~1 L/h per 60 mm animal), but feeding stops at high HAB density, and every success had the animals in place *before* the bloom | **Full loop run #2** (Layer 2: 94-95% chance of a ≥ 50% cut when stocked for 2 tank volumes/day), after the clearance test; needs permits and animals |
 
 **Evidence files:** `evidence/01_BUBBLES_EVIDENCE.md`, `02_SEAWEED_`, `03_PEROXIDE_`,
 `04_CURCUMIN_`, `05_SHELLFISH_EVIDENCE.md`. Each file has a master table, per-source detail,
 aggregated data, hypotheses, mechanisms, design numbers and gaps.
+
+**Layer 2 simulation (2026-09-26, `LAYER2_SIM_RESULTS.md`):**
+- It confirmed seaweed as full run #1.
+- It moved shellfish into full run #2 in place of bubbles, which mostly delay the bloom.
+- It lowered the peroxide target to 0.8 mg/L and capped curcumin at 2.5 mg/L, both because of non-target harm.
 
 **Why only two full loop runs:** each run is 4 arms × 3 tanks for 6-7 weeks. Five methods would
 need about 60 tanks and a lab we don't have. The **screens** (days, small flasks) test all five;
@@ -27,8 +32,8 @@ the **loop runs** (weeks, tanks) go to the two methods most likely to work on ou
 | | Bubbles | Seaweed | Peroxide | Curcumin | Shellfish |
 |---|---|---|---|---|---|
 | Treatment | coarse bubbles, open tube | live sugar kelp panel | CaO₂ in fabric bag | ethanol stock, peristaltic dose | oysters or clams in mesh bag |
-| Dose | 0.05 and 0.6 L/min per litre (Sung & Gobler: 25 and 300 mL/min into 500 mL) | 2 g/L wet (dose arms 0, 0.5, 1, 2) | target 1.6 mg/L H₂O₂; pull above 2.8 | ladder 1 → 2.5 → 5 mg/L | clear 1 tank volume/day ≈ 2 oysters (40 mm) per 20 L; cap 1 per 2 L |
-| `X` | 48 h | 72 h | 24 h, then bag out | 24 h per pulse | **24 h** (was 7 d; see §9) |
+| Dose | 0.05 and 0.6 L/min per litre (Sung & Gobler: 25 and 300 mL/min into 500 mL) | 2 g/L wet (dose arms 0, 0.5, 1, 2) | target **0.8** mg/L H₂O₂; pull above 2.8 | ladder 1 → 2.5 mg/L (cap 2.5) | clear **2** tank volumes/day ≈ 4 oysters (40 mm) per 20 L, sized from the measured clearance; cap 1 per 2 L |
+| `X` | 48 h | 72 h | 24 h, then bag out | 24 h per pulse | **3 d** (Layer 2 sweep) |
 | `MAX_ON` | 192 h | 12 d (≥ 10 d for dinoflagellate) | **3 bags** (was 4) | 4 pulses | 4 × X |
 | Main culture | *Akashiwo sanguinea* (backup *Prorocentrum triestinum*) + *Phaeodactylum* check | *Phaeodactylum* or *Thalassiosira*; dinoflagellate second | small-celled alga (*Micromonas*/*Nannochloropsis*-type) + *T. weissflogii*, *P. micans* as resistant controls | *P. micans* + diatom | diatom |
 | Extra controls | still column, fine airstone, pulsed | fake plastic panel, pH-matched, nutrient top-up, filtrate | empty bag, sodium carbonate, liquid H₂O₂ | ethanol-only, light vs dark, curcumin-spiked blank | empty-shell bag, animals without algae |
@@ -44,14 +49,16 @@ own limit); non-target survival more than 20 points below control.
 **Screens** (one per method, pre-registered before starting):
 - **S1 bubbles:** at 0.6 L/min per litre, the screened dinoflagellate's cell count after 48 h is ≥ 30% below the still control, and *Phaeodactylum* is not reduced.
 - **S2 seaweed:** 2 g/L kelp cuts diatom cells ≥ 50% vs no-seaweed at 72 h. The fake panel and pH-matched control don't.
-- **S3 peroxide:** 1.6 mg/L cuts the small-celled alga ≥ 50% in 24 h, while the diatom and *P. micans* drop < 20%.
+- **S3 peroxide:** 0.8 mg/L cuts the small-celled alga ≥ 50% in 24 h, while the diatom and *P. micans* drop < 20%.
 - **S4 curcumin:** the lowest dose with ≥ 30% cell reduction at 24 h is ≤ 2.5 mg/L, and *Artemia* survival at that dose in light is within 20 points of control.
 - **S5 shellfish:** measured clearance rate (L/animal/h) at 18 °C is within 2× of the published planning rate.
 
 **Go rule for a loop run:** the screen meets its hypothesis *and* passes the non-target check.
 
 **Loop runs** (from `00_CONTROL_LOOP.md`):
-- **H1:** arm B's peak chlorophyll (and cell count) is ≥ 50% below arm A's, with less total treatment than arm C.
+- **H1a:** arm B's peak chlorophyll (and cell count) is ≥ 50% below arm A's.
+- **H1b:** arm B's peak cut beats arm C's (late treatment).
+- Treatment used by B and C is reported, not tested. The original "less treatment than C" can't pass even when B works; see `LAYER2_SIM_RESULTS.md`.
 - **H2:** arm D shows no non-target loss compared with arm A.
 - **H3 (new, from the reviews):** after OFF, arm B regrows. We record days until it's back above `C_ok`. The reviews say bubbles and seaweed effects stop when the treatment is removed, so this is expected, and measuring it is part of the result.
 
@@ -108,7 +115,7 @@ and light bank.
 
 ## 7. Loop run layout (Phase 4)
 
-For two methods on the same culture (expected: seaweed and bubbles, or seaweed and shellfish):
+For two methods on the same culture (**planned: seaweed and shellfish**, both on the diatom; chosen by the Layer 2 simulation, `LAYER2_SIM_RESULTS.md`):
 
 | Arm | Tanks | Notes |
 |---|---|---|
@@ -119,8 +126,8 @@ For two methods on the same culture (expected: seaweed and bubbles, or seaweed a
 | B, C, D, method 2 | 9 | |
 | **Total** | **21 tanks (4-10 L)** | |
 
-If bubbles fails its screen, method 2 is shellfish if the animals are available, otherwise
-seaweed at a second density.
+If the shellfish clearance test shows too little filtering, or the animals or permits don't come
+through, method 2 falls back to seaweed at a second density.
 
 ## 8. Shopping list (all methods, combined)
 

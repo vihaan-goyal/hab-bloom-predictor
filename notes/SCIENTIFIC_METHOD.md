@@ -894,3 +894,19 @@ history:
   - Sung & Gobler 2026 (bubbles): 21-58% and 34-63% cuts at 300 mL/min into 500 mL (0.6 L/min per L). The bubble screen now copies that setup.
   - Seaweed stimulated the target alga at low dose in one study.
   - Curcumin's 99% kill fell to 47% when the trial was repeated.
+
+**Layer 2 tank simulation (2026-09-26).** `src/sim/tank_model.py`, `loop_controller.py` and `method_mc.py` simulate full bench runs (arms A-D, n = 3; 2,000 Monte-Carlo draws per method). Every parameter comes from `src/sim/method_params.csv` with source paper ids, and a draw is kept only if it reproduces its calibration paper.
+- **Checks:** the controller matches Layer 1's `run_loop` with 0 mismatches over 77,958 station-days; the integration matches `solve_ivp` within 0.06%.
+- **Predicted peak cut and chance of a ≥ 50% cut:**
+  - seaweed 2 g/L: 75%, 99%;
+  - shellfish at 1 tank volume/day: 31%, 16% (94-95% at 2 volumes/day);
+  - peroxide on small cells: 95%, 100%;
+  - curcumin: 92%, 100%;
+  - bubbles: 20%, 3% (they mostly delay the bloom).
+- **Late treatment cut the peak 0-4% for every method.**
+- **Decisions:**
+  - full runs = seaweed and shellfish (stocked for 2 volumes/day);
+  - peroxide target 1.6 → 0.8 mg/L (non-target harm 36% → 0%);
+  - curcumin capped at 2.5 mg/L;
+  - H1 split into H1a (≥ 50% cut) and H1b (beats late treatment), because "less treatment than late" can't pass. The simulation showed late treatment is short and useless.
+- Details in `notes/mitigation/LAYER2_SIM_RESULTS.md`.

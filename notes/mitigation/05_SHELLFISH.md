@@ -20,11 +20,11 @@ Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/pl
 | Loop step | What happens |
 |---|---|
 | **Trigger** | Narragansett model `p ≥ 0.50` on daily sensor means (backup: the rule trigger in `00_CONTROL_LOOP.md`) → a winch **lowers mesh bags of clams or oysters** into the treatment zone (in the bench: moves bags from a holding tank into the test tank) |
-| **Density** | start at **~27 clams/m²-equivalent** scaled to tank volume (the Shinnecock density); the bench converts it to animals per litre using measured clearance rates |
-| **`X` (ON time)** | **7 days**, then re-measure. Filtration works over days; the whole-bay time was ~10 days at Shinnecock |
+| **Density** | enough animals to clear **2 tank volumes per day** (updated 2026-09-26), sized from the **measured** 4-h clearance rate. The Layer 2 simulation passed ≥ 50% in 94-95% of runs at 2 volumes/day vs 19-46% at 1. The biggest unknown is real vs literature clearance. (Earlier: ~27 clams/m²-equivalent, the Shinnecock density) |
+| **`X` (ON time)** | **3 days** (updated 2026-09-26), then re-measure. The simulation gave 94-95% at X = 3-4 d vs 77% at 1 d. The 7 days was a whole-bay timescale (~10 days at Shinnecock) |
 | **Re-measure** | chlorophyll, cell count, DO, **animal health** (gaping, not closing, mortality), ammonia (shellfish excrete it) |
 | **OFF rule** | the shared rule → **lift the bags out** back to the holding tank |
-| **`MAX_ON`** | 28 days (4 × X) |
+| **`MAX_ON`** | 12 days (4 × X) |
 | **Method safety limits** | any shellfish mortality over 10%; ammonia above 0.5 mg/L; DO below 4 mg/L (shellfish respiration plus decaying algae); a toxic bloom species detected → remove the animals and discard them, never eat them |
 
 **A faster bench version:** a **clearance-rate test** in hours. Put a known number of animals in a

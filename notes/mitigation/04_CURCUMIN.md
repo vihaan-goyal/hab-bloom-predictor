@@ -23,11 +23,11 @@ Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/ma
 | Loop step | What happens |
 |---|---|
 | **Trigger** | Narragansett model `p ≥ 0.50` on daily sensor means (backup: the rule trigger in `00_CONTROL_LOOP.md`) → a peristaltic pump doses curcumin stock |
-| **Dose** | **1 mg/L** first pulse, a **low** dose because we treat early at low density. If the OFF rule isn't met at re-measure, the next pulse steps up to **2.5, then 5 mg/L**. Never above 5 mg/L (the mesocosm-tested level) |
+| **Dose** | **1 mg/L** first pulse, a **low** dose because we treat early at low density. If the OFF rule isn't met at re-measure, the next pulse steps up to **2.5 mg/L, and stays there** (updated 2026-09-26). The Layer 2 simulation found a 5 mg/L top step harmed non-targets in about 90% of runs, vs about 26% at 2.5, while 76-94% of runs still cut the peak ≥ 50% (`LAYER2_SIM_RESULTS.md`). Never above 5 mg/L (the mesocosm-tested level) |
 | **`X` (ON time)** | **24 h** after each pulse (the 89% effect was measured at 24 h), then re-measure |
 | **Re-measure** | chlorophyll, cell count, **turbidity** (curcumin clouds the water), colour, DO, pH, non-target survival |
 | **OFF rule** | the shared rule → stop dosing. There's nothing to retrieve, so "OFF" means no further pulses |
-| **`MAX_ON`** | 4 pulses (cumulative ≤ 1 + 2.5 + 5 + 5 = 13.5 mg/L per event) |
+| **`MAX_ON`** | 4 pulses (cumulative ≤ 1 + 2.5 + 2.5 + 2.5 = 8.5 mg/L per event) |
 | **Method safety limits** | non-target survival more than 20 points below control; DO below 4 mg/L (dying cells use oxygen); turbidity more than 3× control |
 
 **Why step the dose up:** the forecast gives you a head start. The question is whether the smallest

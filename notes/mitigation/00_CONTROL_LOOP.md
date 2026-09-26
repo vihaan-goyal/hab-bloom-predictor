@@ -136,8 +136,11 @@ timing:
 That's **about 6-7 weeks** in total, so the run has to start by early December to be analysed
 before the February deadline.
 
-**Pre-registered hypothesis (H1):** arm B's peak chlorophyll is at least 50% lower than arm A's,
-using **less total treatment** (hours ON, or grams or mg dosed) than arm C.
+**Pre-registered hypothesis (H1), revised 2026-09-26 after the Layer 2 simulation:**
+- **H1a:** arm B's peak chlorophyll is at least 50% lower than arm A's.
+- **H1b:** arm B's peak cut is larger than arm C's (late treatment).
+- Total treatment (hours ON, or grams or mg dosed) is reported for B and C, plus treatment per percent of peak cut.
+- *Why it changed:* the original H1 also required B to use **less treatment than C**. The simulation (`LAYER2_SIM_RESULTS.md`) showed that late treatment starts when the bloom is already crashing, so it's short and does almost nothing. "Less treatment than C" then fails even when B works.
 **H2:** arm D shows no loss of non-target survival compared with arm A.
 
 **Outcome measures:** peak chlorophyll; area under the chlorophyll curve; days above `C_ok`;
