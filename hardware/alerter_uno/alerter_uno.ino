@@ -18,6 +18,7 @@
   Commands:
       x <days>   cok <ug/L>   ton <p>   mode F|R   warm <mean chl>
       stop       (safety stop: OFF at the next daily line, e.g. DO kit < 4 mg/L)
+      mute 0|1   (silence the buzzer; alerter_link.py uses it to replay history after a reset)
       status     reset
 
   Outputs:  green LED = idle, blue LED + relay = treatment ON,
@@ -44,7 +45,7 @@ float tOn = 0.50, cOk = 5.0, warmMean = NAN;
 int X = 3;
 char mode = 'F';
 
-bool on = false, warn = false, tempAlarm = false;
+bool on = false, warn = false, tempAlarm = false, muted = false;
 long startDay = 0, checkDay = 0;
 float lastChl = NAN, chlHist[3] = {NAN, NAN, NAN};
 int episodes = 0;
@@ -59,6 +60,7 @@ float tempC = NAN;
 const int BUZZ_HZ = 2000;   // passive buzzer: needs a tone, not a steady HIGH
 
 void beep(int ms, int n, int gap) {
+  if (muted) return;                      // the laptop link replays history muted
   for (int i = 0; i < n; i++) {
     tone(PIN_BUZZ, BUZZ_HZ); delay(ms);
     noTone(PIN_BUZZ);        delay(gap);
@@ -150,6 +152,7 @@ void handleLine(char *line) {
   else if (!strcmp(a, "mode") && b) mode = toupper(b[0]) == 'R' ? 'R' : 'F';
   else if (!strcmp(a, "warm") && b) warmMean = atof(b);
   else if (!strcmp(a, "stop"))      { safetyStop = true; Serial.println(F("safety stop at the next daily line")); return; }
+  else if (!strcmp(a, "mute") && b) muted = atoi(b) != 0;
   else if (!strcmp(a, "reset"))     { on = false; warn = false; episodes = 0; lastChl = NAN; for (int i = 0; i < 3; i++) chlHist[i] = NAN; setOutputs(); }
   else if (strcmp(a, "status"))     { Serial.println(F("? unknown command")); return; }
   printStatus();

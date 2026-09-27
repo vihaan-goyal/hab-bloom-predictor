@@ -47,7 +47,7 @@ PN2222A transistors, passive buzzer, bare 5 V relay, 1N4007 diode.
 | # | Item | For | Approx. |
 |---|---|---|---|
 | 1 | Male-to-female jumper wires ([ELEGOO 120-pc M-F/M-M/F-F](https://www.amazon.com/dp/B01EV70C78)) | relay pins, sensor boards | $6 |
-| 2 | 12 V diaphragm air pump ([2 L/min, 0.5-0.7 A](https://www.amazon.com/dp/B01EC2OR0K)) + 12 V 2 A adapter with barrel-jack screw terminals ([bundle](https://www.amazon.com/dp/B08GX5Z4MR)) + air tubing and an air stone | stage 2 (the real pump) | $20 |
+| 2 | 12 V diaphragm air pump ([search: 12 V diaphragm air pump](https://www.amazon.com/s?k=12v+dc+diaphragm+air+pump+aquarium); the listing found first is gone) + 12 V 2 A adapter with barrel-jack screw terminals ([bundle](https://www.amazon.com/dp/B08GX5Z4MR)) + air tubing and an air stone | stage 2 (the real pump) | $20 |
 | 3 | DS18B20 **waterproof** probe ([5-pack with 4.7 kΩ resistors](https://www.amazon.com/dp/B0C8J77NJR)) | stage 3 | $10 |
 | 4 | pH module + BNC probe ([PH-4502C type](https://www.amazon.com/dp/B07KDPQGYD)) + buffer powders 4.00/6.86/9.18 ([VIVOSUN 18-pack](https://www.amazon.com/dp/B0D4L8Y7BT)) | stage 4 | $35 |
 | 5 | [Adafruit TSL2591](https://www.amazon.com/dp/B00XW2OFWW) + [LEE 106 Primary Red gel](https://www.amazon.com/dp/B003DIGLV8) + cuvettes with **4 clear sides** ([Globe 4.5 mL, 100](https://www.amazon.com/dp/B08N5B5PL8)) + [470 nm blue LEDs](https://www.amazon.com/dp/B091SLR9SB) | stage 5 | $40 |
@@ -85,16 +85,19 @@ The sketch uses circuito's pins:
 | D5 | blue LED → 100 Ω (220 Ω also fine) → GND: **treatment ON** |
 | D9 | white LED (circuito's yellow) → 220 Ω → GND: **warning** |
 | D10 | empty in stage 1; stage 2: the relay transistor |
-| D2 | 1 kΩ → NPN transistor base; buzzer between 5V and the collector; emitter → GND |
+| D2 | 330 Ω → NPN transistor base; buzzer between 5V and the collector; emitter → GND |
 | D3 | DS18B20 yellow wire, 4.7 kΩ to 5V (stage 3) |
 | 5V / GND | breadboard rails |
 
 `schematic.png` (drawn by `draw_schematic.py`) is the same circuit as a circuit diagram, plus the
 bare-relay driver that circuito can't draw.
 
-The sketch drives a **passive** buzzer (it plays a 2 kHz tone). A passive buzzer can also go
-straight from D2 to GND without the transistor; it's just a bit quieter. Change `BUZZ_HZ` for a
-different pitch.
+The sketch drives a **passive** buzzer (it plays a 2 kHz tone). Change `BUZZ_HZ` for a different pitch.
+
+⚠ **Full-size breadboards split their power rails in the middle** (look for a gap in the red/blue
+lines). Jumper the top + to the bottom + and the top − to the bottom −, or parts in the bottom half
+get no power. This silenced the buzzer on 2026-09-27: it was in the bottom half, powered from a dead rail.
+A buzzer wired straight from D2 to GND also works, just more quietly.
 
 **Flash it:**
 1. Open `alerter_uno.ino` in the Arduino IDE.
@@ -244,13 +247,25 @@ you will in the real run, and fill in `src/lab/lab_data_template.csv`.
 
 ## Stage 7: laptop link + logging
 
-- `pip install pyserial`.
-- A short Python script (I'll write it):
-  1. once a day, reads the Uno's chlorophyll, temperature and pH, plus your typed DO and salinity;
-  2. runs the model to get `p`;
-  3. sends `<day> <p> <chl>` to the Uno;
-  4. saves everything to a CSV.
-- The Uno also prints its sensor readings every 10 min, so nothing is lost if a daily step is missed.
+**Script: `alerter_link.py`** (written 2026-09-27; needs `pip install pyserial`; close the Arduino IDE
+Serial Monitor first, since only one program can use the port).
+
+```
+python hardware/alerter_uno/alerter_link.py --ports                  # find the Uno's COM port
+python hardware/alerter_uno/alerter_link.py --demo                   # Test A, automatically
+python hardware/alerter_uno/alerter_link.py --replay narragansett:F7 --days 400   # real history
+python hardware/alerter_uno/alerter_link.py --today --p 0.62 --chl 7.4 --start 2026-11-10
+```
+
+- Every Uno reply is checked against the Python controller; any `MISMATCH` is printed and logged.
+- Log: `hardware/alerter_uno/logs/alerter_log.csv` (not committed).
+- **Uno resets:** opening the USB port restarts an Uno and wipes its ON/OFF state. `--today` replays the
+  earlier days from the log with the buzzer muted (`mute 1`), then sends today's line.
+- Add `--sim` to any command to try it with no board (a stand-in Uno built from the Python controller).
+- **Checked on the real Uno (2026-09-27):** `--demo` (lights, beeps and relay clicks right), and all 3,287 days of
+  Narragansett station F7 in 50 s: 115 ON days, 10 episodes (6 ended at MAX_ON, as expected on untreated
+  water), **0 mismatches** with the Python controller, including days with missing `p` or chlorophyll.
+- Later: read chlorophyll, temperature and pH from the Uno's sensors, and get `p` from the model automatically.
 
 **Done when:** a 48-hour test logs with no gaps, and unplugging the USB and reconnecting it recovers cleanly.
 
