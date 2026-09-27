@@ -8,16 +8,22 @@ against the Python controller (src/sim/loop_controller.py), so a mismatch shows 
 Opening the USB port resets an Uno and wipes its ON/OFF state. --today therefore replays the
 earlier days from the log (buzzer muted) before sending today's line.
 
+--today also asks the Uno for its sensor readings (temperature, pH, fluorometer chlorophyll).
+Leave out --chl and the fluorometer's chlorophyll is used. A pH outside --ph-min/--ph-max
+sends a safety stop first (00_CONTROL_LOOP.md: marine 7.6-8.6).
+
 --sim runs a stand-in Uno made from the Python controller, so everything can be tried with
 no board plugged in.
 
 Run from repo root (needs `pip install pyserial` for a real Uno):
     python hardware/alerter_uno/alerter_link.py --ports
+    python hardware/alerter_uno/alerter_link.py --read                     # sensor readings now
     python hardware/alerter_uno/alerter_link.py --demo [--sim]
     python hardware/alerter_uno/alerter_link.py --replay narragansett:<station> [--days 150] [--sim]
     python hardware/alerter_uno/alerter_link.py --replay my_days.csv [--sim]      # columns day,p,chl
-    python hardware/alerter_uno/alerter_link.py --today --p 0.62 --chl 7.4 [--start 2026-11-10]
-Options: --port COM4, --x 3 (days between re-measures), --cok 5 (C_ok, ug/L).
+    python hardware/alerter_uno/alerter_link.py --today --p 0.62 [--chl 7.4] [--start 2026-11-10]
+Options: --port COM4, --x 3 (days between re-measures), --cok 5 (C_ok, ug/L),
+         --ph-min 7.6 --ph-max 8.6 (safety band; seaweed runs use 9.0 as the max).
 Log: hardware/alerter_uno/logs/alerter_log.csv
 """
 import argparse
@@ -40,10 +46,11 @@ from loop_controller import Controller, T_ON  # noqa: E402
 LOG_DIR = os.path.join(HERE, "logs")
 LOG = os.path.join(LOG_DIR, "alerter_log.csv")
 STATE = os.path.join(LOG_DIR, "state.json")
-LOG_COLS = ["timestamp", "mode", "source", "day", "p", "chl", "uno_state", "next_check",
-            "episodes", "py_state", "match"]
+LOG_COLS = ["timestamp", "mode", "source", "day", "p", "chl", "chl_src", "uno_state", "next_check",
+            "episodes", "py_state", "match", "temp", "ph", "fl", "note"]
 BAUD = 115200
 REPLY = re.compile(r"day=(-?\d+) p=(\S+) chl=(\S+) -> (\w+)(?: next_check=(\d+))? episodes=(\d+)")
+SENSOR = re.compile(r"^S (.*)$")
 DEMO = [(1, 0.2, 3), (2, 0.6, 4), (3, 0.7, 6), (4, 0.7, 8), (5, 0.5, 9), (8, 0.3, 4), (9, 0.3, 3)]
 
 
@@ -63,13 +70,14 @@ class Reference:
     def __init__(self, x, c_ok):
         self.c, self.c_ok = Controller(1, x), c_ok
 
-    def step(self, day, p, chl):
+    def step(self, day, p, chl, force_off=False):
         was = bool(self.c.on[0])
         maxed_before = int(self.c.maxed[0])
         p_ = np.nan if p is None else p
         chl_ = np.nan if chl is None else chl
         trig = np.array([not math.isnan(p_) and p_ >= T_ON])
-        self.c.step(int(day), trig, np.array([p_]), np.array([chl_]), self.c_ok)
+        self.c.step(int(day), trig, np.array([p_]), np.array([chl_]), self.c_ok,
+                    force_off=np.array([force_off]))
         on = bool(self.c.on[0])
         if not was and on:
             label = "START"
@@ -92,12 +100,21 @@ class SimUno:
         parts = data.decode().split()
         if not parts:
             return
+        if parts[0] == "read":             # ALERTER_SIM_SENSORS="temp=18 ph=8.1 fl=120 chl=6" fakes values
+            vals = dict(kv.split("=") for kv in os.environ.get("ALERTER_SIM_SENSORS", "").split())
+            self.out.append("S " + " ".join(f"{k}={vals.get(k, 'nan')}" for k in ("temp", "ph", "ph_v", "fl", "chl")))
+            return
+        if parts[0] == "stop":
+            self.stop = True
+            self.out.append("safety stop at the next daily line")
+            return
         if parts[0].lstrip("-").isdigit():
             if self.ref is None:
                 self.ref = Reference(self.x, self.c_ok)
             val = lambda s: None if s in ("-", "nan") else float(s)  # noqa: E731
             day, p, chl = int(parts[0]), val(parts[1]), val(parts[2])
-            label, nxt, eps = self.ref.step(day, p, chl)
+            label, nxt, eps = self.ref.step(day, p, chl, force_off=getattr(self, "stop", False))
+            self.stop = False
             nc = f" next_check={nxt}" if nxt is not None else ""
             self.out.append(f"day={day} p={fmt2(p)} chl={fmt2(chl)} -> {label}{nc} episodes={eps}")
             return
@@ -164,6 +181,20 @@ class Link:
             return None, None, None, line
         return m.group(4), (int(m.group(5)) if m.group(5) else None), int(m.group(6)), line
 
+    def sensors(self):
+        """Ask the Uno for one sensor line; returns {temp, ph, ph_v, fl, chl} with None for nan."""
+        line = self.send("read", expect=r"^S ", timeout=6.0)
+        out = {}
+        m = SENSOR.match(line or "")
+        for kv in (m.group(1).split() if m else []):
+            k, _, v = kv.partition("=")
+            try:
+                f = float(v)
+                out[k] = None if math.isnan(f) else f
+            except ValueError:
+                out[k] = None
+        return out
+
     def setup(self, x, c_ok):
         for cmd in (f"x {x}", f"cok {c_ok}", "mode F", "reset"):
             self.send(cmd, expect=r"^mode=")
@@ -171,6 +202,11 @@ class Link:
 
 def log_rows(rows):
     os.makedirs(LOG_DIR, exist_ok=True)
+    if os.path.exists(LOG):
+        with open(LOG) as f:
+            header = f.readline().strip().split(",")
+        if header != LOG_COLS:                  # older log layout: keep it, start a new file
+            os.replace(LOG, LOG.replace(".csv", f"_old_{int(time.time())}.csv"))
     new = not os.path.exists(LOG)
     with open(LOG, "a", newline="") as f:
         w = csv.DictWriter(f, fieldnames=LOG_COLS)
@@ -179,11 +215,13 @@ def log_rows(rows):
         w.writerows(rows)
 
 
-def row(mode, link, day, p, chl, state, nxt, eps, raw, py):
+def row(mode, link, day, p, chl, state, nxt, eps, raw, py, chl_src="", sens=None, note=""):
+    sens = sens or {}
     return dict(timestamp=dt.datetime.now().isoformat(timespec="seconds"), mode=mode,
-                source="sim" if link.sim else "uno", day=day, p=fmt(p), chl=fmt(chl),
+                source="sim" if link.sim else "uno", day=day, p=fmt(p), chl=fmt(chl), chl_src=chl_src,
                 uno_state=state or f"NO REPLY: {raw}", next_check="" if nxt is None else nxt,
-                episodes="" if eps is None else eps, py_state=py, match=state == py)
+                episodes="" if eps is None else eps, py_state=py, match=state == py,
+                temp=fmt(sens.get("temp")), ph=fmt(sens.get("ph")), fl=fmt(sens.get("fl")), note=note)
 
 
 def run_days(link, days, x, c_ok, mode):
@@ -233,20 +271,41 @@ def today(link, a):
         num = lambda s: None if s in ("", "-") else float(s)  # noqa: E731
         with open(LOG) as f:
             for r in csv.DictReader(f):
-                if r["mode"] == "today" and int(r["day"]) < day:
-                    history[int(r["day"])] = (int(r["day"]), num(r["p"]), num(r["chl"]))
+                if r.get("mode") == "today" and int(r["day"]) < day:
+                    stop = "SAFETY STOP" in (r.get("note") or "")
+                    history[int(r["day"])] = (int(r["day"]), num(r["p"]), num(r["chl"]), stop)
     print(f"Day {day} (run started {start}); restoring {len(history)} earlier day(s) on the Uno, buzzer muted")
     link.send("mute 1")
     link.setup(a.x, a.cok)
     ref = Reference(a.x, a.cok)
-    for d, p, c in sorted(history.values()):
+    for d, p, c, stop in sorted(history.values()):
+        if stop:
+            link.send("stop", expect=r"safety stop")
         link.day(d, p, c)
-        ref.step(d, p, c)
+        ref.step(d, p, c, force_off=stop)
     link.send("mute 0")
-    state_, nxt, eps, raw = link.day(day, a.p, a.chl)
-    py, _, _ = ref.step(day, a.p, a.chl)
-    log_rows([row("today", link, day, a.p, a.chl, state_, nxt, eps, raw, py)])
-    print(f"Today: p={fmt(a.p)} chl={fmt(a.chl)} -> {state_}"
+
+    sens = link.sensors()
+    chl, chl_src = a.chl, "typed"
+    if chl is None:
+        chl, chl_src = sens.get("chl"), "sensor" if sens.get("chl") is not None else "missing"
+    notes = []
+    ph = sens.get("ph")
+    stop = ph is not None and not (a.ph_min <= ph <= a.ph_max)
+    if stop:
+        link.send("stop", expect=r"safety stop")
+        notes.append(f"SAFETY STOP: pH {ph:.2f} outside {a.ph_min}-{a.ph_max}")
+    temp = sens.get("temp")
+    if temp is not None and not (14 <= temp <= 22):
+        notes.append(f"temperature {temp:.1f} C outside 14-22")
+    state_, nxt, eps, raw = link.day(day, a.p, chl)
+    py, _, _ = ref.step(day, a.p, chl, force_off=stop)
+    note = "; ".join(notes)
+    log_rows([row("today", link, day, a.p, chl, state_, nxt, eps, raw, py, chl_src, sens, note)])
+    print("Sensors: " + "  ".join(f"{k}={fmt(sens.get(k))}" for k in ("temp", "ph", "fl", "chl")))
+    for n in notes:
+        print("  WARNING:", n)
+    print(f"Today: p={fmt(a.p)} chl={fmt(chl)} ({chl_src}) -> {state_}"
           + (f" (next re-measure: day {nxt})" if nxt else "")
           + ("" if state_ == py else f"   <-- MISMATCH (Python says {py})"))
 
@@ -263,6 +322,9 @@ def main():
     ap.add_argument("--start", help="first day of the run, YYYY-MM-DD (--today)")
     ap.add_argument("--x", type=int, default=3)
     ap.add_argument("--cok", type=float, default=5.0)
+    ap.add_argument("--ph-min", type=float, default=7.6)
+    ap.add_argument("--ph-max", type=float, default=8.6)
+    ap.add_argument("--read", action="store_true", help="print the Uno's sensor readings")
     ap.add_argument("--port")
     ap.add_argument("--sim", action="store_true", help="no board: use a simulated Uno")
     a = ap.parse_args()
@@ -273,12 +335,17 @@ def main():
             print(p.device, "|", p.description, "| VID", p.vid)
         print("Arduino guess:", find_port())
         return
-    if not (a.demo or a.replay or a.today):
-        ap.error("choose --demo, --replay, --today or --ports")
-    if a.today and a.p is None and a.chl is None:
-        ap.error("--today needs --p and/or --chl")
+    if not (a.demo or a.replay or a.today or a.read):
+        ap.error("choose --demo, --replay, --today, --read or --ports")
+    if a.today and a.p is None:
+        ap.error("--today needs --p (today's forecast); --chl is optional")
 
     link = Link(a.port, a.sim)
+    if a.read:
+        s = link.sensors()
+        print("  ".join(f"{k}={fmt(s.get(k))}" for k in ("temp", "ph", "ph_v", "fl", "chl")) or "no sensor reply")
+        link.dev.close()
+        return
     if a.today:
         today(link, a)
         link.dev.close()

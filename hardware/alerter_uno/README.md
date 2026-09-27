@@ -170,8 +170,9 @@ sponsor's OK.
 
 **Code:**
 - Arduino IDE → Library Manager → install `OneWire` and `DallasTemperature`.
-- Set `USE_DS18B20 1` in the sketch.
-- It reads every 10 s and alarms outside 14-22 °C (yellow LED, fast beeps); `status` shows the reading.
+- Set `USE_DS18B20 1` at the top of `alerter_uno.ino` (the code is already written and compile-checked).
+- It reads every 10 s and alarms outside 14-22 °C (white LED, fast beeps). `read` prints all sensors;
+  `status` shows the temperature.
 
 **Done when:**
 - the probe agrees with a kitchen thermometer within 0.5 °C in a glass of water;
@@ -184,9 +185,17 @@ sponsor's OK.
 - pH 4.00, 6.86 and 9.18 buffer powder packets (calibrate with 6.86 and 9.18);
 - distilled water for rinsing.
 
-**Wiring:** board V+→5V, G→GND, Po→**A0**.
+**Wiring:** board V+→5V, G→GND, Po→**A2** (A4/A5 are the TSL2591's SDA/SCL). Needs a working analog
+header: the old Uno's broke off, so use the new board or a re-soldered header.
 
-**Code:** I'll add it when you get here: a two-point calibration (`cal686`, `cal918` commands) and pH in `status` and the log.
+**Code** (written, compile-checked): set `USE_PH 1`. Then:
+1. Probe in **pH 6.86** buffer, wait 1 min, type `cal686`.
+2. Rinse, probe in **pH 9.18** buffer, wait 1 min, type `cal918`.
+3. `read` now shows `ph=` (and the raw `ph_v=` volts). Calibration is stored in the Uno's EEPROM and
+   survives unplugging; `cal` shows it, `calclear` erases it.
+- `alerter_link.py --today` sends a **safety stop** if pH is outside 7.6-8.6 (change with
+  `--ph-min/--ph-max`; seaweed runs use `--ph-max 9.0`). A safety stop ends a running treatment; it
+  doesn't block a new start that day (same as the Python controller's `force_off`).
 
 **Tips:**
 - Store the probe tip wet (its cap with storage solution), never dry.
@@ -210,11 +219,18 @@ A blue LED makes chlorophyll glow red. A light sensor behind a red filter measur
 **Layout:** the LED shines into the cuvette from one side. The sensor, behind the red filter, looks
 in from 90° so it sees the glow, not the LED. Keep everything light-tight.
 
-**Wiring:** TSL2591 VIN→5V, GND→GND, SDA→**A4**, SCL→**A5**; blue LED on **D7** → 220 Ω → GND.
+**Wiring:** TSL2591 VIN→5V, GND→GND, SDA→**SDA**, SCL→**SCL** (the two pins beside AREF, above D13;
+same signals as A4/A5); blue LED on **D7** → 220 Ω → GND. STEMMA QT cable: red 5V, black GND,
+blue SDA, yellow SCL.
 
-**Code:** I'll add it when you get here:
-- a `read` that turns the LED on, averages 10 sensor readings, and subtracts a dark reading;
-- then `chl` comes from the sensor instead of being typed.
+**Code** (written, compile-checked): Library Manager → install **Adafruit TSL2591 Library** and
+**Adafruit Unified Sensor**; set `USE_TSL2591 1`.
+- `read` turns the blue LED off and on, takes 3 readings each (200 ms), and prints the difference as
+  `fl=`, so room light cancels out. Too bright ("SATURATED") → `gain l`; too faint → `gain h` or `gain x`.
+- **Zero:** cuvette of plain seawater in the box → `blank`.
+- **Scale:** after the dilution series (below), fit µg/L (or cells) against `fl`, and type `chlk <slope>`.
+  Then `read` prints `chl=` in µg/L, and `alerter_link.py --today --p 0.6` uses it automatically
+  (leave out `--chl`).
 
 **Calibration** (once cultures arrive):
 1. Make a dilution series of the culture (100%, 50%, 25%, 12.5%, 6%, 0% in seawater).

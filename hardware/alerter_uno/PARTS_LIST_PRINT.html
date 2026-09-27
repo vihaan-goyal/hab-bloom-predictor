@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Alerter Parts List</title>
+<style>
+  :root { --ink:#1b1b1b; --muted:#5b5b5b; --line:#cfcfcf; --accent:#1f5f8b; --need:#b3261e; --ord:#8a6d00; --have:#2e7d32; --bg:#fff; }
+  body { font-family: "Segoe UI", Arial, sans-serif; color: var(--ink); background: var(--bg); margin: 0; }
+  .page { max-width: 7.6in; margin: 0 auto; padding: 0.45in 0.35in; box-sizing: border-box; }
+  h1 { font-size: 19pt; margin: 0 0 3px; color: var(--accent); }
+  .sub { color: var(--muted); font-size: 10pt; margin-bottom: 10px; }
+  .about { border: 1px solid var(--line); border-radius: 6px; padding: 8px 11px; font-size: 10pt; line-height: 1.4; margin-bottom: 10px; }
+  .key { font-size: 9.5pt; margin-bottom: 8px; }
+  .key span { display: inline-block; margin-right: 14px; }
+  h2 { font-size: 11.5pt; margin: 12px 0 4px; border-bottom: 2px solid var(--ink); padding-bottom: 2px; }
+  table { width: 100%; border-collapse: collapse; font-size: 9.6pt; }
+  th { text-align: left; color: var(--muted); font-weight: 600; padding: 3px 4px; border-bottom: 1px solid var(--line); }
+  td { border-bottom: 1px solid var(--line); padding: 4px 4px; vertical-align: top; }
+  td.part { width: 34%; font-weight: 600; }
+  td.qty { width: 7%; }
+  td.st { width: 12%; font-weight: 700; white-space: nowrap; }
+  td.box { width: 13%; white-space: nowrap; font-size: 9pt; color: var(--muted); }
+  .need { color: var(--need); } .ord { color: var(--ord); } .have { color: var(--have); }
+  .foot { margin-top: 10px; font-size: 9.5pt; color: var(--muted); }
+  @media print { .page { padding: 0.25in 0.15in; } h2 { break-after: avoid; } tr { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Alerter electronics: full parts list</h1>
+  <div class="sub">Vihaan Goyal &amp; Olivia Breiner · CSEF / ISEF 2027 · harmful algal bloom project</div>
+  <div class="about">
+    <b>What it is:</b> an Arduino "alerter" for a test tank. Each day it gets a bloom forecast plus the tank's
+    chlorophyll, temperature and pH, decides when to switch a treatment ON/OFF, and shows it with LEDs, a buzzer and
+    a relay. The logic, LEDs, buzzer, relay and laptop link already work. The Uno's analog header (A0-A5) broke off.
+  </div>
+  <div class="key">
+    <span class="need">■ NEED</span> not yet have or ordered: can you lend it?
+    <span class="ord">■ ORDERED</span> on the way (a spare still helps)
+    <span class="have">■ HAVE</span> already working
+  </div>
+
+  <h2>Controller and wiring</h2>
+  <table>
+    <tr><th>Part</th><th>Qty</th><th>Used for</th><th>Status</th><th>You have it?</th></tr>
+    <tr><td class="part">Arduino Uno R3 (or compatible)</td><td class="qty">1</td><td>The controller; ours has a broken analog header</td><td class="st need">NEED</td><td class="box">☐ yes ☐ lend</td></tr>
+    <tr><td class="part">6-pin female header strip (2.54 mm)</td><td class="qty">1</td><td>Repair the old Uno's A0-A5 header</td><td class="st need">NEED</td><td class="box">☐ yes ☐ lend</td></tr>
+    <tr><td class="part">Breadboard + male-male jumper wires</td><td class="qty">1 set</td><td>Prototyping</td><td class="st have">HAVE</td><td class="box"></td></tr>
+    <tr><td class="part">Male-female jumper wires</td><td class="qty">~20</td><td>Relay pins, sensor boards</td><td class="st ord">ORDERED</td><td class="box">☐ yes ☐ lend</td></tr>
+    <tr><td class="part">USB A-B cable</td><td class="qty">1</td><td>Laptop link</td><td class="st have">HAVE</td><td class="box"></td></tr>
+  </table>
+
+  <h2>Outputs (lights, sound, switching)</h2>
+  <table>
+    <tr><th>Part</th><th>Qty</th><th>Used for</th><th>Status</th><th>You have it?</th></tr>
+    <tr><td class="part">5 mm LEDs: green, blue, white</td><td class="qty">3</td><td>Idle / treatment ON / warning</td><td class="st have">HAVE</td><td class="box"></td></tr>
+    <tr><td class="part">5 mm LEDs: yellow, red (spares)</td><td class="qty">2+</td><td>Replace a burnt-out LED; "pump" indicator</td><td class="st need">NEED</td><td class="box">☐ yes ☐ lend</td></tr>
+    <tr><td class="part">Passive buzzer</td><td class="qty">1</td><td>Alarm beeps</td><td class="st have">HAVE</td><td class="box"></td></tr>
+    <tr><td class="part">5 V relay (SRD-05VDC) + 1N4007 diode</td><td class="qty">1 + 1</td><td>Switches the treatment pump</td><td class="st have">HAVE</td><td class="box"></td></tr>
+    <tr><td class="part">NPN transistors (PN2222A)</td><td class="qty">2</td><td>Drive the buzzer and the relay</td><td class="st have">HAVE</td><td class="box"></td></tr>
+  </table>
+
+  <h2>Resistors and capacitors</h2>
+  <table>
+    <tr><th>Part</th><th>Qty</th><th>Used for</th><th>Status</th><th>You have it?</th></tr>
+    <tr><td class="part">220 Ω, 330 Ω, 10 kΩ</td><td class="qty">5 each</td><td>LEDs, transistor bases, light sensor</td><td class="st have">HAVE</td><td class="box"></td></tr>
+    <tr><td class="part">1 kΩ and 4.7 kΩ resistors</td><td class="qty">3 each</td><td>Transistor bases; temperature-probe pull-up</td><td class="st need">NEED</td><td class="box">☐ yes ☐ lend</td></tr>
+    <tr><td class="part">0.1 µF ceramic capacitors ("104")</td><td class="qty">5</td><td>Light-sensor timing, cleaner readings</td><td class="st need">NEED</td><td class="box">☐ yes ☐ lend</td></tr>
+  </table>
+
+  <h2>Sensors</h2>
+  <table>
+    <tr><th>Part</th><th>Qty</th><th>Used for</th><th>Status</th><th>You have it?</th></tr>
+    <tr><td class="part">DS18B20 waterproof temperature probe</td><td class="qty">1</td><td>Tank temperature</td><td class="st ord">ORDERED</td><td class="box">☐ yes ☐ lend</td></tr>
+    <tr><td class="part">Analog pH module (PH-4502C) + BNC probe</td><td class="qty">1</td><td>Tank pH (safety limit)</td><td class="st ord">ORDERED</td><td class="box">☐ yes ☐ lend</td></tr>
+    <tr><td class="part">TSL2591 light sensor + STEMMA QT cable</td><td class="qty">1</td><td>Homemade chlorophyll sensor (fluorometer)</td><td class="st ord">ORDERED</td><td class="box">☐ yes ☐ lend</td></tr>
+    <tr><td class="part">Bright 470 nm blue LEDs</td><td class="qty">2</td><td>Fluorometer light source</td><td class="st ord">ORDERED</td><td class="box">☐ yes ☐ lend</td></tr>
+    <tr><td class="part">Photoresistor (LDR)</td><td class="qty">1</td><td>Practice light sensor</td><td class="st have">HAVE</td><td class="box"></td></tr>
+  </table>
+
+  <h2>Power and later stages</h2>
+  <table>
+    <tr><th>Part</th><th>Qty</th><th>Used for</th><th>Status</th><th>You have it?</th></tr>
+    <tr><td class="part">12 V DC adapter + barrel-jack screw terminal</td><td class="qty">1</td><td>Powers the pump through the relay</td><td class="st need">NEED</td><td class="box">☐ yes ☐ lend</td></tr>
+    <tr><td class="part">Small 12 V DC air pump + tubing</td><td class="qty">1</td><td>Bubble treatment (late Oct)</td><td class="st need">NEED</td><td class="box">☐ yes ☐ lend</td></tr>
+    <tr><td class="part">Micro servo (SG90 or MG996R)</td><td class="qty">1</td><td>Lowers a seaweed cage into the tank</td><td class="st need">NEED</td><td class="box">☐ yes ☐ lend</td></tr>
+    <tr><td class="part">Small project box</td><td class="qty">1</td><td>Keeps the electronics dry by the tank</td><td class="st need">NEED</td><td class="box">☐ yes ☐ lend</td></tr>
+  </table>
+
+  <h2>Tools (borrow, supervised)</h2>
+  <table>
+    <tr><th>Part</th><th>Qty</th><th>Used for</th><th>Status</th><th>You have it?</th></tr>
+    <tr><td class="part">Multimeter</td><td class="qty">1</td><td>Checking power rails, wiring, the 12 V adapter</td><td class="st need">NEED</td><td class="box">☐ yes ☐ lend</td></tr>
+    <tr><td class="part">Soldering iron, solder, desoldering wick/pump</td><td class="qty">1 set</td><td>Header repair, relay wires</td><td class="st need">NEED</td><td class="box">☐ yes ☐ lend</td></tr>
+    <tr><td class="part">Heat-shrink tubing</td><td class="qty">few</td><td>Protect the temperature probe from salt water</td><td class="st need">NEED</td><td class="box">☐ yes ☐ lend</td></tr>
+    <tr><td class="part">Hot glue gun</td><td class="qty">1</td><td>Mounting sensors in the dark box</td><td class="st need">NEED</td><td class="box">☐ yes ☐ lend</td></tr>
+    <tr><td class="part">3D printer time</td><td class="qty">~1 h</td><td>Light-tight box for the chlorophyll sensor</td><td class="st need">NEED</td><td class="box">☐ yes ☐ lend</td></tr>
+  </table>
+
+  <div class="foot">Everything borrowed goes back in working order. Contact: Vihaan Goyal.</div>
+</div>
+</body>
+</html>
