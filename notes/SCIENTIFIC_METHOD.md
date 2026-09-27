@@ -918,3 +918,4 @@ LEDs, a passive buzzer and a relay (PN2222A + 1N4007 flyback diode on D10).
 - **Build plan:** 9 stages in `hardware/alerter_uno/README.md`: temperature, pH, a DIY fluorometer, hand kits, the laptop link, then a 2-week dry run before the Nov 10 warm-up.
 - **Wiring pictures:** circuito.io, a Fritzing-art breadboard drawing, and a schematic.
 - **Materials:** a per-experiment list is in `notes/mitigation/MATERIALS_LIST.md`.
+- **Laptop link (2026-09-27):** `hardware/alerter_uno/alerter_link.py` sends each day's `p` and chl to the Uno and logs its decisions. On the real board it replayed all 3,287 Narragansett F7 days (10 episodes) with **0 mismatches** against `loop_controller.py`, including days with missing `p` or chl. `--today` restores the Uno's state after a USB reset.
