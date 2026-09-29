@@ -12,25 +12,29 @@ Reports both vocabularies:
   ML:          precision / recall / F1
   Operational: POD (= recall), FAR (= 1 - precision), CSI = TP/(TP+FP+FN)
 
-Selection rule: the LOWEST threshold whose validation POD >= --target-pod.
-(Lowest, because among thresholds hitting the detection target we want the
-one with the best FAR. If none reaches the target, the closest is used and
-flagged loudly.)
+Selection rule: the HIGHEST threshold whose validation POD >= --target-pod.
+(Highest, because among thresholds that all clear the detection target, the
+highest one raises the alerting bar and so gives the best FAR. If none reaches
+the target, the closest is used and flagged loudly.)
 
-IMPORTANT - before running:
-  Paste your locked feature list into FEATURES below (the 35 features from
-  the locked final evaluation script). The placeholder list here is the
-  short failure_analysis feature set and is NOT the locked set. The model
-  spec (LogisticRegression, C=0.05, balanced) matches the locked pipeline;
-  training here is a refit of that spec on train years.
+This docstring previously said LOWEST, which contradicted the code below
+(`idxmax`) and warning_operating_point.py, which applies the same rule. The
+code was right; the docstring was wrong.
+
+The feature list is imported from locked_pipeline.FEATURES_ALL, and the model
+spec (LogisticRegression, C=0.05, balanced) matches it; training here is a
+refit of that spec on the train years.
 
 Usage:
     python warning_threshold_selection.py
-    python warning_threshold_selection.py --data data/hab_features_final.csv --target-pod 0.8
+    python warning_threshold_selection.py --target-pod 0.8
 """
 
 import argparse
 import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 import pandas as pd
 import matplotlib
@@ -39,26 +43,16 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 
-# ---------------------------------------------------------------------------
-# PASTE THE LOCKED 35-FEATURE LIST HERE (from the locked final evaluation
-# script). The list below is a PLACEHOLDER so the script runs end to end.
-# ---------------------------------------------------------------------------
-FEATURES = [
-    'Chlorophyll', 'chl_lag1', 'chl_lag2', 'chl_lag3', 'chl_lag4',
-    'chl_roll3_mean', 'chl_roll6_mean', 'chl_roll9_mean',
-    'chl_roll14_mean', 'chl_roll21_mean', 'chl_trend',
-    'chl_anomaly', 'chl_climatology',
-    'do_lag1', 'temp_lag1', 'sal_lag1',
-    'sal_lag2', 'sal_lag3', 'sal_lag4',
-    'sea_water_temperature', 'sea_water_salinity',
-    'oxygen_concentration_in_sea_water',
-    'month', 'latitude_x', 'longitude_x',
-    'nox_lag2', 'dip_lag2', 'dip_change', 'dip_x_month',
-    'neighbor_chl3_mean', 'neighbor_chl3_lag1',
-    'tidal_gt_anom', 'tidal_msl_anom',
-    'percent_saturation',
-    'max_gust_3d',
-]
+# Imported from the locked pipeline rather than duplicated. This list used to
+# be pasted here under a warning that it was "a PLACEHOLDER ... NOT the locked
+# set"; it was in fact byte-identical to FEATURES_ALL, so the warning was stale
+# and told readers to distrust correct output. Importing removes the chance of
+# the two drifting apart.
+from src.models.locked_pipeline import (                        # noqa: E402
+    BASE_CSV, FEATURES_ALL, add_forward_label, fit_locked_model,
+    load_locked_dataframe, predict_proba)
+
+FEATURES = list(FEATURES_ALL)
 
 LABEL_SHIFT_DAYS = 21          # locked horizon
 TRAIN_MAX = 2019
@@ -68,7 +62,11 @@ TEST_YEARS = (2023, 2025)
 
 def parse_args():
     p = argparse.ArgumentParser(description="Validation-only warning threshold selection.")
-    p.add_argument("--data", default="data/hab_features_final.csv")
+    # Defaults to the locked canonical file (station-days). It used to default
+    # to hab_features_final.csv, which is the 1.36M-row measurement-level
+    # source -- a different grain entirely, and not what the locked model is
+    # fit on.
+    p.add_argument("--data", default=BASE_CSV)
     p.add_argument("--label-col", default="bloom",
                    help="Base bloom column; the h-day-ahead label is derived from it.")
     p.add_argument("--target-pod", type=float, default=0.8)
@@ -94,15 +92,31 @@ def metrics(y, pred):
 
 def main():
     a = parse_args()
-    df = pd.read_csv(a.data, low_memory=False)
-    df["date"] = pd.to_datetime(df["date"])
+    # Load through the locked pipeline so the derived rolling means and the
+    # percent_saturation / max_gust_3d merges are present. Reading the CSV raw
+    # left four of the locked 35 missing.
+    df = load_locked_dataframe(base_csv=a.data, verbose=False)
 
     missing = [f for f in FEATURES if f not in df.columns]
     if missing:
-        raise SystemExit(f"Features not in data (fix FEATURES list): {missing}")
+        raise SystemExit(f"Features not in data: {missing}")
 
-    df["label"] = df.groupby("station_name")[a.label_col].shift(-LABEL_SHIFT_DAYS)
-    df = df.dropna(subset=FEATURES + ["label"])
+    # Label from the locked builder.
+    #
+    # This was previously
+    #     df["label"] = df.groupby("station_name")[a.label_col].shift(-21)
+    # which shifts 21 ROWS, not 21 days. Station visits are a survey cadence
+    # with a ~21-day median gap, so that spanned roughly 441 days -- it was the
+    # Family C row-shift defect, in the script that freezes the operating point.
+    # add_forward_label uses a real 21-day calendar window and returns NaN for
+    # right-censored windows.
+    df = add_forward_label(df, horizon=LABEL_SHIFT_DAYS, col="label")
+    # Drop on the LABEL only, never on the features. The locked spec imputes
+    # missing features with train medians; dropping any row with a NaN feature
+    # instead collapsed the test set to 88 rows, because max_gust_3d covers only
+    # 55% of station-days.
+    df = df.dropna(subset=["label"])
+    df["label"] = df["label"].astype(int)
     yr = df["date"].dt.year
 
     tr = df[yr <= TRAIN_MAX]
@@ -112,11 +126,12 @@ def main():
     print(f"val positive rate={va['label'].mean():.3f}  "
           f"test positive rate={te['label'].mean():.3f}")
 
-    sc = StandardScaler().fit(tr[FEATURES])
-    clf = LogisticRegression(C=0.05, class_weight="balanced", max_iter=2000)
-    clf.fit(sc.transform(tr[FEATURES]), tr["label"])
-
-    p_val = clf.predict_proba(sc.transform(va[FEATURES]))[:, 1]
+    # Fit through the locked pipeline so the scaler, imputation and model spec
+    # are the deployed ones by construction rather than by hand-copied constants.
+    bundle = fit_locked_model(df, label_col="label",
+                              train_end=pd.Timestamp(f"{TRAIN_MAX}-12-31"),
+                              features=FEATURES)
+    p_val = predict_proba(bundle, va)
     y_val = va["label"].values
 
     # ---- sweep on VALIDATION only ----
@@ -147,7 +162,7 @@ def main():
           f"CSI={chosen['CSI']}  precision={chosen['precision']}")
 
     # ---- evaluate ONCE on test at frozen t* ----
-    p_te = clf.predict_proba(sc.transform(te[FEATURES]))[:, 1]
+    p_te = predict_proba(bundle, te)
     m_te = metrics(te["label"].values, (p_te >= t_star).astype(int))
     print("\nTEST (2023-2025) at frozen t* - reported, never tuned")
     print("=" * 72)

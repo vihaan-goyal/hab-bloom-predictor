@@ -15,11 +15,13 @@ import os
 import re
 import sys
 
-SKIP_DIRS = {".git", "__pycache__", ".claude", ".ipynb_checkpoints", "node_modules"}
+SKIP_DIRS = {".git", "__pycache__", ".claude", ".ipynb_checkpoints", "node_modules", ".venv", "venv", ".agents"}
 
 # import name -> distribution name, where they differ
 ALIASES = {
     "sklearn": "scikit-learn",
+    "mpl_toolkits": "matplotlib",
+    "serial": "pyserial",
     "netCDF4": "netCDF4",
     "cv2": "opencv-python",
     "PIL": "pillow",

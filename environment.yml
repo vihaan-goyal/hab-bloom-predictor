@@ -33,3 +33,10 @@ dependencies:
     - imbalanced-learn
     - interpret
     - tabpfn
+    # Added 2026-09-28 (found by tests/check_dependencies.py): hardware and device-simulation scripts.
+    - pyserial            # hardware/alerter_uno/alerter_link.py (Arduino over USB)
+    - trimesh             # hardware/fluorometer_box/make_box.py (3D-printable box)
+    - manifold3d          # boolean engine trimesh uses in make_box.py
+    - schemdraw           # hardware/alerter_uno/draw_schematic.py
+    - lxml                # hardware/alerter_uno/draw_breadboard_fritzing.py
+    - magpylib            # src/sim/rake_field.py, optimize.py (clay-device magnet field)
