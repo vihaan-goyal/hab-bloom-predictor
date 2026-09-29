@@ -120,7 +120,43 @@ def neighbour_mean(df):
     return pd.Series(out, index=df.index)
 
 
-def rebuild(df, prof, name, s1_fac, s2_ratio, s2_fallback, lab=None):
+MIN_PRIOR_DATES = 3      # prior visit-dates before a causal climatology cell is trusted
+
+
+def _prior_mean(obs, keys):
+    """Running mean per `keys` of every observation up to and including each date."""
+    a = (obs.groupby(keys + ["date"], as_index=False)["v"].agg(s="sum", n="count")
+            .sort_values(keys + ["date"]))
+    g = a.groupby(keys, sort=False)
+    a["clim"] = g.s.cumsum() / g.n.cumsum()
+    a["k"] = g.cumcount() + 1
+    return a[keys + ["date", "clim", "k"]].sort_values("date")
+
+
+def causal_climatology(d, obs):
+    """Leak-free climatology (fix ported from worktree-climatology-fix 59aaf86, 2026-09-28).
+
+    For a row at (station, month, date t): the mean of every observation at that station and
+    calendar month dated STRICTLY before t, once >= MIN_PRIOR_DATES prior visit-dates exist;
+    otherwise the all-station same-month mean before t (same minimum); otherwise NaN (train-median
+    imputation). The old version averaged all years, so test-period chlorophyll leaked into
+    chl_climatology and chl_anomaly on every training row. `obs` has station_name, date, v."""
+    obs = obs.dropna(subset=["v", "date"]).copy()
+    obs["month"] = obs.date.dt.month.astype(float)
+    q = d[["station_name", "date"]].copy()
+    q["month"] = q.date.dt.month.astype(float)
+    q["_i"] = np.arange(len(q))
+    q = q.sort_values("date")
+    out = pd.Series(np.nan, index=q._i.values)
+    for keys in (["month"], ["station_name", "month"]):     # later wins: station-month first
+        pm = _prior_mean(obs, keys)
+        m = pd.merge_asof(q, pm, on="date", by=keys, allow_exact_matches=False)
+        good = (m.k >= MIN_PRIOR_DATES).values
+        out.loc[m._i.values[good]] = m.clim.values[good]
+    return out.sort_index().values
+
+
+def rebuild(df, prof, name, s1_fac, s2_ratio, s2_fallback, lab=None, causal=True):
     d = df.copy()
     if name == "S4":        # lab surface CHLA only (Amendment A1); empty where no sample
         d["Chlorophyll"] = d[["station_name", "date"]].merge(
@@ -136,7 +172,14 @@ def rebuild(df, prof, name, s1_fac, s2_ratio, s2_fallback, lab=None):
 
     # climatology: station x month mean over every profile reading, all years, as in
     # notebooks/eda_labels.ipynb cell 11
-    if name == "S4":        # lab analogue: every lab surface sample, all years
+    if causal:              # leak-free: only observations dated before each row
+        if name == "S4":
+            obs = lab.rename(columns={"lab": "v"})[["station_name", "date", "v"]]
+        else:
+            obs = prof[["station_name", "date"]].copy()
+            obs["v"] = series(prof, name, s1_fac, s2_ratio, s2_fallback)
+        d["chl_climatology"] = causal_climatology(d, obs)
+    elif name == "S4":      # lab analogue: every lab surface sample, all years
         clim = lab.groupby([lab.station_name, lab.date.dt.month.rename("month")]).lab.mean()
         clim = clim.rename("clim").astype(float)
         clim.index = clim.index.set_levels(clim.index.levels[1].astype(float), level=1)
@@ -144,9 +187,10 @@ def rebuild(df, prof, name, s1_fac, s2_ratio, s2_fallback, lab=None):
         p = prof.copy()
         p["Chlorophyll"] = series(p, name, s1_fac, s2_ratio, s2_fallback)
         clim = p.groupby(["station_name", "month"]).Chlorophyll.mean().rename("clim")
-    d = d.drop(columns="chl_climatology").merge(clim.reset_index(), on=["station_name", "month"],
-                                                how="left").rename(columns={"clim": "chl_climatology"})
-    d.index = df.index
+    if not causal:
+        d = d.drop(columns="chl_climatology").merge(clim.reset_index(), on=["station_name", "month"],
+                                                    how="left").rename(columns={"clim": "chl_climatology"})
+        d.index = df.index
     d["chl_anomaly"] = d.Chlorophyll - d.chl_climatology
     d["chl_anomaly_pct"] = d.chl_anomaly / d.chl_climatology * 100
 
@@ -192,9 +236,10 @@ def build():
     df["date"] = pd.to_datetime(df.date)
     df["year"] = df.date.dt.year
     keep_cols = [c for c in df.columns if c not in DROPPED]
-    prof = pd.read_csv(PROFILE_CSV, usecols=["station_name", "month", "year", "Chlorophyll",
+    prof = pd.read_csv(PROFILE_CSV, usecols=["station_name", "month", "year", "time", "Chlorophyll",
                                              "Corrected_Chlorophyll"],
                        dtype={"station_name": str}, low_memory=False)
+    prof["date"] = pd.to_datetime(prof.time, utc=True).dt.tz_localize(None).dt.normalize()
     s1_fac = s1_year_factors(df)
     s2_ratio, s2_fallback = s2_year_ratios()
     print("S1 gap-fill factor (Corrected/raw) for years not fully covered:")
@@ -204,7 +249,7 @@ def build():
     print(f"S2 ratio for 2025 (no lab yet): 2016-2024 median = {s2_fallback:.3f}")
 
     # ---- gate G1 -------------------------------------------------------------
-    s0 = rebuild(df, prof, "S0", s1_fac, s2_ratio, s2_fallback)
+    s0 = rebuild(df, prof, "S0", s1_fac, s2_ratio, s2_fallback, causal=False)   # G1: old method
     print("\nGate G1: S0 rebuilt through this code vs the original columns")
     ok = True
     for c in REBUILT:

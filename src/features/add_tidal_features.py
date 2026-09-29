@@ -108,14 +108,26 @@ print(f"Mean MSL: {monthly['tidal_msl'].mean():.3f} m")
 # Compute tidal anomaly: GT relative to long-term monthly mean
 # High positive anomaly = unusually strong tidal mixing this month
 # ---------------------------------------------------------------------------
+# Leak-free (fix ported from worktree-climatology-fix, 2026-09-28): the climatology for a month
+# in year Y is the mean of that calendar month over years STRICTLY BEFORE Y, and NaN until
+# MIN_PRIOR_YEARS exist. The old version averaged the whole 1993-2025 record, so test-period sea
+# level leaked into tidal_gt_anom / tidal_msl_anom on training rows.
+MIN_PRIOR_YEARS = 3
 monthly['month_num'] = monthly['date'].dt.month
-monthly_clim = monthly.groupby('month_num')['tidal_gt'].mean().rename('tidal_gt_clim')
-monthly = monthly.merge(monthly_clim, on='month_num', how='left')
+
+
+def expanding_prior(col):
+    grp = monthly.groupby('month_num')[col]
+    prior_mean = grp.transform(lambda s: s.expanding().mean().shift(1))
+    prior_n = grp.transform(lambda s: s.expanding().count().shift(1))
+    return prior_mean.where(prior_n >= MIN_PRIOR_YEARS)
+
+
+monthly['tidal_gt_clim'] = expanding_prior('tidal_gt')
 monthly['tidal_gt_anom'] = monthly['tidal_gt'] - monthly['tidal_gt_clim']
 
 # MSL anomaly -- unusually high sea level = more coastal flooding + nutrient flushing
-msl_clim = monthly.groupby('month_num')['tidal_msl'].mean().rename('tidal_msl_clim')
-monthly = monthly.merge(msl_clim, on='month_num', how='left')
+monthly['tidal_msl_clim'] = expanding_prior('tidal_msl')
 monthly['tidal_msl_anom'] = monthly['tidal_msl'] - monthly['tidal_msl_clim']
 
 TIDAL_FEATURES = ['tidal_gt', 'tidal_msl', 'tidal_gt_anom', 'tidal_msl_anom']
@@ -138,6 +150,9 @@ tidal_merge = tidal_merge.rename(columns={'date': 'month_start'})
 
 hab_tidal = hab.merge(tidal_merge, on='month_start', how='left')
 hab_tidal = hab_tidal.drop(columns=['month_start'])
+# hab_features_daily.csv still carries a stale baked bloom_28d label (no right-censoring); the
+# canonical file never had it, and every script builds its own label, so drop it here.
+hab_tidal = hab_tidal.drop(columns=['bloom_28d'], errors='ignore')
 
 print(f"HAB rows: {len(hab):,}  -->  merged: {len(hab_tidal):,}")
 for f in TIDAL_FEATURES:

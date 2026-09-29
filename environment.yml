@@ -19,3 +19,17 @@ dependencies:
     - shap==0.51.0
     - earthaccess==0.17.0
     - requests==2.34.2
+    # Added 2026-08-26. These were imported by scripts in the repo but absent
+    # from this file, so a clean checkout following the documented setup could
+    # not run them. Found by tests/check_dependencies.py.
+    - polars              # audit_flagged_windows.py, check_label_integrity.py + 7 more
+    - joblib              # model persistence
+    - python-dotenv       # src/data/download_kd490.py reads .env
+    - ephem               # build_astro_features.py
+    - cdsapi              # src/data/download_era5_wind.py (ERA5 retrieval)
+    # Experiment-only; needed for src/models/experiments/ and model_bakeoff.py,
+    # not for the live pipeline.
+    - lightgbm
+    - imbalanced-learn
+    - interpret
+    - tabpfn
