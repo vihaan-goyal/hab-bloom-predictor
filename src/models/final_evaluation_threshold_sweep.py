@@ -123,21 +123,14 @@ df['chl_trend'] = (
 # Right-censored (fix ported from worktree-climatology-fix 572ff7d, 2026-09-28): a window that
 # runs past the station's last visit and has no bloom in it is unresolved, so it is NaN (dropped)
 # rather than scored 0. --no-censor reproduces the old label.
+# 2026-09-28: a window with no visit inside it is also unresolved (NaN), the same rule as the
+# lab-only S4 label (label_utils.forward_window_label).
+from label_utils import forward_window_label
 df['bloom_28d'] = np.nan
 for station, grp in df.groupby('station_name'):
-    idx   = grp.index
-    dates = grp['date'].values
-    chl   = grp['Chlorophyll'].values
-    last  = dates.max()
-    labels = np.full(len(grp), np.nan)
-    for i in range(len(grp)):
-        end = dates[i] + np.timedelta64(28, 'D')
-        mask = (dates > dates[i]) & (dates <= end)
-        if mask.any() and (chl[mask] > BLOOM_THRESHOLD).any():
-            labels[i] = 1
-        elif end <= last or _args.no_censor:
-            labels[i] = 0
-    df.loc[idx, 'bloom_28d'] = labels
+    df.loc[grp.index, 'bloom_28d'] = forward_window_label(
+        grp['date'].values, grp['Chlorophyll'].values > BLOOM_THRESHOLD, 28,
+        unresolved_as_zero=_args.no_censor)
 
 if _args.label_col:
     print(f"Label: {_args.label_col} (rows where it is empty are dropped)")
@@ -167,8 +160,10 @@ FEATURES = [f for f in FEATURES_ALL if f in df.columns]
 # ---------------------------------------------------------------------------
 # Splits
 # ---------------------------------------------------------------------------
-train = df[df['date'].dt.year <= 2019]
-val   = df[(df['date'].dt.year >= 2020) & (df['date'].dt.year <= 2022)]
+# Purge (2026-09-28): a row's 28-day label window must not reach into the next split.
+_H = pd.Timedelta(days=28)
+train = df[df['date'] <= pd.Timestamp('2020-01-01') - _H]
+val   = df[(df['date'].dt.year >= 2020) & (df['date'] <= pd.Timestamp('2023-01-01') - _H)]
 test  = df[df['date'].dt.year >= 2023]
 
 def prepare(split):

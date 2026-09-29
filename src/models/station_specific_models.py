@@ -39,7 +39,7 @@ from sklearn.metrics import (
 
 WESTERN_STATIONS = ['A4', 'B3', 'C1', '01', '02']
 MIN_TEST_BLOOMS = 3
-FIXED_THRESH = 0.60
+FIXED_THRESH = 0.47   # 28-day alert-budget threshold, chosen on validation (final_evaluation_threshold_sweep.py); was 0.60 (test-chosen, withdrawn 2026-09-28)
 
 # ---------------------------------------------------------------------------
 # 1. Load + merge sal_lag2/3/4
@@ -49,76 +49,23 @@ FIXED_THRESH = 0.60
 import os
 _IN = os.environ.get('HAB_FEATURES_CSV', 'data/hab_features_tidal_S1.csv')
 _TAG = os.environ.get('HAB_OUT_TAG', '')
-print(f"Loading {_IN}...")
-df = pd.read_csv(_IN)
-df['date'] = pd.to_datetime(df['date'])
-
-# sal_lag2/3/4 live in hab_features_daily.csv. The current tidal CSV already
-# carries them (added in commit ce9d02c), so we only merge any that are
-# genuinely absent -- merging present columns would create _x/_y suffixes and
-# silently drop them from the feature set, breaking the match with the
-# pipeline's global model.
-need = [c for c in ['sal_lag2', 'sal_lag3', 'sal_lag4'] if c not in df.columns]
-if need:
-    print(f"  Merging missing columns from hab_features_daily.csv: {need}")
-    hab_daily = pd.read_csv('data/hab_features_daily.csv')[
-        ['date', 'station_name'] + need
-    ]
-    hab_daily['date'] = pd.to_datetime(hab_daily['date'])
-    df = df.merge(hab_daily, on=['date', 'station_name'], how='left')
-else:
-    print("  sal_lag2/3/4 already present in tidal CSV (no merge needed).")
-
-print("Merging max_gust_3d from data/gust_features_daily.csv...")
-gust = pd.read_csv('data/gust_features_daily.csv', usecols=['date', 'max_gust_3d'])
-gust['date'] = pd.to_datetime(gust['date'])
-df = df.merge(gust, on='date', how='left')
-print(f"  max_gust_3d coverage: {df['max_gust_3d'].notna().mean() * 100:.1f}%")
-
-# ---------------------------------------------------------------------------
-# 2. Recompute rolling means + bloom_28d label (identical to all pipeline scripts)
-# ---------------------------------------------------------------------------
-for n, min_p in [(3, 2), (6, 3), (9, 5), (14, 7), (21, 10)]:
-    df[f'chl_roll{n}_mean'] = (
-        df.groupby('station_name')['Chlorophyll']
-          .transform(lambda x: x.rolling(n, min_periods=min_p).mean())
-    )
-
-df['chl_trend'] = (
-    df.groupby('station_name')['Chlorophyll']
-      .transform(lambda x: x.rolling(4, min_periods=3)
-                 .apply(lambda v: np.polyfit(range(len(v)), v, 1)[0]))
-)
-
-df['bloom_28d'] = 0
+# 2026-09-28: use the shared loader (adds percent_saturation, which this script used to drop,
+# so its "global" model is the same 35-feature model as the pipeline) and the shared label rule
+# (unresolved windows -> NaN).
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from locked_pipeline import load_locked_dataframe, FEATURES_ALL as _LOCKED_FEATURES  # noqa: E402
+from label_utils import forward_window_label  # noqa: E402
+df = load_locked_dataframe(_IN)
+df['bloom_28d'] = np.nan
 for station, grp in df.groupby('station_name'):
-    idx   = grp.index
-    dates = grp['date'].values
-    chl   = grp['Chlorophyll'].values
-    labels = np.zeros(len(grp), dtype=int)
-    for i in range(len(grp)):
-        mask = (dates > dates[i]) & (dates <= dates[i] + np.timedelta64(28, 'D'))
-        if mask.any() and (chl[mask] > 10).any():
-            labels[i] = 1
-    df.loc[idx, 'bloom_28d'] = labels
+    df.loc[grp.index, 'bloom_28d'] = forward_window_label(
+        grp['date'].values, grp['Chlorophyll'].values > 10, 28)
 
 # ---------------------------------------------------------------------------
 # 3. Feature set (same as pipeline)
 # ---------------------------------------------------------------------------
-FEATURES_ALL = [
-    'Chlorophyll', 'chl_lag1', 'chl_lag2', 'chl_lag3', 'chl_lag4',
-    'chl_roll3_mean', 'chl_roll6_mean', 'chl_roll9_mean', 'chl_trend',
-    'chl_roll14_mean', 'chl_roll21_mean',
-    'chl_anomaly', 'chl_climatology',
-    'do_lag1', 'temp_lag1', 'sal_lag1', 'sal_lag2', 'sal_lag3', 'sal_lag4',
-    'sea_water_temperature', 'sea_water_salinity',
-    'oxygen_concentration_in_sea_water',
-    'month', 'latitude_x', 'longitude_x',
-    'nox_lag2', 'dip_lag2', 'dip_change', 'dip_x_month',
-    'neighbor_chl3_mean', 'neighbor_chl3_lag1',
-    'tidal_gt_anom', 'tidal_msl_anom',
-    'max_gust_3d',
-]
+FEATURES_ALL = list(_LOCKED_FEATURES)
 FEATURES = [f for f in FEATURES_ALL if f in df.columns]
 missing = [f for f in FEATURES_ALL if f not in df.columns]
 if missing:

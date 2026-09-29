@@ -11,18 +11,15 @@ For a target date D:
      observed on or before D (walk-forward: no future information).
   3. Scores the most recent station visit at or before D for every station
      (visits older than --max-stale days are reported as STALE, not scored).
-  4. Alert = P(exceedance within 21d) >= t* (frozen operating point 0.35,
-     selected out-of-sample on 2020-2022; see warning_operating_point.py).
+  4. Alert = P(exceedance within 21d) >= t* (locked_pipeline.T_STAR_21 = 0.20, the
+     pre-registered rule applied out-of-sample on 2020-2022; warning_operating_point.py).
   5. Writes data/daily_predictions.csv for the dashboard.
 
-Operating characteristics at t*=0.35 (out-of-sample test 2023-2025, lab-consistent
-label S1 since 2026-09-23; warning_robustness.py):
-  POD 0.791 [0.636, 0.906] | FAR 0.886 | precision 0.114 [0.063, 0.163]
-An alert means: sample this station within the next 3 weeks. Roughly 1 in
-9 alerts precedes a verified exceedance, a 2.7x lift over the 4.2% base rate.
-(On the original sensor label: POD 0.875, precision 0.125. Re-applying the
-pre-registered POD >= 0.8 selection rule on S1 picks t*=0.20, not 0.35; the
-frozen 0.35 is kept here pending that decision, see notes/LABEL_REBUILD_PREREG.md.)
+Operating characteristics at t*=0.20 (walk-forward test 2023-2025, S1 label, after the
+2026-09-28 audit; warning_robustness.py): POD 0.791 [0.636, 0.904] | FAR 0.885 |
+precision 0.115 [0.065, 0.165]. An alert means: sample this station within the next 3 weeks.
+About 1 in 9 alerts precedes a verified exceedance, ~1.5x the 7.7% base rate. Current numbers:
+notes/S1_NUMBERS_SHEET.md.
 
 Aeration scoring from the previous version is intentionally omitted until
 the intervention framework rerun on corrected data is complete.
@@ -45,7 +42,7 @@ from src.models.locked_pipeline import (          # noqa: E402
     HORIZON_DAYS, add_forward_label, fit_locked_model,
     load_locked_dataframe, predict_proba)
 
-T_STAR = 0.35            # frozen operating point -- do NOT tune here
+from locked_pipeline import T_STAR_21 as T_STAR  # noqa: E402  (single source; see locked_pipeline.py)
 OUTPUT_PATH = "data/daily_predictions.csv"
 
 

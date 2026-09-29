@@ -78,7 +78,9 @@ daily = (
     .reset_index(drop=True)
 )
 
-# 3-day rolling max (min 2 days to avoid leading NaNs for the first gap)
+# 3-day rolling max over days t-2..t (min 2 days for gaps). Day t is allowed: the forecast is
+# issued at the END of sampling day t using everything measured that day (the same framing as
+# the day-t chlorophyll), and the label looks only at days after t. Reviewed 2026-09-28.
 daily['max_gust_3d'] = daily['max_gust_ms'].rolling(3, min_periods=2).max()
 
 daily.to_csv(OUT_PATH, index=False)

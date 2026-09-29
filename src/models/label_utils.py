@@ -47,8 +47,25 @@ def classify_exceedances(df, threshold=THRESHOLD, sustain_window=SUSTAIN_WINDOW)
     return df
 
 
+def forward_window_label(dates, qualifies, horizon, unresolved_as_zero=False):
+    """1 if a qualifying day falls in (d, d+horizon]; 0 if the window holds at least one visit,
+    none qualifies, and it closes by the station's last visit; NaN otherwise (unresolved)."""
+    dates = np.asarray(dates)
+    last = dates.max()
+    lab = np.full(len(dates), np.nan)
+    for i in range(len(dates)):
+        end = dates[i] + np.timedelta64(horizon, 'D')
+        mask = (dates > dates[i]) & (dates <= end)
+        if mask.any() and qualifies[mask].any():
+            lab[i] = 1
+        elif (mask.any() and end <= last) or unresolved_as_zero:
+            lab[i] = 0
+    return lab
+
+
 def build_forward_label(df, horizon=HORIZON, threshold=THRESHOLD,
-                        sustained_only=False, sustain_window=SUSTAIN_WINDOW):
+                        sustained_only=False, sustain_window=SUSTAIN_WINDOW,
+                        unresolved_as_zero=False):
     """Positive if a qualifying exceedance occurs in (d, d+horizon].
     sustained_only=False -> any exceedance qualifies (original bloom_28d).
     sustained_only=True  -> only sustained exceedances qualify (cleaned target).
@@ -57,18 +74,16 @@ def build_forward_label(df, horizon=HORIZON, threshold=THRESHOLD,
     if sustained_only and 'is_sustained' not in work.columns:
         work = classify_exceedances(work, threshold, sustain_window)
 
-    out = pd.Series(0, index=work.index, dtype=int)
+    # Unresolved windows are NaN (fix 2026-09-28): a window with no visit inside it, or one that
+    # runs past the station's last visit without a bloom, cannot be verified, so it is not scored
+    # 0. Callers drop NaN labels. unresolved_as_zero=True reproduces the old label.
+    out = pd.Series(np.nan, index=work.index, dtype=float)
     for _, grp in work.groupby('station_name'):
         dates = grp['date'].values
         if sustained_only:
             qualifies = grp['is_sustained'].values == 1
         else:
             qualifies = grp['Chlorophyll'].values > threshold
-        lab = np.zeros(len(grp), dtype=int)
-        for i in range(len(grp)):
-            mask = (dates > dates[i]) & (dates <= dates[i] + np.timedelta64(horizon, 'D'))
-            if mask.any() and qualifies[mask].any():
-                lab[i] = 1
-        out.loc[grp.index] = lab
+        out.loc[grp.index] = forward_window_label(dates, qualifies, horizon, unresolved_as_zero)
 
     return out.reindex(df.index)

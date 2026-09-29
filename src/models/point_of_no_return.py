@@ -65,7 +65,7 @@ from locked_pipeline import (  # noqa: E402
     fit_locked_model, load_locked_dataframe)
 
 LABEL = "bloom_fwd"
-T_STAR = 0.35            # README's frozen operating point
+from locked_pipeline import T_STAR_21 as T_STAR  # noqa: E402  (single source)
 T_STAR_ALT = 0.30        # what the selection sweep CSVs mark as chosen
 FIRST_TEST_YEAR = 2015
 LAST_TEST_YEAR = 2025

@@ -39,7 +39,10 @@ VAL_YEARS = (2020, 2022)
 def parse_args():
     p = argparse.ArgumentParser(description="Model-free warning operating point.")
     p.add_argument("--cv-preds", default="data/cv_pred_orig_h21.csv")
-    p.add_argument("--test-preds", default="data/test_predictions.csv")
+    p.add_argument("--test-preds", default=None,
+                   help="optional separate test file; default takes test rows from the CV file "
+                        "(same 21-day horizon as selection). The old default pointed at the 28-day "
+                        "single-split file, mixing horizons (fixed 2026-09-28).")
     p.add_argument("--test-from-cv", action="store_true",
                    help="score test on the CV file's out-of-sample rows after "
                         "the selection years (keeps one label horizon "
@@ -121,7 +124,7 @@ def main():
     print(f"  selection: POD={chosen['POD']}  FAR={chosen['FAR']}  "
           f"CSI={chosen['CSI']}  precision={chosen['precision']}")
 
-    if a.test_from_cv:
+    if a.test_from_cv or a.test_preds is None:
         te = cv[cv["date"].dt.year > VAL_YEARS[1]].copy()
         ycol_t, pcol_t = ycol, pcol
         if len(te) < 100:

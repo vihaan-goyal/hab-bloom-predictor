@@ -145,7 +145,10 @@ hab = pd.read_csv('data/hab_features_daily.csv')
 hab['date'] = pd.to_datetime(hab['date'])
 hab['month_start'] = hab['date'].values.astype('datetime64[M]')
 
+# Join the PREVIOUS month's values (fix 2026-09-28): a monthly mean for the row's own month
+# includes days after the row's date, and NOAA publishes it only after the month ends.
 tidal_merge = monthly[['date'] + TIDAL_FEATURES].copy()
+tidal_merge['date'] = tidal_merge['date'] + pd.offsets.MonthBegin(1)
 tidal_merge = tidal_merge.rename(columns={'date': 'month_start'})
 
 hab_tidal = hab.merge(tidal_merge, on='month_start', how='left')
@@ -153,6 +156,9 @@ hab_tidal = hab_tidal.drop(columns=['month_start'])
 # hab_features_daily.csv still carries a stale baked bloom_28d label (no right-censoring); the
 # canonical file never had it, and every script builds its own label, so drop it here.
 hab_tidal = hab_tidal.drop(columns=['bloom_28d'], errors='ignore')
+# dip_change = DIP(t) - DIP(previous visit) uses the day-t lab result. Kept (reviewed 2026-09-28):
+# the model is an end-of-day-t forecast from day-t measurements, and the day-t chlorophyll is also
+# a lab-corrected value. Lab latency is a stated limitation for real-time use, not look-ahead.
 
 print(f"HAB rows: {len(hab):,}  -->  merged: {len(hab_tidal):,}")
 for f in TIDAL_FEATURES:

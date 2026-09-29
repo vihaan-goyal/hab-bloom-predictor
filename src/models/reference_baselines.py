@@ -54,7 +54,7 @@ TRAIN_END = pd.Timestamp("2019-12-31")
 VAL_START, VAL_END = pd.Timestamp("2020-01-01"), pd.Timestamp("2022-12-31")
 TEST_START = pd.Timestamp("2023-01-01")
 LABEL = "bloom_fwd"
-T_STAR = 0.35            # frozen station-day operating point (README)
+from locked_pipeline import T_STAR_21 as T_STAR  # noqa: E402  (single source)
 WEST_LON = -73.4         # matches basin_alert.py default
 GRID = np.round(np.arange(0.0, 1.001, 0.05), 3)
 N_BOOT = 2000
@@ -99,7 +99,7 @@ def build_station_day(verbose=True):
     df["station_name"] = df["station_name"].astype(str)
 
     # --- climatology rates, TRAIN ROWS ONLY (no leakage into val/test) ------
-    tr = df[(df["date"] <= TRAIN_END) & df[LABEL].notna()]
+    tr = df[(df["date"] <= pd.Timestamp(TRAIN_END) - pd.Timedelta(days=HORIZON_DAYS)) & df[LABEL].notna()]   # purge
     global_rate = float(tr[LABEL].mean())
 
     for name, keys in [("clim_rate", ["station_name", "month"]),
@@ -144,8 +144,9 @@ def basin_frame(df):
         else:
             lab.append(np.nan)
     days[LABEL] = lab
-    days["year"] = days["date"].dt.year
-    # one cluster per year at basin level (no station dimension left)
+    # Cluster by calendar month at basin level (2026-09-28): one cluster per YEAR left only
+    # 3 test clusters, so the basin interval was not informative.
+    days["year"] = days["date"].dt.to_period("M").astype(str)
     days["station_name"] = "BASIN"
     return days
 

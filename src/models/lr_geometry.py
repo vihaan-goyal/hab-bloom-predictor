@@ -35,7 +35,8 @@ NAR_TIER_A = ['chl', 'chl_lag1', 'chl_lag2', 'chl_lag3', 'chl_lag4',
               'do', 'do_lag1', 'temp', 'temp_lag1',
               'sal', 'sal_lag1', 'sal_lag2', 'sal_lag3', 'sal_lag4', 'month']
 NAR_TRAIN_MAX, NAR_VAL, NAR_TEST = 2020, (2021, 2022), 2023
-LIS_TRAIN_END, LIS_TEST_YEARS, LIS_T_STAR = "2019-12-31", (2020, 2025), 0.35
+from locked_pipeline import T_STAR_21 as LIS_T_STAR  # noqa: E402  (single source)
+LIS_TRAIN_END, LIS_TEST_YEARS = "2019-12-31", (2020, 2025)
 OUT_SUMMARY = tagged("data/lr_geometry_summary.csv")
 FIG = tagged("figures/fig_lr_geometry.png")
 BLUE, ORANGE, GRAY = "#2a78d6", "#eb6834", "#8a8f98"

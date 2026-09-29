@@ -99,15 +99,20 @@ def contingency(y, a):
                 precision=(1 - far) if not np.isnan(far) else np.nan)
 
 
-def bootstrap_ci(y, a, n_boot=10000, seed=42):
-    """Percentile bootstrap CIs for POD/FAR/CSI over basin decision days."""
+def bootstrap_ci(y, a, n_boot=10000, seed=42, blocks=None):
+    """Percentile bootstrap CIs for POD/FAR/CSI over basin decision days. `blocks` (e.g. the
+    calendar month of each day) resamples whole blocks, because neighbouring days share
+    overlapping 21-day label windows (2026-09-28; the old version resampled single days)."""
     rng = np.random.default_rng(seed)
     y = np.asarray(y, dtype=float)
     a = np.asarray(a, dtype=bool)
     n = len(y)
+    groups = ([np.where(np.asarray(blocks) == b)[0] for b in pd.unique(np.asarray(blocks))]
+              if blocks is not None else None)
     stats = {"pod": [], "far": [], "csi": []}
     for _ in range(n_boot):
-        idx = rng.integers(0, n, n)
+        idx = (np.concatenate([groups[i] for i in rng.integers(0, len(groups), len(groups))])
+               if groups is not None else rng.integers(0, n, n))
         m = contingency(pd.Series(y[idx]), pd.Series(a[idx]))
         for k in stats:
             stats[k].append(m[k])
@@ -159,7 +164,8 @@ def main():
     m = contingency(test["basin_label"], test["alert"])
     empty = float((~test["has_future"]).mean())
 
-    ci = bootstrap_ci(test["basin_label"], test["alert"])
+    ci = bootstrap_ci(test["basin_label"], test["alert"],
+                      blocks=pd.to_datetime(test["date"]).dt.to_period("M").astype(str).values)
     print(f"\n== TEST 2023-2025, basin alert at t_basin={t_basin:.2f} ==")
     print(f"basin decision days : {len(test)}")
     print(f"base rate           : {test['basin_label'].mean():.3f}")

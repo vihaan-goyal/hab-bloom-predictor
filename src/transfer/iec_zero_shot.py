@@ -101,9 +101,13 @@ def build_features(df):
     df["do_lag1"] = g["oxygen_concentration_in_sea_water"].shift(1)
     df["temp_lag1"] = g["sea_water_temperature"].shift(1)
     df["month"] = df.date.dt.month.astype(float)
-    clim = df.groupby(["station_name", "month"])["Chlorophyll"].transform("mean")
-    df["chl_climatology"] = clim
-    df["chl_anomaly"] = df["Chlorophyll"] - clim
+    # Leak-free climatology (2026-09-28): only observations dated before each row, the same
+    # function as the LIS pipeline (label_rebuild.causal_climatology). The old version averaged
+    # every IEC year, test years included.
+    from src.models.label_rebuild import causal_climatology
+    obs = df[["station_name", "date"]].assign(v=df["Chlorophyll"].values)
+    df["chl_climatology"] = causal_climatology(df, obs)
+    df["chl_anomaly"] = df["Chlorophyll"] - df["chl_climatology"]
     for n, min_p in [(3, 2), (6, 3), (9, 5), (14, 7), (21, 10)]:
         df[f"chl_roll{n}_mean"] = g["Chlorophyll"].transform(
             lambda x: x.rolling(n, min_periods=min_p).mean())
@@ -127,8 +131,8 @@ def build_features(df):
     df["neighbor_chl3_lag1"] = df.groupby("station_name")["neighbor_chl3_mean"].shift(1)
 
     tidal = pd.read_csv(TIDAL, parse_dates=["date"])
-    tidal["ym"] = tidal.date.dt.to_period("M")
-    df["ym"] = df.date.dt.to_period("M")
+    tidal["ym"] = tidal.date.dt.to_period("M") + 1   # previous month's values (a month's mean
+    df["ym"] = df.date.dt.to_period("M")              # includes later days; fix 2026-09-28)
     df = df.merge(tidal[["ym", "tidal_gt_anom", "tidal_msl_anom"]], on="ym", how="left").drop(columns="ym")
     gust = pd.read_csv(GUST, parse_dates=["date"], usecols=["date", "max_gust_3d"])
     df = df.merge(gust, on="date", how="left")
@@ -252,7 +256,9 @@ def main():
         add(name, "LIS frozen", t_star, point_metrics(y, p, t_star) | boot_ci(rows, "p_lis", ycol, t_star))
         add(name, "always-alert", np.nan, point_metrics(y, np.ones(len(y)), 0.5))
         if have_cal:
-            pc = climatology_baseline(cal, rows, ycol); tc = float(np.median(pc))
+            pc = climatology_baseline(cal, rows, ycol)
+            # threshold from the calibration rows, not the test rows (fix 2026-09-28)
+            tc = float(np.median(climatology_baseline(cal, cal, ycol)))
             add(name, "station-month climatology", tc,
                 point_metrics(y, pc, tc) | boot_ci(rows.assign(p_clim=pc), "p_clim", ycol, tc))
             pr, c = chl_rule_baseline(cal, rows, ycol)

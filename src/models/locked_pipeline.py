@@ -32,6 +32,9 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))   # label_utils lives here
+
 # Label rebuild (notes/LABEL_REBUILD_PREREG.md). Since 2026-09-23 the default input is the
 # lab-consistent S1 file written by src/models/label_rebuild.py. The original raw-fluorometer
 # file is reproducible with HAB_FEATURES_CSV=data/hab_features_tidal.csv; HAB_OUT_TAG
@@ -51,6 +54,10 @@ GUST_CSV = "data/gust_features_daily.csv"
 
 BLOOM_THRESHOLD = 10.0   # ug/L, locked
 HORIZON_DAYS = 21        # paper standard (h21)
+# The ONE 21-day operating threshold (2026-09-28): the pre-registered rule, highest t whose
+# out-of-sample 2020-22 POD >= 0.8 (warning_operating_point.py --test-from-cv). Every script
+# imports it from here; re-derive it with that script, never on test data.
+T_STAR_21 = 0.20
 
 FEATURES_ALL = [
     'Chlorophyll', 'chl_lag1', 'chl_lag2', 'chl_lag3', 'chl_lag4',
@@ -143,22 +150,14 @@ def add_forward_label(df, horizon=HORIZON_DAYS, threshold=BLOOM_THRESHOLD,
     strictly after the row's date, at the same station. NaN where the window
     extends beyond the last observation at that station (right-censored),
     so unfinished windows are excluded from training rather than counted 0."""
+    # Also NaN when the window holds no visit at all (fix 2026-09-28): an unobserved window cannot
+    # be verified, so it is excluded rather than scored 0. Shared rule: label_utils.
+    from label_utils import forward_window_label
     df = df.copy()
     df[col] = np.nan
     for station, grp in df.groupby('station_name'):
-        idx = grp.index
-        dates = grp['date'].values
-        chl = grp['Chlorophyll'].values
-        last = dates.max()
-        labels = np.full(len(grp), np.nan)
-        for i in range(len(grp)):
-            end = dates[i] + np.timedelta64(horizon, 'D')
-            mask = (dates > dates[i]) & (dates <= end)
-            if mask.any() and (chl[mask] > threshold).any():
-                labels[i] = 1
-            elif end <= last:
-                labels[i] = 0
-        df.loc[idx, col] = labels
+        df.loc[grp.index, col] = forward_window_label(
+            grp['date'].values, grp['Chlorophyll'].values > threshold, horizon)
     return df
 
 
@@ -167,13 +166,15 @@ def make_model():
                               max_iter=1000, random_state=42)
 
 
-def fit_locked_model(df, label_col, train_end=None, features=None):
+def fit_locked_model(df, label_col, train_end=None, features=None, purge_days=HORIZON_DAYS):
     """Fit the locked spec. train_end (Timestamp) limits training rows to
     date <= train_end; None uses all labeled rows. Returns a dict bundle."""
     features = features or [f for f in FEATURES_ALL if f in df.columns]
     rows = df.dropna(subset=[label_col])
     if train_end is not None:
-        rows = rows[rows['date'] <= pd.Timestamp(train_end)]
+        # purge (2026-09-28): a row's label looks `purge_days` ahead, so rows within that
+        # distance of train_end would see outcomes from after the training period.
+        rows = rows[rows['date'] <= pd.Timestamp(train_end) - pd.Timedelta(days=purge_days)]
     X = rows[features].copy()
     y = rows[label_col].astype(int)
     med = X.median()
