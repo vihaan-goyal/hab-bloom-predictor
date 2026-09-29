@@ -44,6 +44,11 @@ dose form: arm B total dose < arm C total dose.
 - Turbidity (a DIY nephelometer: LED at 90° to a photodiode, or a Secchi-tube reading).
 - Colour; curcumin is yellow and **interferes with fluorescence**. Calibrate the fluorometer against curcumin-spiked, algae-free water, and confirm with cell counts.
 - Curcumin fading over time (absorbance near 425 nm if a cheap spectrometer is available).
+- **It blinds the fluorometer (added 2026-09-28; can fake success).** Curcumin is yellow and absorbs the blue LED light, so the chlorophyll reading drops even when the algae don't. That would trigger OFF on a fake drop.
+  - **Cell counts decide OFF** for this method.
+  - Build a **correction curve:** fluorometer reading of a fixed algae sample spiked with 0, 0.5, 1 and 2.5 mg/L curcumin.
+- **It breaks down in light within hours,** so the dose added isn't the dose the algae see. Measure colour (absorbance near 425 nm, or a blue-LED photodiode) at **0, 6 and 24 h** after each pulse.
+- **Record the exact product and lot:** "95% curcumin" usually means 95% *curcuminoids*, a mix of three related compounds.
 
 ## Materials (estimates)
 

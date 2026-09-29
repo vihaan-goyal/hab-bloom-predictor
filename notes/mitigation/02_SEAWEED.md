@@ -54,6 +54,14 @@ repeats the 2025 design on our stand-in culture.
   - ***Ulva*** is abundant in summer but scarce in winter, so collect it early if needed, and hold it in f/2 under light (the papers kept it up to a month).
 - **Panel:** a mesh cage holding the weighed seaweed, lowered and lifted by a servo arm.
 - **Extra control arm:** a plastic "fake seaweed" panel of the same area, which separates chemistry from shading and contact.
+- **Kelp is a cold-water plant (added 2026-09-28; can break the method).** Sugar kelp grows best around 10-15 °C and is stressed near room temperature, so it may start decaying mid-run, adding chlorophyll and nutrients and weakening the effect.
+  - Keep the **holding tank cold** (a cool room, or a mini fridge with a small light).
+  - Replace blades **weekly** and log the swap; any pale or slimy blade is replaced at once.
+  - Better, if the lab allows: run the tanks near **15 °C**, the papers' temperature.
+  - *Ulva* tolerates warmth but pushes pH higher, so it stays the fallback.
+- **Seaweed-only control (added 2026-09-28):** kelp in medium with **no algae added**. Broken fragments, microalgae living on the blades, and decaying tissue can all read as "algae". This tank measures that background so it can be subtracted.
+- **Keep fragments out of samples:** cut pieces **a day early** so the cut edges heal, rinse them in filtered seawater, and **strain every sample** through a fine mesh (~50-100 µm, which passes single diatom cells but stops fragments) before it goes in the cuvette.
+- **Test diatom:** ***Skeletonema*** first (the dominant diatom of Long Island Sound blooms). *Phaeodactylum* is a very hardy lab species that may under-respond, so it's a backup only.
 
 ## Measurements specific to seaweed
 - Seaweed wet weight before and after each deployment (salad-spun).

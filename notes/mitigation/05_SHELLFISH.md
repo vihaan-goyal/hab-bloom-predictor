@@ -9,6 +9,8 @@ Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/pl
   - It is correlational at the whole-bay scale.
 - **Nutrient co-benefit:** oyster aquaculture already removes 1.3-2.7% of Long Island Sound's nutrient inputs (Bricker et al. 2018).
 
+- **Contrast with freshwater ponds:** pond guidance says there is "no practical way" to add organisms that eat *planktonic* algae; grass carp and tilapia only eat filamentous algae and macroalgae (Sink et al. 2022, Texas A&M AgriLife RWFM-PU-154). In salt water, filter-feeding bivalves fill exactly that gap.
+
 **Caveats:**
 - Filter feeders act over **days to years**, not hours, which fits a slower loop.
 - **They accumulate toxins.** Oysters stored microcystin, and shellfish take up saxitoxin and domoic acid. Animals used for treatment must **never be eaten** and should be removed if a toxic species is present.
@@ -36,6 +38,9 @@ per hour. This gives the number needed to plan the 7-day loop without guessing.
 - **Tanks:** 3 per arm, 20-40 L, aerated artificial seawater at salinity 28-30, 16-20 °C; a separate holding tank fed with a non-toxic alga (e.g. *Isochrysis*) between deployments.
 - **Culture to "bloom":** non-toxic diatom or dinoflagellate, as in the other methods.
 - **Extra control:** **empty shells** in bags, which separates filtering from simply having a structure in the water.
+- **Backup animal source (added 2026-09-28):** if hatchery seed or permits don't come through by November, **live oysters from a seafood market** are legal to buy and keep in tanks, and they filter well (they're larger, so fewer are needed; size the number from the clearance test). Log that they are **never eaten and never released**; dispose of them as the sponsor directs.
+- **Ammonia (can break the method in small tanks):** test ammonia **daily** while animals are in, not only at re-measure. Stock from the **measured** clearance rate, never more animals than needed. Ammonia fed back into the water also drives regrowth after OFF (H3), so log it with the regrowth.
+- **Framing:** "oysters eat algae" alone isn't a finding. The result is the **timing**: B (early) against the reactive arm C, plus how fast the bloom regrows after the bags come out.
 
 ## Measurements specific to shellfish
 - Clearance rate (L/animal/h) from the 4-h test.

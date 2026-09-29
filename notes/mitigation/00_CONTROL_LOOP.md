@@ -93,6 +93,7 @@ not a bay: its bloom is driven by the nutrients we add. So the loop runs **both 
 side** and logs both:
 - **Model trigger (the system):** `p` from the Narragansett model on the tank's daily sensor means. This drives arm B.
 - **Rule trigger (the backup and comparison):** fixed in advance. It fires when the tank's chlorophyll has risen on 2 consecutive days and passed 2× its warm-up mean. The log shows whether the model fired earlier, later or not at all compared with the rule.
+- **Handover rule (added 2026-09-28; pre-register it, don't decide mid-run):** if the rule trigger has fired in a B tank and the model still hasn't fired **2 days later**, the rule takes over for that tank. The log records which trigger switched each tank ON. The model's skill is argued from the historical replays (Layer 1), not from the tanks, because a tank bloom is driven by the nutrients we add.
 
 A **false-alarm tank** (arm D) is triggered on purpose without a real bloom coming. This measures
 the cost of a wrong alert: 24-29% of Layer-1 episodes were false alarms at Narragansett, and more
@@ -113,6 +114,14 @@ prospective season already does for the WLIS and EXRX buoys (live-season rules i
 | Salinity | refractometer or conductivity probe | daily (model input) |
 | Non-target health | Brine shrimp (*Artemia*, marine) or *Daphnia* (freshwater) 24-h survival in treated water | each RE-MEASURE |
 
+**Sampling rules for the fluorometer (added 2026-09-28).** The fluorometer measures glow, not
+cells. Glow per cell changes with time of day (light history) and with treatments that damage
+photosynthesis or bleach cells (seaweed, peroxide, curcumin), so a fake drop could trigger OFF.
+- Sample every tank at the **same time each day**.
+- **Keep each sample in the dark for 15 min** before reading it.
+- Cell counts are the ground truth: report **glow per cell** at each count, and the OFF rule uses counts for seaweed and curcumin.
+- Counting workload: 21 tanks × ~10 min is too much daily. Photograph the counting chamber through the microscope with a phone and count later (ImageJ); count every 2 days, and daily only around trigger and OFF; split the work between both team members.
+
 **Safety limits (EMERGENCY OFF at any time):** DO < 4 mg/L; pH outside the method's range (marine 7.6-8.6); non-target survival more than 20 percentage points below control; any method-specific limit in its file.
 
 ## Bench experiment design (the same for every method)
@@ -124,7 +133,7 @@ timing:
 |---|---|---|
 | **A: untreated** | no treatment | the natural bloom curve |
 | **B: forecast-triggered loop** | the full loop above | the main hypothesis |
-| **C: late treatment** | treatment starts only after chlorophyll peaks | whether early beats late |
+| **C: reactive ("visible bloom") treatment** | treatment starts when chlorophyll passes **50% of the expected untreated peak** (the pilot bloom run sets the expected peak); same X, OFF rule and MAX_ON as B | whether early beats what a real manager would do |
 | **D: false alarm** | loop triggered on a tank with no added nutrients (no real bloom) | what a wrong alert costs (non-target harm, material, energy) |
 
 **Timeline per run:**
@@ -136,12 +145,35 @@ timing:
 That's **about 6-7 weeks** in total, so the run has to start by early December to be analysed
 before the February deadline.
 
+**Why arm C changed (2026-09-28):** "after the peak" starts C when the bloom is already crashing,
+so it does 0-4% by construction (Layer 2) and a judge can call it a strawman. Starting C at 50%
+of the expected peak is the reactive strategy a lake or bay manager actually uses, so B beating
+it is a real test of "early matters". The Layer 2 simulation should be re-run with this arm C
+before `LOOP_PREREG.md` is written.
+
+**Pilot bloom run (added 2026-09-28):** during the warm-up, 2 spare tanks get nutrients early
+with no treatment. They confirm the culture actually blooms in our tanks (if arm A doesn't
+bloom, every hypothesis fails), and give the expected peak height and timing that arm C's start
+and `C_ok` are set from. Keep backup culture flasks going through the run.
+
 **Pre-registered hypothesis (H1), revised 2026-09-26 after the Layer 2 simulation:**
 - **H1a:** arm B's peak chlorophyll is at least 50% lower than arm A's.
-- **H1b:** arm B's peak cut is larger than arm C's (late treatment).
+- **H1b:** arm B's peak cut is larger than arm C's (reactive treatment, started at 50% of the expected peak).
 - Total treatment (hours ON, or grams or mg dosed) is reported for B and C, plus treatment per percent of peak cut.
 - *Why it changed:* the original H1 also required B to use **less treatment than C**. The simulation (`LAYER2_SIM_RESULTS.md`) showed that late treatment starts when the bloom is already crashing, so it's short and does almost nothing. "Less treatment than C" then fails even when B works.
 **H2:** arm D shows no loss of non-target survival compared with arm A.
+**H4 (added 2026-09-28): trim the bloom, don't remove the algae.** Diatoms at normal levels make
+oxygen and feed the food web, so the loop must cut the *peak*, not push the algae below normal.
+- **Pass:** in arm B, the 3-tank mean chlorophyll (and cell count) never falls below **80% of the warm-up mean** (the normal, pre-bloom level), from nutrients-in to the end of the cool-down.
+- **Also logged:** daytime DO in B stays at or above its warm-up level, showing that the treated tanks still make oxygen.
+- **Floor OFF rule (bench):** if a treated tank reads below 80% of its warm-up mean on **2 days in a row**, the treatment switches OFF (logged like a safety stop). Two days, so that one noisy reading doesn't trip it. Arm D runs its fixed false-alarm episode without this rule, so it still measures a full wrong alert.
+- The Layer 2 simulation can't predict this: it has no nutrient recycling from dead cells, so its treated tanks drift below normal weeks after OFF. The bench measures it directly.
+- **Source:** Sink et al. 2022, *Managing and Controlling Algae in Ponds* (Texas A&M AgriLife Extension, RWFM-PU-154, [PDF](https://extension.rwfm.tamu.edu/wp-content/uploads/sites/7/2023/06/Managing-and-controlling-algae-in-ponds.pdf)). It's written for freshwater ponds, but its points are general:
+  - planktonic algae are "the good" kind, essential to the food chain and to oxygen;
+  - rapid die-off after algaecide treatment or a bloom crash causes oxygen depletion and fish kills;
+  - so dense ponds should be treated only 20-25% at a time, with 7-10 days between treatments.
+
+  That is the same logic as H4 and as treating early and small. See also Texas A&M AquaPlant, [filamentous algae](https://aquaplant.tamu.edu/management-options/filamentous-algae/), which warns that post-treatment oxygen depletion is the main danger of any chemical control.
 
 **Outcome measures:** peak chlorophyll; area under the chlorophyll curve; days above `C_ok`;
 total ON time or dose; non-target survival; number of ON/OFF cycles.
@@ -152,7 +184,7 @@ report it that way rather than over-claiming.
 
 ## Organisms (non-toxic stand-ins)
 - **Dinoflagellate:** *Prorocentrum micans* (used as the non-toxic control in Mardones et al. 2023). **Not as the main test organism for bubbles:** bubbling *promoted* *Prorocentrum* in Sung & Gobler 2026, so for bubbles it's only an "expected to resist" comparison (see `01_BUBBLES.md`).
-- **Diatom:** *Phaeodactylum tricornutum* or *Thalassiosira*. Long Island Sound blooms are mostly diatoms.
+- **Diatom:** ***Skeletonema*** first (added 2026-09-28: the dominant diatom of Long Island Sound blooms, so the most relevant stand-in), then *Thalassiosira*. *Phaeodactylum tricornutum* is a very hardy lab species and may under-respond to seaweed; keep it only as a backup. Long Island Sound blooms are mostly diatoms.
 - **Source:** the National Center for Marine Algae and Microbiota (NCMA, Bigelow Laboratory, Maine) sells cultures.
 - **Do not use *Scrippsiella*:** Northwest Atlantic strains harm shellfish larvae.
 - Never culture toxic *Alexandrium*, *Karenia*, *Margalefidinium* or *Microcystis*.
@@ -161,7 +193,7 @@ report it that way rather than over-claiming.
 - **Controller:** an ESP32 microcontroller reads the sensors, runs the state machine above, and logs every reading and state change to a CSV (and optionally a dashboard).
 - **Actuators by method:**
   - relay → air pump (bubbles)
-  - servo or winch → lowers and raises a seaweed panel or peroxide bag
+  - servo or winch → lowers and raises a seaweed panel or shellfish bag
   - peristaltic pump → curcumin dosing
 - **Forecast input:** the ESP32 logs readings to a CSV. Once a day a laptop runs the fork's `predict_anywhere.py` on that CSV and sends `p` back to the controller over Wi-Fi or USB. The rule trigger runs on the ESP32 itself as a backup if the laptop link fails.
 - **Keep a design log from day one:** version, what failed, the measured improvement. Engineering judges score documented iteration.
@@ -172,7 +204,7 @@ report it that way rather than over-claiming.
 |---|---|---|---|---|
 | `01_BUBBLES.md` | coarse-bubble aeration | fish or shellfish pens, tanks, marinas | yes (switch off) | 48 h |
 | `02_SEAWEED.md` | seaweed panels (*Ulva*, sugar kelp) | shellfish and kelp farms, small bays | yes (lift out) | 72 h |
-| `03_PEROXIDE_BAG.md` | calcium peroxide in a fabric bag | ponds, enclosed basins | yes (lift out) | 24 h |
+| `03_PEROXIDE_BAG.md` | liquid H₂O₂ pumped in pulses (sodium percarbonate as the comparison) | ponds, enclosed basins | no, but it breaks down to water and oxygen in 1-2 days | 24 h |
 | `04_CURCUMIN.md` | curcumin dosing | enclosed canals, tanks | no (dosed into the water) | 24 h |
 | `05_SHELLFISH.md` | clam or oyster bags | shellfish farms, small bays | yes (lift out) | 7 days |
 

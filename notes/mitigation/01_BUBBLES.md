@@ -74,6 +74,13 @@ of their effect, and it's long enough to separate a real effect from a 1-day art
 - **Culture:** non-toxic dinoflagellate (*Prorocentrum micans*); optional second series with a diatom (*Phaeodactylum*).
 - **Air:** one aquarium pump per arm via a manifold, with an **open tube end or wide-bore outlet** (coarse) at the bottom and a needle valve so every column gets the same flow. Measure flow with a bubble-counter or a rotameter.
 - **Extra arm worth adding:** a fine airstone at the same airflow, which replicates the paper's coarse-versus-fine contrast.
+- **Hidden confounder: carbon supply (added 2026-09-28; can hide the effect).** In still flasks, dense cultures run short of dissolved CO₂ and their pH climbs. Bubbling with air puts CO₂ back, which **helps** growth and can cancel out the turbulence stress.
+  - Log **pH in every flask** daily, still controls included.
+  - Add a **gentle-bubbling control:** a very low airflow (a few bubbles per second) that gives gas exchange with almost no stirring. The bubble effect is then measured against it, not only against still water.
+- **Reframe (2026-09-28): aeration may be worth more against the bloom's *harm* than against the bloom.** Pond managers use bottom aeration for prevention, not to kill algae. It adds oxygen to bottom water, feeds the aerobic bacteria that break down organic matter, and prevents fish kills when oxygen-poor bottom water mixes up (Sink et al. 2022, Texas A&M AgriLife Extension RWFM-PU-154). This matches Layer 2, where bubbles barely cut the bloom (median 19%).
+  - **Present bubbles as** reducing the oxygen crash after a bloom, which is what drives western Long Island Sound hypoxia, rather than as stopping the bloom.
+  - **Add to the screen:** DO at dawn (the daily low) in bubbled vs still flasks after the bloom peaks, to test that role directly.
+- **Species first:** many dinoflagellates grow *faster* when stirred. The screen decides the species; a "no effect" result is still reportable.
 - **Controller:** ESP32 + relay module → pump; fluorometer + DO/pH/temperature sensors → state machine.
 
 ## Measurements specific to bubbles

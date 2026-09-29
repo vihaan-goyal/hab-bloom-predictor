@@ -10,7 +10,7 @@ and the shared loop in `00_CONTROL_LOOP.md`. **Nothing hands-on starts until the
 |---|---|---|---|---|---|
 | 01 | Coarse bubbles | 27 | Moderate (bench) | Only on sensitive dinoflagellates. It pauses division (23-55% less growth) and cells regrow once it stops. 3 of 10 dinoflagellates grew *faster* when stirred. Diatoms are unaffected or helped | **Screen only** (Layer 2: bubbles mostly delay the bloom; ≥ 50% cut in 3% of runs) |
 | 02 | Kelp panels | 20 | Moderate-strong (lab and mesocosm) | Likely: diatom −74-94% at ≥ 72 h (2 g/L); dinoflagellates need ~2 g/L for ~10 days. Untested on *Phaeodactylum* or *Thalassiosira* | **Full loop run** (lead method) |
-| 03 | Peroxide bag | 27 | Strong for small cells only | At a dose that is safe for non-targets (≤ 2.8 mg/L), only ~2 µm cells die. *P. micans* was hit 11% even at 6.4 mg/L, *T. weissflogii* 2.6% | **Screen only**, on a small-celled alga; shows the "selective" idea |
+| 03 | Peroxide (pumped H₂O₂; percarbonate comparison) | 27 | Strong for small cells only | At a dose that is safe for non-targets (≤ 2.8 mg/L), only ~2 µm cells die. *P. micans* was hit 11% even at 6.4 mg/L, *T. weissflogii* 2.6% | **Screen only**, on a small-celled alga; shows the "selective" idea |
 | 04 | Curcumin | 25 | Weak-moderate (one organism, *K. brevis*) | Unknown: no diatom or *Prorocentrum* data. Works at ≥ 3 mg/L, but zebrafish larval LD50 is 1.8-2.8 mg/L. It also interferes with the 470 nm fluorometer | **Screen only**, as a comparison arm |
 | 05 | Shellfish bags | 24 | Strong in tanks, weak at larger scale | Yes for filtration (oysters ~1 L/h per 60 mm animal), but feeding stops at high HAB density, and every success had the animals in place *before* the bloom | **Full loop run #2** (Layer 2: 94-95% chance of a ≥ 50% cut when stocked for 2 tank volumes/day), after the clearance test; needs permits and animals |
 
@@ -31,12 +31,12 @@ the **loop runs** (weeks, tanks) go to the two methods most likely to work on ou
 
 | | Bubbles | Seaweed | Peroxide | Curcumin | Shellfish |
 |---|---|---|---|---|---|
-| Treatment | coarse bubbles, open tube | live sugar kelp panel | CaO₂ in fabric bag | ethanol stock, peristaltic dose | oysters or clams in mesh bag |
+| Treatment | coarse bubbles, open tube | live sugar kelp panel | liquid 3% H₂O₂ by pump (loop); sodium percarbonate (screen comparison) | ethanol stock, peristaltic dose | oysters or clams in mesh bag |
 | Dose | 0.05 and 0.6 L/min per litre (Sung & Gobler: 25 and 300 mL/min into 500 mL) | 2 g/L wet (dose arms 0, 0.5, 1, 2) | target **0.8** mg/L H₂O₂; pull above 2.8 | ladder 1 → 2.5 mg/L (cap 2.5) | clear **2** tank volumes/day ≈ 4 oysters (40 mm) per 20 L, sized from the measured clearance; cap 1 per 2 L |
-| `X` | 48 h | 72 h | 24 h, then bag out | 24 h per pulse | **3 d** (Layer 2 sweep) |
+| `X` | 48 h | 72 h | 24 h per pulse | 24 h per pulse | **3 d** (Layer 2 sweep) |
 | `MAX_ON` | 192 h | 12 d (≥ 10 d for dinoflagellate) | **3 bags** (was 4) | 4 pulses | 4 × X |
 | Main culture | *Akashiwo sanguinea* (backup *Prorocentrum triestinum*) + *Phaeodactylum* check | *Phaeodactylum* or *Thalassiosira*; dinoflagellate second | small-celled alga (*Micromonas*/*Nannochloropsis*-type) + *T. weissflogii*, *P. micans* as resistant controls | *P. micans* + diatom | diatom |
-| Extra controls | still column, fine airstone, pulsed | fake plastic panel, pH-matched, nutrient top-up, filtrate | empty bag, sodium carbonate, liquid H₂O₂ | ethanol-only, light vs dark, curcumin-spiked blank | empty-shell bag, animals without algae |
+| Extra controls | still column, fine airstone, pulsed | fake plastic panel, pH-matched, nutrient top-up, filtrate | sodium percarbonate arm, sodium carbonate | ethanol-only, light vs dark, curcumin-spiked blank | empty-shell bag, animals without algae |
 | Method safety limit | temp +2 °C, evaporation > 5% | pH > 9.0 | residual > 2.8 mg/L, pH > 9.0 | DO drop > 2 mg/L in 24 h | ammonia-N > 0.5 mg/L, mortality > 10% |
 | Non-target check | *Artemia* 24 h | *Artemia* 24 h | *Artemia* **24 h and 96 h** (delayed deaths) | *Artemia* in **light** | animal health log |
 | Main endpoint | cell count | cell count | size-class cell count | cell count (fluorometer unreliable) | chl + cell count |
@@ -57,9 +57,10 @@ own limit); non-target survival more than 20 points below control.
 
 **Loop runs** (from `00_CONTROL_LOOP.md`):
 - **H1a:** arm B's peak chlorophyll (and cell count) is ≥ 50% below arm A's.
-- **H1b:** arm B's peak cut beats arm C's (late treatment).
+- **H1b:** arm B's peak cut beats arm C's (reactive treatment, started at 50% of the expected peak).
 - Treatment used by B and C is reported, not tested. The original "less treatment than C" can't pass even when B works; see `LAYER2_SIM_RESULTS.md`.
 - **H2:** arm D shows no non-target loss compared with arm A.
+- **H4 (2026-09-28):** arm B trims the bloom without pushing algae below normal: its 3-tank mean chlorophyll never falls below 80% of the warm-up mean, and daytime DO stays at or above its warm-up level. A floor OFF rule (2 days below 80% of warm-up) enforces it; details in `00_CONTROL_LOOP.md`.
 - **H3 (new, from the reviews):** after OFF, arm B regrows. We record days until it's back above `C_ok`. The reviews say bubbles and seaweed effects stop when the treatment is removed, so this is expected, and measuring it is part of the result.
 
 ## 4. Timeline
@@ -71,8 +72,8 @@ The fixed points:
 
 | Dates (2026-27) | Phase | What happens | Blocking on |
 |---|---|---|---|
-| **Now - Oct 10** | 0. Admin | Find a sponsor or Designated Supervisor and a lab space. Forms 1, 1A, 1B, and Form 3 (CaO₂ oxidizer, ethanol). Ask NCMA about the strains (§5). Email a CT kelp farm and a shellfish hatchery. Optional: email Dr. Gobler for the bubble PDF | **You** |
-| Oct 5 - Oct 24 | 1. Build and calibrate | ESP32 controller and relay/servo/pump; DIY fluorometer; calibrate to µg/L with a dilution series. Curcumin-spiked blank test for fluorometer interference. CaO₂ release curve in seawater without algae (strips at 1, 4, 12, 24 h). Start the design log | parts ordered |
+| **Now - Oct 10** | 0. Admin | Find a sponsor or Designated Supervisor and a lab space. Forms 1, 1A, 1B, and Form 3 (sodium percarbonate oxidizer, ethanol). Ask NCMA about the strains (§5). Email a CT kelp farm and a shellfish hatchery. Optional: email Dr. Gobler for the bubble PDF | **You** |
+| Oct 5 - Oct 24 | 1. Build and calibrate | ESP32 controller and relay/servo/pump; DIY fluorometer; calibrate to µg/L with a dilution series. Curcumin-spiked blank test for fluorometer interference. Percarbonate peroxide-content check in seawater without algae (low-range kit at 0, 15 min, 1 h, 24 h). Start the design log | parts ordered |
 | Oct 15 - Oct 31 | Culture up | Grow NCMA cultures to working density; hatch *Artemia* test batches | cultures arrive |
 | **Oct 26 - Nov 14** | 2. Screens | Five screens in 250 mL flasks or 5 L columns, n = 3 each (§6). Each is 1-10 days, run in parallel | cultures, forms |
 | **Nov 10** | Warm-up start | 21 tanks start logging at low nutrients (the model's 21-day warm-up) | controller working |
@@ -87,7 +88,7 @@ The fixed points:
 
 1. **Sponsor and forms.** This blocks everything.
    - Designated Supervisor: a science teacher, or a UConn/DEEP contact.
-   - Form 3: CaO₂ is an oxidizer and ethanol is flammable.
+   - Form 3: sodium percarbonate is an oxidizer and ethanol is flammable.
    - No vertebrates are used: *Artemia* and shellfish are invertebrates. Confirm with the SRC.
 2. **Lab space:** room for 21 tanks plus flask racks, grow lights, a GFCI outlet and a microscope.
 3. **Email NCMA (Bigelow)** to ask:
@@ -106,7 +107,7 @@ The fixed points:
 |---|---|---|---|---|
 | Bubbles | 500 mL cultures in 1 L flasks (the Sung & Gobler setup) | still; air stone at 25 mL/min; air stone at 300 mL/min; × 2 species (dinoflagellate, *Phaeodactylum*); n = 4 | 4 d (covers 48 h ON + 48 h regrowth) | cells daily, pH, temperature |
 | Seaweed | 250 mL flasks | kelp 0, 0.5, 1, 2 g/L; fake panel; pH-matched; filtrate | 10 d | cells every 24-48 h, pH, *Artemia* at end |
-| Peroxide | 250 mL flasks | 0, 0.8, 1.6, 3.2, 6.4 mg/L × 3 species; empty bag; Na₂CO₃ | 72 h | size-class counts, H₂O₂ strips, *Artemia* 24 h + 96 h |
+| Peroxide | 250 mL flasks | liquid H₂O₂ 0, 0.8, 1.6, 3.2, 6.4 mg/L × 3 species; percarbonate at 0.8 mg/L H₂O₂ × 3 species; Na₂CO₃ | 72 h | size-class counts, H₂O₂ strips, *Artemia* 24 h + 96 h |
 | Curcumin | 250 mL flasks | 0, 0.5, 1, 2.5, 5, 10 mg/L; ethanol-only; 2.5 mg/L dark | 72 h | cells, A425, DO, *Artemia* in light |
 | Shellfish | 1 L beakers | 1 animal each (10 per species) + 3 no-animal | 4 h | chl every 30 min → L/animal/h |
 
@@ -121,10 +122,11 @@ For two methods on the same culture (**planned: seaweed and shellfish**, both on
 |---|---|---|
 | A untreated | 3 | **shared** by both methods (same culture, same dates) |
 | B loop, method 1 | 3 | |
-| C late, method 1 | 3 | |
+| C reactive (starts at 50% of expected peak), method 1 | 3 | |
 | D false alarm, method 1 | 3 | no nutrients |
 | B, C, D, method 2 | 9 | |
-| **Total** | **21 tanks (4-10 L)** | |
+| Pilot bloom (warm-up only) + seaweed-only control | 2 + 1 | pilot tanks can be reused as spares once the run starts |
+| **Total** | **24 tanks (4-10 L)** | |
 
 If the shellfish clearance test shows too little filtering, or the animals or permits don't come
 through, method 2 falls back to seaweed at a second density.
@@ -141,7 +143,7 @@ through, method 2 falls back to seaweed at a second density.
 | LED grow lights × 2 + timers | all | $60 |
 | Sea salt, f/2 and f/4 medium, Sedgewick-Rafter chamber | all | $80 |
 | Cultures (NCMA, 4-5 strains) | all | $250-400 |
-| Calcium peroxide, H₂O₂ strips, fabric | peroxide | $60 |
+| Sodium percarbonate, 3% H₂O₂, low-range kit and strips | peroxide | $60-90 |
 | Curcumin ≥ 95%, food-grade ethanol | curcumin | $30 |
 | Kelp (farm) / *Ulva* (collect), mesh cages | seaweed | $0-50 |
 | Oyster or clam seed, mesh bags | shellfish | $30-80 |
@@ -168,6 +170,43 @@ Much of this can be borrowed: ask the sponsor for the microscope, glassware and 
 | Fluorometer disagrees with cell counts | the OFF rule is wrong | the OFF rule uses cell counts (already the plan for seaweed and curcumin) |
 | Model never fires in a tank (month term, rescaling) | arm B has no model trigger | the rule trigger drives arm B; report the model's behaviour as a finding |
 | Lab closed over break | missed counts | the bloom phase ends Dec 19 by design |
+| Arm A culture doesn't bloom in our tanks | every hypothesis fails | pilot bloom run during warm-up; backup culture flasks (§11) |
+| Kelp decays at room temperature | seaweed effect fades mid-run | cold holding tank, weekly blade swap (§11) |
+
+## 11. Make-or-break fixes (2026-09-28)
+
+A review for holes that could sink a method. The details are in each method file; the shared
+ones are in `00_CONTROL_LOOP.md`.
+
+**Shared (all methods):**
+
+| Hole | Fix | Where |
+|---|---|---|
+| Arm C ("after the peak") does 0-4% by construction, so it's a strawman | **Arm C now starts at 50% of the expected untreated peak** (a reactive manager). Re-run the Layer 2 simulation with it before writing `LOOP_PREREG.md` | `00_CONTROL_LOOP.md` |
+| When the rule trigger takes over from the model is undefined | **Handover rule:** rule fired + model silent for 2 days → rule drives that tank; log which trigger fired. The model's skill is argued from Layer 1, not the tanks | `00_CONTROL_LOOP.md` |
+| The fluorometer reads glow, not cells; treatments and time of day change glow per cell | Same sampling time daily, 15 min dark before reading, report glow per cell; counts decide OFF for seaweed and curcumin | `00_CONTROL_LOOP.md` |
+| Arm A may never bloom (culture crash), which fails every hypothesis | **Pilot bloom run** in 2 spare tanks during warm-up; it also sets arm C's start and `C_ok`. Keep backup culture flasks | `00_CONTROL_LOOP.md` |
+| Cell counting (21 tanks × ~10 min) is too much work | Phone photos through the microscope, count later in ImageJ; every 2 days, daily only around trigger and OFF; split between both team members | `00_CONTROL_LOOP.md` |
+| *Phaeodactylum* is hardy and may under-respond | ***Skeletonema*** first (dominant Long Island Sound diatom) | `00_CONTROL_LOOP.md`, `02_SEAWEED.md` |
+| Nothing stopped the loop from pushing diatoms (oxygen makers) below normal | **H4** + a floor OFF rule: 2 days below 80% of the warm-up level → OFF; log daytime DO | `00_CONTROL_LOOP.md` |
+
+**Per method:**
+
+| Method | Hole | Fix |
+|---|---|---|
+| Seaweed | Kelp decays near room temperature | cold holding tank, weekly blade swap, run near 15 °C if possible |
+| Seaweed | Fragments and epiphytes read as chlorophyll | seaweed-only control tank; cut a day early, rinse, strain samples |
+| Shellfish | Hatchery seed or permits late | live seafood-market oysters as backup (never eaten or released) |
+| Shellfish | Ammonia builds up in small tanks | daily ammonia test; stock from the measured clearance only |
+| Bubbles | Bubbling adds CO₂, which helps growth and hides the stress effect | pH in every flask; gentle-bubbling control |
+| Peroxide | Strips can't resolve 0.8 mg/L; bag overshoots | low-range peroxide kit; pump-dosed liquid 3% H₂O₂ as the main dose; **calcium peroxide bag dropped (2026-09-28)**, sodium percarbonate (registered-algaecide ingredient) is the comparison |
+| Peroxide | ~2 µm cells can't be counted | size-fractionated chlorophyll with a 5 µm syringe filter |
+| Curcumin | Absorbs the blue LED, so it fakes a chlorophyll drop | counts decide OFF; curcumin-spiked correction curve |
+| Curcumin | Breaks down in light within hours | colour at 0, 6 and 24 h after each pulse; record product and lot |
+
+**Added to the shopping list:** low-range peroxide test kit (~$30-60), 5 µm syringe filters and
+syringes (~$20), fine nylon mesh (~$10), and a mini fridge or cool spot for the kelp holding tank
+(borrow if possible).
 
 ## Never claim
 - That it prevents blooms in the open Sound; this is tanks only.
