@@ -44,6 +44,9 @@ _ap.add_argument('--input',
                       'is data/hab_features_tidal.csv)')
 _ap.add_argument('--label-col', default=None,
                  help='use this prebuilt column as the label instead of bloom_28d (S3)')
+_ap.add_argument('--no-censor', action='store_true',
+                 help='reproduce the old label: windows running past a station last visit '
+                      'count as 0 instead of being dropped')
 _ap.add_argument('--tag', default='',
                  help='suffix for every output file, e.g. _S1')
 _args, _ = _ap.parse_known_args()
@@ -117,16 +120,23 @@ df['chl_trend'] = (
       .transform(lambda x: x.rolling(4, min_periods=3).apply(_slope, raw=True))
 )
 
-df['bloom_28d'] = 0
+# Right-censored (fix ported from worktree-climatology-fix 572ff7d, 2026-09-28): a window that
+# runs past the station's last visit and has no bloom in it is unresolved, so it is NaN (dropped)
+# rather than scored 0. --no-censor reproduces the old label.
+df['bloom_28d'] = np.nan
 for station, grp in df.groupby('station_name'):
     idx   = grp.index
     dates = grp['date'].values
     chl   = grp['Chlorophyll'].values
-    labels = np.zeros(len(grp), dtype=int)
+    last  = dates.max()
+    labels = np.full(len(grp), np.nan)
     for i in range(len(grp)):
-        mask = (dates > dates[i]) & (dates <= dates[i] + np.timedelta64(28, 'D'))
+        end = dates[i] + np.timedelta64(28, 'D')
+        mask = (dates > dates[i]) & (dates <= end)
         if mask.any() and (chl[mask] > BLOOM_THRESHOLD).any():
             labels[i] = 1
+        elif end <= last or _args.no_censor:
+            labels[i] = 0
     df.loc[idx, 'bloom_28d'] = labels
 
 if _args.label_col:
@@ -216,6 +226,22 @@ _grid = np.round(np.arange(0.10, 0.91, 0.05), 2)
 _val_f1 = [f1_score(y_val, (lr_val_p >= t).astype(int), zero_division=0) for t in _grid]
 VAL_T = float(_grid[int(np.argmax(_val_f1))])
 print(f"Validation-F1 threshold (2020-2022): {VAL_T:.2f}")
+
+# Operating threshold (2026-09-28): the project's pre-registered rule, applied on VALIDATION only --
+# the highest threshold whose validation recall (POD) is still >= 0.80. The earlier headline t=0.60
+# was picked on the 2023-25 test sweep, so its test precision/lift were not independent estimates.
+TARGET_POD = 0.80
+_val_pod = [recall_score(y_val, (lr_val_p >= t).astype(int), zero_division=0) for t in _grid]
+_ok = [t for t, p in zip(_grid, _val_pod) if p >= TARGET_POD]
+OP_T = float(max(_ok)) if _ok else float(_grid[0])
+_op = (lr_test_p >= OP_T).astype(int)
+_tp = int(((_op == 1) & (y_test == 1)).sum()); _fp = int(((_op == 1) & (y_test == 0)).sum())
+_fn = int(((_op == 0) & (y_test == 1)).sum())
+_prec = _tp / (_tp + _fp) if _tp + _fp else float('nan')
+print(f"Operating threshold (validation POD >= {TARGET_POD}): t* = {OP_T:.2f} "
+      f"(validation POD {_val_pod[list(_grid).index(OP_T)]:.3f})")
+print(f"  Test at t*: precision {_prec:.3f}  recall {_tp / (_tp + _fn):.3f}  "
+      f"lift {_prec / y_test.mean():.2f}  TP {_tp} / FP {_fp} / FN {_fn}")
 
 # ---------------------------------------------------------------------------
 # Threshold sweep -- LR on test set
