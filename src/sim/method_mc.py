@@ -9,20 +9,26 @@ paper; tank_model.backtest). Every draw simulates 5 tanks per arm for 56 days:
     Bf   loop, forecast trigger          p >= 0.50 from a persistence forecast of the tank's own
                                          readings (7-day projection of the last 2 days' growth)
     Br   loop, rule trigger              chl up 2 days running and > 2 x warm-up mean
-    C    late treatment                  starts once, the first day chl falls after passing
-                                         2 x warm-up mean (i.e. after the peak)
+    C    reactive treatment              starts once, the first day chl passes 50% of the expected
+                                         untreated peak (C_REACT_FRAC); the expected peak comes from
+                                         a simulated pilot bloom run (PILOT_TANKS untreated tanks
+                                         with the draw's parameters, run before the bench)
     D    false alarm                     no nutrients; loop forced ON on day 21
+    Cl   late treatment (old arm C)      starts once, the first day chl falls after passing
+                                         2 x warm-up mean (i.e. after the peak); kept for comparison
 
 Loop rules are loop_controller.Controller (identical to Layer 1's run_loop). C_ok = 50% of arm
 A's running peak (00_CONTROL_LOOP.md bench rule). Seaweed pulls its panel if pH > 9.0.
-Readings carry fluorometer noise; the controller only sees readings.
+Readings carry fluorometer noise; the controller only sees readings. Optional floor rule (FLOOR_ON,
+off by default): a treated tank reading below FLOOR_FRAC x its warm-up mean is switched OFF.
 
 Pre-registered tests, evaluated per draw on the first n tanks of each arm (n = 3 is the plan):
     H1      mean peak reduction of B vs mean A >= 50%, and B used fewer ON days than C
             (point estimate), and the stricter version with the 95% t-interval lower bound >= 50%
             (t_interval from src/lab/analyze_lab.py; t = 4.30 at n = 3)
     H1a     the first half of H1 alone (>= 50% peak cut), mean and 95% CI versions
-    H1b     B's peak cut beats the late arm C's by 20+ points
+    H1b     B's peak cut beats the reactive arm C's (point estimate; also reported with a 20-point
+            margin, and against the old late arm Cl)
             (The simulation showed that late treatment is short and cheap because the bloom is
              already crashing, so "fewer ON days than C" can fail even when B works.)
     H2      the false-alarm arm D: seaweed never hits the pH safety stop (bubbles add nothing)
@@ -60,7 +66,14 @@ from analyze_lab import t_interval  # noqa: E402
 OUT_DIR, FIG_DIR = "data/sim", "figures/sim"
 DAYS, NUTRIENT_DAY, WARM = 56, 21, (14, 21)
 TANKS = 5                      # per arm (n = 3 is the plan; 4 and 5 for the power check)
-ARMS = ["A", "Bf", "Br", "C", "D"]
+ARMS = ["A", "Bf", "Br", "C", "D", "Cl"]
+C_REACT_FRAC = 0.5             # arm C starts at this share of the expected untreated peak (2026-09-28)
+PILOT_TANKS = 2                # untreated pilot tanks per draw that set the expected peak
+FLOOR_ON = False               # 'don't go below normal' OFF rule (2026-09-28): a treated tank whose
+FLOOR_FRAC = 0.8               # reading falls below 80% of its warm-up mean is switched OFF.
+# Off by default: tested ON, it never fired while a treatment was ON (B's dips below normal come weeks
+# after OFF, because the model has no nutrient recycling from dead cells), and it only cut arm D short
+# on noise. The bench measures overshoot directly (00_CONTROL_LOOP.md, H4).
 FC_SCALE, FC_NOISE = 0.35, 0.5  # forecast emulator: logistic scale and noise (log units)
 BLOOM_MIN = 10.0               # ug/L; the forecast's bloom line is max(10, 2 x warm-up mean)
 ORGANISM = {"seaweed": "diatom", "bubbles": "dino", "peroxide": "small", "curcumin": "dino",
@@ -77,6 +90,27 @@ SWEEP = {                      # (parameter, values, axis label) for the X x dos
 SEED = 42
 
 
+def pilot_run(method, p, rng):
+    """Pilot bloom run (00_CONTROL_LOOP.md): PILOT_TANKS untreated tanks per draw with the draw's
+    parameters. Returns the expected untreated peak reading per draw (mean over its pilot tanks)."""
+    D = len(p["loss"])
+    rep = {k: np.repeat(v, PILOT_TANKS) for k, v in p.items() if np.asarray(v).dtype.kind in "fi"}
+    mu_key = tm.MU_KEY[ORGANISM[method]]
+    rep[mu_key] = rep[mu_key] * (1 + rng.normal(0, rep["tank_cv_mu"]))
+    rep["a0"] = rep["a0"] * (1 + rng.normal(0, 0.1, len(rep["loss"])))
+    tank = tm.TankBatch(rep, method, ORGANISM[method])
+    off = np.zeros(len(rep["loss"]), bool)
+    peak = np.zeros(len(rep["loss"]))
+    for d in range(DAYS):
+        if d == NUTRIENT_DAY:
+            tank.N = tank.N + rep["n_pulse"]
+        chl = tank.step_day(off)
+        meas = chl * (1 + rng.normal(0, rep["fluor_cv"]))
+        if d >= NUTRIENT_DAY:
+            peak = np.maximum(peak, meas)
+    return peak.reshape(D, PILOT_TANKS).mean(axis=1)
+
+
 def run_bench(method, p, rng, x_days=None, keep_curves=False):
     """Simulate every draw in p (dict of arrays, length D) as a full bench run."""
     D = len(p["loss"])
@@ -90,10 +124,12 @@ def run_bench(method, p, rng, x_days=None, keep_curves=False):
     tank = tm.TankBatch(rep, method, ORGANISM[method])
     x = rep["x_days"].astype(int) if x_days is None else np.full(len(arm), int(x_days))
     ctrl = Controller(len(arm), x)
-    is_A, is_Bf, is_Br, is_C, is_D = (arm == i for i in range(5))
+    is_A, is_Bf, is_Br, is_C, is_D, is_Cl = (arm == i for i in range(len(ARMS)))
+    pilot_peak = pilot_run(method, p, rng)[draw]
     hist = np.zeros((DAYS, len(arm)))
     on_hist = np.zeros((DAYS, len(arm)), bool)
     c_started = np.zeros(len(arm), bool)
+    cl_started = np.zeros(len(arm), bool)
     passed = np.zeros(len(arm), bool)
     safety = np.zeros(len(arm), int)
     a_peak = np.zeros(D)
@@ -121,16 +157,21 @@ def run_bench(method, p, rng, x_days=None, keep_curves=False):
         passed |= meas > 2 * warm
         trig = is_Bf & (pf >= T_ON)
         trig |= is_Br & rule_trigger(hist, d, warm)
-        late = is_C & ~c_started & passed & (meas < hist[d - 1])
+        react = is_C & ~c_started & (meas >= C_REACT_FRAC * pilot_peak)
+        trig |= react
+        c_started |= react
+        late = is_Cl & ~cl_started & passed & (meas < hist[d - 1])
         trig |= late
-        c_started |= late
+        cl_started |= late
         trig |= is_D & (d == NUTRIENT_DAY)
         force = np.zeros(len(arm), bool)
         if method == "seaweed":
             force = tank.ph() > tm.PH_LIMIT
         elif method == "peroxide":
             force = tank.C > PEROXIDE_PULL
-        safety += force & ctrl.on
+        floor = FLOOR_ON & (d > NUTRIENT_DAY) & (meas < FLOOR_FRAC * warm)
+        force = force | floor
+        safety += (force & ~floor) & ctrl.on
         on_now = ctrl.step(d, trig, pf, meas, c_ok, force_off=force)
         first_on = np.where((first_on < 0) & on_now, d, first_on)
         on_hist[d] = on_now
@@ -165,12 +206,16 @@ def evaluate(res, D, n=3, b_arm="Bf"):
     for dr in range(D):
         b = by[b_arm].loc[[dr]]
         c = by["C"].loc[[dr]]
+        cl = by["Cl"].loc[[dr]]
         dd = by["D"].loc[[dr]]
         red = 1 - b.peak.values / peak_a[dr]
         m, lo, hi = t_interval(red)
         on_b, on_c = b.on_days.mean(), c.on_days.mean()
         red_c = 1 - c.peak.mean() / peak_a[dr]
+        red_cl = 1 - cl.peak.mean() / peak_a[dr]
         rows.append(dict(draw=dr, red_mean=m, red_lo=lo, red_hi=hi, on_b=on_b, on_c=on_c, red_c=red_c,
+                         red_cl=red_cl, b_gt_c=bool(m > red_c), b_beats_cl=bool(m > red_cl + 0.2),
+                         c_day=c.first_on.mean(), b_day=b.first_on.mean(),
                          h1_point=bool((m >= 0.5) and (on_b < on_c)), h1_ci=bool((lo >= 0.5) and (on_b < on_c)),
                          h1a_point=bool(m >= 0.5), h1a_ci=bool(lo >= 0.5), b_beats_c=bool(m > red_c + 0.2),
                          regrew=bool(np.isfinite(b.regrow.values).any()),
@@ -187,7 +232,10 @@ def summarise(method, variant, ev, ev_by_n, ev_rule):
                p_h1_point_n3=ev.h1_point.mean(), p_h1_ci_n3=ev.h1_ci.mean(),
                median_peak_reduction=ev.red_mean.median(), red_p5=q(ev.red_mean, 5), red_p95=q(ev.red_mean, 95),
                median_on_days_B=ev.on_b.median(), median_on_days_C=ev.on_c.median(),
-               median_late_reduction_C=ev.red_c.median(),
+               median_late_reduction_C=ev.red_c.median(), median_old_late_reduction_Cl=ev.red_cl.median(),
+               p_b_gt_c=ev.b_gt_c.mean(), p_b_beats_cl=ev.b_beats_cl.mean(),
+               median_b_minus_c=(ev.red_mean - ev.red_c).median(),
+               median_c_start_minus_b_start=(ev.c_day - ev.b_day).median(),
                p_h2_pass=ev.h2_pass.mean(), median_on_days_D=ev.on_d.median(),
                p_h1a_point_n3=ev.h1a_point.mean(), p_h1a_ci_n3=ev.h1a_ci.mean(), p_b_beats_c=ev.b_beats_c.mean(),
                share_regrew=ev.regrew.mean(), p_b_safety_stop=(ev.b_safety > 0).mean(),
@@ -268,7 +316,7 @@ def plot_curves(curves):
     for ax in axes.flat[len(curves):]:
         ax.axis("off")
     colors = dict(A="#5A707A", Bf="#23775A", C="#A8492A", D="#1F5FA8")
-    names = {"A": "A untreated", "Bf": "B loop", "C": "C late", "D": "D false alarm"}
+    names = {"A": "A untreated", "Bf": "B loop", "C": "C reactive", "D": "D false alarm"}
     for ax, (method, (res, dr)) in zip(axes.flat, curves.items()):
         arm = np.array(ARMS)[res["arm"]]
         sel = res["draw"] == dr
@@ -342,9 +390,12 @@ def main():
             print(f"  H1a >=50% peak cut, n=3: mean {s['p_h1a_point_n3']:.0%}, 95% CI {s['p_h1a_ci_n3']:.0%}   "
                   f"(n=4: {s['p_h1a_point_n4']:.0%} / {s['p_h1a_ci_n4']:.0%}; "
                   f"n=5: {s['p_h1a_point_n5']:.0%} / {s['p_h1a_ci_n5']:.0%});  "
-                  f"H1b B beats late C by 20+ points: {s['p_b_beats_c']:.0%}")
+                  f"H1b B beats reactive C: {s['p_b_gt_c']:.0%} (by 20+ points: {s['p_b_beats_c']:.0%}; "
+                  f"old late arm by 20+: {s['p_b_beats_cl']:.0%})")
             print(f"  B peak reduction vs A: median {s['median_peak_reduction']:.0%} "
-                  f"[5-95%: {s['red_p5']:.0%}, {s['red_p95']:.0%}];  late arm C: {s['median_late_reduction_C']:.0%}")
+                  f"[5-95%: {s['red_p5']:.0%}, {s['red_p95']:.0%}];  reactive C: {s['median_late_reduction_C']:.0%} "
+                  f"(B - C median {s['median_b_minus_c']:+.0%}; C starts {s['median_c_start_minus_b_start']:.1f} d after B);  "
+                  f"old late arm: {s['median_old_late_reduction_Cl']:.0%}")
             print(f"  ON days: B {s['median_on_days_B']:.0f}, C {s['median_on_days_C']:.0f}, "
                   f"D {s['median_on_days_D']:.0f};  B hit MAX_ON in {s['share_B_maxed']:.0%} of runs;  "
                   f"regrew above C_ok after OFF in {s['share_regrew']:.0%} (median {s['median_regrow_days']:.1f} d);  "

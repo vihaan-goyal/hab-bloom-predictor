@@ -131,3 +131,42 @@ These are predictions to test on the bench, not evidence that a method works.
   - the model has no pseudofaeces and no toxin;
   - regrowth is fed by excreted ammonia;
   - "clearance" stands in for all of the animals' behaviour.
+
+## Re-run with the reactive arm C (2026-09-28)
+
+**What changed:**
+- Arm C now starts the first day chlorophyll passes **50% of the expected untreated peak**. The expected peak comes from a simulated pilot bloom run: 2 untreated tanks per draw with the draw's parameters.
+- The old "after the peak" arm is kept as `Cl` for comparison.
+- H1b is now "B's cut beats C's", also reported with a 20-point margin.
+- The code is in `src/sim/method_mc.py` (`pilot_run`, `C_REACT_FRAC`). Results are 2,000 draws per method, forecast trigger, n = 3; the method rows use their summary dose; shellfish is at 1 tank volume/day.
+
+| | Seaweed | Shellfish (1 vol/day) | Peroxide | Curcumin | Bubbles (responsive sp.) |
+|---|---|---|---|---|---|
+| B peak cut (median) | 75% | 30% | 96% | 92% | 19% |
+| **Reactive C peak cut** | **11%** | **6%** | **25%** | **21%** | **3%** |
+| Old late arm (after the peak) | 1% | 0% | 1% | 4% | 3% |
+| C starts after B by (median) | 4.0 d | 4.0 d | 3.0 d | 8.7 d | 9.7 d |
+| B beats C | 100% | 99% | 100% | 100% | 98% |
+| B beats C by 20+ points | 100% | 62% | 100% | 100% | 39% |
+
+The other numbers (H1a, ON days, harm, H2) match the earlier run within 1-2 points.
+
+**Sensitivity: how early does "reactive" have to be before it catches up?** (300 draws; shellfish stocked at the planned 2 volumes/day)
+
+| C starts at … of the expected peak | 50% | 20% | 10% |
+|---|---|---|---|
+| Seaweed: C cut / B beats C / by 20+ | 10% / 100% / 100% | 33% / 100% / 99% | 52% / 100% / 56% |
+| Shellfish: C cut / B beats C / by 20+ | 9% / 100% / 93% | 34% / 100% / 63% | 29% / 93% / 58% |
+
+**What it means:**
+- The simulated tank bloom goes from warm-up level to peak in about 5 days. A treatment started when the bloom is "visible" (50% of peak) is only ~1 day before the peak, so it can do little. B wins because it starts about 4 days earlier.
+- Even a reactive manager watching closely (starting at 10-20% of peak, 2-3 days after B) gets a smaller cut than B. The gap shrinks as C gets earlier: every day of lead time counts.
+- This is the bench version of the project's claim, and it is no longer a strawman comparison.
+- **The bench test depends on the real bloom speed,** which the pilot bloom run measures. A slower bloom gives the reactive arm more time. Pre-register the 50% start and report the sensitivity.
+
+**Overshoot check (H4, 2026-09-28).**
+- **What the simulation shows:** seaweed and peroxide B tanks fall below 80% of their warm-up level in 91-95% of runs (low point 0.35-0.42× normal). The low comes **weeks after the treatment is OFF** (median day 54-55), never while it's ON.
+- **Why it isn't a real prediction:** the model has no nutrient recycling from dead cells. Treated tanks use up their nutrients, then drift down.
+- **The floor rule:** a "switch OFF below 80% of warm-up" rule (`FLOOR_ON` in `method_mc.py`) was tested. It never fired during treatment, and it only cut the false-alarm arm D short on noise, so it is off by default in the simulation.
+- **Decision:** overshoot is measured on the bench instead (H4 in `00_CONTROL_LOOP.md`).
+- **New caveat:** no nutrient recycling means the model can't predict late regrowth or overshoot.
