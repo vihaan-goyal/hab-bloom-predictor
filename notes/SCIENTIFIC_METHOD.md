@@ -919,3 +919,44 @@ LEDs, a passive buzzer and a relay (PN2222A + 1N4007 flyback diode on D10).
 - **Wiring pictures:** circuito.io, a Fritzing-art breadboard drawing, and a schematic.
 - **Materials:** a per-experiment list is in `notes/mitigation/MATERIALS_LIST.md`.
 - **Laptop link (2026-09-27):** `hardware/alerter_uno/alerter_link.py` sends each day's `p` and chl to the Uno and logs its decisions. On the real board it replayed all 3,287 Narragansett F7 days (10 episodes) with **0 mismatches** against `loop_controller.py`, including days with missing `p` or chl. `--today` restores the Uno's state after a USB reset.
+
+**Significance checks on the LIS model (2026-09-28, exploratory, not pre-registered).** On the S1
+test set (1,034 station-days, 65 positive rows = 38 independent episodes; predictions reproduce
+exactly from `final_evaluation_threshold_sweep.py`):
+- Better than chance: AUC 0.804, p < 0.0001 (Mann-Whitney; label permutation; circular shift within station over 2023-2025). Precision @0.60 vs the 6.3% base rate: p < 10⁻¹³.
+- Better than a month-of-year baseline: AUC 0.80 vs 0.71, +0.09 [−0.01, +0.20] (station-block bootstrap), one-sided p = 0.03. The baseline used the test set's own monthly rates, so it's generous to the baseline.
+- **Timing within a season is not shown:** with labels shifted within each station-year the null reaches AUC 0.81 (p = 0.06); within June-September only, p = 0.64.
+- **Conclusion:** the model ranks high-risk stations and seasons, not the week within a season. Consistent with the precision-ceiling finding, and with the loop design: the forecast narrows where and when to watch, and the sensors confirm the week.
+
+**Make-or-break review of the five methods (2026-09-28).** Fixes added to `notes/mitigation/`
+(`EXECUTION_PLAN.md` §11, `00_CONTROL_LOOP.md` and each method file):
+- Arm C redefined from "after the peak" (a strawman, 0-4% cut by construction) to a reactive start at 50% of the expected peak. The Layer 2 simulation must be re-run with it before `LOOP_PREREG.md`.
+- Pre-registered handover from the model trigger to the rule trigger (2 days).
+- A pilot bloom run during warm-up.
+- Fluorometer sampling rules: same time daily, 15 min dark, glow per cell.
+- *Skeletonema* as the lead diatom.
+- Per-method fixes:
+  - kelp cold holding and a seaweed-only control;
+  - market-oyster backup and a daily ammonia test;
+  - a gentle-bubbling CO₂ control;
+  - a low-range peroxide kit, pump-dosed liquid H₂O₂ and a 5 µm size-fraction;
+  - a curcumin fluorometer correction curve and photodegradation checks.
+- Total tanks: 21 → 24.
+
+**Layer 2 re-run with the reactive arm C (2026-09-28).** With arm C starting at 50% of the expected untreated peak (set by a simulated pilot bloom run), C cut the peak 6-25% vs B's 30-96%; B beat C in 98-100% of runs for every method. Even a reactive start at 10-20% of peak (2-3 days after B) did worse than B (seaweed C 33-52% vs B 75%). The simulated bloom rises to its peak in ~5 days, so lead time is what matters; the pilot bloom run will measure the real speed. Details: `notes/mitigation/LAYER2_SIM_RESULTS.md`.
+
+**H4: trim the bloom, don't remove the algae (2026-09-28).** Diatoms at normal levels make oxygen and feed the food web, so a new pre-registration item says arm B's chlorophyll must never fall below 80% of the warm-up (normal) level, with daytime DO logged, and a floor OFF rule (2 days below 80% → OFF). The simulation can't test it: it has no nutrient recycling, so its treated tanks drift below normal weeks after OFF, and a floor rule never fired during treatment. The bench measures it.
+
+**Pond-management sources added (2026-09-28).** Texas A&M AgriLife's *Managing and Controlling Algae in Ponds* (RWFM-PU-154) and the AquaPlant filamentous-algae page are now cited for:
+- H4: planktonic algae make oxygen, and rapid die-off causes fish kills, which is why ponds are treated 20-25% at a time;
+- peroxide: a registered pond algaecide, 75-89% control of planktonic algae;
+- shellfish: ponds have no practical grazer of planktonic algae, and bivalves fill that gap in salt water;
+- a reframing of bubbles: aeration mainly prevents the oxygen crash rather than the bloom, with dawn DO added to the screen.
+
+**Sound-matched tank water (2026-09-28).** `src/lab/lis_water_recipe.py` averages DEEP's western-Sound data (surface, 2014-2025) into a baseline, recorded in `notes/mitigation/WATER_RECIPE.md`:
+- **Warm-up water:** salinity 27.5, with nutrients at the post-spring-bloom low (0.7 µM N, 1.1 µM P, 2.2 µM Si).
+- **Bloom pulse:** the real winter-to-spring drawdown, +7.1 µM N, +1.0 µM P and +35 µM Si. That's about 100× less nitrate than f/2, so tank blooms will be smaller and more realistic; the pilot bloom run checks the fluorometer can see them.
+- Starter cultures must be grown in f/20 or rinsed, so their medium doesn't swamp the pulse.
+- The silicate unit (SiO₂ vs Si) is inferred and is to be confirmed with DEEP.
+
+**Peroxide method: calcium peroxide swapped for sodium percarbonate (2026-09-28).** The loop doses liquid 3% H₂O₂ by pump; it is stable for weeks, which suits autonomy. The screen adds sodium percarbonate (pure oxygen bleach), the active ingredient of registered pond algaecides, at the same peroxide dose (0.8 mg/L H₂O₂ ≈ 2.9 mg/L), with a matched sodium carbonate control. The calcium peroxide "tea bag" is dropped: percarbonate dissolves in minutes, so a bag can't be retrieved, and peroxide breaks down to water and oxygen in 1-2 days anyway, so the loop controls exposure by dose and timing. Updated in the method file, plan, procedures, materials list and Form 3.
