@@ -20,7 +20,8 @@ Current plan:
 |---|---|---|---|---|
 | Arduino Uno + breadboard, LEDs, buzzer, wires | 1 (have; a 2nd Uno planned) | $0-25 | The "brain": runs the ON/OFF rules, lights the status LEDs, beeps | It *is* the control loop: it decides when a treatment goes in and comes out, the same way every time |
 | Relay + PN2222A transistor + 1N4007 diode | 1 (have) | $0 | An electrically controlled switch; the transistor lets the Arduino drive it, and the diode protects the Arduino from the relay's voltage kick | Lets a 5 V Arduino switch a 12 V pump (or other device) on and off automatically |
-| 12 V pump + tubing + 12 V 2 A adapter | 2 pumps / 1 kit / 1 (ordered) | $27 | Moves liquid when the relay closes | Doses liquids (curcumin, liquid peroxide) and shows the loop physically acting |
+| 12 V pump + tubing + 12 V 2 A adapter | 2 pumps / 1 kit / 1 (ordered) | $27 | A diaphragm pump: moves air or water when the relay closes | Circulates tank water (e.g. through the sensor) and runs aeration; it can't meter microdoses |
+| **Peristaltic dosing pump** (12 V, with silicone tubing) | 1 | $15-25 | Pushes a measured volume each time it runs; calibrated by weighing what it delivers | Doses the peroxide and curcumin working solutions in the loop runs (a few mL per 10 L tank) |
 | Servo motor | 1 | $5 | Motor that rotates to a set angle | Lowers and lifts the seaweed panel or shellfish bag on ON and OFF |
 | DS18B20 waterproof temperature sensor + 4.7 kΩ resistor | 1+ (ordered) | $10 | Measures water temperature | Temperature is a model input, and a safety check: pump heat, and kelp must stay cool |
 | pH module (probe + board) + pH 6.86 / 9.18 buffer powder | 1 / 12-pack (ordered) | $25 | Measures how acidic or basic the water is; the buffers calibrate it | Seaweed and percarbonate raise pH, and the loop must stop above pH 9.0 or outside 7.6-8.6 |
@@ -30,7 +31,7 @@ Current plan:
 
 | Item | Qty | Approx. | What it does | Why we need it |
 |---|---|---|---|---|
-| Artificial sea salt + refractometer | 1 bag / 1 | $45 | Salt makes seawater; the refractometer measures salinity | Marine algae need salinity ~30-32; evaporation raises it, so we check and top up |
+| Artificial sea salt + refractometer | 1 bag / 1 | $45 | Salt makes seawater; the refractometer measures salinity | The tanks copy the western Sound at salinity 27.5 (WATER_RECIPE.md); evaporation raises it, so we check and top up |
 | f/2 medium (make f/4 by halving) | 1 kit | $30 | Algae "fertilizer": nitrogen, phosphorus, vitamins, trace metals | Grows the cultures, and the nutrient pulse on day 21 is what starts the bloom |
 | **Cultures from NCMA:** *Skeletonema* (lead diatom), *Thalassiosira*, *Phaeodactylum* (backup), dinoflagellate *Akashiwo* / *P. triestinum*, *P. micans*, a small-celled alga | 4-6 strains | $250-400 | Living, non-toxic stand-ins for bloom algae | The "bloom" we try to stop. *Skeletonema* is the dominant diatom of Long Island Sound blooms, so results are more relevant |
 | Backup culture flasks | 2 per strain | (from the flasks below) | Spare copies of every culture | If a culture crashes or gets contaminated, we restart instead of losing the run |
@@ -41,6 +42,7 @@ Current plan:
 | GFCI power strip | 1 | $20 | Cuts power instantly if current leaks to water | Safety: pumps and lights near water |
 | *Artemia* (brine shrimp) eggs + hatching cone | 1 | $15 | Tiny animals hatched on demand | The non-target check: if a treatment kills brine shrimp, it isn't safe |
 | DO (dissolved oxygen) test kit | 1 | $30 | Measures oxygen in the water | Safety: dying algae, shellfish and seaweed at night use oxygen; the loop stops below 4 mg/L |
+| **Chlorophyll reference**: 90% acetone + borrowed spectrophotometer (or a borrowed calibrated fluorometer) | 1 | $0-20 | Measures true chlorophyll in µg/L | Calibrates the DIY fluorometer (`chlk`) so C_ok and the floor are in µg/L (PROCEDURES P3) |
 | Goggles, nitrile gloves, lab notebook, labels | 1 set | $20 | Protection and records | Required for chemicals, and the notebook is the official record for ISEF |
 
 **Tanks shared by both loop runs**
@@ -68,7 +70,7 @@ supplies CO₂, which *helps* growth and can hide the stress effect; this arm se
 
 | Item | Qty | Approx. | What it does | Why we need it |
 |---|---|---|---|---|
-| 250 mL flasks: 0, 0.5, 1, 2 g/L kelp, fake panel, pH-matched, filtrate × n = 3 | 21 | $40 | Small test cultures | Finds the dose that works on *our* diatom before committing tanks |
+| 250 mL flasks: 0, 0.5, 1, 2 g/L kelp, fake panel, pH-matched, filtrate × n = 3, + 1 seaweed-only | 22 | $40 | Small test cultures | Finds the dose that works on *our* diatom before committing tanks |
 | Plastic aquarium plant (fake seaweed) | 1 | $5 | Same shape and shade as seaweed, no chemistry | Shows whether the effect is the seaweed's chemicals or just shade and structure |
 
 **Loop run:**
@@ -89,8 +91,8 @@ supplies CO₂, which *helps* growth and can hide the stress effect; this arm se
 
 | Item | Qty | Approx. | What it does | Why we need it |
 |---|---|---|---|---|
-| 250 mL flasks: 0, 0.8, 1.6, 3.2, 6.4 mg/L × 3 species, + percarbonate × 3 species, + Na₂CO₃, × n = 3 | 57 | $75 | Test cultures | A dose ladder on small and large cells tests the "only kills small cells" idea |
-| Drugstore 3% H₂O₂ | 1 bottle | $3 | Liquid peroxide | **Main dosing method** (by pump or pipette): the dose is known from the arithmetic (0.8 mg/L in 10 L = 0.27 mL) |
+| 250 mL flasks: 0, 0.8, 1.6, 3.2, 6.4 mg/L × 3 species, + 3-pulse 0.8 arm, + percarbonate × 3 species, + Na₂CO₃, × n = 3 | 60 | $80 | Test cultures | A dose ladder on small and large cells tests the "only kills small cells" idea |
+| Drugstore 3% H₂O₂ | 1 bottle | $3 | Liquid peroxide | **Main dosing method**: diluted to 0.1% for flasks (160 µL per 200 mL = 0.8 mg/L) and pumped in tanks (8 mL of 0.1% or 0.27 mL of 3% per 10 L) |
 | Sodium percarbonate, pure (oxygen-bleach powder, no fragrance or surfactant) | 1 small tub | $10 | Dissolves into hydrogen peroxide plus washing soda | The active ingredient of registered pond algaecides; tested as the "real-world product" version at the same peroxide dose |
 | **Low-range peroxide test kit** (steps below 1 mg/L) | 1 | $30-60 | Measures peroxide at low levels | Strips can't tell 0.8 from 0.5 mg/L; this confirms the dose |
 | H₂O₂ test strips, 0.5-25 mg/L | 1 pack | $20 | Rough peroxide reading | The fast check for the 2.8 mg/L safety cutoff |
@@ -106,7 +108,7 @@ supplies CO₂, which *helps* growth and can hide the stress effect; this arm se
 | 250 mL flasks: 0, 0.5, 1, 2.5, 5, 10 mg/L, ethanol-only, 2.5 mg/L in dark × n = 3, + 4 correction-curve flasks | 28 | $40 | Test cultures | Finds the lowest dose that works; the dark arm tests whether light makes it toxic |
 | Curcumin ≥ 95% (supplement grade, not turmeric); record product and lot | 1 bottle | $20 | The treatment | Turmeric is mostly not curcumin; "95%" is really a mix of 3 compounds, so the lot is recorded |
 | Food-grade ethanol (e.g. Everclear) | small bottle | $10 | Dissolves the curcumin | Curcumin won't dissolve in water; the ethanol-only flask checks the ethanol does nothing by itself |
-| Adjustable micropipette (100-1000 µL) + tips | 1 | $30 | Measures tiny volumes exactly | Doses of a few hundred microlitres of stock |
+| Adjustable micropipettes (10-100 µL and 100-1000 µL) + tips | 2 | $50 | Measure tiny volumes exactly | Flask doses of 50-1280 µL of working solutions (PROCEDURES P6) |
 | Aluminium foil | 1 roll | $3 | Blocks light | The dark arm |
 
 The **correction curve** (the same algae sample spiked with 0-2.5 mg/L curcumin) is needed
@@ -135,13 +137,13 @@ because yellow curcumin absorbs the blue LED light, which makes the fluorometer 
 
 | | Approx. |
 |---|---|
-| Shared kit + cultures + arm A and pilot tanks (much of the electronics already bought) | $780-1,000 |
+| Shared kit + cultures + arm A and pilot tanks (much of the electronics already bought) | $795-1,045 |
 | Bubbles | $140 |
 | Seaweed | $225-325 |
-| Peroxide | $175-205 |
-| Curcumin | $105 |
+| Peroxide | $180-210 |
+| Curcumin | $125 |
 | Shellfish | $245-335 |
-| **All five** | **about $1,700-2,100 before borrowing; ~$1,200-1,450 if the sponsor lends the microscope, scale, glassware, meters and a mini fridge** |
+| **All five** | **about $1,700-2,200 before borrowing; ~$1,200-1,500 if the sponsor lends the microscope, scale, glassware, meters and a mini fridge** |
 
 ## Open points
 - **Tank size mismatch:** arm A is shared, but seaweed tanks are 4-10 L and shellfish tanks 20 L. Either make every tank 20 L (then seaweed needs ~40 g kelp per tank, ~360 g total) or give seaweed its own 3 untreated tanks. The plan now counts 24 tanks including the pilot and seaweed-only tanks.

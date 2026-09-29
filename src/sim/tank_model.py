@@ -1,8 +1,9 @@
 """
 tank_model.py -- Layer 2, step 1: algae in a treated tank (all five methods)
 =============================================================================
-Methods: seaweed and bubbles (below), plus peroxide (bag in: H2O2 rises to target x release
-efficiency; out: first-order decay; Hill-shaped kill of small cells), curcumin (one pulse per ON
+Methods: seaweed and bubbles (below), plus peroxide (2026-09-28: one pumped liquid pulse per ON
+day, C += target, only if the residual is <= REDOSE_MAX; first-order decay with the half-life;
+Hill-shaped kill of small cells), curcumin (one pulse per ON
 day up a 1 -> 2.5 -> top ladder; fast decay; Hill kill; the fluorometer under-reads while it is
 present) and shellfish (bags in: filtering ramps up; clearance saturates at high algae; part of the
 eaten nitrogen comes back as ammonia).
@@ -50,7 +51,9 @@ SPECIES_CLASS_P = {"inhib": 0.3, "neutral": 0.4, "stim": 0.3}   # mixing-09: 3 /
 BACKTEST = {
     "seaweed": {"t48": (0.03, 0.57), "t72": (0.64, 0.97)},   # seaweed-03, +/-10 points
     "bubbles": {"t10d": (0.11, 0.73)},                        # mixing-01, +/-10 points
-    "peroxide": {"t24_1.6": (0.80, 1.00)},                    # peroxide-03: >90% at 1.6 mg/L, 24 h
+    # peroxide-03 (direct spikes of reagent H2O2): >90% chl-a loss by 24 h at 1.6 mg/L (-10 points),
+    # and at 0.8 mg/L "the inhibition was transient" (24-h EC50 0.91 mg/L): at most ~60% at 24 h
+    "peroxide": {"t24_1.6": (0.80, 1.00), "t24_0.8": (-0.10, 0.60)},
     "curcumin": {"t24_5": (0.22, 0.99), "t24_3": (0.20, 0.70), "t24_1": (-0.10, 0.15)},
     # curcumin-01/-02: 5 mg/L -32% (2024) to -89% (2022) at 24 h; 3 mg/L -45%; 0.1-2 mg/L no effect
     # shellfish: no single calibration experiment; parameters used as drawn (see LAYER2 notes)
@@ -58,6 +61,7 @@ BACKTEST = {
 SEED = 42
 MU_KEY = {"diatom": "mu_diatom", "dino": "mu_dino", "small": "mu_small"}
 CURCUMIN_LADDER = (1.0, 2.5)                    # then ladder_top (04_CURCUMIN.md)
+REDOSE_MAX = 0.5    # mg/L H2O2: a new peroxide pulse only once the residual is at or below this
 LN2 = np.log(2)
 
 
@@ -126,6 +130,11 @@ class TankBatch:
             ladder = np.select([self.k_pulse == 0, self.k_pulse == 1], list(CURCUMIN_LADDER), p["ladder_top"])
             self.C = self.C + np.where(on, ladder, 0.0)
             self.k_pulse = np.where(on, self.k_pulse + 1, 0)
+        if self.method == "peroxide":
+            # one liquid pulse per ON day, only once the last one has decayed (re-dose rule)
+            pulse = on & (self.C <= REDOSE_MAX)
+            self.C = self.C + np.where(pulse, p["target"], 0.0)
+            self.maxC = np.maximum(self.maxC, self.C)
         self.prev_day_on = on.copy()
         for _ in range(24):
             g = np.ones(self.n)
@@ -151,10 +160,8 @@ class TankBatch:
                 m = np.where(on & (self.cont_on > BUBBLE_MORT_AFTER) & slowed, p["m_late"], 0.0)
                 self.was_on = on.copy()
             elif self.method == "peroxide":
-                # bag in: H2O2 rises toward its release level; bag out: first-order decay
-                level = p["target"] * p["release_eff"]
-                self.C = np.where(on, self.C + (level - self.C) * (1 - np.exp(-DT / p["tau_release"])),
-                                  self.C * np.exp(-LN2 * DT / p["half_life"]))
+                # pumped liquid pulse (added at the start of the day, above), first-order decay
+                self.C = self.C * np.exp(-LN2 * DT / p["half_life"])
                 m = p["m_max"] * hill(self.C, p["ec50"], p["hill"])
             elif self.method == "curcumin":
                 self.C = self.C * np.exp(-LN2 * DT / p["half_life"])
@@ -217,12 +224,15 @@ def backtest(method, p):
             trt.step_day(np.ones(n, bool))
         return {"t10d": 1 - trt.A / ctl.A}
     if method == "peroxide":
-        q["target"] = np.full(n, 1.6)
-        ctl = TankBatch(q, "none", "small", a0=np.ones(n), n0=big_n)
-        trt = TankBatch(q, "peroxide", "small", a0=np.ones(n), n0=big_n)
-        ctl.step_day(np.zeros(n, bool))
-        trt.step_day(np.ones(n, bool))
-        return {"t24_1.6": 1 - trt.A / ctl.A}
+        out = {}
+        for dose, key in ((1.6, "t24_1.6"), (0.8, "t24_0.8")):    # one direct spike, as in the paper
+            q["target"] = np.full(n, dose)
+            ctl = TankBatch(q, "none", "small", a0=np.ones(n), n0=big_n)
+            trt = TankBatch(q, "peroxide", "small", a0=np.ones(n), n0=big_n)
+            ctl.step_day(np.zeros(n, bool))
+            trt.step_day(np.ones(n, bool))
+            out[key] = 1 - trt.A / ctl.A
+        return out
     if method == "curcumin":
         out = {}
         for dose, key in ((5.0, "t24_5"), (3.0, "t24_3"), (1.0, "t24_1")):
@@ -270,7 +280,7 @@ def _check_baseline():
     peak_day = int(np.argmax(daily))
     print(f"baseline (mid values): warm-up day 20 chl {daily[20]:.2f} ug/L, peak {daily.max():.1f} ug/L "
           f"on day {peak_day}, day 55 {daily[55]:.1f} ug/L")
-    assert daily[20] < 10 and daily.max() > 30 and peak_day > 21 and daily[55] < daily.max(), "bloom shape"
+    assert daily.max() > 3 * daily[20] and peak_day > 21 and daily[55] < daily.max(), "bloom shape"
 
     mu, kn, loss = p["mu_diatom"][0], p["k_n"][0], p["loss"][0]
 

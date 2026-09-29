@@ -1,4 +1,95 @@
-# Layer 2 results: simulated bench runs of the treatment loop (2026-09-26)
+# Layer 2 results: simulated bench runs of the treatment loop (2026-09-26; re-run 2026-09-28)
+
+> **Read the 2026-09-28 re-run first. It supersedes every table further down, which is kept as
+> history.** An audit found that the earlier runs did not match the protocol. Every number in the
+> re-run section comes from `data/sim/method_summary.csv` and `data/sim/method_design_*.csv`
+> (`python src/sim/method_mc.py`, 2,000 draws per method, seed 42).
+
+## Re-run, 2026-09-28: the protocol as planned
+
+**What changed:**
+- **Peroxide is a pumped liquid pulse.** The dose is added once per ON day, only when the residual is at
+  or below 0.5 mg/L, and decays with the H2O2 half-life. Before, the level was held at the target all
+  day, which does not match a single pump pulse.
+  - The back-test now uses direct spikes, as in the source (peroxide-03): 1.6 mg/L must cut the
+    small-celled alga at least 80% at 24 h, and 0.8 mg/L must stay at or below 60% ("transient"
+    inhibition at 0.8 mg/L; 24-h EC50 0.91 mg/L).
+  - The fabric-bag release parameters are removed.
+- **C_ok** is 50% of the expected untreated peak from the **pilot run**, pulsed on day 7 as in
+  PROCEDURES. It was arm A's running peak.
+- **H4 floor OFF** as planned: 2 readings in a row below 80% of warm-up, not applied to arm D.
+- **The handover** is simulated: forecast arm, rule fires, model silent for 2 days, then the rule
+  starts the tank.
+- **MAX_ON per method:** peroxide 3 pulses, curcumin 4 pulses, the rest 4 × X.
+- **The H1a interval** includes arm A's tank-to-tank spread (Welch t on log peaks). Before, A was
+  treated as exact, which made the "95% interval clears 50%" chance too high.
+- **Peak cuts** are measured on cell-count-like readings, so curcumin's fluorometer under-reading no
+  longer inflates its cut. The loop still sees the biased fluorometer.
+- **Nutrients are on the WATER_RECIPE scale:** warm-up about 1, pulse 5-16 µg chl-equivalent, so
+  the untreated bloom peaks near 9 µg/L (was 88). If the bench scales the pulse up, scale `n_pulse`
+  by the same factor.
+- **Doses are the planned ones:** peroxide 0.8 mg/L per pulse, curcumin ladder capped at 2.5,
+  shellfish stocked for 2 tank volumes a day with X = 3 d.
+
+**Checks:**
+- The controller still matches Layer 1's `run_loop` on 77,958 station-days with 0 mismatches.
+- The hourly step matches `solve_ivp` within 0.30%.
+- Back-test acceptance: seaweed 34%, bubbles 11%, peroxide 14%, curcumin 49%.
+
+**Results** (n = 3 tanks per arm, forecast trigger with the handover):
+
+| | Seaweed 2 g/L | Shellfish 2 vol/day | Peroxide 0.8 mg/L pulses | Curcumin (cap 2.5) | Bubbles, responsive sp. | Bubbles, unscreened |
+|---|---|---|---|---|---|---|
+| B peak cut vs A, median [5-95%] | **72%** [52, 84] | **81%** [63, 92] | **74%** [57, 83] | 63% [33, 79] | 25% [9, 48] | 10% [-16, 39] |
+| ≥ 50% cut (mean), n = 3 | 97% | 100% | 99% | 78% | 4% | 1% |
+| ≥ 50% cut (95% CI incl. A spread), n = 3 / 4 / 5 | 64% / 78% / 84% | 79% / 92% / 96% | 80% / 92% / 95% | 47% / 60% / 65% | 1% / 1% / 1% | 0% / 0% / 0% |
+| Reactive C peak cut (starts at 50% of expected peak) | 14% | 22% | 24% | 21% | 6% | 1% |
+| C starts after B (median days) | 3.0 | 3.0 | 2.7 | 6.7 | 7.3 | 7.3 |
+| B beats C / by 20+ points | 100% / 100% | 100% / 100% | 100% / 100% | 100% / 92% | 99% / 48% | 70% / 22% |
+| ON days B / C / D | 12 / 4 / 4 | 24 / 4 / 4 | 11 / 3 / 2 | 23 / 4 / 2 | 30 / 9 / 3 | 30 / 9 / 3 |
+| Non-target harm in B | 0% | 0% | 1% | 19% | 0% | 0% |
+| False-alarm arm D safe (H2) | 100% | 100% | 100% | 94% | 100% | 100% |
+| B ended by the H4 floor | 39% | 93% | 0% | 0% | 0% | 0% |
+| Rule trigger instead: peak cut | 55% | 65% | 62% | 50% | 22% | 7% |
+
+**Design sweeps** (400 draws per cell):
+
+| Method | ≥ 50% cut, mean (95%-CI version) | Non-target harm |
+|---|---|---|
+| **Peroxide, X = 1** | 0.8 mg/L: 99% (80%). 1.6 mg/L: 100% (91%). 3.2 mg/L: 100% (95%) | 0.8: 1%. 1.6: 62%. 3.2: 100% |
+| **Curcumin, X = 1** | cap 2.5: 79% (49%). cap 5: 100% (78%) | cap 2.5: 26%. cap 5: 86% |
+| **Seaweed, X = 3** | 1 g/L: 55%. 2 g/L: 96% (63%). 3 g/L: 99% (67%) | none |
+| **Shellfish, X = 3** | 1 vol/day: 84% (53%). 2 vol/day: 100% (80%) | none |
+| **Bubbles** | best 16% (X = 4, 0.6 L/min per L) | none |
+
+**What it means:**
+1. **Seaweed, shellfish and peroxide cut the simulated peak by about three-quarters.**
+   - Seaweed 72%, shellfish 81%, peroxide 74%. With the honest interval, 3 tanks per arm gives a
+     64-80% chance the CI clears 50%; **4 tanks per arm gives 78-92%.**
+   - Treating early beats the reactive start in essentially every run.
+2. **Peroxide at 0.8 mg/L works through repeated pulses, not one dose.**
+   - One 0.8 mg/L dose gives a transient cut (back-test median 48% at 24 h), which is what the source
+     paper says.
+   - Up to 3 daily 0.8 mg/L pulses cut the simulated peak 74%, with 1% non-target harm. 1.6 mg/L
+     harms non-targets in 62% of runs.
+   - The screen is restated accordingly (EXECUTION_PLAN S3, PROCEDURES S3).
+3. **Curcumin's earlier 92% was inflated** by its fluorometer artefact. Measured on cell-like
+   readings it is 63%, and it still harms non-targets in 19% of runs at the 2.5 mg/L cap. It stays a
+   comparison screen.
+4. **Bubbles still mostly delay the bloom** (25% cut), and B hits MAX_ON in 99% of runs.
+5. **The H4 floor matters for shellfish:** the oysters push chlorophyll below 80% of warm-up in 93%
+   of runs, so the floor, not the C_ok rule, ends most shellfish episodes. That is the "trim, don't
+   remove" rule working as intended, and a bench prediction to check.
+
+**Caveats (in addition to those below):**
+- The recipe-scale bloom peaks near 9 µg/L. The pilot run must confirm the fluorometer resolves it.
+- The rule-trigger arm is always weaker than the forecast arm with the handover (for example
+  seaweed 55% vs 72%).
+
+---
+
+## History: 2026-09-26 runs (superseded by the re-run above)
+
 
 Scripts:
 - `src/sim/tank_model.py`: the tank.
@@ -12,7 +103,7 @@ Parameters are in `src/sim/method_params.csv`, each with source paper ids from `
 **What this tests.** Layer 1 replayed the loop on water nobody treated. Layer 2 closes the loop:
 - A simulated tank grows a bloom after nutrients go in on day 21.
 - The treatment changes the algae, and the controller reacts to noisy daily readings.
-- Each of 2,000 draws is a full simulated bench run: arms A (untreated), B (loop), C (late), D (false alarm), n = 3 tanks each, plus 2 spare tanks per arm for a power check.
+- Each of 2,000 draws is a full simulated bench run: arms A (untreated), B (loop), C (late, in these historical runs; now reactive), D (false alarm), n = 3 tanks each, plus 2 spare tanks per arm for a power check.
 - The parameters are drawn from the literature ranges and **kept only if they reproduce the paper they came from**:
   - seaweed: 13-47% at 48 h and 74-94% at 72 h (seaweed-03);
   - bubbles: 21-63% over 10 days (mixing-01);

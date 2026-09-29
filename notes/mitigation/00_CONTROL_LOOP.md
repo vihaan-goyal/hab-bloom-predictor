@@ -50,9 +50,9 @@ flowchart TD
 |---|---|---|---|
 | `T_on` | forecast probability that switches treatment on | **0.50** (the Narragansett model's frozen threshold, saved inside `release/narragansett_bloom_model.joblib`) | the operating point the model was evaluated at (precision 0.70 at home) |
 | `T_off` | forecast probability needed to switch off | 0.8 × `T_on` | hysteresis |
-| `C_ok` | chlorophyll that counts as "no bloom" | 5 µg/L in the field (half the 10 µg/L bloom line); in the bench, 50% of the untreated control's peak | leaves a margin under the bloom threshold |
+| `C_ok` | chlorophyll that counts as "no bloom" | 5 µg/L in the field (half the 10 µg/L bloom line); in the bench, **50% of the pilot bloom run's untreated peak** (known before nutrients go in) | leaves a margin under the bloom threshold |
 | `X` | treatment ON time before re-measuring | **per method** (see 01-05) | set from the literature, then tuned on the bench |
-| `MAX_ON` | the most total ON time for one event | 4 × `X` | if it hasn't worked by then, it isn't working |
+| `MAX_ON` | the most total ON time for one event | 4 × `X`; per-pulse methods count pulses (peroxide 3, curcumin 4) | if it hasn't worked by then, it isn't working |
 | `Y` | cool-down monitoring after OFF | 14 days (field), 5 days (bench) | rebound time seen in the literature |
 
 ## Where the forecast comes from: the Narragansett sensor model
@@ -67,7 +67,7 @@ Sound model.
 `predict_anywhere.py`.
 - Gradient boosting on 23 features: chlorophyll lags, rolling means, trend, anomaly and site climatology; dissolved oxygen, temperature and salinity with lags; month.
 - It predicts whether daily-mean chlorophyll will exceed the bloom level **within the next 7 days**. It updates **once per day**.
-- Home skill: AUC 0.839, precision 0.70, lift 2.00 (Narragansett, 2023). On 74 sites it had never seen: median lift 1.58, median AUC 0.74.
+- Home skill (after the 2026-09-28 fork audit, model v2): onset AUC 0.829, precision 0.68, lift 1.94 (Narragansett, 2023). It beats a past-years calendar on bloom starts in 9 of 9 years (pooled +0.060 AUC, p < 0.0001, pre-registered). On 74 sites it had never seen, with leak-free scoring: median lift 1.51, median AUC 0.74.
 
 **Inputs it needs from our sensors:**
 
@@ -87,6 +87,21 @@ minutes; `--min-readings` sets how many readings make a valid day).
    - A tank won't have 60 days, so the DIY fluorometer is **calibrated to µg/L** (dilution series and, if possible, extracted chlorophyll).
    - The model is then run with `--no-rescale`. The Narragansett sondes read about 1.3-1.6× the lab, so there is a known offset. Record it as a limitation, and test both options (rescaled on the warm-up data vs `--no-rescale`) in the Layer-2 pilot.
 3. **Month is an input.** The bench runs in autumn or winter, when Narragansett blooms are rarer, so the model's month term pulls probabilities down. Run it with the real date, and note it.
+
+**What a tank can feed the model, measured (2026-09-28; fork finding 29,
+`src/models/tank_feature_check.py`).** A tank supplies chlorophyll and temperature automatically, and
+DO and salinity by kit. It has no site climatology. On real Narragansett data (test 2023, onset rows):
+
+| Inputs | Onset AUC |
+|---|---|
+| Full model | 0.829 |
+| Tank + kits | 0.820 |
+| Tank sensors only, deployed through the real tool path (one-season record) | 0.804 |
+| Retrained on chlorophyll + temperature | 0.805 |
+
+So the tank trigger behaves like a forecast about 0.025 AUC weaker than the field model, and no
+special tank model is needed. Report it that way: the tank tests the loop, and forecast skill comes
+from field data, discounted by the measured 0.025.
 
 **In a tank the model is a demonstration of the system, not a valid forecast.** A tank is
 not a bay: its bloom is driven by the nutrients we add. So the loop runs **both triggers side by
@@ -120,7 +135,7 @@ photosynthesis or bleach cells (seaweed, peroxide, curcumin), so a fake drop cou
 - Sample every tank at the **same time each day**.
 - **Keep each sample in the dark for 15 min** before reading it.
 - Cell counts are the ground truth: report **glow per cell** at each count, and the OFF rule uses counts for seaweed and curcumin.
-- Counting workload: 21 tanks × ~10 min is too much daily. Photograph the counting chamber through the microscope with a phone and count later (ImageJ); count every 2 days, and daily only around trigger and OFF; split the work between both team members.
+- Counting workload: 24 tanks × ~10 min is too much daily. Photograph the counting chamber through the microscope with a phone and count later (ImageJ); count every 2 days, and daily only around trigger and OFF; split the work between both team members.
 
 **Safety limits (EMERGENCY OFF at any time):** DO < 4 mg/L; pH outside the method's range (marine 7.6-8.6); non-target survival more than 20 percentage points below control; any method-specific limit in its file.
 
@@ -148,11 +163,12 @@ before the February deadline.
 **Why arm C changed (2026-09-28):** "after the peak" starts C when the bloom is already crashing,
 so it does 0-4% by construction (Layer 2) and a judge can call it a strawman. Starting C at 50%
 of the expected peak is the reactive strategy a lake or bay manager actually uses, so B beating
-it is a real test of "early matters". The Layer 2 simulation should be re-run with this arm C
-before `LOOP_PREREG.md` is written.
+it is a real test of "early matters". The Layer 2 simulation was re-run with this arm C (and the
+floor, handover and pilot-based C_ok) on 2026-09-28: C starts about 3 days after B and cuts the
+peak 14-24%, against B's 72-81% for seaweed, shellfish and peroxide (`LAYER2_SIM_RESULTS.md`).
 
-**Pilot bloom run (added 2026-09-28):** during the warm-up, 2 spare tanks get nutrients early
-with no treatment. They confirm the culture actually blooms in our tanks (if arm A doesn't
+**Pilot bloom run (added 2026-09-28):** on about **day 7** of the warm-up, 2 spare tanks get the
+bloom pulse with no treatment. They confirm the culture actually blooms in our tanks (if arm A doesn't
 bloom, every hypothesis fails), and give the expected peak height and timing that arm C's start
 and `C_ok` are set from. Keep backup culture flasks going through the run.
 
@@ -162,6 +178,9 @@ and `C_ok` are set from. Keep backup culture flasks going through the run.
 - Total treatment (hours ON, or grams or mg dosed) is reported for B and C, plus treatment per percent of peak cut.
 - *Why it changed:* the original H1 also required B to use **less treatment than C**. The simulation (`LAYER2_SIM_RESULTS.md`) showed that late treatment starts when the bloom is already crashing, so it's short and does almost nothing. "Less treatment than C" then fails even when B works.
 **H2:** arm D shows no loss of non-target survival compared with arm A.
+**H3 (reported, no pass mark; added from the evidence reviews):** after B's last OFF, record the days
+until chlorophyll is back above `C_ok`. Bubble and seaweed effects stop when the treatment is removed,
+so regrowth is expected, and measuring it is part of the result.
 **H4 (added 2026-09-28): trim the bloom, don't remove the algae.** Diatoms at normal levels make
 oxygen and feed the food web, so the loop must cut the *peak*, not push the algae below normal.
 - **Pass:** in arm B, the 3-tank mean chlorophyll (and cell count) never falls below **80% of the warm-up mean** (the normal, pre-bloom level), from nutrients-in to the end of the cool-down.
@@ -178,9 +197,12 @@ oxygen and feed the food web, so the loop must cut the *peak*, not push the alga
 **Outcome measures:** peak chlorophyll; area under the chlorophyll curve; days above `C_ok`;
 total ON time or dose; non-target survival; number of ON/OFF cycles.
 
-**Statistics:** mean ± 95% t-interval across the 3 replicate tanks (t = 4.30 for n = 3), the same
-convention as `src/lab/analyze_lab.py`. With n = 3 a result can be "consistent but underpowered";
-report it that way rather than over-claiming.
+**Statistics:** H1a compares B with A using both arms' tank-to-tank spread: Welch t-interval on the
+log peaks (B vs A), reported as a percent cut with its 95% interval. Single-arm summaries use mean ±
+95% t-interval (t = 4.30 for n = 3), as in `src/lab/analyze_lab.py`. With n = 3 a result can be
+"consistent but underpowered" (the re-run simulation gives a 64-80% chance that the honest interval
+clears 50% with 3 tanks, 78-92% with 4); report it that way rather than over-claiming, and use 4 tanks
+per arm if space allows.
 
 ## Organisms (non-toxic stand-ins)
 - **Dinoflagellate:** *Prorocentrum micans* (used as the non-toxic control in Mardones et al. 2023). **Not as the main test organism for bubbles:** bubbling *promoted* *Prorocentrum* in Sung & Gobler 2026, so for bubbles it's only an "expected to resist" comparison (see `01_BUBBLES.md`).
@@ -190,12 +212,12 @@ report it that way rather than over-claiming.
 - Never culture toxic *Alexandrium*, *Karenia*, *Margalefidinium* or *Microcystis*.
 
 ## Hardware that makes it a system, not a jar test
-- **Controller:** an ESP32 microcontroller reads the sensors, runs the state machine above, and logs every reading and state change to a CSV (and optionally a dashboard).
+- **Controller:** the Arduino Uno alerter (`hardware/alerter_uno/`) reads the sensors, runs the state machine above (including the floor OFF rule and the handover, `mode H`), and the laptop link (`alerter_link.py`) logs every reading and state change to a CSV.
 - **Actuators by method:**
   - relay → air pump (bubbles)
-  - servo or winch → lowers and raises a seaweed panel or shellfish bag
-  - peristaltic pump → curcumin dosing
-- **Forecast input:** the ESP32 logs readings to a CSV. Once a day a laptop runs the fork's `predict_anywhere.py` on that CSV and sends `p` back to the controller over Wi-Fi or USB. The rule trigger runs on the ESP32 itself as a backup if the laptop link fails.
+  - servo (`USE_SERVO`, D11) → lowers and raises a seaweed panel or shellfish bag
+  - relay → peristaltic dosing pump (peroxide and curcumin working solutions)
+- **Forecast input:** once a day the laptop runs the fork's `predict_anywhere.py` on the logged readings and sends `p` to the Uno over USB. The rule trigger runs on the Uno itself, so it still works if the laptop link fails.
 - **Keep a design log from day one:** version, what failed, the measured improvement. Engineering judges score documented iteration.
 
 ## Methods in this folder
@@ -206,7 +228,7 @@ report it that way rather than over-claiming.
 | `02_SEAWEED.md` | seaweed panels (*Ulva*, sugar kelp) | shellfish and kelp farms, small bays | yes (lift out) | 72 h |
 | `03_PEROXIDE_BAG.md` | liquid H₂O₂ pumped in pulses (sodium percarbonate as the comparison) | ponds, enclosed basins | no, but it breaks down to water and oxygen in 1-2 days | 24 h |
 | `04_CURCUMIN.md` | curcumin dosing | enclosed canals, tanks | no (dosed into the water) | 24 h |
-| `05_SHELLFISH.md` | clam or oyster bags | shellfish farms, small bays | yes (lift out) | 7 days |
+| `05_SHELLFISH.md` | clam or oyster bags | shellfish farms, small bays | yes (lift out) | 3 days |
 
 **Left out:**
 - Barley straw needs 2-8 weeks to become active and has weak marine evidence.

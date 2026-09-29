@@ -55,10 +55,10 @@ That difference is the pulse.
 ## Watch-outs
 1. **Starter-culture carry-over can swamp the recipe.** Standard f/2 has ~880 µM nitrate, so a 1:100 inoculum from an f/2 culture adds ~9 µM, more than the whole pulse.
    - Fix: grow the starter culture in **f/20** (one-tenth strength) for its last transfer, or spin it down and rinse the cells in nutrient-free seawater before adding them.
-2. **Tank blooms will be smaller than in the simulation.** A 7 µM nitrate pulse supports a peak of very roughly 5-15 µg/L chlorophyll above the warm-up level. Layer 2 assumed ~90 µg/L.
+2. **Tank blooms will be small.** A 7 µM nitrate pulse supports a peak of very roughly 5-15 µg/L chlorophyll above the warm-up level. The Layer 2 re-run (2026-09-28) uses this scale; its untreated bloom peaks near 9 µg/L.
    - The pilot bloom run checks that the fluorometer can see a bloom this size.
    - If it's too faint, scale the **whole pulse** up by a fixed factor (for example ×3, keeping the N:P:Si ratios) and report the factor.
-   - Re-run the simulation with the real pilot peak.
+   - Re-run the simulation with the real pilot peak (scale `n_pulse` in `src/sim/method_params.csv` by the same factor).
 3. **N:P in the pulse is ~7:1,** below the 16:1 algae need, so nitrogen runs out first. That's typical of the Sound. It's also why nitrogen, not phosphorus, is what the Sound's cleanup plan (the LIS TMDL) targets.
 4. **Silicate unit is inferred.** DEEP's data portal doesn't state it. The values only make sense as mg/L SiO₂: as Si they would be 80-100 µM, far above typical Sound values.
    - Confirm with DEEP (add it to the Matt Lyman follow-up).

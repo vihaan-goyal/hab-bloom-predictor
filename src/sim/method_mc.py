@@ -1,5 +1,5 @@
 """
-method_mc.py -- Layer 2, step 3: Monte-Carlo bench runs of the treatment loop (seaweed, bubbles)
+method_mc.py -- Layer 2, step 3: Monte-Carlo bench runs of the treatment loop (all five methods)
 =================================================================================================
 Step 3 of notes/mitigation/LAYER2_SIM_RESULTS.md. Each draw is one full bench run with the
 parameters drawn from src/sim/method_params.csv (kept only if they reproduce their calibration
@@ -17,15 +17,23 @@ paper; tank_model.backtest). Every draw simulates 5 tanks per arm for 56 days:
     Cl   late treatment (old arm C)      starts once, the first day chl falls after passing
                                          2 x warm-up mean (i.e. after the peak); kept for comparison
 
-Loop rules are loop_controller.Controller (identical to Layer 1's run_loop). C_ok = 50% of arm
-A's running peak (00_CONTROL_LOOP.md bench rule). Seaweed pulls its panel if pH > 9.0.
-Readings carry fluorometer noise; the controller only sees readings. Optional floor rule (FLOOR_ON,
-off by default): a treated tank reading below FLOOR_FRAC x its warm-up mean is switched OFF.
+Loop rules are loop_controller.Controller (identical to Layer 1's run_loop, plus the bench rules of
+00_CONTROL_LOOP.md, updated 2026-09-28):
+    C_ok      50% of the expected untreated peak from the simulated pilot bloom run (pilot pulsed on
+              day PILOT_PULSE_DAY = 7, as in PROCEDURES.md)
+    floor     H4: 2 consecutive readings below 80% of the tank's warm-up mean -> OFF (not arm D)
+    handover  forecast arm: if the rule fires and the model is silent 2 days later, the rule starts it
+    MAX_ON    peroxide 3 pulses, curcumin 4 pulses, others 4 x X
+Seaweed pulls its panel if pH > 9.0; peroxide stops if the residual exceeds 2.8 mg/L. Readings carry
+fluorometer noise (and curcumin's under-reading); the controller only sees readings. Peak cuts are
+measured on cell-count-like readings (true chlorophyll with the same noise, no curcumin artefact).
+Nutrients are on the WATER_RECIPE scale (warm-up ~1, pulse 5-16 ug chl-eq), so blooms peak near
+9 ug/L.
 
 Pre-registered tests, evaluated per draw on the first n tanks of each arm (n = 3 is the plan):
     H1      mean peak reduction of B vs mean A >= 50%, and B used fewer ON days than C
-            (point estimate), and the stricter version with the 95% t-interval lower bound >= 50%
-            (t_interval from src/lab/analyze_lab.py; t = 4.30 at n = 3)
+            (point estimate), and the stricter version with the 95% interval lower bound >= 50%
+            (Welch t on log peaks, so arm A's tank-to-tank spread is included)
     H1a     the first half of H1 alone (>= 50% peak cut), mean and 95% CI versions
     H1b     B's peak cut beats the reactive arm C's (point estimate; also reported with a 20-point
             margin, and against the old late arm Cl)
@@ -60,8 +68,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, "..", "lab"))
 import tank_model as tm  # noqa: E402
-from loop_controller import Controller, rule_trigger, T_ON  # noqa: E402
-from analyze_lab import t_interval  # noqa: E402
+from loop_controller import Controller, rule_trigger, T_ON, HANDOVER_DAYS  # noqa: E402
+from scipy import stats  # noqa: E402
 
 OUT_DIR, FIG_DIR = "data/sim", "figures/sim"
 DAYS, NUTRIENT_DAY, WARM = 56, 21, (14, 21)
@@ -69,17 +77,17 @@ TANKS = 5                      # per arm (n = 3 is the plan; 4 and 5 for the pow
 ARMS = ["A", "Bf", "Br", "C", "D", "Cl"]
 C_REACT_FRAC = 0.5             # arm C starts at this share of the expected untreated peak (2026-09-28)
 PILOT_TANKS = 2                # untreated pilot tanks per draw that set the expected peak
-FLOOR_ON = False               # 'don't go below normal' OFF rule (2026-09-28): a treated tank whose
-FLOOR_FRAC = 0.8               # reading falls below 80% of its warm-up mean is switched OFF.
-# Off by default: tested ON, it never fired while a treatment was ON (B's dips below normal come weeks
-# after OFF, because the model has no nutrient recycling from dead cells), and it only cut arm D short
-# on noise. The bench measures overshoot directly (00_CONTROL_LOOP.md, H4).
+PILOT_PULSE_DAY = 7            # the pilot tanks get their pulse on day 7 (PROCEDURES.md, Part 2 step 3)
+C_OK_FRAC = 0.5                # C_ok = 50% of the pilot's untreated peak (00_CONTROL_LOOP.md)
+FLOOR_ON = True                # H4 floor OFF rule, as planned: FLOOR_DAYS (2) consecutive readings
+FLOOR_FRAC = 0.8               # below 80% of the tank's warm-up mean -> OFF; not applied to arm D
+MAX_ON = {"peroxide": 3, "curcumin": 4}   # pulses per episode (method files); others 4 x X
 FC_SCALE, FC_NOISE = 0.35, 0.5  # forecast emulator: logistic scale and noise (log units)
-BLOOM_MIN = 10.0               # ug/L; the forecast's bloom line is max(10, 2 x warm-up mean)
+# the forecast emulator's bloom line is 2 x the tank's warm-up mean (tank scale, no absolute ug/L)
 ORGANISM = {"seaweed": "diatom", "bubbles": "dino", "peroxide": "small", "curcumin": "dino",
             "shellfish": "diatom"}
 METHODS = list(ORGANISM)
-PEROXIDE_PULL = 2.8            # mg/L residual: pull the bag early (03_PEROXIDE_BAG.md)
+PEROXIDE_PULL = 2.8            # mg/L residual above this -> safety stop (03_PEROXIDE_BAG.md)
 SWEEP = {                      # (parameter, values, axis label) for the X x dose design sweep
     "seaweed": ("dose", [0.5, 1.0, 2.0, 3.0], "kelp dose (g/L wet)"),
     "bubbles": ("rate", [0.05, 0.6], "airflow (L/min per L)"),
@@ -102,11 +110,11 @@ def pilot_run(method, p, rng):
     off = np.zeros(len(rep["loss"]), bool)
     peak = np.zeros(len(rep["loss"]))
     for d in range(DAYS):
-        if d == NUTRIENT_DAY:
+        if d == PILOT_PULSE_DAY:
             tank.N = tank.N + rep["n_pulse"]
         chl = tank.step_day(off)
         meas = chl * (1 + rng.normal(0, rep["fluor_cv"]))
-        if d >= NUTRIENT_DAY:
+        if d >= PILOT_PULSE_DAY:
             peak = np.maximum(peak, meas)
     return peak.reshape(D, PILOT_TANKS).mean(axis=1)
 
@@ -123,40 +131,42 @@ def run_bench(method, p, rng, x_days=None, keep_curves=False):
     rep["a0"] = rep["a0"] * (1 + rng.normal(0, 0.1, len(arm)))
     tank = tm.TankBatch(rep, method, ORGANISM[method])
     x = rep["x_days"].astype(int) if x_days is None else np.full(len(arm), int(x_days))
-    ctrl = Controller(len(arm), x)
+    ctrl = Controller(len(arm), x, max_on=MAX_ON.get(method), handover_days=HANDOVER_DAYS)
     is_A, is_Bf, is_Br, is_C, is_D, is_Cl = (arm == i for i in range(len(ARMS)))
     pilot_peak = pilot_run(method, p, rng)[draw]
+    c_ok = C_OK_FRAC * pilot_peak
     hist = np.zeros((DAYS, len(arm)))
+    cells = np.zeros((DAYS, len(arm)))        # what cell counts see: no fluorometer artefact
     on_hist = np.zeros((DAYS, len(arm)), bool)
     c_started = np.zeros(len(arm), bool)
     cl_started = np.zeros(len(arm), bool)
     passed = np.zeros(len(arm), bool)
     safety = np.zeros(len(arm), int)
-    a_peak = np.zeros(D)
     warm = np.ones(len(arm))
     first_on = np.full(len(arm), -1)
     for d in range(DAYS):
         if d == NUTRIENT_DAY:
             tank.N = tank.N + np.where(is_D, 0.0, rep["n_pulse"])
             warm = hist[WARM[0]:WARM[1]].mean(axis=0)
+            if FLOOR_ON:                        # H4 floor, every treated arm except the false alarm
+                ctrl.floor = np.where(is_D, np.nan, FLOOR_FRAC * warm)
         treat = ctrl.on & ~is_A
         chl_true = tank.step_day(treat)
-        meas = np.maximum(chl_true * tank.reading_factor() * (1 + rng.normal(0, rep["fluor_cv"])), 1e-3)
+        noise = 1 + rng.normal(0, rep["fluor_cv"])
+        meas = np.maximum(chl_true * tank.reading_factor() * noise, 1e-3)
         hist[d] = meas
+        cells[d] = np.maximum(chl_true * noise, 1e-3)
         if d < NUTRIENT_DAY:
             continue
-        # C_ok: half of arm A's running peak (mean over the draw's A tanks)
-        a_mean = np.bincount(draw[is_A], weights=meas[is_A], minlength=D) / TANKS
-        a_peak = np.maximum(a_peak, a_mean)
-        c_ok = 0.5 * a_peak[draw]
         # forecast emulator: 7-day persistence projection of the tank's own readings
         r = (np.log(meas) - np.log(hist[d - 2])) / 2.0
-        line = np.maximum(BLOOM_MIN, 2 * warm)
+        line = 2 * warm
         z = (np.log(meas) + 7 * r - np.log(line)) / FC_SCALE + rng.normal(0, FC_NOISE, len(arm))
         pf = 1 / (1 + np.exp(-z))
         passed |= meas > 2 * warm
-        trig = is_Bf & (pf >= T_ON)
-        trig |= is_Br & rule_trigger(hist, d, warm)
+        rule = rule_trigger(hist, d, warm)
+        trig = is_Bf & (pf >= T_ON)          # plus the 2-day handover to the rule (Controller)
+        trig |= is_Br & rule
         react = is_C & ~c_started & (meas >= C_REACT_FRAC * pilot_peak)
         trig |= react
         c_started |= react
@@ -169,29 +179,40 @@ def run_bench(method, p, rng, x_days=None, keep_curves=False):
             force = tank.ph() > tm.PH_LIMIT
         elif method == "peroxide":
             force = tank.C > PEROXIDE_PULL
-        floor = FLOOR_ON & (d > NUTRIENT_DAY) & (meas < FLOOR_FRAC * warm)
-        force = force | floor
-        safety += (force & ~floor) & ctrl.on
-        on_now = ctrl.step(d, trig, pf, meas, c_ok, force_off=force)
+        safety += force & ctrl.on
+        on_now = ctrl.step(d, trig, pf, meas, c_ok, force_off=force, rule=is_Bf & rule)
         first_on = np.where((first_on < 0) & on_now, d, first_on)
         on_hist[d] = on_now
 
-    peak = hist[NUTRIENT_DAY:].max(axis=0)
+    peak = cells[NUTRIENT_DAY:].max(axis=0)   # peak from cell-count-like readings (no artefact)
     # regrowth: days after the last OFF until readings exceed C_ok again (NaN if never / never OFF)
-    c_ok_end = 0.5 * a_peak[draw]
     regrow = np.full(len(arm), np.nan)
     for i in np.where((is_Bf | is_Br) & (ctrl.last_off >= 0))[0]:
-        after = np.where(hist[ctrl.last_off[i] + 1:, i] > c_ok_end[i])[0]
+        after = np.where(cells[ctrl.last_off[i] + 1:, i] > c_ok[i])[0]
         if len(after):
             regrow[i] = after[0] + 1
     # non-target harm: the highest peroxide / curcumin level a tank reached vs the harm threshold
     nt_harm = (tank.maxC > rep["nt_threshold"]) if "nt_threshold" in rep else np.zeros(len(arm), bool)
     res = dict(draw=draw, arm=arm, peak=peak, on_days=ctrl.on_days, episodes=ctrl.episodes,
                maxed=ctrl.maxed, safety=safety, regrow=regrow, first_on=first_on, nt_harm=nt_harm,
-               max_c=tank.maxC)
+               max_c=tank.maxC, floor_stops=ctrl.floor_stops)
     if keep_curves:
         res["hist"], res["on_hist"] = hist, on_hist
     return res
+
+
+def welch_reduction(b_peaks, a_peaks):
+    """95% interval for B's peak cut vs A with BOTH arms' tank-to-tank spread (Welch t on log
+    peaks). Returns (low, high) of 1 - B/A."""
+    lb, la = np.log(b_peaks), np.log(a_peaks)
+    vb, va = lb.var(ddof=1) / len(lb), la.var(ddof=1) / len(la)
+    d = lb.mean() - la.mean()
+    se = np.sqrt(vb + va)
+    if se == 0:
+        return 1 - np.exp(d), 1 - np.exp(d)
+    df = se ** 4 / (vb ** 2 / (len(lb) - 1) + va ** 2 / (len(la) - 1))
+    t = stats.t.ppf(0.975, df)
+    return 1 - np.exp(d + t * se), 1 - np.exp(d - t * se)
 
 
 def evaluate(res, D, n=3, b_arm="Bf"):
@@ -208,8 +229,9 @@ def evaluate(res, D, n=3, b_arm="Bf"):
         c = by["C"].loc[[dr]]
         cl = by["Cl"].loc[[dr]]
         dd = by["D"].loc[[dr]]
-        red = 1 - b.peak.values / peak_a[dr]
-        m, lo, hi = t_interval(red)
+        a = by["A"].loc[[dr]]
+        m = 1 - b.peak.mean() / peak_a[dr]
+        lo, hi = welch_reduction(b.peak.values, a.peak.values)
         on_b, on_c = b.on_days.mean(), c.on_days.mean()
         red_c = 1 - c.peak.mean() / peak_a[dr]
         red_cl = 1 - cl.peak.mean() / peak_a[dr]
@@ -222,7 +244,8 @@ def evaluate(res, D, n=3, b_arm="Bf"):
                          h2_pass=bool((dd.safety == 0).all() and not dd.nt_harm.any()), on_d=dd.on_days.mean(),
                          b_nt_harm=bool(b.nt_harm.any()),
                          regrow_days=np.nanmedian(b.regrow.values) if np.isfinite(b.regrow.values).any() else np.nan,
-                         b_safety=int(b.safety.sum()), maxed_b=b.maxed.mean()))
+                         b_safety=int(b.safety.sum()), maxed_b=b.maxed.mean(),
+                         floor_b=bool((b.floor_stops > 0).any())))
     return pd.DataFrame(rows)
 
 
@@ -241,7 +264,7 @@ def summarise(method, variant, ev, ev_by_n, ev_rule):
                share_regrew=ev.regrew.mean(), p_b_safety_stop=(ev.b_safety > 0).mean(),
                p_b_nontarget_harm=ev.b_nt_harm.mean(),
                median_regrow_days=ev.regrow_days.median(), share_B_maxed=(ev.maxed_b > 0).mean(),
-               p_h1_point_rule_trigger=ev_rule.h1_point.mean(),
+               p_h1_point_rule_trigger=ev_rule.h1_point.mean(), p_b_floor_stop=ev.floor_b.mean(),
                median_peak_reduction_rule=ev_rule.red_mean.median())
     for n, e in ev_by_n.items():
         row[f"p_h1_point_n{n}"] = e.h1_point.mean()

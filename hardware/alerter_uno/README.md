@@ -122,11 +122,36 @@ A buzzer wired straight from D2 to GND also works, just more quietly.
 
 The Python controller gives the same states on both tests (checked 2026-09-26).
 
+**Test C (handover + floor, added 2026-09-28)**: send `reset`, `x 3`, `cok 3`, `mode H`, `warm 2`,
+`floor 0.8`, then one line at a time:
+
+```
+1 0.1 2.0    -> idle
+2 0.1 2.2    -> idle
+3 0.1 4.6    -> idle            (rule fires: rose 2 days and > 2 x warm; forecast still low)
+4 0.2 5.1    -> idle
+5 0.2 6.0    -> START           (handover: rule fired 2 days ago, forecast never did)
+6 0.3 6.5    -> ON
+8 0.3 7.0    -> ON              (day 7 skipped: fine)
+9 0.3 1.5    -> ON              (1st reading below the floor 0.8 x 2 = 1.6)
+10 0.3 1.4   -> OFF_FLOOR       (2nd in a row: H4 floor OFF)
+11 0.3 1.3   -> idle
+12 0.6 5.0   -> START           (forecast)
+```
+
+`alerter_link.py --replay <file> --sim --mode H --warm 2 --floor 0.8 --x 3 --cok 3` prints the same
+states (Python reference, 2026-09-28). Run it on the board too: 0 mismatches is the pass mark.
+
 **Other commands:**
 - `status`
 - `x 2`, `cok 4.5`
-- `mode R` + `warm 1.8` switches to the rule trigger (chl rose 2 days AND > 2 × warm-up mean)
-- `stop` for a safety stop, e.g. when the DO kit reads < 4 mg/L
+- `mode F` (forecast only), `mode R` + `warm 1.8` (rule trigger: chl rose on 2 calendar days AND
+  > 2 × warm-up mean), `mode H` + `warm 1.8` (forecast, with the 2-day handover to the rule: arm B)
+- `floor 0.8` (H4: 2 readings in a row below 0.8 × warm while ON → `OFF_FLOOR`; `floor 0` for the
+  false-alarm arm D), `maxon 3` (MAX_ON in days; 0 = 4 × X; peroxide 3, curcumin 4)
+- `temp 10 20` (temperature warning window; default 10-20 °C for the planned 12-18 °C run)
+- `stop` for a safety stop, e.g. when the DO kit reads < 4 mg/L. With the laptop link, use
+  `--today ... --stop "DO 3.6 mg/L"` instead, so the stop is logged and replayed after a reset.
 
 **Done when:** Tests A and B print exactly the lines above, and the LEDs and buzzer match.
 
@@ -171,8 +196,8 @@ sponsor's OK.
 **Code:**
 - Arduino IDE → Library Manager → install `OneWire` and `DallasTemperature`.
 - Set `USE_DS18B20 1` at the top of `alerter_uno.ino` (the code is already written and compile-checked).
-- It reads every 10 s and alarms outside 14-22 °C (white LED, fast beeps). `read` prints all sensors;
-  `status` shows the temperature.
+- It reads every 10 s and alarms outside the window (default 10-20 °C, set with `temp <lo> <hi>`;
+  white LED, fast beeps). `read` prints all sensors; `status` shows the temperature.
 
 **Done when:**
 - the probe agrees with a kitchen thermometer within 0.5 °C in a glass of water;
@@ -227,8 +252,13 @@ blue SDA, yellow SCL.
 **Adafruit Unified Sensor**; set `USE_TSL2591 1`.
 - `read` turns the blue LED off and on, takes 3 readings each (200 ms), and prints the difference as
   `fl=`, so room light cancels out. Too bright ("SATURATED") → `gain l`; too faint → `gain h` or `gain x`.
+  The gain is saved with the calibration (EEPROM); changing it tells you to redo `blank` and `chlk`,
+  because both are only valid at the gain they were measured at.
 - **Zero:** cuvette of plain seawater in the box → `blank`.
-- **Scale:** after the dilution series (below), fit µg/L (or cells) against `fl`, and type `chlk <slope>`.
+- **Scale:** `chlk` is **µg/L of chlorophyll per signal count**. After the dilution series (below), fit
+  reference chlorophyll in µg/L (acetone extraction, or a borrowed calibrated fluorometer) against
+  `fl`, and type `chlk <slope>`. C_ok and the floor are then in µg/L. (If no µg/L reference exists,
+  fit cells/mL instead and give C_ok and `warm` in cells/mL too; never mix the two units.)
   Then `read` prints `chl=` in µg/L, and `alerter_link.py --today --p 0.6` uses it automatically
   (leave out `--chl`).
 
@@ -283,6 +313,11 @@ python hardware/alerter_uno/alerter_link.py --today --p 0.62 --chl 7.4 --start 2
   water), **0 mismatches** with the Python controller, including days with missing `p` or chlorophyll.
 - Later: read chlorophyll, temperature and pH from the Uno's sensors, and get `p` from the model automatically.
 
+- **Loop settings (2026-09-28):** `--mode H` (default; arm B), `--warm <mean>`, `--floor 0.8` (0 for arm D),
+  `--maxon 0|3|4`, `--temp-lo 10 --temp-hi 20`, `--stop "reason"` (logged manual safety stop). Values
+  are sent with 6 significant figures and the Python reference uses the sent value, so a reading right
+  at a threshold cannot disagree.
+
 **Done when:** a 48-hour test logs with no gaps, and unplugging the USB and reconnecting it recovers cleanly.
 
 ## Stage 8: dry run on a real tank (Oct 26 - Nov 9)
@@ -291,7 +326,7 @@ Run one tank of plain seawater + culture at low nutrients for 2 weeks, exactly a
 will run:
 - sensors logging;
 - daily hand measurements;
-- the loop active on the rule trigger.
+- the loop active on the rule trigger (`--mode R --warm <warm-up mean>`).
 
 **Done when:**
 - 14 days with no missing daily rows;
@@ -299,3 +334,15 @@ will run:
 - nothing overheats, leaks or drifts.
 
 Then the real 21-day warm-up starts on Nov 10.
+
+## Optional: servo for the seaweed panel or shellfish bag (added 2026-09-28)
+
+The two full runs (seaweed, shellfish) move a panel or bag in and out of the tank.
+- **Wiring:** servo signal (orange/yellow) → **D11**; servo red → an external 5-6 V supply (not the
+  Uno's 5 V pin: a stalled servo browns out the Uno); servo brown/black → GND, **shared with the Uno's GND**.
+- **Code:** set `USE_SERVO 1` (Servo library, built in). The servo goes to the ON angle while
+  treatment is ON and back to the OFF angle otherwise. `servo 90 0` sets the ON / OFF angles.
+- The Servo library takes Timer1, so pins 9 and 10 lose PWM. That is fine here: the white LED (D9) and
+  the relay (D10) only use on/off.
+- **pH note:** `readPhVolts` assumes a 5.000 V reference. USB gives 4.7-5.1 V, so recalibrate the pH
+  probe (`cal686`, `cal918`) whenever the power source changes, and run from the same supply.

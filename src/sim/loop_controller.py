@@ -12,6 +12,15 @@ batch of tanks at once:
              else STOP if ON for >= MAX_ON (= 4 X) days; else next check = today + X.
     The OFF day itself counts as ON (as in run_loop); the tank can restart the next day.
 
+Bench additions (2026-09-28; 00_CONTROL_LOOP.md), all off by default so --selftest still matches
+run_loop exactly:
+    max_on         per-tank MAX_ON in days (default 4 X); e.g. 3 pulses for peroxide.
+    floor          per-tank floor level (FLOOR_FRAC x warm-up mean): a tank reading below it on
+                   FLOOR_DAYS consecutive readings while ON is switched OFF (H4; NaN = no floor,
+                   used for the false-alarm arm D).
+    handover_days  if the rule trigger has fired while the tank is idle and the model has not
+                   fired HANDOVER_DAYS days later, the rule starts the tank.
+
 --selftest feeds the Narragansett history (trigger = forecast p >= 0.50, C_ok = 5 ug/L) through
 the controller and requires the same ON days and episodes as run_loop.
 
@@ -29,14 +38,25 @@ import sys
 import numpy as np
 
 T_ON = 0.50
+FLOOR_DAYS = 2        # consecutive readings below the floor before a floor OFF
+HANDOVER_DAYS = 2     # rule fired, model silent this many days -> rule starts the tank
 
 
 class Controller:
     """Loop state for n tanks. X and MAX_ON in days."""
 
-    def __init__(self, n, x_days, t_on=T_ON):
+    def __init__(self, n, x_days, t_on=T_ON, max_on=None, floor=None, floor_days=FLOOR_DAYS,
+                 handover_days=None):
         self.x = np.broadcast_to(np.asarray(x_days, dtype=int), (n,)).copy()
-        self.max_on = 4 * self.x
+        self.max_on = (4 * self.x if max_on is None
+                       else np.broadcast_to(np.asarray(max_on, dtype=int), (n,)).copy())
+        self.floor = (np.full(n, np.nan) if floor is None
+                      else np.broadcast_to(np.asarray(floor, dtype=float), (n,)).copy())
+        self.floor_days = floor_days
+        self.below = np.zeros(n, int)
+        self.floor_stops = np.zeros(n, int)
+        self.handover_days = handover_days
+        self.pending = np.full(n, -1)
         self.t_on, self.t_off = t_on, 0.8 * t_on
         self.on = np.zeros(n, bool)
         self.start = np.zeros(n, int)
@@ -47,10 +67,11 @@ class Controller:
         self.maxed = np.zeros(n, int)
         self.last_off = np.full(n, -1)
 
-    def step(self, day, trigger, p, chl, c_ok, force_off=None):
+    def step(self, day, trigger, p, chl, c_ok, force_off=None, rule=None):
         """Update all tanks after today's reading. trigger: bool array (start condition);
-        p, chl: arrays (NaN allowed); c_ok: scalar or array; force_off: safety stop mask.
-        Returns the bool array 'ON today' (includes a tank's OFF day)."""
+        p, chl: arrays (NaN allowed); c_ok: scalar or array; force_off: safety stop mask;
+        rule: the rule trigger (used only for the handover). Returns the bool array
+        'ON today' (includes a tank's OFF day)."""
         was = self.on.copy()
         on_today = was.copy()
         at_check = was & (day >= self.check)
@@ -66,23 +87,39 @@ class Controller:
         ended = stop_ok | maxed
         if force_off is not None:
             ended |= was & np.asarray(force_off, bool)
+        # floor rule (H4): FLOOR_DAYS consecutive readings below the floor while ON -> OFF
+        seen = was & np.isfinite(chl)
+        with np.errstate(invalid="ignore"):
+            low = seen & np.isfinite(self.floor) & (chl < self.floor)
+        self.below = np.where(low, self.below + 1, np.where(seen, 0, self.below))
+        floor_hit = was & ~ended & (self.below >= self.floor_days)
+        ended |= floor_hit
+        self.floor_stops += floor_hit
         self.maxed += maxed
         self.on = was & ~ended
+        self.below = np.where(self.on, self.below, 0)
         self.last_off = np.where(ended, day, self.last_off)
         # a tank that was OFF at the start of today may start (one that just stopped may not)
-        start = ~was & np.asarray(trigger, bool)
+        trig = np.asarray(trigger, bool).copy()
+        if self.handover_days is not None and rule is not None:
+            self.pending = np.where(ended, -1, self.pending)
+            self.pending = np.where(~was & np.asarray(rule, bool) & (self.pending < 0), day, self.pending)
+            trig |= ~was & (self.pending >= 0) & (day - self.pending >= self.handover_days)
+        start = ~was & trig
         self.on |= start
         on_today |= start
         self.start = np.where(start, day, self.start)
         self.check = np.where(start, day + self.x, self.check)
         self.last = np.where(start, chl, self.last)
         self.episodes += start
+        self.pending = np.where(start, -1, self.pending)
         self.on_days += on_today
         return on_today
 
 
 def rule_trigger(chl_hist, day, warm_mean):
-    """chl rose on 2 consecutive days and today's chl > 2 x warm-up mean. chl_hist: (days, n)."""
+    """chl rose on 2 consecutive days and today's chl > 2 x warm-up mean. chl_hist: (days, n),
+    one row per calendar day (a skipped day is a NaN row, so no trigger across a gap)."""
     c0, c1, c2 = chl_hist[day - 2], chl_hist[day - 1], chl_hist[day]
     return (c1 > c0) & (c2 > c1) & (c2 > 2 * warm_mean)
 

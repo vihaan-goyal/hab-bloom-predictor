@@ -38,7 +38,7 @@ dose form: arm B total dose < arm C total dose.
 - **Jars:** 3 per arm, 1.5 L, following Mote's beaker scale, artificial seawater at salinity 30, 12:12 light.
 - **Culture:** non-toxic dinoflagellate (*Prorocentrum micans*) plus a diatom (*Phaeodactylum*) arm, to test whether curcumin works on diatoms at all.
 - **Stock:** food-grade curcumin (≥ 95%, not turmeric powder), dissolved in a small volume of ethanol. Keep ethanol in the jar below 0.1% and match it exactly in a **carrier-only control jar**.
-- **Dosing:** peristaltic pump driven by the ESP32, calibrated by weighing the delivered volume.
+- **Dosing:** peristaltic dosing pump switched by the Arduino alerter's relay, calibrated by weighing the delivered volume.
 
 ## Measurements specific to curcumin
 - Turbidity (a DIY nephelometer: LED at 90° to a photodiode, or a Secchi-tube reading).
@@ -57,7 +57,7 @@ dose form: arm B total dose < arm C total dose.
 | Curcumin ≥ 95% (food or supplement grade) | $20 |
 | Ethanol (food grade) | $10 |
 | Peristaltic pump + driver | $25 |
-| Jars, ESP32, fluorometer, turbidity LED/photodiode, pH, temperature, DO kit | $140 |
+| Jars, Arduino alerter, fluorometer, turbidity LED/photodiode, pH, temperature, DO kit | $140 |
 | Sea salt, f/2, cultures (NCMA) | $80-130 |
 | Brine shrimp eggs | $10 |
 

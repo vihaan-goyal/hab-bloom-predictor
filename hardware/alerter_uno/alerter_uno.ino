@@ -7,16 +7,23 @@
     not ON:  start if the trigger fires today; next check = today + X; remember today's chl.
     ON:      on a check day with no reading, check again tomorrow;
              OFF if  p < T_off (= 0.8 T_on)  AND  chl < C_ok  AND  chl <= chl at the last check;
-             else STOP if ON for >= MAX_ON (= 4 X) days; else next check = today + X.
+             else STOP if ON for >= MAX_ON (= 4 X, or `maxon`) days; else next check = today + X.
+             FLOOR: 2 readings in a row below floor x warm-up mean while ON -> OFF (H4).
     The OFF day itself counts as ON; the tank can restart the next day.
 
   Triggers:  mode F (forecast)  p >= T_on
-             mode R (rule)      chl rose 2 days in a row AND chl > 2 x warm-up mean
+             mode R (rule)      chl rose 2 calendar days in a row AND chl > 2 x warm-up mean
+             mode H (handover)  forecast, but if the rule fires and the forecast has not started
+                                the tank 2 days later, the rule starts it (00_CONTROL_LOOP.md)
 
   Input, one line per day in the Serial Monitor (115200 baud, "Newline"):
       <day> <p> <chl>          e.g.  12 0.63 7.4      (use - for a missing value)
   Loop commands:
-      x <days>   cok <ug/L>   ton <p>   mode F|R   warm <mean chl>
+      x <days>   cok <ug/L>   ton <p>   mode F|R|H   warm <mean chl>
+      floor <frac>   floor OFF level as a share of warm (default 0.8; 0 = off, e.g. arm D)
+      maxon <days>   MAX_ON in days (0 = 4 x X; peroxide 3, curcumin 4)
+      temp <lo> <hi> temperature warning window, C (default 10 20)
+      servo <on> <off>   servo angles for ON / OFF (USE_SERVO)
       stop       (safety stop: OFF at the next daily line, e.g. DO kit < 4 mg/L)
       mute 0|1   (silence the buzzer; alerter_link.py uses it to replay history after a reset)
       status     reset
@@ -26,7 +33,8 @@
       cal686     pH probe in pH 6.86 buffer: store its voltage     cal918   same for pH 9.18
       blank      fluorometer: cuvette of plain seawater, store its signal as zero chlorophyll
       chlk <k>   fluorometer: ug/L of chlorophyll per signal count (from the dilution series)
-      gain l|m|h|x   fluorometer sensitivity (TSL2591 gain: low, medium, high, max)
+      gain l|m|h|x   fluorometer sensitivity (TSL2591 gain: low, medium, high, max); saved with the
+                     calibration, because blank and chlk are only valid at the gain they were set at
       cal        show the stored calibration        calclear   erase it
       Calibration is kept in EEPROM, so it survives resets and uploads.
 
@@ -49,10 +57,16 @@
 #ifndef USE_PH
 #define USE_PH 0        // pH module (analog)           no library
 #endif
+#ifndef USE_SERVO
+#define USE_SERVO 0     // servo that lowers/lifts the seaweed panel or shellfish bag (D11)
+#endif
 
 #if USE_DS18B20
 #include <OneWire.h>
 #include <DallasTemperature.h>
+#endif
+#if USE_SERVO
+#include <Servo.h>      // uses Timer1: pins 9 and 10 lose PWM, which is fine (digitalWrite only)
 #endif
 #if USE_TSL2591
 #include <Wire.h>
@@ -65,17 +79,22 @@
 const int PIN_GREEN = 6, PIN_YELLOW = 9, PIN_RED = 5, PIN_BUZZ = 2, PIN_RELAY = 10, PIN_TEMP = 3;
 const int PIN_FLUOR_LED = 7;   // fluorometer's blue excitation LED (TSL2591 itself is on SDA/SCL)
 const int PIN_PH = A2;         // pH module Po (A4/A5 are taken by SDA/SCL)
+const int PIN_SERVO = 11;      // servo signal (USE_SERVO)
 const bool RELAY_ACTIVE_LOW = false;  // false: bare relay via transistor, or LED stand-in; true for most opto relay modules
-const float TEMP_LO = 14.0, TEMP_HI = 22.0;   // culture window 16-20 C, +/- 2 C
+float tempLo = 10.0, tempHi = 20.0;   // planned run 12-18 C (WATER_RECIPE.md), +/- 2 C; `temp` changes it
+const int FLOOR_DAYS = 2, HANDOVER_DAYS = 2;
 
-float tOn = 0.50, cOk = 5.0, warmMean = NAN;
-int X = 3;
+float tOn = 0.50, cOk = 5.0, warmMean = NAN, floorFrac = 0.8;
+int X = 3, maxOnDays = 0;      // 0 = 4 x X
 char mode = 'F';
+int servoOnDeg = 90, servoOffDeg = 0;
 
 bool on = false, warn = false, tempAlarm = false, muted = false;
 long startDay = 0, checkDay = 0;
 float lastChl = NAN, chlHist[3] = {NAN, NAN, NAN};
-int episodes = 0;
+long histDay = -100000;        // calendar day of chlHist[2]
+long pendingDay = -1;          // handover: day the rule fired while idle (-1 = none)
+int episodes = 0, belowCount = 0;
 bool safetyStop = false;
 
 #if USE_DS18B20
@@ -88,10 +107,15 @@ bool tslOk = false;
 #endif
 float tempC = NAN;
 
-// ---- calibration kept in EEPROM
-struct Cal { uint16_t magic; float v686, v918, blank, chlK; };
-const uint16_t CAL_MAGIC = 0xA1E7;
-Cal cal = {CAL_MAGIC, NAN, NAN, NAN, NAN};
+#if USE_SERVO
+Servo servo;
+#endif
+
+// ---- calibration kept in EEPROM (gain added 2026-09-28; the old 0xA1E7 layout is migrated)
+struct CalV1 { uint16_t magic; float v686, v918, blank, chlK; };
+struct Cal { uint16_t magic; float v686, v918, blank, chlK; char gain; };
+const uint16_t CAL_MAGIC_V1 = 0xA1E7, CAL_MAGIC = 0xA1E8;
+Cal cal = {CAL_MAGIC, NAN, NAN, NAN, NAN, 'm'};
 unsigned int everyMin = 10;
 
 const int BUZZ_HZ = 2000;   // passive buzzer: needs a tone, not a steady HIGH
@@ -109,19 +133,28 @@ void setOutputs() {
   digitalWrite(PIN_RED, on ? HIGH : LOW);
   digitalWrite(PIN_YELLOW, (warn || tempAlarm) ? HIGH : LOW);
   digitalWrite(PIN_RELAY, (on != RELAY_ACTIVE_LOW) ? HIGH : LOW);
+#if USE_SERVO
+  servo.write(on ? servoOnDeg : servoOffDeg);
+#endif
 }
 
+void pushHist(float v) { chlHist[0] = chlHist[1]; chlHist[1] = chlHist[2]; chlHist[2] = v; }
+
 bool ruleTrigger() {
-  // chlHist = [day-2, day-1, today]
+  // chlHist = [day-2, day-1, today] by CALENDAR day (a skipped day is NaN)
   return !isnan(chlHist[0]) && !isnan(chlHist[1]) && !isnan(chlHist[2]) && !isnan(warmMean)
       && chlHist[1] > chlHist[0] && chlHist[2] > chlHist[1] && chlHist[2] > 2 * warmMean;
 }
 
 void stepDay(long day, float p, float chl) {
-  chlHist[0] = chlHist[1]; chlHist[1] = chlHist[2]; chlHist[2] = chl;
-  bool trig = (mode == 'F') ? (!isnan(p) && p >= tOn) : ruleTrigger();
+  for (long g = histDay + 1; g < day && g < histDay + 4; g++) pushHist(NAN);   // skipped days
+  pushHist(chl);
+  histDay = day;
+  bool rule = ruleTrigger();
+  bool fc = !isnan(p) && p >= tOn;
+  bool trig = (mode == 'R') ? rule : fc;
   float tOff = 0.8 * tOn;
-  int maxOn = 4 * X;
+  int maxOn = maxOnDays > 0 ? maxOnDays : 4 * X;
 
   bool was = on, ended = false, maxed = false;
   warn = false;
@@ -139,10 +172,24 @@ void stepDay(long day, float p, float chl) {
   }
   if (was && safetyStop) { ended = true; warn = true; }
   safetyStop = false;
+  // floor rule (H4): FLOOR_DAYS readings in a row below floorFrac x warm-up mean while ON
+  bool floorHit = false;
+  if (was && !isnan(chl)) {
+    if (floorFrac > 0 && !isnan(warmMean) && chl < floorFrac * warmMean) belowCount++;
+    else belowCount = 0;
+  }
+  if (was && !ended && belowCount >= FLOOR_DAYS) { ended = true; floorHit = true; }
   on = was && !ended;
+  if (!on) belowCount = 0;
+  // handover (mode H): rule fired while idle, forecast silent HANDOVER_DAYS later -> start
+  if (mode == 'H') {
+    if (ended) pendingDay = -1;
+    if (!was && rule && pendingDay < 0) pendingDay = day;
+    if (!was && pendingDay >= 0 && day - pendingDay >= HANDOVER_DAYS) trig = true;
+  }
   bool started = false;
   if (!was && trig) {
-    on = true; started = true;
+    on = true; started = true; pendingDay = -1;
     startDay = day; checkDay = day + X; lastChl = chl; episodes++;
   }
   setOutputs();
@@ -154,7 +201,7 @@ void stepDay(long day, float p, float chl) {
   Serial.print(F(" chl=")); Serial.print(chl, 2);
   Serial.print(F(" -> "));
   if (started) Serial.print(F("START"));
-  else if (was && ended) Serial.print(maxed ? F("STOP_MAX_ON") : F("OFF"));
+  else if (was && ended) Serial.print(maxed ? F("STOP_MAX_ON") : floorHit ? F("OFF_FLOOR") : F("OFF"));
   else Serial.print(on ? F("ON") : F("idle"));
   if (on) { Serial.print(F(" next_check=")); Serial.print(checkDay); }
   Serial.print(F(" episodes=")); Serial.println(episodes);
@@ -173,6 +220,9 @@ float readPhVolts() {
 #if USE_PH
   long s = 0;
   for (int i = 0; i < 40; i++) { s += analogRead(PIN_PH); delay(3); }
+  // Assumes a 5.000 V ADC reference. USB supplies 4.7-5.1 V, which shifts every reading; the
+  // two-point buffer calibration absorbs a fixed offset, so re-run cal686/cal918 whenever the
+  // power source changes (and power the Uno from the same supply during a run).
   return s / 40.0 * 5.0 / 1023.0;
 #else
   return NAN;
@@ -225,7 +275,8 @@ void printCal() {
   Serial.print(F("cal v686=")); Serial.print(cal.v686, 3);
   Serial.print(F(" v918=")); Serial.print(cal.v918, 3);
   Serial.print(F(" blank=")); Serial.print(cal.blank, 1);
-  Serial.print(F(" chlk=")); Serial.println(cal.chlK, 5);
+  Serial.print(F(" chlk=")); Serial.print(cal.chlK, 5);
+  Serial.print(F(" gain=")); Serial.println(cal.gain);
 }
 
 void saveCal() { EEPROM.put(0, cal); printCal(); }
@@ -236,6 +287,11 @@ void setGain(char g) {
   tsl2591Gain_t gain = g == 'l' ? TSL2591_GAIN_LOW : g == 'h' ? TSL2591_GAIN_HIGH : g == 'x' ? TSL2591_GAIN_MAX : TSL2591_GAIN_MED;
   tsl.setGain(gain);
   Serial.print(F("gain=")); Serial.println(g);
+  if (cal.gain != g) {           // blank and chlk belong to one gain: store it with them
+    cal.gain = g;
+    Serial.println(F("gain changed: redo `blank` and `chlk` at this gain"));
+    saveCal();
+  }
 #else
   (void)g;
   Serial.println(F("fluor: USE_TSL2591 is 0"));
@@ -254,8 +310,10 @@ void printStatus() {
   Serial.print(F(" T_on=")); Serial.print(tOn, 2);
   Serial.print(F(" T_off=")); Serial.print(0.8 * tOn, 2);
   Serial.print(F(" C_ok=")); Serial.print(cOk, 2);
-  Serial.print(F(" MAX_ON=")); Serial.print(4 * X);
+  Serial.print(F(" MAX_ON=")); Serial.print(maxOnDays > 0 ? maxOnDays : 4 * X);
   Serial.print(F(" warm=")); Serial.print(warmMean, 2);
+  Serial.print(F(" floor=")); Serial.print(floorFrac, 2);
+  Serial.print(F(" temp_win=")); Serial.print(tempLo, 1); Serial.print(F("-")); Serial.print(tempHi, 1);
   Serial.print(F(" state=")); Serial.print(on ? F("ON") : F("idle"));
   Serial.print(F(" temp=")); Serial.println(tempC, 1);
 }
@@ -274,15 +332,20 @@ void handleLine(char *line) {
   if (!strcmp(a, "chlk") && b)      { cal.chlK = atof(b); saveCal(); return; }
   if (!strcmp(a, "gain") && b)      { setGain(tolower(b[0])); return; }
   if (!strcmp(a, "cal"))            { printCal(); return; }
-  if (!strcmp(a, "calclear"))       { cal = {CAL_MAGIC, NAN, NAN, NAN, NAN}; saveCal(); return; }
+  if (!strcmp(a, "calclear"))       { cal = {CAL_MAGIC, NAN, NAN, NAN, NAN, 'm'}; saveCal(); return; }
   if (!strcmp(a, "x") && b)         X = max(1, atoi(b));
   else if (!strcmp(a, "cok") && b)  cOk = atof(b);
   else if (!strcmp(a, "ton") && b)  tOn = atof(b);
-  else if (!strcmp(a, "mode") && b) mode = toupper(b[0]) == 'R' ? 'R' : 'F';
+  else if (!strcmp(a, "mode") && b) { char m = toupper(b[0]); mode = (m == 'R' || m == 'H') ? m : 'F'; }
   else if (!strcmp(a, "warm") && b) warmMean = atof(b);
+  else if (!strcmp(a, "floor") && b) floorFrac = atof(b);
+  else if (!strcmp(a, "maxon") && b) maxOnDays = max(0, atoi(b));
+  else if (!strcmp(a, "temp") && b && c) { tempLo = atof(b); tempHi = atof(c); }
+  else if (!strcmp(a, "servo") && b && c) { servoOnDeg = constrain(atoi(b), 0, 180); servoOffDeg = constrain(atoi(c), 0, 180); setOutputs(); }
   else if (!strcmp(a, "stop"))      { safetyStop = true; Serial.println(F("safety stop at the next daily line")); return; }
   else if (!strcmp(a, "mute") && b) muted = atoi(b) != 0;
-  else if (!strcmp(a, "reset"))     { on = false; warn = false; episodes = 0; lastChl = NAN; for (int i = 0; i < 3; i++) chlHist[i] = NAN; setOutputs(); }
+  else if (!strcmp(a, "reset"))     { on = false; warn = false; episodes = 0; lastChl = NAN; belowCount = 0; pendingDay = -1;
+                                      histDay = -100000; for (int i = 0; i < 3; i++) chlHist[i] = NAN; setOutputs(); }
   else if (strcmp(a, "status"))     { Serial.println(F("? unknown command")); return; }
   printStatus();
   (void)c;
@@ -293,15 +356,31 @@ void setup() {
   pinMode(PIN_BUZZ, OUTPUT); pinMode(PIN_RELAY, OUTPUT); pinMode(PIN_FLUOR_LED, OUTPUT);
   setOutputs();
   Serial.begin(115200);
+#if USE_SERVO
+  servo.attach(PIN_SERVO);
+  setOutputs();
+#endif
   Cal stored;
   EEPROM.get(0, stored);
   if (stored.magic == CAL_MAGIC) cal = stored;
+  else {
+    CalV1 old;
+    EEPROM.get(0, old);
+    if (old.magic == CAL_MAGIC_V1) {          // migrate: keep the calibration, assume medium gain
+      cal = {CAL_MAGIC, old.v686, old.v918, old.blank, old.chlK, 'm'};
+      EEPROM.put(0, cal);
+    }
+  }
 #if USE_DS18B20
   sensors.begin();
 #endif
 #if USE_TSL2591
   tslOk = tsl.begin();
-  if (tslOk) { tsl.setGain(TSL2591_GAIN_MED); tsl.setTiming(TSL2591_INTEGRATIONTIME_200MS); }
+  if (tslOk) {
+    tsl.setTiming(TSL2591_INTEGRATIONTIME_200MS);
+    char g = cal.gain;
+    tsl.setGain(g == 'l' ? TSL2591_GAIN_LOW : g == 'h' ? TSL2591_GAIN_HIGH : g == 'x' ? TSL2591_GAIN_MAX : TSL2591_GAIN_MED);
+  }
   else Serial.println(F("fluor: TSL2591 not found (check SDA/SCL wiring)"));
 #endif
   Serial.println(F("alerter_uno ready. Send: <day> <p> <chl>   or: status"));
@@ -322,7 +401,7 @@ void loop() {
   if (millis() - lastTempMs > 10000) {
     lastTempMs = millis();
     readTemp();
-    bool alarm = !isnan(tempC) && (tempC < TEMP_LO || tempC > TEMP_HI);
+    bool alarm = !isnan(tempC) && (tempC < tempLo || tempC > tempHi);
     if (alarm && !tempAlarm) { Serial.print(F("TEMP ALARM ")); Serial.println(tempC, 1); }
     tempAlarm = alarm;
     setOutputs();

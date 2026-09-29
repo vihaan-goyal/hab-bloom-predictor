@@ -22,8 +22,16 @@ Run from repo root (needs `pip install pyserial` for a real Uno):
     python hardware/alerter_uno/alerter_link.py --replay narragansett:<station> [--days 150] [--sim]
     python hardware/alerter_uno/alerter_link.py --replay my_days.csv [--sim]      # columns day,p,chl
     python hardware/alerter_uno/alerter_link.py --today --p 0.62 [--chl 7.4] [--start 2026-11-10]
+    python hardware/alerter_uno/alerter_link.py --today --p 0.40 --stop "DO kit 3.6 mg/L"   # logged stop
 Options: --port COM4, --x 3 (days between re-measures), --cok 5 (C_ok, ug/L),
-         --ph-min 7.6 --ph-max 8.6 (safety band; seaweed runs use 9.0 as the max).
+         --mode H (F forecast / R rule / H forecast with the 2-day handover to the rule; arm B = H),
+         --warm <warm-up mean chl> (needed by the rule and the floor), --floor 0.8 (H4 floor OFF;
+         0 for the false-alarm arm D), --maxon 0 (0 = 4 X; peroxide 3, curcumin 4),
+         --ph-min 7.6 --ph-max 8.6 (safety band; seaweed runs use 9.0 as the max),
+         --temp-lo 10 --temp-hi 20 (warning window; the planned run is 12-18 C).
+Every value is sent with 6 significant figures and the Python reference uses the sent value, so
+the two cannot disagree at a threshold. A manual safety stop given with --stop is logged and
+replayed after a reset.
 Log: hardware/alerter_uno/logs/alerter_log.csv
 """
 import argparse
@@ -41,7 +49,7 @@ import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "src", "sim"))
-from loop_controller import Controller, T_ON  # noqa: E402
+from loop_controller import Controller, T_ON, HANDOVER_DAYS  # noqa: E402
 
 LOG_DIR = os.path.join(HERE, "logs")
 LOG = os.path.join(LOG_DIR, "alerter_log.csv")
@@ -50,13 +58,20 @@ LOG_COLS = ["timestamp", "mode", "source", "day", "p", "chl", "chl_src", "uno_st
             "episodes", "py_state", "match", "temp", "ph", "fl", "note"]
 BAUD = 115200
 REPLY = re.compile(r"day=(-?\d+) p=(\S+) chl=(\S+) -> (\w+)(?: next_check=(\d+))? episodes=(\d+)")
+ON_STATES = ("START", "ON", "OFF", "OFF_FLOOR", "STOP_MAX_ON")
 SENSOR = re.compile(r"^S (.*)$")
 DEMO = [(1, 0.2, 3), (2, 0.6, 4), (3, 0.7, 6), (4, 0.7, 8), (5, 0.5, 9), (8, 0.3, 4), (9, 0.3, 3)]
 
 
 def fmt(v):
     """Value as sent to the Uno ('-' = missing)."""
-    return "-" if v is None or (isinstance(v, float) and math.isnan(v)) else f"{v:.4g}"
+    return "-" if v is None or (isinstance(v, float) and math.isnan(v)) else f"{v:.6g}"
+
+
+def sent(v):
+    """The value the Uno actually receives (what the reference must use)."""
+    t = fmt(v)
+    return None if t == "-" else float(t)
 
 
 def fmt2(v):
@@ -67,22 +82,37 @@ def fmt2(v):
 class Reference:
     """The Python controller, labelled the way the sketch labels its decisions."""
 
-    def __init__(self, x, c_ok):
-        self.c, self.c_ok = Controller(1, x), c_ok
+    def __init__(self, x, c_ok, mode="F", warm=None, floor_frac=0.8, max_on=0):
+        floor = floor_frac * warm if (warm is not None and floor_frac > 0) else None
+        self.c = Controller(1, x, max_on=max_on or None, floor=floor,
+                            handover_days=HANDOVER_DAYS if mode == "H" else None)
+        self.c_ok, self.mode, self.warm = c_ok, mode, warm
+        self.hist = {}
+
+    def rule(self, day, chl):
+        """chl rose on 2 calendar days in a row and > 2 x warm-up mean (as the sketch)."""
+        c0, c1 = self.hist.get(day - 2), self.hist.get(day - 1)
+        vals = (c0, c1, chl, self.warm)
+        return (all(v is not None and not math.isnan(v) for v in vals)
+                and c1 > c0 and chl > c1 and chl > 2 * self.warm)
 
     def step(self, day, p, chl, force_off=False):
         was = bool(self.c.on[0])
-        maxed_before = int(self.c.maxed[0])
+        maxed_before, floor_before = int(self.c.maxed[0]), int(self.c.floor_stops[0])
+        rule = self.rule(int(day), chl)
+        self.hist[int(day)] = chl
         p_ = np.nan if p is None else p
         chl_ = np.nan if chl is None else chl
-        trig = np.array([not math.isnan(p_) and p_ >= T_ON])
+        fc = not math.isnan(p_) and p_ >= T_ON
+        trig = np.array([rule if self.mode == "R" else fc])
         self.c.step(int(day), trig, np.array([p_]), np.array([chl_]), self.c_ok,
-                    force_off=np.array([force_off]))
+                    force_off=np.array([force_off]), rule=np.array([rule]))
         on = bool(self.c.on[0])
         if not was and on:
             label = "START"
         elif was and not on:
-            label = "STOP_MAX_ON" if self.c.maxed[0] > maxed_before else "OFF"
+            label = ("STOP_MAX_ON" if self.c.maxed[0] > maxed_before
+                     else "OFF_FLOOR" if self.c.floor_stops[0] > floor_before else "OFF")
         else:
             label = "ON" if on else "idle"
         nxt = int(self.c.check[0]) if on else None
@@ -94,6 +124,7 @@ class SimUno:
 
     def __init__(self):
         self.x, self.c_ok, self.ref = 3, 5.0, None
+        self.mode, self.warm, self.floor, self.maxon = "F", None, 0.8, 0
         self.out = ["alerter_uno ready. Send: <day> <p> <chl>   or: status"]
 
     def write(self, data):
@@ -110,7 +141,7 @@ class SimUno:
             return
         if parts[0].lstrip("-").isdigit():
             if self.ref is None:
-                self.ref = Reference(self.x, self.c_ok)
+                self.ref = Reference(self.x, self.c_ok, self.mode, self.warm, self.floor, self.maxon)
             val = lambda s: None if s in ("-", "nan") else float(s)  # noqa: E731
             day, p, chl = int(parts[0]), val(parts[1]), val(parts[2])
             label, nxt, eps = self.ref.step(day, p, chl, force_off=getattr(self, "stop", False))
@@ -122,10 +153,18 @@ class SimUno:
             self.x = int(parts[1])
         elif parts[0] == "cok":
             self.c_ok = float(parts[1])
+        elif parts[0] == "mode":
+            self.mode = parts[1].upper()[0] if parts[1].upper()[0] in "RH" else "F"
+        elif parts[0] == "warm":
+            self.warm = float(parts[1])
+        elif parts[0] == "floor":
+            self.floor = float(parts[1])
+        elif parts[0] == "maxon":
+            self.maxon = int(parts[1])
         elif parts[0] == "reset":
             self.ref = None
         if parts[0] != "mute":
-            self.out.append(f"mode=F X={self.x} C_ok={self.c_ok:.2f} state=sim")
+            self.out.append(f"mode={self.mode} X={self.x} C_ok={self.c_ok:.2f} state=sim")
 
     def readline(self):
         return (self.out.pop(0) + "\r\n").encode() if self.out else b""
@@ -195,9 +234,24 @@ class Link:
                 out[k] = None
         return out
 
-    def setup(self, x, c_ok):
-        for cmd in (f"x {x}", f"cok {c_ok}", "mode F", "reset"):
+    def setup(self, cfg):
+        cmds = [f"x {cfg['x']}", f"cok {fmt(cfg['c_ok'])}", f"mode {cfg['mode']}",
+                f"floor {fmt(cfg['floor'])}", f"maxon {cfg['maxon']}",
+                f"temp {fmt(cfg['temp_lo'])} {fmt(cfg['temp_hi'])}"]
+        if cfg.get("warm") is not None:
+            cmds.append(f"warm {fmt(cfg['warm'])}")
+        for cmd in cmds + ["reset"]:
             self.send(cmd, expect=r"^mode=")
+
+
+def config(a):
+    """Loop settings from the command line, with the sent (rounded) values."""
+    return dict(x=a.x, c_ok=sent(a.cok), mode=a.mode.upper()[0], warm=sent(a.warm),
+                floor=sent(a.floor), maxon=a.maxon, temp_lo=a.temp_lo, temp_hi=a.temp_hi)
+
+
+def reference(cfg):
+    return Reference(cfg["x"], cfg["c_ok"], cfg["mode"], cfg["warm"], cfg["floor"], cfg["maxon"])
 
 
 def log_rows(rows):
@@ -224,12 +278,13 @@ def row(mode, link, day, p, chl, state, nxt, eps, raw, py, chl_src="", sens=None
                 temp=fmt(sens.get("temp")), ph=fmt(sens.get("ph")), fl=fmt(sens.get("fl")), note=note)
 
 
-def run_days(link, days, x, c_ok, mode):
+def run_days(link, days, cfg, mode):
     """Send (day, p, chl) rows, compare with the Python controller, log, print the active days."""
-    link.setup(x, c_ok)
-    ref = Reference(x, c_ok)
+    link.setup(cfg)
+    ref = reference(cfg)
     rows = []
     for day, p, chl in days:
+        p, chl = sent(p), sent(chl)
         state, nxt, eps, raw = link.day(day, p, chl)
         py, _, _ = ref.step(day, p, chl)
         rows.append(row(mode, link, day, p, chl, state, nxt, eps, raw, py))
@@ -262,7 +317,8 @@ def today(link, a):
     os.makedirs(LOG_DIR, exist_ok=True)
     state = json.load(open(STATE)) if os.path.exists(STATE) else {}
     start = a.start or state.get("start") or dt.date.today().isoformat()
-    state.update(start=start, x=a.x, c_ok=a.cok)
+    cfg = config(a)
+    state.update(start=start, **cfg)
     with open(STATE, "w") as f:
         json.dump(state, f, indent=1)
     day = (dt.date.today() - dt.date.fromisoformat(start)).days + 1
@@ -276,8 +332,8 @@ def today(link, a):
                     history[int(r["day"])] = (int(r["day"]), num(r["p"]), num(r["chl"]), stop)
     print(f"Day {day} (run started {start}); restoring {len(history)} earlier day(s) on the Uno, buzzer muted")
     link.send("mute 1")
-    link.setup(a.x, a.cok)
-    ref = Reference(a.x, a.cok)
+    link.setup(cfg)
+    ref = reference(cfg)
     for d, p, c, stop in sorted(history.values()):
         if stop:
             link.send("stop", expect=r"safety stop")
@@ -289,23 +345,28 @@ def today(link, a):
     chl, chl_src = a.chl, "typed"
     if chl is None:
         chl, chl_src = sens.get("chl"), "sensor" if sens.get("chl") is not None else "missing"
+    p, chl = sent(a.p), sent(chl)
     notes = []
     ph = sens.get("ph")
     stop = ph is not None and not (a.ph_min <= ph <= a.ph_max)
     if stop:
-        link.send("stop", expect=r"safety stop")
         notes.append(f"SAFETY STOP: pH {ph:.2f} outside {a.ph_min}-{a.ph_max}")
+    if a.stop:                              # manual stop (e.g. DO kit < 4 mg/L), logged for replay
+        stop = True
+        notes.append(f"SAFETY STOP: {a.stop}")
+    if stop:
+        link.send("stop", expect=r"safety stop")
     temp = sens.get("temp")
-    if temp is not None and not (14 <= temp <= 22):
-        notes.append(f"temperature {temp:.1f} C outside 14-22")
-    state_, nxt, eps, raw = link.day(day, a.p, chl)
-    py, _, _ = ref.step(day, a.p, chl, force_off=stop)
+    if temp is not None and not (a.temp_lo <= temp <= a.temp_hi):
+        notes.append(f"temperature {temp:.1f} C outside {a.temp_lo:g}-{a.temp_hi:g}")
+    state_, nxt, eps, raw = link.day(day, p, chl)
+    py, _, _ = ref.step(day, p, chl, force_off=stop)
     note = "; ".join(notes)
-    log_rows([row("today", link, day, a.p, chl, state_, nxt, eps, raw, py, chl_src, sens, note)])
+    log_rows([row("today", link, day, p, chl, state_, nxt, eps, raw, py, chl_src, sens, note)])
     print("Sensors: " + "  ".join(f"{k}={fmt(sens.get(k))}" for k in ("temp", "ph", "fl", "chl")))
     for n in notes:
         print("  WARNING:", n)
-    print(f"Today: p={fmt(a.p)} chl={fmt(chl)} ({chl_src}) -> {state_}"
+    print(f"Today: p={fmt(p)} chl={fmt(chl)} ({chl_src}) -> {state_}"
           + (f" (next re-measure: day {nxt})" if nxt else "")
           + ("" if state_ == py else f"   <-- MISMATCH (Python says {py})"))
 
@@ -322,6 +383,13 @@ def main():
     ap.add_argument("--start", help="first day of the run, YYYY-MM-DD (--today)")
     ap.add_argument("--x", type=int, default=3)
     ap.add_argument("--cok", type=float, default=5.0)
+    ap.add_argument("--mode", default="H", help="F forecast, R rule, H forecast + 2-day handover")
+    ap.add_argument("--warm", type=float, help="warm-up mean chlorophyll (rule trigger and floor)")
+    ap.add_argument("--floor", type=float, default=0.8, help="H4 floor as a share of warm; 0 = off (arm D)")
+    ap.add_argument("--maxon", type=int, default=0, help="MAX_ON days (0 = 4 x X)")
+    ap.add_argument("--temp-lo", type=float, default=10.0)
+    ap.add_argument("--temp-hi", type=float, default=20.0)
+    ap.add_argument("--stop", help="log a manual safety stop with this reason (--today)")
     ap.add_argument("--ph-min", type=float, default=7.6)
     ap.add_argument("--ph-max", type=float, default=8.6)
     ap.add_argument("--read", action="store_true", help="print the Uno's sensor readings")
@@ -352,8 +420,8 @@ def main():
         return
     days = DEMO if a.demo else load_replay(a.replay, a.days)
     t0 = time.time()
-    rows = run_days(link, days, a.x, a.cok, "demo" if a.demo else "replay")
-    on = sum(r["uno_state"] in ("START", "ON", "OFF", "STOP_MAX_ON") for r in rows)
+    rows = run_days(link, days, config(a), "demo" if a.demo else "replay")
+    on = sum(r["uno_state"] in ON_STATES for r in rows)
     eps = max([int(r["episodes"]) for r in rows if r["episodes"] != ""] or [0])
     mism = sum(not r["match"] for r in rows)
     print(f"{len(rows)} days sent in {time.time() - t0:.1f} s | treatment-ON days {on} | episodes {eps} | "

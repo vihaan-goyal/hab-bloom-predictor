@@ -77,7 +77,7 @@ repeats the 2025 design on our stand-in culture.
 |---|---|
 | 250 mL flasks (15) + 12-15 tanks (4-10 L) | $90 |
 | Mesh cages, servo arm | $25 |
-| ESP32 + servo driver | $20 |
+| Arduino Uno alerter + servo (`USE_SERVO`, D11) | $5-25 |
 | DIY fluorometer, pH, temperature, DO kit | $90 |
 | LED grow light + timer | $30 |
 | Holding tank + air pump for seaweed | $30 |

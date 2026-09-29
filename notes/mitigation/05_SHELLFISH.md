@@ -31,11 +31,11 @@ Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/pl
 
 **A faster bench version:** a **clearance-rate test** in hours. Put a known number of animals in a
 known volume, measure chlorophyll every 30 min for 4 h, and calculate litres filtered per animal
-per hour. This gives the number needed to plan the 7-day loop without guessing.
+per hour. This gives the number needed to stock the tanks (2 tank volumes a day) without guessing.
 
 ## Bench setup
 - **Animals:** small hard clams (*Mercenaria*) or oyster seed. Buy them from a Connecticut shellfish farm or hatchery, which can advise on legal sourcing and keeping them.
-- **Tanks:** 3 per arm, 20-40 L, aerated artificial seawater at salinity 28-30, 16-20 °C; a separate holding tank fed with a non-toxic alga (e.g. *Isochrysis*) between deployments.
+- **Tanks:** 3 per arm, 20-40 L, aerated artificial seawater at salinity 27.5 (WATER_RECIPE), at the run temperature 12-15 °C (measure clearance at that temperature: oysters filter less when cold); a separate holding tank fed with a non-toxic alga (e.g. *Isochrysis*) between deployments.
 - **Culture to "bloom":** non-toxic diatom or dinoflagellate, as in the other methods.
 - **Extra control:** **empty shells** in bags, which separates filtering from simply having a structure in the water.
 - **Backup animal source (added 2026-09-28):** if hatchery seed or permits don't come through by November, **live oysters from a seafood market** are legal to buy and keep in tanks, and they filter well (they're larger, so fewer are needed; size the number from the clearance test). Log that they are **never eaten and never released**; dispose of them as the sponsor directs.
@@ -55,7 +55,7 @@ per hour. This gives the number needed to plan the 7-day loop without guessing.
 | Clams or oyster seed (farm or hatchery) | $30-80 |
 | 12-15 tanks (20-40 L) + air pumps | $150 |
 | Mesh bags, line, small winch | $30 |
-| ESP32, fluorometer, pH, temperature, DO kit, ammonia kit | $120 |
+| Arduino alerter + servo, fluorometer, pH, temperature, DO kit, ammonia kit | $120 |
 | Sea salt, f/2, cultures | $80-130 |
 
 ## Safety and forms

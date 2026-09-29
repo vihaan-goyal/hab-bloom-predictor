@@ -16,15 +16,18 @@ NaH₂PO₄·H₂O, Na₂SiO₃·9H₂O), f/2 trace metals and vitamins, scale, 
 
 ### P2. Grow the algae cultures
 **Materials:** NCMA cultures, f/2 and f/20 medium, flasks, grow light and timer, labels.
-1. Grow each strain in f/2 under the light (12:12 or 16:8) at 15-18 °C.
+1. Grow each strain in f/2 under the light (12:12 or 16:8) at the **run temperature, 12-15 °C** (WATER_RECIPE.md); move stock cultures kept warmer (15-18 °C) to 12-15 °C at least one transfer before an experiment.
 2. Keep 2 backup flasks per strain at all times.
 3. **For the last transfer before any experiment, grow the culture in f/20** (one-tenth strength), so it doesn't carry extra nutrients into the test water.
 4. Count the cells (P4) before inoculating, so every vessel starts with the same number of cells.
 
 ### P3. Calibrate and read the fluorometer
-**Materials:** alerter (Arduino + TSL2591 dark box), cuvettes, culture, seawater, pipette.
-1. Make a dilution series of one culture (100%, 50%, 25%, 12.5%, 0%) and read each; send `blank` for the 0% sample.
-2. Count the cells in the 100% sample (P4) and fit a chlorophyll-per-cell factor (`chlk`).
+**Materials:** alerter (Arduino + TSL2591 dark box), cuvettes, culture, seawater, pipettes, a chlorophyll reference (acetone extraction with a borrowed spectrophotometer, or a borrowed calibrated fluorometer).
+1. Set the gain first (`gain m`; `l` if it saturates). The gain is saved with the calibration, so a later gain change means redoing steps 2-3.
+2. Make a dilution series of one culture (100%, 50%, 25%, 12.5%, 0%) and read each; send `blank` for the 0% sample.
+3. Measure the **reference chlorophyll in µg/L** of the 100% sample (and ideally the 50%), and fit µg/L against the fluorometer signal `fl`: the slope is `chlk` (**µg/L per signal count**; type `chlk <slope>`). C_ok, the warm-up mean and the floor are then all in µg/L.
+   - Also count cells in the 100% sample (P4) and record glow per cell. That is a check, not the calibration.
+   - If no µg/L reference is available, fit **cells/mL** against `fl` instead, and give C_ok, `warm` and the floor in cells/mL too. Never mix the units.
 3. **Reading rules:** sample every vessel at the same time each day; keep each sample in the dark for 15 minutes; strain through fine mesh if seaweed is present; read 3 times and average.
 
 ### P4. Count cells
@@ -38,6 +41,23 @@ NaH₂PO₄·H₂O, Na₂SiO₃·9H₂O), f/2 trace metals and vitamins, scale, 
 1. Hatch brine shrimp 24-48 h ahead.
 2. Put 10 nauplii into 10 mL of test water (treated) and 10 into control water; 3 replicates each.
 3. Count the survivors at 24 h (and at 96 h for peroxide). Survival more than 20 points below control is a **fail**.
+
+### P6. Working dilutions for small doses (make fresh each day; label with date)
+**Materials:** 10-100 µL and 100-1000 µL micropipettes with tips, 0.01 g scale, 100 mL bottles, distilled water, food-grade ethanol.
+
+Flask volumes below are **200 mL** of culture in a 250 mL flask; tanks are **10 L**.
+
+| Working solution | How to make it | Dose | Per 200 mL flask | Per 10 L tank |
+|---|---|---|---|---|
+| **H₂O₂ 0.1%** (1 mg/mL) | 1 mL of 3% H₂O₂ + 29 mL distilled water | 0.8 / 1.6 / 3.2 / 6.4 mg/L | 160 / 320 / 640 / 1280 µL | 8 mL (or 0.27 mL of 3%) at 0.8 mg/L |
+| **Sodium percarbonate** (1 mg/mL) | 0.10 g in 100 mL distilled water, dissolved just before use | ~2.9 mg/L (≈ 0.8 mg/L H₂O₂) | 580 µL | 29 mL |
+| **Sodium carbonate** (1 mg/mL) | 0.10 g in 100 mL distilled water | ~2.0 mg/L | 400 µL | 20 mL |
+| **Curcumin stock A** (10 mg/mL in ethanol) | 0.10 g in 10 mL ethanol | 2.5 / 5 / 10 mg/L | 50 / 100 / 200 µL | 1 mg/L: 1.0 mL; 2.5 mg/L: 2.5 mL |
+| **Curcumin stock B** (1 mg/mL in ethanol) | 1 mL of stock A + 9 mL ethanol | 0.5 / 1 mg/L | 100 / 200 µL | - |
+
+- Ethanol stays at or below 200 µL per 200 mL flask (0.1%). The ethanol-only control gets 200 µL.
+- The loop's pump doses tanks through a **peristaltic dosing pump** (calibrated by weighing what it delivers). The 12 V diaphragm pump in the kit moves air or water, not microdoses.
+- The 0.01 g scale can't weigh the 0.6 mg a flask needs, which is why every small dose goes through a 1 mg/mL working solution.
 
 ---
 
@@ -77,24 +97,24 @@ NaH₂PO₄·H₂O, Na₂SiO₃·9H₂O), f/2 trace metals and vitamins, scale, 
 7. **Analysis:** percent cut vs 0 g/L at 72 h and at day 10; compare the fake-panel, pH-matched and filtrate arms.
 
 ### S3. Peroxide
-**Hypothesis:** 0.8 mg/L cuts the small-celled alga ≥ 50% in 24 h, while the diatom and *P. micans* drop < 20%.
+**Hypothesis (restated 2026-09-28 from the source, peroxide-03):** one 1.6 mg/L dose cuts the small-celled alga ≥ 50% in 24 h while the diatom and *P. micans* drop < 20%; one 0.8 mg/L dose gives a smaller, transient cut; and **three daily 0.8 mg/L pulses** (the loop dose; re-dose only if the residual is ≤ 0.5 mg/L) cut the small-celled alga ≥ 50% by 72 h with brine shrimp survival within 20 points of control.
 
-**Materials:** 57 × 250 mL flasks, 3% hydrogen peroxide, sodium percarbonate (pure oxygen-bleach powder), sodium carbonate, low-range peroxide kit and strips, 5 µm syringe filters and syringes, small-celled alga, *T. weissflogii*, *P. micans*, fluorometer, brine shrimp, goggles and gloves (supervisor present).
+**Materials:** 60 × 250 mL flasks, 3% hydrogen peroxide (and its 0.1% working dilution, P6), sodium percarbonate (pure oxygen-bleach powder), sodium carbonate, low-range peroxide kit and strips, 5 µm syringe filters and syringes, small-celled alga, *T. weissflogii*, *P. micans*, fluorometer, brine shrimp, goggles and gloves (supervisor present).
 
 1. **Check the percarbonate first:** dissolve a weighed amount in plain seawater (no algae) and measure peroxide at 0, 15 min, 1 h and 24 h. This confirms how much peroxide it really gives (0.8 mg/L H₂O₂ ≈ 2.5-2.9 mg/L percarbonate). Always dissolve it fresh on the day of use.
-2. Fill the flasks with P1 water. Inoculate each species separately (3 species).
-3. Dose with liquid 3% H₂O₂: 0, 0.8, 1.6, 3.2 and 6.4 mg/L × 3 species × n = 3. Add a **sodium percarbonate** arm at the same peroxide dose (0.8 mg/L H₂O₂, ~2.9 mg/L percarbonate) × 3 species × n = 3, and a **sodium carbonate** control (~2.0 mg/L, the carbonate that percarbonate adds) on the small-celled alga, n = 3.
+2. Fill the flasks with 200 mL of P1 water. Inoculate each species separately (3 species).
+3. Dose with the 0.1% H₂O₂ working dilution (P6): 0, 0.8, 1.6, 3.2 and 6.4 mg/L × 3 species × n = 3. Add a **3-pulse arm** on the small-celled alga (n = 3): 0.8 mg/L on days 0, 1 and 2, each only if that flask's residual is ≤ 0.5 mg/L. Add a **sodium percarbonate** arm at the same peroxide dose (0.8 mg/L H₂O₂, ~2.9 mg/L percarbonate) × 3 species × n = 3, and a **sodium carbonate** control (~2.0 mg/L, the carbonate that percarbonate adds) on the small-celled alga, n = 3.
 4. Measure peroxide with the low-range kit at 0, 1, 4 and 24 h.
 5. **At 24 h and 72 h:** size-fractionated chlorophyll (total, and after the 5 µm filter = small cells), plus cell counts for the diatom and *P. micans*.
 6. Run brine shrimp tests (P5) at **24 h and 96 h** (peroxide can cause delayed deaths).
-7. **Analysis:** percent cut per species at each dose; the lowest dose that kills small cells while sparing large ones; and whether percarbonate matches liquid H₂O₂ at the same peroxide dose.
+7. **Analysis:** percent cut per species at each dose; the lowest dose that kills small cells while sparing large ones; whether three 0.8 mg/L pulses match one 1.6 mg/L dose; and whether percarbonate matches liquid H₂O₂ at the same peroxide dose.
 
 ### S4. Curcumin
 **Hypothesis:** the lowest dose with ≥ 30% cell reduction at 24 h is ≤ 2.5 mg/L, and brine shrimp survival at that dose, in light, is within 20 points of control.
 
 **Materials:** 28 × 250 mL flasks, curcumin (≥ 95%), food-grade ethanol, micropipette, aluminium foil, *P. micans* and diatom cultures, fluorometer, DO kit, microscope, brine shrimp.
 
-1. Make a curcumin stock in ethanol, so ethanol in the flasks stays below 0.1%. Record the product and lot.
+1. Make curcumin stocks A and B in ethanol (P6), so ethanol in the 200 mL flasks stays at or below 0.1%. Record the product and lot.
 2. **Correction curve:** read one algae sample with 0, 0.5, 1 and 2.5 mg/L curcumin added (the dye lowers the fluorometer reading).
 3. Set up the doses: 0, 0.5, 1, 2.5, 5 and 10 mg/L, plus **ethanol-only** and **2.5 mg/L in the dark** (flasks wrapped in foil), n = 3.
 4. **At 0, 6 and 24 h:** colour (fading), DO, and cell counts (the main result).
@@ -102,7 +122,7 @@ NaH₂PO₄·H₂O, Na₂SiO₃·9H₂O), f/2 trace metals and vitamins, scale, 
 6. **Analysis:** the dose-response curve, the lowest effective dose, and the light vs dark difference.
 
 ### S5. Shellfish clearance
-**Hypothesis:** the measured clearance rate (L per oyster per hour) at 18 °C is within 2× of the published planning rate.
+**Hypothesis:** the measured clearance rate (L per oyster per hour) at the run temperature (12-15 °C) is within 2× of the published planning rate, adjusted to that temperature.
 
 **Materials:** 13 × 1 L beakers, 10 oysters (~40 mm), diatom culture, fluorometer, timer, air stones, gloves, holding tank.
 
@@ -133,9 +153,9 @@ hypothesis **and** passes the brine shrimp test.
 4. **Day 21:** add the **bloom pulse** to arms A, B and C: per 10 L, nitrate 1.02 mL, phosphate 1.01 mL, silicate 4.98 mL. **Arm D gets none.**
 5. **Days 21-40 (bloom phase):** the loop runs each tank's treatment by its own rule:
    - **A:** never treated.
-   - **B:** switches ON by the forecast (or by the rule trigger if the model is still silent 2 days after it). It re-measures every X days and switches OFF when chlorophyll is below C_ok and not rising, when it falls 2 days below 80% of warm-up, or on a safety stop.
+   - **B:** switches ON by the forecast (or by the rule trigger if the model is still silent 2 days after it). It re-measures every X days and switches OFF when chlorophyll is below C_ok and not rising, when it falls 2 days below 80% of warm-up, or on a safety stop. Alerter settings: `mode H`, `warm <warm-up mean>`, `floor 0.8`, `cok <50% of the pilot peak>`, `x <X>` (peroxide: `x 1`, `maxon 3`).
    - **C:** switches ON when chlorophyll reaches 50% of the expected peak (from the pilot), then follows the same OFF rule.
-   - **D:** forced ON on day 21 with no bloom, for one full episode.
+   - **D:** forced ON on day 21 with no bloom, for one full episode, with the floor switched off (`floor 0`).
 6. **Days 40-45 (cool-down):** keep logging, with no new ON switches.
 7. **Throughout:** fluorometer daily (P3 rules); cell counts every 2 days, and daily around ON and OFF (P4); pH, temperature and DO daily; ammonia daily for shellfish; log every time a human has to step in.
 

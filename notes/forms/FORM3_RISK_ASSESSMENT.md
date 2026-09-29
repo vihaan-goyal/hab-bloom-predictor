@@ -21,7 +21,9 @@ any chemical, organism or activity changes (for example, if *Akashiwo sanguinea*
 | Sodium phosphate monobasic (NaH₂PO₄·H₂O) | phosphate nutrient stock | mild irritant |
 | Sodium carbonate (washing soda) | carbonate/pH control arm | eye irritant |
 | f/2 algae medium (trace metals, vitamins) and artificial sea salt | culture medium, seawater | low hazard at the concentrations used |
-| Household bleach (sodium hypochlorite) | disinfecting cultures before disposal | corrosive; never mixed with peroxide, acids or ammonia |
+| Household bleach (sodium hypochlorite) | disinfecting cultures before disposal | corrosive; toxic gas (chloramine or chlorine) if mixed with ammonia or acids; with peroxide it releases oxygen, so keep them apart too |
+| Acetone, 90% (≤ 250 mL) | extracting chlorophyll to calibrate the fluorometer | highly flammable; eye irritant; use with ventilation, no flames |
+| Test-kit reagents (dissolved-oxygen, ammonia, nitrate/phosphate and low-range peroxide kits) | water tests | as each kit's SDS (some contain corrosive or toxic reagents); used as the kit directs |
 
 **Devices and activities:**
 - Mains-powered aquarium air pumps and LED grow lights, and 12 V pumps, near salt water (electrical).
@@ -62,7 +64,8 @@ before use, so wild microorganisms are not cultured.
 | Sodium metasilicate stock | eye and skin burns (strong base) | moderate, controlled |
 | Ethanol | fire if near flame or heat | low (≤ 100 mL) |
 | Sodium nitrate, phosphate, carbonate, curcumin | irritation; ingestion | low |
-| Bleach | eye and skin burns; toxic gas if mixed with peroxide, acids or ammonia | moderate, controlled |
+| Bleach | eye and skin burns; toxic gas if mixed with ammonia (oyster tanks) or acids; with peroxide it releases oxygen gas | moderate, controlled |
+| Acetone | fire; vapour irritation | low (≤ 250 mL, ventilated, no flames) |
 | Electricity near salt water | electric shock | moderate, controlled |
 | Soldering; heating seawater | burns; solder fumes | low |
 | Microalgae cultures | non-pathogenic; minor irritation if splashed in eyes | low |
@@ -81,10 +84,10 @@ before use, so wild microorganisms are not cultured.
   - Keep ethanol away from flames and heat sources.
   - Keep stock solutions labeled with contents, concentration and date, refrigerated and out of reach.
   - Weigh powders slowly to avoid dust.
-  - Never mix bleach with peroxide, acids or ammonia.
-- **Doses stay below known-safe levels:**
-  - peroxide target 0.8 mg/L, with no further dose while the residual exceeds 2.8 mg/L (checked with a low-range kit and test strips);
-  - curcumin capped at 2.5 mg/L;
+  - Never mix bleach with ammonia-containing water (oyster tanks), acids or peroxide; disinfect each separately.
+- **Dose limits used** (these are planning limits, not proof of safety; the brine shrimp tests measure harm directly):
+  - peroxide: 0.8 mg/L per pulse in the tanks, at most 3 pulses, a new pulse only if the residual is ≤ 0.5 mg/L, emergency stop above 2.8 mg/L. Published non-target values: krill LC50 0.86 mg/L, *Moina* LC50 2 mg/L, *Daphnia* no-effect 3 mg/L. The **screen** doses go up to **6.4 mg/L** in 200 mL flasks, to map the dose-response;
+  - curcumin: tank ladder 1 → 2.5 mg/L (cap 2.5; zebrafish larval LD50 1.8-2.8 mg/L, so 2.5 is not assumed safe). The **screen** doses go up to **10 mg/L** in flasks;
   - the control system automatically stops treatment if pH leaves 7.6-8.6 (9.0 for seaweed) or dissolved oxygen drops below 4 mg/L.
 - **Electrical:**
   - Every mains device is plugged into a GFCI outlet or power strip, with drip loops on all cords.
@@ -104,7 +107,7 @@ before use, so wild microorganisms are not cultured.
 ## 4. Disposal
 - **Cultures and treated tank water:**
   - Peroxide-treated water is held until test strips read below 0.5 mg/L.
-  - All algae-containing water is then disinfected with household bleach (1 part bleach to 9 parts water, 30 min) and flushed down a lab sink with plenty of running water.
+  - All algae-containing water is then disinfected with household bleach: **1 part bleach to 9 parts culture water** (10% bleach by volume), 30 min, and flushed down a lab sink with plenty of running water. Oyster-tank water is disinfected separately and never mixed with other waste (ammonia + bleach).
   - **Nothing goes into the Sound, a storm drain or the ground.**
 - **Chemicals:** leftovers go back to the school's chemical storage or are disposed of under the school's chemical hygiene plan, as the supervisor directs. Small amounts of dilute curcumin/ethanol solution are handled the same way.
 - **Seaweed, brine shrimp and oysters:** frozen or bleached, then bagged in the trash, or as the supplier or supervisor directs. None are released or eaten.

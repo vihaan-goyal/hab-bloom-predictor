@@ -81,7 +81,7 @@ of their effect, and it's long enough to separate a real effect from a 1-day art
   - **Present bubbles as** reducing the oxygen crash after a bloom, which is what drives western Long Island Sound hypoxia, rather than as stopping the bloom.
   - **Add to the screen:** DO at dawn (the daily low) in bubbled vs still flasks after the bloom peaks, to test that role directly.
 - **Species first:** many dinoflagellates grow *faster* when stirred. The screen decides the species; a "no effect" result is still reportable.
-- **Controller:** ESP32 + relay module → pump; fluorometer + DO/pH/temperature sensors → state machine.
+- **Controller:** the Arduino Uno alerter (`hardware/alerter_uno/`) + relay → pump; fluorometer + DO/pH/temperature sensors → state machine.
 
 ## Measurements specific to bubbles
 - Airflow (L/min) per column, logged.
@@ -94,7 +94,7 @@ of their effect, and it's long enough to separate a real effect from a 1-day art
 |---|---|
 | 2 aquarium air pumps + manifold, needle valves, tubing | $40 |
 | 12 clear columns (or soda bottles) + stands | $40 |
-| ESP32 + relay module + wiring | $20 |
+| Arduino Uno alerter + relay + wiring (built) | $0-25 |
 | DIY fluorometer parts (LED, photodiode, filter, op-amp) | $30 |
 | pH probe + DS18B20 temperature sensor; DO test kit | $60 |
 | Artificial sea salt, culture medium (f/2) | $30 |
