@@ -147,7 +147,7 @@ Team projects use the same 100-point rubric. The only extra check is that every 
 
 ### Inferences
 - INFERRED: Expect judges to ask:
-  - What is your baseline? (climatology or persistence; this project already has lift against climatology)
+  - What is your baseline? (climatology or persistence; this project compares against both, see notes/S1_NUMBERS_SHEET.md; lift itself is measured against the base rate)
   - Is the split temporal? (the test set is 2023-2025, so yes)
   - Was any feature built using future information? (rolling-window alignment)
   - How many events are in the test set? (the S4 check has only 15 events)

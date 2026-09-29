@@ -1,4 +1,4 @@
-# Current numbers on the lab-consistent label (S1), leak-free (2026-09-28)
+# Current numbers on the lab-consistent label (S1), after the 2026-09-28 audit
 
 Every number here comes from a re-run output file on the default (S1) path. The source file is
 given for each group. The rationale and history are in `notes/LABEL_REBUILD_PREREG.md` §§10-15.
@@ -19,102 +19,110 @@ temporary low in 2012-2017 (lab exceedance share 0.03-0.07, against 0.10-0.23 be
 after). The TMDL attribution was withdrawn on 2026-09-05; the "lab-change" reading was withdrawn
 on 2026-09-23.
 
-## Leak fix, 2026-09-28 (read this first)
-Four locked features were anomalies against full-record (1993-2025) climatologies, so test-period
-data leaked into training rows: `chl_climatology`, `chl_anomaly` (station-month chlorophyll) and
-`tidal_gt_anom`, `tidal_msl_anom` (monthly tides). They are now causal: each row uses only data dated
-strictly before it (`label_rebuild.py causal_climatology`, `add_tidal_features.py`). The 28-day label
-is now right-censored (windows past a station's last visit are dropped, not scored 0), and its
-operating threshold is chosen on validation by the pre-registered rule. The fixes were first found on
-the `worktree-climatology-fix` branch (2026-08-26) and never merged; that branch is archived as a tag.
-Numbers marked **(pre-leak-fix, not re-run)** below come from the 2026-09-23 run.
+## The 2026-09-28 audit (read this first)
+Four independent audits of both repos. What changed in the LIS pipeline:
 
-## Headline, 28-day label, single split (`data/test_predictions_S1.csv`, `data/rerun2_*.log`)
-- Test 2023-2025: **951** station-days (83 unresolvable windows dropped), **65** events, base **6.8%**.
-- AUC **0.789** [0.690, 0.864] (station-year clustered bootstrap). Before the fix: 0.804 on 1,034 rows.
-- **Operating threshold (pre-registered rule on validation: highest t with 2020-22 POD >= 0.80):
-  t* = 0.25** (validation POD 0.848). Test: precision **0.119** [0.072, 0.166], recall **0.846**
-  [0.706, 0.950], lift **1.74** [1.46, 2.04]; 55 TP / 408 FP / 10 FN.
-- **Alert-budget threshold (second operating point, 2026-09-28):** the lowest t whose 2020-22
-  validation alerts average ≤ 8 per month network-wide. The budget is the project's existing 8
-  station-visits/month (`decision_value.py`), fixed before this threshold was chosen. It gives
-  **t = 0.47**. Test: 6.4 alerts/month; precision **0.223** [0.125, 0.311], recall **0.615**
-  [0.411, 0.769], lift **3.27** [2.43, 4.15]; 40 TP / 139 FP / 25 FN. Chosen after the test sweep had
-  been seen, so disclose that the rule was added then (the budget itself predates it).
-- **t = 0.60 is withdrawn as an operating point:** it was picked on the 2023-25 test sweep, so its
-  numbers are not independent. For reference only, at 0.60: precision 0.329 [0.171, 0.444], recall
-  0.415, lift 4.82 [3.13, 6.76] (was 0.316 / 0.477 / 5.03).
-- Significance (exploratory, not pre-registered): block (station) permutation p < 0.001; better than a
-  month-of-year baseline by +0.093 AUC [-0.008, +0.207], one-sided p = 0.033. Within-season timing
-  (station-year shift p = 0.06; June-Sept p = 0.64) was measured before the fix, not re-run.
-- Training bloom rate 5.5%; validation 3.1%.
-- Lab-only check S4: AUC **0.781** on 161 test rows / 15 events; at its validation t* = 0.25,
-  precision 0.224, recall 0.733, lift 2.41. Too small to stand alone.
+**Look-ahead removed.**
+- `chl_climatology` / `chl_anomaly` were built over all of 1993-2025. They now use only
+  observations dated before each row (`label_rebuild.causal_climatology`).
+- `tidal_gt_anom` / `tidal_msl_anom` had two problems: a full-record climatology, and the row's
+  own month's mean, which includes later days. They now use the previous month against a
+  prior-years climatology.
+- The IEC transfer features got the same fixes.
 
-## Per-station, western five, global t=0.60 (`data/rerun2_station_specific_models.log`)
-Reference only (0.60 was a test-chosen threshold).
-| Station | Base rate | Precision | Recall | TP/FP/FN |
-|---|---|---|---|---|
-| A4 | 20.0% | 0.368 | 0.875 | 7/12/1 |
-| B3 | 20.0% | 0.357 | 0.625 | 5/9/3 |
-| C1 | 12.5% | 0.444 | 0.800 | 4/5/1 |
-| 01 | 16.7% | 0.500 | 0.667 | 2/2/1 |
-| 02 | 27.8% | 0.500 | 0.400 | 2/2/3 |
+**Label.** A forward window is unresolved (NaN, dropped) if it:
+- holds no visit at all, or
+- runs past the station's last visit without a bloom.
 
-No western station and strategy clears precision > 0.50 with recall > 0.40.
+It is shared by every script (`label_utils.forward_window_label`); it was 0 before. This removed
+about a third of rows (unobserved windows).
 
-## 21-day operating point
-- Locked fit ≤2019, test 2023-25 station-day (`data/reference_baselines.csv`): 954 rows, 43 events,
-  base 4.5%. Model at t*=0.35: precision **0.112**, POD **0.628**, FAR 0.888, lift **2.48** (before the
-  fix 0.117 / 0.744 / 2.59). Against always-alert: +1.45 [0.78, 2.20], clearly better. Persistence:
-  precision 0.164, POD 0.279, lift 3.65. Climatology: not tested fairly (its validation threshold
-  degenerates to t=0). Keep "not clearly better than climatology".
-- Walk-forward CV predictions at t*=0.35, test 2023-25 (`warning_robustness.py`): POD **0.698**
-  [0.500, 0.836], precision **0.111** [0.057, 0.164], FAR 0.889, 30 TP / 240 FP / 13 FN, base 4.2%,
-  lift ~2.6 (before the fix 0.791 / 0.114).
-- **Open decision (unchanged):** the pre-registered POD ≥ 0.8 rule gives t*=**0.20** (test POD
-  **0.837**, precision **0.071**). Deploy keeps 0.35 until the user decides.
-- Pooled 21-day rolling-origin CV (`rolling_origin_cv.py --horizon 21`): AUC **0.759**, 3,653 rows /
-  121 events (before the fix 0.772).
+**Splits and thresholds.**
+- Training rows are purged if their label window reaches the next split.
+- The withdrawn t = 0.60 had been picked on the test sweep.
+- One 21-day threshold constant, `locked_pipeline.T_STAR_21` = 0.20 (the pre-registered
+  validation POD ≥ 0.8 rule), is used everywhere.
+- The 28-day thresholds are chosen on validation.
+
+**Forecast-time convention, stated.** The forecast is issued at the end of sampling day t, from
+everything measured that day. So `max_gust_3d` (days t-2..t) and `dip_change` (day-t lab DIP) are
+allowed, the same as the day-t chlorophyll.
+
+**Disclosures that cannot be fixed after the fact.**
+1. The 35 features were chosen partly using 2023-25 test results (`PRECISION_OPTIMIZATION_LOG.md`),
+   so every 2023-25 number is optimistic. Only future data (the 2026 prospective season) is a clean
+   test.
+2. S1 in 2022-24 is the raw sensor at factor 1.0, because DEEP has no `Corrected_Chlorophyll` for
+   those years; 2025 is lab-corrected (median 0.52 × raw). The scale is not uniform inside the test
+   period.
+3. `Corrected_Chlorophyll` and DIP exist only after DEEP's lab work. A real-time version would run on
+   raw sensor values, which is lab latency, not look-ahead.
+
+## Headline, 28-day label, single split (`data/test_predictions_S1.csv`, `data/rerun3_eval_S1.log`)
+- **Test 2023-25:** 683 station-days (unresolved windows dropped), 65 events, base **9.5%**. Train 6,182 (8.3%), validation 701 (4.7%).
+- **AUC 0.767** [0.647, 0.857] (station-year bootstrap; `significance_checks.py`).
+- **Validation POD ≥ 0.8 threshold, t* = 0.25:** precision **0.151**, recall **0.785**, lift **1.59**; 51 TP / 287 FP / 14 FN.
+- **Alert budget (≤ 8 alerts/month on validation), t = 0.47:** 4.8 alerts/month on test; precision **0.354**, recall **0.523**, lift **3.72**; 34 TP / 62 FP / 31 FN.
+- **Lab-only S4:** AUC 0.758 on 161 rows / 15 events; at its validation t* = 0.30, precision 0.204, recall 0.733, lift 2.19.
+
+## Significance and the calendar (`significance_checks.py`, `notes/CALENDAR_BASELINE_PREREG.md`)
+- **Better than chance:** station-shift null, p < 0.001.
+- **Timing within a season is not shown:** station-year shift null, p = 0.42.
+- **Single split vs a training-year station-month calendar:** +0.039 AUC [−0.045, +0.112], p = 0.17. Not significant.
+- **Pre-registered walk-forward 2016-2025, 21-day, 121 events:** model 0.693 vs calendar 0.616, **+0.077 [+0.034, +0.121], p < 0.001. PASS.** The model wins 6 of 10 folds.
+  - In 2023-25 it is a tie: −0.013, p = 0.64.
+- **Pre-registered "calendar + conditions" model: not adopted.** Development 0.668 vs locked 0.676. The locked model already encodes season and site.
+
+## Per-station, western five, global t = 0.47 (`data/rerun3_station_specific_models.log`)
+- Global model on the western subset: precision 0.476, recall 0.690 (20 TP / 22 FP / 9 FN).
+- Station-tuned thresholds (A and B) do not beat it.
+- The log's "@0.60" labels mean the global threshold, now 0.47.
+
+## 21-day operating point (`T_STAR_21` = 0.20)
+- **Walk-forward CV** (`rolling_origin_cv.py --horizon 21`): pooled AUC **0.693**, 1,971 rows / 121 events (was 0.759 before the audit and 0.772 before 2026-09-28).
+- **Test 2023-25 at t* = 0.20** (`warning_robustness.py`): POD **0.791** [0.636, 0.904], precision **0.115** [0.065, 0.165], FAR 0.885; 34 TP / 261 FP / 9 FN, 560 rows.
+  - Extra years 2016-19: POD 0.500, precision 0.095.
+- **Locked fit ≤ 2019, station-day** (`reference_baselines.py`): base 7.7%, model POD 0.791, precision 0.125, lift **1.63**.
+  - Against always-alert: +0.63 [+0.35, +0.92], clearly better.
+  - Station-month and day-of-year climatology degenerate to always-alert on validation.
+  - Persistence: lift 3.26 at POD 0.279.
 
 ## Basin level
-- Basin-day (`reference_baselines.csv`): model t=0.65, lift **1.63** (41 days, 9 events); persistence
-  2.10; against always-alert +0.14 [−1.00, 1.45], not clear (before the fix 2.14). Say "a tie with
-  persistence".
-- Basin search **(pre-leak-fix, not re-run)**: best validation lift 2.05× at the 70.5th percentile of
-  the null, inside it: the search found noise.
+- **Basin-day** (`reference_baselines.py`): model t = 0.55, lift 1.75, POD 0.556. Against always-alert: +0.76 [−1.00, +2.25], not clear (month-block bootstrap).
+- **Basin search:** best validation lift 1.82× at the 25th percentile of its null, which is noise. Test lift 1.15× on 39 days / 8 events.
 
-## Decision value, 8 visits/month (`data/decision_value.csv`) **(pre-leak-fix, not re-run)**
-- LIS: calendar **17.8** [9.6, 55.0] → alert-directed top-V **9.7** [5.5, 26.6] visits per bloom;
-  causal 7.8 [3.9, 40.4]; climatology **11.2** [5.7, 53.2]; share caught 0.28 → 0.51; **43** blooms
-  (was 15.4 → 8.3, climatology 9.3, 0.29 → 0.54, 48 blooms).
-- Narragansett unchanged: 3.81 → 1.45, climatology 1.76.
+## Decision value, 8 visits/month (`data/rerun3_decision_value.log`)
+| | LIS visits per bloom | LIS share caught | Narragansett visits per bloom |
+|---|---|---|---|
+| Calendar sampling | 6.2 [3.1, 21.0] | 0.37 | 3.65 |
+| Climatology | 4.5 [2.6, 11.7] | 0.51 | 1.72 |
+| Alert-directed, top-V | 4.5 [2.8, 9.9] | 0.51 | 1.42 |
 
-## IEC zero-shot transfer **(pre-leak-fix, not re-run)** (`data/iec_zero_shot_results.csv`, primary 2020-25 onset, 949 rows, 126 events)
-- Lift **1.57** [1.41, 1.75]; AUC **0.707** [0.656, 0.760] (was 1.84 [1.59, 2.11], AUC 0.732).
-- Station-month climatology: lift 1.50, AUC 0.733. It **transfers better than chance and no better
-  than a calendar.** 4 of 13 stations have a lift interval above 1 (was 5 of 13). It is inside the
-  pre-registered band of 1.2-1.8.
-- IEC chlorophyll method: Standard Methods 10200H through 2016, both in 2017, EPA 445.0 from 2018
-  on. That is before the 2020-25 window, so the transfer is unaffected.
+In LIS, alerts tie climatology. In Narragansett, alerts beat it.
 
-## Class overlap and rarity (`data/lr_geometry_summary.csv`, onset rows, 21 d) **(pre-leak-fix, not re-run)**
-- LIS: base **0.026**, AUC 0.770, OVL **0.620**, precision 0.055, POD 0.667 (was 0.036, 0.855, 0.445,
-  0.112, 0.868).
-- Narragansett unchanged: 0.347, 0.810, OVL 0.516, precision 0.641.
-- Wording: the Sound's low precision is **"mostly rarity, not only"**. The Sound also separates the
-  classes less well. **"Precision follows rarity, not skill" is withdrawn.**
-- Matched-rarity tests (fork, Narragansett-only computations, unchanged): at matched 5% rarity with
-  daily sampling, precision 0.09-0.14 (the Sound's 0.117 sits inside). Lift at rarity over nine CV
-  years: 8.48× [5.98, 12.81] at T=52.5 and 6.92× [5.32, 9.31] at T=39, both above the Sound's 2.59.
-  The fork's LIS reference is now precision 0.117, AUC 0.825 (21-day station-day test), base 0.045,
-  lift 2.59.
+## IEC zero-shot transfer (`data/iec_zero_shot_results.csv`, primary 2020-25 onset, 404 rows, 126 events)
+- Model AUC **0.667** [0.606, 0.725] (was 0.707).
+- At its calibration-chosen t* = 0.93: lift **2.18** [1.57, 2.85], POD 0.151.
+- The withdrawn t = 0.60 gives lift 1.37.
+- Station-month climatology (threshold from calibration rows): AUC 0.566, lift 1.12.
+- **The model transfers better than the IEC calendar.**
 
-## Point of no return (`data/ponr_rows.csv`) **(pre-leak-fix, not re-run)**
-544 pre-onset observations / 153 events (was 617). Analogue risk peak **0.42**, median 0.02 (was 0.62 /
-0.04). Summer model counterfactual (M1 nutrients) 42% of events "locked in" → **0%** once physics
-can vary (was 65% → 0%). The conclusion is unchanged: no point of no return.
+## Class overlap and rarity (`data/lr_geometry_summary.csv`, 21-day onset rows)
+- **LIS:** base 0.045, AUC 0.673, OVL 0.737, precision 0.064, POD 0.750.
+- **Narragansett:** base 0.351, AUC 0.806, OVL 0.523, precision 0.638.
+- The Sound separates the classes worse as well as being rarer.
 
-## Unchanged (not LIS-label dependent)
-Narragansett AUC 0.839, precision 0.70, lift 2.00 [1.50, 2.68]; rolling 0.656 / 2.50; the 74-site
-transfer (median lift 1.58, 67 of 74, median AUC 0.74); the NN negatives; the device work.
+## Point of no return (`data/rerun3_point_of_no_return.log`)
+Re-run: 322 pre-onset observations over 98 events. Conclusions are in the log. Not re-summarized
+here; check it before quoting.
+
+## Narragansett (being corrected by the fork audit fix; see that repo's CLAUDE.md for current values)
+Current fork values after its 2026-09-28 audit (fork CLAUDE.md and findings §5, §24-25, §29-30):
+- **Onset GB:** AUC 0.829, precision 0.682 [0.584, 0.783] at POD 0.572, lift 1.94 [1.53, 2.51].
+- **Rolling CV:** 0.666 / lift 2.47 / AUC 0.877.
+- **Beats the calendar on bloom starts in 9 of 9 years:** pooled +0.060 [+0.047, +0.074], p < 0.0001; 2023 +0.066, p = 0.0005.
+- **74-site transfer, leak-free:** median lift 1.51, 65 of 74 with CI above 1, median AUC 0.74.
+- **Local refit vs zero-shot:** refit is better on lift at 10 of 16 top sites (median +0.05).
+- **Matched-rarity lift:** 9.15× [6.60, 13.64].
+- **Tank-sensor forecast:** onset AUC 0.804 (full 0.829).
+- **Unchanged:** the NN negatives and the device work.

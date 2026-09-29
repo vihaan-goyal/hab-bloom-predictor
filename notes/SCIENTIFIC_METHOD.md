@@ -981,3 +981,55 @@ exactly from `final_evaluation_threshold_sweep.py`):
 - Basin search, decision value, IEC transfer, rarity/overlap and point-of-no-return are marked "pre-leak-fix, not re-run" in `notes/S1_NUMBERS_SHEET.md`.
 
 **Alert-budget operating point (2026-09-28).** A second threshold rule, fixed by capacity rather than by a test score: the lowest threshold whose 2020-22 validation alerts average at most **8 per month** (the project's existing sampling budget from `decision_value.py`). It gives **t = 0.47**. On test: 6.4 alerts a month, precision **0.223 [0.125, 0.311]**, recall **0.615**, lift **3.27 [2.43, 4.15]**. It sits between the high-recall rule (t* = 0.25, lift 1.74) and the withdrawn test-chosen 0.60. *Disclosure:* this rule was added after the test sweep had been seen; the budget number itself predates it.
+
+**Tank-only features (2026-09-28; fork finding 29).** On real Narragansett data (test 2023, onset rows, GB spec):
+- The full model scores AUC 0.839 (reproduced).
+- Tank-measurable inputs only (chlorophyll, temperature, month) score **0.810**. The deployed model with the missing inputs median-filled also scores **0.810**. Chlorophyll alone scores 0.805.
+- The tank trigger is therefore a forecast about 0.03 AUC weaker than the field model. The tank tests the loop; forecast skill comes from field data.
+- The fork's `chl_climatology` has the same full-record leak as the LIS one. Its effect there is small (−0.005 AUC); it is not yet fixed in the build script.
+
+**Model vs calendar, pre-registered (2026-09-28; `notes/CALENDAR_BASELINE_PREREG.md`).**
+- Walk-forward 2016-2025 (121 events): the locked 21-day model beats a past-years station-month calendar, AUC 0.693 vs 0.616, +0.077 [+0.034, +0.121], p < 0.001. It wins 6 of 10 folds.
+- In 2022-25 the calendar ties or edges it (2023-25: −0.013, p = 0.64), and its top-10% lift is similar (2.8 vs 2.6).
+- The model adds skill over the season on average, not in every year.
+
+**Calendar + conditions model, pre-registered (2026-09-28): not adopted.** Adding a causal station-month calendar rate as a 36th input lowered development AUC slightly (0.668 vs 0.676) and tied on 2023-25 (0.735 vs calendar 0.749). The locked model already encodes season and site, so the recent-years tie with the calendar is a limit of the current features. The locked model stays; the clean test is the 2026 prospective season.
+
+**Full audit of both repos (2026-09-28).** Four independent audits: LIS features, LIS evaluation, bench/firmware, and the Narragansett fork.
+
+**LIS fixes:**
+- Tidal anomalies now use the previous month against a prior-years climatology.
+- One shared label rule: unobserved or unfinished windows are NaN, not 0. This removed about a third of rows.
+- Train/val purge.
+- One 21-day threshold constant, t* = 0.20, from the pre-registered rule (it was "open").
+- The per-station script uses all 35 features.
+- IEC features are causal, and its baseline threshold comes from calibration rows.
+- Basin CIs use month blocks.
+- Committed significance scripts.
+- Stale docs corrected.
+- Stated convention: an end-of-day-t forecast using day-t measurements.
+- Disclosed: the feature selection partly used 2023-25; 2022-24 S1 is raw-sensor scale; lab latency.
+
+**New numbers:**
+- 28-day test AUC 0.767 [0.647, 0.857]; alert-budget t = 0.47: precision 0.354, lift 3.72.
+- 21-day walk-forward AUC 0.693.
+- Model vs calendar (pre-registered): better over 2016-2025, p < 0.001; tie in 2023-25.
+- 21-day station-day lift 1.63.
+- IEC transfer AUC 0.667 (vs calendar 0.566).
+- Basin search still noise.
+
+**Bench fixes (fix agent):**
+- Peroxide is modelled as a pulse; S3 is restated as 3 × 0.8 mg/L pulses vs 1.6 mg/L.
+- The floor and handover rules are in the simulation, firmware and link, plus servo support.
+- The simulation is re-run at recipe scale: seaweed 72%, shellfish 81%, peroxide pulses 74%, curcumin 63% (was an inflated 92%), bubbles 25%; B beats reactive C 99-100%.
+- Docs reconciled; Form 3 corrected.
+
+**Narragansett fixes:** in progress.
+
+**Narragansett audit fixes and calendar test (2026-09-28).**
+- **Home model:** onset AUC 0.829, precision 0.68, lift 1.94. Model v2 has a prior-years climatology, and a label needs ≥ 4 observed days.
+- **Beats the calendar on bloom starts:** pre-registered, 9 of 9 years, +0.060 pooled (p < 0.0001), +0.066 in 2023 (p = 0.0005).
+- **74-site transfer**, leak-free (calibration-years rescaling and climatology): median lift 1.51.
+- **Local refit** helps modestly (+0.05 lift at 10 of 16 sites). This reverses the "refitting buys nothing" claim.
+- **Tank-sensor forecast:** 0.804 via the real tool path. This corrects the earlier 0.810, and the fork climatology leak is now fixed.
+- **Thesis:** LIS boat data ties the calendar in recent years, while daily sensors beat it every year.

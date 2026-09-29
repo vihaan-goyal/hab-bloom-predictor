@@ -31,20 +31,19 @@ BASE + tidal_gt_anom + tidal_msl_anom + chl_roll14_mean + chl_roll21_mean +
 sal_lag2 + sal_lag3 + sal_lag4 + percent_saturation + max_gust_3d.
 Requires `data/gust_features_daily.csv` (`python src/features/add_gust_features.py`).
 
-Test (2023–2025, 28-day label, S1, leak-free, right-censored): 951 rows, 65 events, base 6.8% |
-AUC 0.789 [0.690, 0.864] | at the pre-registered validation threshold t* = 0.25: precision 0.119,
-recall 0.846, lift 1.74 [1.46, 2.04]; at the alert-budget threshold (≤ 8 alerts/month on validation)
-t = 0.47: precision 0.223, recall 0.615, lift 3.27 [2.43, 4.15]. The old t = 0.60 (lift ~5) was picked on the test years and is
-withdrawn as an operating point.
+Current numbers (after the 2026-09-28 audit) live ONLY in `notes/S1_NUMBERS_SHEET.md`. In short:
+- **28-day test 2023-25** (683 rows, 65 events, base 9.5%): AUC 0.767 [0.647, 0.857].
+  - At the alert-budget threshold t = 0.47 (≤ 8 alerts/month on validation): precision 0.354, lift 3.72.
+  - At the validation POD rule t* = 0.25: precision 0.151, recall 0.785.
+- **21-day walk-forward CV:** AUC 0.693. It beats a past-years calendar over 2016-2025 (+0.077, p < 0.001, pre-registered) and ties it in 2023-25.
+- The 21-day operating threshold is `locked_pipeline.T_STAR_21` (0.20, validation rule); import it, never hard-code.
 
-- 2026-09-28 leak fix: `chl_climatology`, `chl_anomaly`, `tidal_gt_anom` and `tidal_msl_anom` used
-  full-record (1993-2025) climatologies. They are now causal (data before each row only). Keep it that
-  way: any climatology or anomaly feature must use only earlier data.
-- S1 replaced the sensor label on 2026-09-23 (the CTD fluorometer read 2-5× the lab; DEEP advised the
-  lab data). Sensor-label numbers (AUC 0.815) are superseded.
-- The 21-day operating point, per-station table, S4 check and which results are not yet re-run are in
-  `notes/S1_NUMBERS_SHEET.md` (the only source for current numbers); history in
-  `notes/LABEL_REBUILD_PREREG.md`.
+Rules learned the hard way (2026-09-28 audit):
+- Any climatology, anomaly or monthly feature must use only data dated before the row (and, for monthly series, only completed months).
+- Forward labels come only from `label_utils.forward_window_label`: an unobserved or unfinished window is NaN, not 0.
+- Thresholds are chosen on validation only; purge training rows whose label window reaches the next split.
+- The forecast is issued at the end of sampling day t from that day's measurements.
+- Disclose that the 35 features were chosen partly on 2023-25, and that 2022-24 S1 is raw-sensor scale.
 
 ## Key scripts
 
@@ -52,6 +51,7 @@ withdrawn as an operating point.
 |--------|---------|
 | `src/models/final_evaluation_threshold_sweep.py` | 28-day evaluation; validation-chosen threshold; test sweep for display only |
 | `tests/check_dependencies.py` | Lists imports missing from `environment.yml` |
+| `src/models/significance_checks.py`, `calendar_baseline_cv.py`, `calendar_hybrid_cv.py` | Significance and calendar comparisons (pre-registered in `notes/CALENDAR_BASELINE_PREREG.md`) |
 | `src/models/station_specific_models.py` | Per-station threshold tuning (Strategy B) |
 | `src/models/ablation_study.py` | Feature ablation |
 | `src/deploy/daily_inference.py` | Daily inference pipeline + alert emails |
