@@ -10,25 +10,31 @@ Vihaan Goyal, Westhill High School, Stamford, Connecticut
 
 ## What this project shows
 
-A regularized logistic regression forecasts chlorophyll-a exceedances (>10 ug/L within 21 days of a station visit) across Long Island Sound with useful ranking skill (pooled out-of-sample AUC 0.772; was 0.852 on the original sensor label), but alert precision is capped near 0.12 regardless of model class, feature set, threshold, era, or spatial alerting policy. Thirteen pre-registered improvement attempts were rejected (sensor label; not re-run). The central finding is that this precision ceiling is mechanistic, not a modeling failure:
+A regularized logistic regression forecasts chlorophyll-a exceedances (>10 ug/L within 21 days of a station visit) across Long Island Sound with useful ranking skill (pooled out-of-sample AUC 0.759 after the 2026-09-28 leak fix; 0.772 before it, 0.852 on the original sensor label), but alert precision is capped near 0.12 regardless of model class, feature set, threshold, era, or spatial alerting policy. Thirteen pre-registered improvement attempts were rejected (sensor label; not re-run). The central finding is that this precision ceiling is mechanistic, not a modeling failure:
 
 1. **Rarity.** Exceedances are rare in the test years (4.5% of station-days at the 21-day horizon), and rare events cap precision regardless of model. The low precision is mostly rarity, not only (the Sound also separates the classes less well, overlap 0.62 against 0.52 in Narragansett Bay). The old "2014 cliff" (sensor-label bloom share 0.42–0.59 in 2009–2013 → 0.03–0.11 from 2014) was mostly a CTD sensor scale change (SeaBird to YSI EXO2 around 2009/2010), confirmed by CT DEEP; the lab record has no 2014 step, but it does show a real, temporary low in 2012–2017. It is not a TMDL effect and not a DEEP lab change.
 2. **Sampling.** The median gap between chlorophyll measurements is 21 days, equal to the forecast horizon. 48% of inter-sample gaps exceed the horizon, so many predicted events cannot even be verified.
 
-Across eras and label definitions the system delivered a roughly constant 2.5 to 3.4x precision lift over the base rate on the sensor label (not re-run); on the rebuilt label the 21-day station-day lift is 2.59x. No intervention has moved that multiplier.
+Across eras and label definitions the system delivered a roughly constant 2.5 to 3.4x precision lift over the base rate on the sensor label (not re-run); on the rebuilt, leak-free label the 21-day station-day lift is 2.48x. No intervention has moved that multiplier.
 
 ## The early warning system
+
+**Leak fix (2026-09-28).** Four of the 35 features (`chl_climatology`, `chl_anomaly`, `tidal_gt_anom`,
+`tidal_msl_anom`) were anomalies against climatologies averaged over the whole 1993-2025 record, so
+test-period data leaked into training rows. They now use only data dated before each row
+(`label_rebuild.py`, `add_tidal_features.py`; fix first found on the `worktree-climatology-fix`
+branch, now archived as a tag). All numbers below are re-run on the leak-free features.
 
 Operating point frozen by a pre-registered rule (highest threshold with out-of-sample 2020 to 2022 POD >= 0.8), evaluated once on out-of-sample 2023 to 2025 (walk-forward CV predictions, rebuilt label):
 
 | Metric | Value | 95% CI (clustered bootstrap) |
 |---|---|---|
-| POD (recall) | 0.791 (34 of 43 events) | [0.636, 0.906] |
-| FAR (1 - precision) | 0.886 | not re-run |
-| Precision | 0.114 (~2.7x over 4.2% base rate) | [0.063, 0.163] |
+| POD (recall) | 0.698 (30 of 43 events) | [0.500, 0.836] |
+| FAR (1 - precision) | 0.889 | [0.836, 0.943] |
+| Precision | 0.111 (~2.6x over 4.2% base rate) | [0.057, 0.164] |
 | CSI | 0.122 (sensor label; not re-run) | [0.075, 0.169] |
 
-Alert threshold t* = 0.35, **an open decision**: re-applying the pre-registered rule on the rebuilt label gives t* = 0.20 (test POD 0.907, precision 0.072); deploy keeps the frozen 0.35 until that is decided. On the original sensor label the table read POD 0.875, precision 0.125 over a 4.6% base rate, and selection-to-test transfer was near exact (POD 0.864 -> 0.875). At the 21 recurring-bloom stations (defined on pre-test data), detection is 91% at precision 0.137 (sensor label; not re-run). A station-gated alert policy was tested and rejected: false alarms arise at bloom-prone stations during non-bloom periods, so the ceiling is temporal, not spatial (sensor label; not re-run). A sustained-exceedance secondary label raises the lift to 3.4x but leaves precision near 0.10 (sensor label; not re-run).
+Alert threshold t* = 0.35, **an open decision**: re-applying the pre-registered rule on the rebuilt label gives t* = 0.20 (test POD 0.837, precision 0.071); deploy keeps the frozen 0.35 until that is decided. On the original sensor label the table read POD 0.875, precision 0.125 over a 4.6% base rate, and selection-to-test transfer was near exact (POD 0.864 -> 0.875). At the 21 recurring-bloom stations (defined on pre-test data), detection is 91% at precision 0.137 (sensor label; not re-run). A station-gated alert policy was tested and rejected: false alarms arise at bloom-prone stations during non-bloom periods, so the ceiling is temporal, not spatial (sensor label; not re-run). A sustained-exceedance secondary label raises the lift to 3.4x but leaves precision near 0.10 (sensor label; not re-run).
 
 The framing rationale: a missed bloom carries ecological and shellfish-industry costs, while a false alarm prompts a water sample at a station where, half the time, no sample would otherwise occur in the window.
 
@@ -81,7 +87,7 @@ The `data/` folder is not in git. Reproduce it from the public sources above; th
 
 ```
 conda activate base
-python src/models/rolling_origin_cv.py --horizon 21      # pooled AUC 0.772 (S1 default)
+python src/models/rolling_origin_cv.py --horizon 21      # pooled AUC 0.759 (S1 default, leak-free)
 python warning_operating_point.py --target-pod 0.8 --test-from-cv
 python warning_robustness.py --t-star 0.35
 ```
@@ -110,18 +116,18 @@ persistence) with a paired station-year clustered bootstrap of the lift differen
 
 | Level | base rate | model lift | clearly beats |
 |---|---|---|---|
-| Station-day (n=954, 43 events) | 0.045 | **2.59x** | always-alert only, +1.59 [+1.07, +2.22] |
-| Basin-day (n=41, 9 events) | 9 of 41 | 2.14x | nothing; +0.43 [-1.00, +1.77] vs always-alert |
+| Station-day (n=954, 43 events) | 0.045 | **2.48x** | always-alert only, +1.45 [+0.78, +2.20] |
+| Basin-day (n=41, 9 events) | 9 of 41 | 1.63x | nothing; +0.14 [-1.00, +1.45] vs always-alert |
 
-(Rebuilt label, t*=0.35; was 2.63x on 956 rows / 48 events, and basin 1.37x on 12 events, on
+(Rebuilt, leak-free label, t*=0.35; before the 2026-09-28 leak fix 2.59x and basin 2.14x; was 2.63x on 956 rows / 48 events, and basin 1.37x on 12 events, on
 the original sensor label.)
 
 At station-day level the model is clearly better than no information. Persistence
-scores a higher lift (3.65x) at a much lower POD (0.279 against the model's 0.744).
+scores a higher lift (3.65x) at a much lower POD (0.279 against the model's 0.628).
 Climatology was not tested fairly on the rebuilt label (its validation-chosen threshold
 degenerated to t=0, i.e. always-alert), so the original statement stands: not clearly
-better than climatology. At basin level the model (2.14x) and persistence (2.10x) are a
-tie.
+better than climatology. At basin level the model (1.63x) and persistence (2.10x) are a
+tie (neither interval excludes the other).
 
 **Mechanism:** basin aggregation raises the base rate from 0.045 to 9 of 41 basin-days,
 and lift = precision / base_rate. The aggregation that buys verification coverage spends

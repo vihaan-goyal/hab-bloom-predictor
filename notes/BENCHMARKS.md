@@ -180,8 +180,9 @@ Different question, stricter evaluation; never "better".
    limited by verification density rather than model quality.
 6. Comparison context for AUC: C-HARM nowcasts score AUC 0.33-0.77
    against pier observations; on the rebuilt (S1) label the LIS system
-   scores 0.804 (28-day single-split test) / 0.772 (21-day rolling-origin
-   CV); it was 0.815 / 0.852 on the original sensor label. Different target and
+   scores 0.789 (28-day single-split test) / 0.759 (21-day rolling-origin
+   CV) after the 2026-09-28 leak fix (0.804 / 0.772 before it); it was 0.815 / 0.852 on the
+   original sensor label. Different target and
    region, but the LIS system operates within the skill range of the
    pre-operational state of the art while forecasting 21 days ahead
    rather than nowcasting.

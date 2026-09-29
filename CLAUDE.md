@@ -12,8 +12,8 @@ python src/features/add_tidal_features.py   # writes data/hab_features_tidal.csv
 python src/models/label_rebuild.py build     # writes data/hab_features_tidal_S1.csv
 # Prefix HAB_FEATURES_CSV=data/hab_features_tidal.csv to reproduce the original sensor label.
 
-# Final evaluation with threshold sweep (test set 2023–2025)
-python src/models/final_evaluation_threshold_sweep.py
+# Final evaluation (test 2023–2025); add --no-censor to reproduce the old label
+python src/models/final_evaluation_threshold_sweep.py --tag _S1
 
 # Daily inference for a given date (writes data/daily_predictions.csv)
 python src/deploy/daily_inference.py --date 2022-07-19
@@ -31,19 +31,26 @@ BASE + tidal_gt_anom + tidal_msl_anom + chl_roll14_mean + chl_roll21_mean +
 sal_lag2 + sal_lag3 + sal_lag4 + percent_saturation + max_gust_3d.
 Requires `data/gust_features_daily.csv` (`python src/features/add_gust_features.py`).
 
-Test (2023–2025, 28-day label, S1): AUC 0.804 [0.706, 0.878] | base rate 6.3% |
-Precision @0.60 0.316 [0.179, 0.424] | Recall @0.60 0.477 | 31 TP / 67 FP / 34 FN |
-Lift 5.03 [3.50, 6.88].
+Test (2023–2025, 28-day label, S1, leak-free, right-censored): 951 rows, 65 events, base 6.8% |
+AUC 0.789 [0.690, 0.864] | at the pre-registered validation threshold t* = 0.25: precision 0.119,
+recall 0.846, lift 1.74 [1.46, 2.04]. The old t = 0.60 (lift ~5) was picked on the test years and is
+withdrawn as an operating point.
 
-- S1 replaced the sensor label on 2026-09-23, because the CTD fluorometer read 2-5× the lab values and DEEP advised using the lab data.
-- The old sensor-label numbers (AUC 0.815) are superseded.
-- The per-station table, the lab-only check S4 and the full story are in `notes/S1_NUMBERS_SHEET.md` and `notes/LABEL_REBUILD_PREREG.md`.
+- 2026-09-28 leak fix: `chl_climatology`, `chl_anomaly`, `tidal_gt_anom` and `tidal_msl_anom` used
+  full-record (1993-2025) climatologies. They are now causal (data before each row only). Keep it that
+  way: any climatology or anomaly feature must use only earlier data.
+- S1 replaced the sensor label on 2026-09-23 (the CTD fluorometer read 2-5× the lab; DEEP advised the
+  lab data). Sensor-label numbers (AUC 0.815) are superseded.
+- The 21-day operating point, per-station table, S4 check and which results are not yet re-run are in
+  `notes/S1_NUMBERS_SHEET.md` (the only source for current numbers); history in
+  `notes/LABEL_REBUILD_PREREG.md`.
 
 ## Key scripts
 
 | Script | Purpose |
 |--------|---------|
-| `src/models/final_evaluation_threshold_sweep.py` | Final test-set evaluation; threshold sweep |
+| `src/models/final_evaluation_threshold_sweep.py` | 28-day evaluation; validation-chosen threshold; test sweep for display only |
+| `tests/check_dependencies.py` | Lists imports missing from `environment.yml` |
 | `src/models/station_specific_models.py` | Per-station threshold tuning (Strategy B) |
 | `src/models/ablation_study.py` | Feature ablation |
 | `src/deploy/daily_inference.py` | Daily inference pipeline + alert emails |

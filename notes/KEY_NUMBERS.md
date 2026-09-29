@@ -1,6 +1,9 @@
 # KEY_NUMBERS.md — HAB Bloom Predictor Reference
 
 Corrected pipeline. Do NOT use numbers from the OLD docs listed in Section 6.
+**2026-09-28: a feature leak was fixed (full-record climatologies in 4 features) and t=0.60 was
+withdrawn (it was chosen on the test years). The S1 numbers in this file are pre-fix; current values
+are ONLY in notes/S1_NUMBERS_SHEET.md** (headline AUC 0.789, lift 1.74 at the validation t*=0.25).
 Last updated: 2026-09-23 (label rebuilt on the lab scale, S1 now the default; current numbers
 in notes/S1_NUMBERS_SHEET.md, rationale in notes/LABEL_REBUILD_PREREG.md). Numbers not in that
 sheet are marked "(sensor label; not re-run)".

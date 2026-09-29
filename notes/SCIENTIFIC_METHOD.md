@@ -163,7 +163,7 @@ surface CHLA only. Its result is test AUC **0.782 [0.595, 0.921]**, lift 5.0
 covers only 2023 to May 2024. Both predictions were right (P6, P7). The interval is
 wider than 0.30, so under the pre-registered rule S4 is "consistent with S1, not yet
 measurable on its own". **Reporting from now on:** the label definition is the lab
-(S4). The skill estimate is S1's, AUC 0.804 [0.706, 0.878] and lift 5.0 [3.5, 6.9], on
+(S4). The skill estimate is S1's, AUC 0.804 [0.706, 0.878] and lift 5.0 [3.5, 6.9] *(superseded 2026-09-28 by the leak fix: AUC 0.789, and lift 5 withdrawn because t=0.60 was test-chosen; see the entry of that date)*, on
 the full 2023-2025 test, with S4's interval beside it. S4 becomes final when DEEP
 releases lab chlorophyll after June 2024. *Open design question:* lab chlorophyll
 arrives months after sampling, so a real-time forecast can't use lab-based
@@ -923,6 +923,7 @@ LEDs, a passive buzzer and a relay (PN2222A + 1N4007 flyback diode on D10).
 **Significance checks on the LIS model (2026-09-28, exploratory, not pre-registered).** On the S1
 test set (1,034 station-days, 65 positive rows = 38 independent episodes; predictions reproduce
 exactly from `final_evaluation_threshold_sweep.py`):
+- *(These checks used the pre-leak-fix predictions; the corrected re-run is in the "Leak fix" entry below.)*
 - Better than chance: AUC 0.804, p < 0.0001 (Mann-Whitney; label permutation; circular shift within station over 2023-2025). Precision @0.60 vs the 6.3% base rate: p < 10⁻¹³.
 - Better than a month-of-year baseline: AUC 0.80 vs 0.71, +0.09 [−0.01, +0.20] (station-block bootstrap), one-sided p = 0.03. The baseline used the test set's own monthly rates, so it's generous to the baseline.
 - **Timing within a season is not shown:** with labels shifted within each station-year the null reaches AUC 0.81 (p = 0.06); within June-September only, p = 0.64.
@@ -960,3 +961,21 @@ exactly from `final_evaluation_threshold_sweep.py`):
 - The silicate unit (SiO₂ vs Si) is inferred and is to be confirmed with DEEP.
 
 **Peroxide method: calcium peroxide swapped for sodium percarbonate (2026-09-28).** The loop doses liquid 3% H₂O₂ by pump; it is stable for weeks, which suits autonomy. The screen adds sodium percarbonate (pure oxygen bleach), the active ingredient of registered pond algaecides, at the same peroxide dose (0.8 mg/L H₂O₂ ≈ 2.9 mg/L), with a matched sodium carbonate control. The calcium peroxide "tea bag" is dropped: percarbonate dissolves in minutes, so a bag can't be retrieved, and peroxide breaks down to water and oxygen in 1-2 days anyway, so the loop controls exposure by dose and timing. Updated in the method file, plan, procedures, materials list and Form 3.
+
+**Leak fix and threshold correction (2026-09-28).** A review of the never-merged `worktree-climatology-fix` branch (2026-08-26) found two defects still live in `main`:
+1. **Feature leak.** `chl_climatology`, `chl_anomaly`, `tidal_gt_anom` and `tidal_msl_anom` were anomalies against climatologies averaged over all of 1993-2025, so test-year data leaked into training rows. They now use only data dated before each row. The 3 earliest years of tidal anomalies and 1.6% of chlorophyll climatology cells are left empty (imputed).
+2. **Label and threshold.** The 28-day label scored unresolvable windows (running past a station's last visit) as "no bloom"; they are now dropped (83 test rows). The headline threshold 0.60 had been picked on the test sweep, so it is withdrawn. The project's pre-registered rule (highest t with validation POD ≥ 0.8) now sets it.
+
+**Results (test 2023-25, S1):**
+- AUC **0.789 [0.690, 0.864]** (was 0.804).
+- At the validation t* = 0.25: precision **0.119**, recall **0.846**, lift **1.74 [1.46, 2.04]**.
+- Still better than chance (block permutation p < 0.001) and than a month-of-year baseline (+0.093 AUC, one-sided p = 0.033).
+- At the old 0.60, lift is 4.82, but that point is not an independent estimate.
+- The 21-day system barely moved: pooled CV AUC 0.759 (was 0.772); at t* = 0.35, precision 0.111, POD 0.698 (was 0.114 / 0.791); station-day lift 2.48 (was 2.59).
+
+**Meaning:** ranking skill was real and survives. The "5× lift" headline came from a threshold tuned on the test years. The honest, validation-chosen high-recall setting catches 85% of blooms at 1.7× lift.
+
+**Also:**
+- Declared 20 missing dependencies (including the hardware scripts' pyserial and trimesh) and added `tests/check_dependencies.py`.
+- Noted a remaining within-month look-ahead in the monthly tidal values, not yet fixed.
+- Basin search, decision value, IEC transfer, rarity/overlap and point-of-no-return are marked "pre-leak-fix, not re-run" in `notes/S1_NUMBERS_SHEET.md`.
