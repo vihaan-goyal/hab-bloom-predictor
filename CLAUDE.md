@@ -33,7 +33,8 @@ Requires `data/gust_features_daily.csv` (`python src/features/add_gust_features.
 
 Test (2023–2025, 28-day label, S1, leak-free, right-censored): 951 rows, 65 events, base 6.8% |
 AUC 0.789 [0.690, 0.864] | at the pre-registered validation threshold t* = 0.25: precision 0.119,
-recall 0.846, lift 1.74 [1.46, 2.04]. The old t = 0.60 (lift ~5) was picked on the test years and is
+recall 0.846, lift 1.74 [1.46, 2.04]; at the alert-budget threshold (≤ 8 alerts/month on validation)
+t = 0.47: precision 0.223, recall 0.615, lift 3.27 [2.43, 4.15]. The old t = 0.60 (lift ~5) was picked on the test years and is
 withdrawn as an operating point.
 
 - 2026-09-28 leak fix: `chl_climatology`, `chl_anomaly`, `tidal_gt_anom` and `tidal_msl_anom` used

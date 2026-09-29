@@ -979,3 +979,5 @@ exactly from `final_evaluation_threshold_sweep.py`):
 - Declared 20 missing dependencies (including the hardware scripts' pyserial and trimesh) and added `tests/check_dependencies.py`.
 - Noted a remaining within-month look-ahead in the monthly tidal values, not yet fixed.
 - Basin search, decision value, IEC transfer, rarity/overlap and point-of-no-return are marked "pre-leak-fix, not re-run" in `notes/S1_NUMBERS_SHEET.md`.
+
+**Alert-budget operating point (2026-09-28).** A second threshold rule, fixed by capacity rather than by a test score: the lowest threshold whose 2020-22 validation alerts average at most **8 per month** (the project's existing sampling budget from `decision_value.py`). It gives **t = 0.47**. On test: 6.4 alerts a month, precision **0.223 [0.125, 0.311]**, recall **0.615**, lift **3.27 [2.43, 4.15]**. It sits between the high-recall rule (t* = 0.25, lift 1.74) and the withdrawn test-chosen 0.60. *Disclosure:* this rule was added after the test sweep had been seen; the budget number itself predates it.

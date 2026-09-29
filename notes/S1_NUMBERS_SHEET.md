@@ -35,6 +35,12 @@ Numbers marked **(pre-leak-fix, not re-run)** below come from the 2026-09-23 run
 - **Operating threshold (pre-registered rule on validation: highest t with 2020-22 POD >= 0.80):
   t* = 0.25** (validation POD 0.848). Test: precision **0.119** [0.072, 0.166], recall **0.846**
   [0.706, 0.950], lift **1.74** [1.46, 2.04]; 55 TP / 408 FP / 10 FN.
+- **Alert-budget threshold (second operating point, 2026-09-28):** the lowest t whose 2020-22
+  validation alerts average ≤ 8 per month network-wide. The budget is the project's existing 8
+  station-visits/month (`decision_value.py`), fixed before this threshold was chosen. It gives
+  **t = 0.47**. Test: 6.4 alerts/month; precision **0.223** [0.125, 0.311], recall **0.615**
+  [0.411, 0.769], lift **3.27** [2.43, 4.15]; 40 TP / 139 FP / 25 FN. Chosen after the test sweep had
+  been seen, so disclose that the rule was added then (the budget itself predates it).
 - **t = 0.60 is withdrawn as an operating point:** it was picked on the 2023-25 test sweep, so its
   numbers are not independent. For reference only, at 0.60: precision 0.329 [0.171, 0.444], recall
   0.415, lift 4.82 [3.13, 6.76] (was 0.316 / 0.477 / 5.03).

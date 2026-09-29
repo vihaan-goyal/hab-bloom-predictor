@@ -243,6 +243,28 @@ print(f"Operating threshold (validation POD >= {TARGET_POD}): t* = {OP_T:.2f} "
 print(f"  Test at t*: precision {_prec:.3f}  recall {_tp / (_tp + _fn):.3f}  "
       f"lift {_prec / y_test.mean():.2f}  TP {_tp} / FP {_fp} / FN {_fn}")
 
+# Alert-budget threshold (2026-09-28): the lowest threshold whose VALIDATION alerts average at most
+# ALERT_BUDGET per month across the network. The budget is the project's existing sampling budget
+# (8 station-visits a month, src/models/decision_value.py), fixed before this threshold was chosen.
+ALERT_BUDGET = 8
+_val_meta = val.loc[val[FEATURES + ['bloom_28d']].dropna(subset=['bloom_28d']).index]
+_val_month = _val_meta['date'].dt.to_period('M').values
+_n_val_months = len(pd.unique(_val_month))
+_fine = np.round(np.arange(0.05, 0.96, 0.01), 2)
+_per_month = [(lr_val_p >= t).sum() / _n_val_months for t in _fine]
+BUDGET_T = float(next(t for t, a in zip(_fine, _per_month) if a <= ALERT_BUDGET))
+_test_meta_b = test.loc[test[FEATURES + ['bloom_28d']].dropna(subset=['bloom_28d']).index]
+_n_test_months = len(pd.unique(_test_meta_b['date'].dt.to_period('M').values))
+_bb = (lr_test_p >= BUDGET_T).astype(int)
+_btp = int(((_bb == 1) & (y_test == 1)).sum()); _bfp = int(((_bb == 1) & (y_test == 0)).sum())
+_bfn = int(((_bb == 0) & (y_test == 1)).sum())
+_bprec = _btp / (_btp + _bfp) if _btp + _bfp else float('nan')
+print(f"Alert-budget threshold (<= {ALERT_BUDGET} alerts/month on validation, "
+      f"{_n_val_months} months): t_budget = {BUDGET_T:.2f}")
+print(f"  Test at t_budget: {(_btp + _bfp) / _n_test_months:.1f} alerts/month over {_n_test_months} "
+      f"sampled months | precision {_bprec:.3f}  recall {_btp / (_btp + _bfn):.3f}  "
+      f"lift {_bprec / y_test.mean():.2f}  TP {_btp} / FP {_bfp} / FN {_bfn}")
+
 # ---------------------------------------------------------------------------
 # Threshold sweep -- LR on test set
 # ---------------------------------------------------------------------------
