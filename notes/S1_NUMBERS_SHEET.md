@@ -5,7 +5,7 @@
 **What changed.** DEEP (M. Lyman) sent profile chlorophyll, raw and corrected, for Jan 2024 - Jul 2026.
 - DEEP's correction is exactly linear per cruise. Those lines reproduce our 2025 `Corrected_Chlorophyll`
   with zero difference.
-- Our 2024 raw values equal DEEP's raw on all 812 casts.
+- Our 2024 raw values equal DEEP's raw on all 812 depth samples (362 casts).
 - `label_rebuild.py` now fills 2024 from these lines (`fill_corrected`). Corrected/lab median for 2024
   is 1.02.
 - The 2024 one-day share above 10 µg/L fell from 0.133 (raw sensor) to 0.041.
@@ -39,9 +39,29 @@
 **Hybrid:** still not adopted. On development folds the hybrid is below the locked model, −0.008
 (`data/rerun_2024fix_hybrid.log`).
 
-**Not yet rerun on the corrected 2024:** station-specific models, basin alert, decision value, LR
-geometry, point of no return, and the `warning_*` scripts (they read `cv_pred_orig_h21.csv`). Treat their
-numbers below as "(pre-2024-fix)".
+**Rerun on the corrected 2024 (2026-10-02, `data/rerun4_*.log`):**
+- **Significance, 28-day test** (683 rows, 25 events):
+  - Station-shift null p = 0.70; station-year (timing) null p = 0.51.
+  - **Month-of-year baseline AUC 0.698 vs model 0.590: −0.108 [−0.225, −0.008], p = 0.98.**
+  - Read the other way: baseline > model, one-sided p ≈ 0.02 (post hoc; not the pre-registered direction, and the CI bound is barely past 0).
+- **Station-specific, western five, t = 0.47:** global precision 0.188, recall 0.429 (3/7). A4 with its own
+  threshold: precision 0.50, recall 0.75. No station clears precision > 0.5 with recall > 0.4.
+- **Reference baselines, basin-day** (41 days, 3 events): model lift 1.52 vs persistence 1.95. All CIs
+  include 0.
+- **Basin alert** at t_basin = 0.55: POD 0.333 [0, 1], FAR 0.889 (TP 1 / FP 8 / FN 2).
+- **Decision value, 8 visits/month, LIS:** alert-directed 9.9 visits/bloom [4.8, 35.0] vs calendar 11.0
+  [4.7, 105.0]. The CIs overlap, so there is no demonstrated gain. (Narragansett: 1.4 vs 3.6.)
+- **LR geometry, 21-day onset rows:** LIS AUC 0.643, precision 0.037 at t* (30 events) vs Narragansett
+  0.806 / 0.638.
+- **Point of no return:** unchanged conclusion. No pre-onset row reaches analogue risk ≥ 0.6.
+- **Cadence thinning:** POD 0.375 at the full cadence, falling to 0 at a 70-day gap.
+- **Warning operating point, 21-day test 2023-25, t* = 0.20** (560 rows, 16 events): POD 0.562, FAR 0.965,
+  precision 0.035.
+- **Warning robustness:** rerun with `--t-star 0.20`; per-station table in `data/warning_robustness.csv`.
+- **Reading:**
+  - On the corrected label, LIS boat data show no recent skill beyond the calendar.
+  - The only robust LIS result is the 2016-2025 walk-forward edge (+0.088, p < 0.001).
+  - Narragansett carries the forecasting claim.
 
 **Clean test ahead:** `notes/PROSPECTIVE_2026_PREREG.md` (2026 season, pre-registered 2026-10-02).
 

@@ -7,7 +7,7 @@ project could not have tuned to.
 
 **What we already know (disclosed).** While checking the files we computed only summary statistics
 of the 2026 chlorophyll itself, never a model score:
-- 133 surface lab-profile pairs; corrected/lab median 0.99;
+- 133 surface lab-profile pairs (profile S row joined to the mean of that station-day's lab surface samples; clarified 2026-10-02, numbers unchanged); corrected/lab median 0.99;
 - 3.8% of corrected surface values and 3.0% of lab values are above 10 µg/L.
 
 So 2026 so far is a low-bloom season, and the test will have few events.

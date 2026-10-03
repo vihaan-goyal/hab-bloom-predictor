@@ -152,7 +152,7 @@ _p_te_all, _y_te_all = global_probs(test)
 print(f"Global model fitted on {len(Xg_tr):,} train rows "
       f"({yg_tr.mean()*100:.1f}% bloom). "
       f"Global test AUC = {roc_auc_score(_y_te_all, _p_te_all):.4f} "
-      f"(pipeline reference ~0.814).")
+      f"(pipeline reference 0.590, notes/S1_NUMBERS_SHEET.md).")
 
 # ---------------------------------------------------------------------------
 # 5. Per-station evaluation
@@ -212,7 +212,7 @@ for station in WESTERN_STATIONS:
     print(f"    @best : P={A_best['precision']:.3f} R={A_best['recall']:.3f} "
           f"F1={A_best['f1']:.3f} AUC={A_best['auc']:.3f} "
           f"(TP={A_best['tp']} FP={A_best['fp']} FN={A_best['fn']})")
-    print(f"    @0.60 : P={A_60['precision']:.3f} R={A_60['recall']:.3f} "
+    print(f"    @0.47 : P={A_60['precision']:.3f} R={A_60['recall']:.3f} "
           f"F1={A_60['f1']:.3f} "
           f"(TP={A_60['tp']} FP={A_60['fp']} FN={A_60['fn']})")
 
@@ -229,7 +229,7 @@ for station in WESTERN_STATIONS:
     print(f"    @best : P={B_best['precision']:.3f} R={B_best['recall']:.3f} "
           f"F1={B_best['f1']:.3f} AUC={B_best['auc']:.3f} "
           f"(TP={B_best['tp']} FP={B_best['fp']} FN={B_best['fn']})")
-    print(f"    @0.60 : P={B_60['precision']:.3f} R={B_60['recall']:.3f} "
+    print(f"    @0.47 : P={B_60['precision']:.3f} R={B_60['recall']:.3f} "
           f"F1={B_60['f1']:.3f} "
           f"(TP={B_60['tp']} FP={B_60['fp']} FN={B_60['fn']})")
 
@@ -304,9 +304,9 @@ print("CONFUSION MATRIX DETAIL  (test 2023-2025)")
 print("=" * 72)
 print(f"{'Stn':>4} {'n+':>3} {'n':>4} | "
       f"{'A@best':>8}  {'TP':>3} {'FP':>3} {'FN':>3} | "
-      f"{'A@0.60':>8}  {'TP':>3} {'FP':>3} {'FN':>3} | "
+      f"{'A@0.47':>8}  {'TP':>3} {'FP':>3} {'FN':>3} | "
       f"{'B@best':>8}  {'TP':>3} {'FP':>3} {'FN':>3} | "
-      f"{'B@0.60':>8}  {'TP':>3} {'FP':>3} {'FN':>3}")
+      f"{'B@0.47':>8}  {'TP':>3} {'FP':>3} {'FN':>3}")
 print("-" * 100)
 for st in WESTERN_STATIONS:
     if st not in per_station:
@@ -351,7 +351,7 @@ print("COMBINED ACROSS WESTERN STATIONS  (pooled test rows)")
 print("=" * 72)
 print(f"{'Approach':<42} {'Prec':>6} {'Rec':>6} {'F1':>6} {'TP':>4} {'FP':>4} {'FN':>4}")
 print("-" * 72)
-print(f"{'Global model @0.60 (western subset)':<42} "
+print(f"{'Global model @0.47 (western subset)':<42} "
       f"{g_60['precision']:>6.3f} {g_60['recall']:>6.3f} {g_60['f1']:>6.3f} "
       f"{g_60['tp']:>4} {g_60['fp']:>4} {g_60['fn']:>4}")
 print(f"{'Strategy A: station-only @ station-best t':<42} "
@@ -372,8 +372,8 @@ for st in WESTERN_STATIONS:
     if st not in per_station:
         continue
     r = per_station[st]
-    for strat, key in [('A@best', 'A_best'), ('A@0.60', 'A_60'),
-                       ('B@best', 'B_best'), ('B@0.60', 'B_60')]:
+    for strat, key in [('A@best', 'A_best'), ('A@0.47', 'A_60'),
+                       ('B@best', 'B_best'), ('B@0.47', 'B_60')]:
         m = r[key]
         if m['precision'] > 0.50 and m['recall'] > 0.40:
             hits.append((st, strat, m['precision'], m['recall'], m['f1']))
@@ -389,8 +389,8 @@ else:
         if st not in per_station:
             continue
         r = per_station[st]
-        for strat, key in [('A@best', 'A_best'), ('A@0.60', 'A_60'),
-                           ('B@best', 'B_best'), ('B@0.60', 'B_60')]:
+        for strat, key in [('A@best', 'A_best'), ('A@0.47', 'A_60'),
+                           ('B@best', 'B_best'), ('B@0.47', 'B_60')]:
             m = r[key]
             if m['recall'] > 0.40:
                 cand.append((m['precision'], st, strat, m['recall'], m['f1']))
