@@ -49,7 +49,7 @@ That difference is the pulse.
 | Arm D (false alarm) | no pulse | | | |
 
 - **Trace metals and vitamins:** add the f/2 trace-metal and vitamin mixes at the normal f/2 dose to every tank, pulse or not. DEEP doesn't measure these, and diatoms need them. This keeps N, P and Si as the only things that differ between tanks.
-- **Temperature:** the real spring bloom happens at 2-5 °C, which the lab can't hold. Run at **12-15 °C** (a cool room; this also suits the kelp) and report it as a limitation.
+- **Temperature:** the real spring bloom happens at 2-5 °C, which the lab can't hold. Run at **12-15 °C** (a cool room) and report it as a limitation.
 - **Light:** 12:12 or 16:8, the same in every tank.
 
 ## Watch-outs

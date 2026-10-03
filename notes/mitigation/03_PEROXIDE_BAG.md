@@ -6,6 +6,17 @@
 - **Why:** percarbonate dissolves in minutes, so a bag of it wouldn't be retrievable. Peroxide breaks down to water and oxygen within 1-2 days anyway, so the loop controls exposure by **dose and timing**, not by retrieval. Percarbonate also raises pH less than CaO₂ (washing soda vs calcium hydroxide), its own non-target data exist (Thoo 2020: below 10 mg/L percarbonate ≈ 2.8 mg/L H₂O₂), and there is one less oxidizer to store.
 - The CaO₂ bag notes below are kept as background only.
 
+**Updated 2026-10-01: peroxide is now full loop run #2** (was screen only), with aeration as #1.
+Seaweed, shellfish and curcumin were dropped because the device must run fully autonomously; a
+pump plus a 3% H₂O₂ reservoir meets that rule (`EXECUTION_PLAN.md`, "Plan change 2026-10-01").
+- The loop keeps **H1** (≥ 50% peak cut, B vs A; B beats reactive C), the 0.8 mg/L pumped pulses,
+  `MAX_ON` 3 pulses and the re-dose rule. Sodium percarbonate stays a screen comparison only.
+- **The screen uses a cell-size panel:** *Micromonas pusilla* (~2 µm; eradicated by peroxide in
+  Randhawa et al. 2012, peroxide-03), *Nannochloropsis* (2-3 µm; untested in our papers), *Skeletonema*,
+  *T. weissflogii* and *P. micans*.
+- **New secondary hypothesis (H5):** peroxide sensitivity falls with cell size. The small cells are
+  hit; the larger diatoms and dinoflagellates, and the arm-D non-target check, are spared at 0.8 mg/L.
+
 Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/peroxides.md` #3,
 #5, #6, #15, #18, #34, #39; Part 1 #1.
 
@@ -52,8 +63,9 @@ Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/pe
 happens, then the OFF rule decides whether to send another. This keeps exposure short by design.
 
 ## Bench setup
-- **Jars:** 3 per arm, 1-4 L (Lusty & Gobler used 4 L bottles; Randhawa 250 mL).
-- **Best-fit culture:** a **small-celled non-toxic alga** (e.g. a *Micromonas*- or *Nannochloropsis*-type picoplankton) mixed with a **diatom**. That tests the size selectivity: does the small alga crash while the diatom survives?
+- **Screen:** 250 mL flasks, one species each (the panel above), n = 3 (Randhawa used 250 mL).
+- **Loop tanks:** 3 per arm, 4-10 L (Lusty & Gobler used 4 L bottles). The peristaltic pump doses 3% H₂O₂ from a reservoir; check the reservoir's strength weekly with the low-range kit and refill it (the one allowed maintenance).
+- **Loop culture (2026-10-01):** the small alga the screen shows is cut (*Micromonas pusilla* or *Nannochloropsis*), mixed with ***Skeletonema***. That tests the size selectivity in the tank: does the small alga crash while the diatom survives?
 - *(Dropped 2026-09-28)* **Bag:** 2-4 layers of polyester or nonwoven fabric, heat-sealed or sewn, holding the weighed CaO₂. Keliri tested four fabric types; start with the one they found released like loose granules.
 - **Percarbonate check first (replaces the CaO₂ release curve):** dissolve a weighed amount of sodium percarbonate in plain seawater and measure H₂O₂ at 0, 15 min, 1 h and 24 h with the low-range kit. That confirms its real peroxide content (theoretical 32.5% H₂O₂ by weight; commercial powder is often less), so 0.8 mg/L H₂O₂ ≈ **2.5-2.9 mg/L percarbonate (~25-29 mg per 10 L)**. Always dissolve it fresh on the day of dosing. (The old CaO₂ release-curve pilot is dropped.)
 - **Comparison arm:** sodium percarbonate at the same H₂O₂ dose, plus a **sodium carbonate control** matched to the carbonate it adds (~2.0 mg/L Na₂CO₃ per 2.9 mg/L percarbonate), which separates peroxide from carbonate and pH.
@@ -61,7 +73,7 @@ happens, then the OFF rule decides whether to send another. This keeps exposure 
   - Buy a **low-range peroxide test kit** (colorimetric, with steps below 1 mg/L), and keep the strips only for the 2.8 mg/L safety cutoff.
   - Make **liquid 3% H₂O₂, dosed by the pump,** the main dosing method for the screen: the dose is then known from the arithmetic (0.8 mg/L in 10 L = 8 mg = 0.27 mL of 3%). The percarbonate arm becomes the comparison arm.
 - *(Dropped with CaO₂)* **The bag overshoots:** Keliri's 2 g/L released up to 12 mg/L, 15× the target. Build the release curve in plain seawater first (below) and **start with a very small CaO₂ mass**.
-- **Counting ~2 µm cells:** they're nearly impossible to count on a school microscope. Use **size-fractionated chlorophyll** instead: push a sample through a **5 µm syringe filter**. What passes through is small cells, and total minus filtrate is large cells. It's a standard oceanography method and cheap. Hemocytometer counts at 400× are a cross-check only.
+- **Counting ~2 µm cells:** they're hard to count on a school microscope, and the write-up says so. In the screen each flask holds one species, so the **fluorometer** measures the small algae directly, with **hemocytometer counts at 400×** as the check. In the mixed loop tanks, use **size-fractionated chlorophyll**: push a sample through a **5 µm syringe filter**. What passes through is small cells, and total minus filtrate is large cells. It's a standard oceanography method and cheap.
 
 ## Measurements specific to peroxide
 - H₂O₂ residual (strips) at 1, 4, 12 and 24 h in the first cycle.
@@ -75,9 +87,9 @@ happens, then the OFF rule decides whether to send another. This keeps exposure 
 |---|---|
 | Sodium percarbonate, pure (oxygen-bleach powder, no fragrance or surfactant) | $10 |
 | Peroxide test strips (0.5-25 mg/L) | $20 |
-| Jars (12-15) | $40 |
-| Arduino Uno alerter + peristaltic dosing pump; fluorometer, pH, temperature, DO kit | $110 |
-| Sea salt, f/2, cultures (NCMA) | $80-130 |
+| Flasks for the panel screen (93 × 250 mL); loop tanks counted in `EXECUTION_PLAN.md` §8 | $120 |
+| Arduino Uno alerter + 12 V peristaltic dosing pump (now needed for the loop run) + 3% H₂O₂ reservoir bottle; fluorometer, pH, temperature, DO kit | $110 |
+| Sea salt, f/2, cultures (NCMA, incl. *Micromonas pusilla*); live *Nannochloropsis* (reef-aquarium supplier) | $95-155 |
 | Brine shrimp eggs | $10 |
 
 ## Safety and forms

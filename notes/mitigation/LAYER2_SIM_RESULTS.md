@@ -1,5 +1,7 @@
 # Layer 2 results: simulated bench runs of the treatment loop (2026-09-26; re-run 2026-09-28)
 
+> **2026-10-01:** the plan changed for autonomy reasons: the full loop runs are now aeration and peroxide (seaweed, shellfish and curcumin dropped; `EXECUTION_PLAN.md`, "Plan change 2026-10-01"). The seaweed and shellfish results below are kept as a record.
+
 > **Read the 2026-09-28 re-run first. It supersedes every table further down, which is kept as
 > history.** An audit found that the earlier runs did not match the protocol. Every number in the
 > re-run section comes from `data/sim/method_summary.csv` and `data/sim/method_design_*.csv`

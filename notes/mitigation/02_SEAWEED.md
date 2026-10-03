@@ -1,5 +1,7 @@
 # Method 2: retrievable seaweed panels (sugar kelp first, *Ulva* second)
 
+> **Dropped 2026-10-01 (kept as a record).** The device must run fully autonomously: switchable by relay or pump, no living stock, weeks with at most a refill. Seaweed needs live stock kept alive in a cold holding tank and swapped; sugar kelp dies back above about 18-20 °C, which is the summer bloom season; it can't run unattended. The full loop runs are now aeration and peroxide (`EXECUTION_PLAN.md`, "Plan change 2026-10-01").
+
 Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/marine.md` #21-#24.
 **Updated 2026-09-25 after reading the three Sylvers & Gobler papers in full** (2021, 2023, 2025;
 open access, read through the browser). Tang & Gobler 2011 is paywalled and still abstract-only.

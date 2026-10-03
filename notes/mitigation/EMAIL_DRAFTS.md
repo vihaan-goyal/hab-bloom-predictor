@@ -2,11 +2,17 @@
 
 Written 2026-09-26. Vihaan sends every email himself. Each draft has one ask.
 
+**2026-10-01: seaweed and shellfish are dropped** (the plan is now aeration and peroxide;
+`EXECUTION_PLAN.md`, "Plan change 2026-10-01"). **Don't send #3a, #3b, #4a or #4b**; they are kept
+as a record. #1 and #2 are updated: the sponsor email names aeration and peroxide, and the NCMA
+email asks for *Micromonas pusilla* and *Skeletonema*. *Nannochloropsis* is bought live from a
+reef-aquarium supplier (no email needed).
+
 **Before sending:**
 - Fill in the teacher's name in #1.
 - If there's no sponsor yet, add "(sponsor to be confirmed)" to #2-4.
-- Send #4b (permits) **before** ordering oysters.
-- Oyster count updated 2026-09-26 from 30 to **~50**. Shellfish is now full run #2, stocked to clear 2 tank volumes a day: about 4 per 20 L tank × 9 treated tanks, plus a holding tank, plus 10 for the clearance test.
+- ~~Send #4b (permits) **before** ordering oysters.~~ (dropped 2026-10-01)
+- *(Record only)* Oyster count updated 2026-09-26 from 30 to **~50**. Shellfish is now full run #2, stocked to clear 2 tank volumes a day: about 4 per 20 L tank × 9 treated tanks, plus a holding tank, plus 10 for the clearance test.
 
 ## Contacts
 
@@ -24,8 +30,8 @@ Written 2026-09-26. Vihaan sends every email himself. Each draft has one ask.
 |---|---|---|
 | 1 | Sponsor | Now (blocks everything; in person may be easier) |
 | 2 | NCMA | This week |
-| 3a / 3b | Yarish lab / Stonington Kelp | This week |
-| 4b, then 4a | Bureau of Aquaculture, then Copps Island | This week |
+| ~~3a / 3b~~ | ~~Yarish lab / Stonington Kelp~~ | dropped 2026-10-01 |
+| ~~4b, then 4a~~ | ~~Bureau of Aquaculture, then Copps Island~~ | dropped 2026-10-01 |
 | 5 | Matt Lyman follow-up | Tue 2026-09-29, only if no reply |
 | 6 | Prof. O'Donnell (talk date) | When ready to schedule |
 
@@ -37,7 +43,7 @@ Written 2026-09-26. Vihaan sends every email himself. Each draft has one ask.
 
 > Hi [Name],
 >
-> I'm working on a CSEF/ISEF project: a model that forecasts harmful algal blooms, plus a bench test of low-impact ways to stop a bloom early (seaweed, aeration, filter-feeding shellfish), using non-toxic algae cultures in small tanks.
+> I'm working on a CSEF/ISEF project: a model that forecasts harmful algal blooms, plus a bench test of two low-impact ways to stop a bloom early (aeration and a small, fast-breaking dose of hydrogen peroxide), switched on by the forecast, using non-toxic algae cultures in small tanks.
 >
 > Would you be willing to be my Designated Supervisor and sign the forms? I'd need a small lab corner from late October to December. I have a full plan and safety list I can show you.
 >
@@ -58,13 +64,14 @@ Written 2026-09-26. Vihaan sends every email himself. Each draft has one ask.
 > - *Prorocentrum micans*
 > - *Phaeodactylum tricornutum*
 > - *Thalassiosira weissflogii*
-> - one small-celled alga (e.g. *Micromonas* or *Nannochloropsis*)
+> - *Skeletonema* (any non-toxic coastal strain)
+> - *Micromonas pusilla*
 >
 > Thank you,
 > Vihaan Goyal
 > Westhill High School, Stamford, CT
 
-## 3a. Yarish Seaweed Lab, UConn Stamford (call or email)
+## 3a. Yarish Seaweed Lab, UConn Stamford (call or email) - dropped 2026-10-01, don't send
 
 **Subject:** Young sugar kelp for a Stamford student experiment
 
@@ -77,7 +84,7 @@ Written 2026-09-26. Vihaan sends every email himself. Each draft has one ask.
 > Thank you,
 > Vihaan Goyal
 
-## 3b. Stonington Kelp Co.
+## 3b. Stonington Kelp Co. - dropped 2026-10-01, don't send
 
 **To:** suzie@stoningtonkelpco.com
 **Subject:** Small amount of sugar kelp for a school experiment
@@ -89,14 +96,14 @@ Written 2026-09-26. Vihaan sends every email himself. Each draft has one ask.
 > Thank you,
 > Vihaan Goyal
 
-## 4a. Copps Island Oysters (contact form)
+## 4a. Copps Island Oysters (contact form) - dropped 2026-10-01, don't send
 
 > Hi, I'm a Westhill High School student in Stamford. For a science fair experiment I'm testing whether oysters filtering algae in tanks can keep a bloom from building. Could I buy about 50 oyster seed (~40 mm) in late October? They'd stay in school tanks and never be eaten or released.
 >
 > Thank you,
 > Vihaan Goyal
 
-## 4b. CT Bureau of Aquaculture
+## 4b. CT Bureau of Aquaculture - dropped 2026-10-01, don't send
 
 **To:** Agri.Aquaculture@ct.gov
 **Subject:** Permit question for a school tank experiment with oysters

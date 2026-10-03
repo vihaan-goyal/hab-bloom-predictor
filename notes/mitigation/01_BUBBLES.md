@@ -3,6 +3,17 @@
 Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/physical.md` #22,
 `notes/snowball/marine.md` #33.
 
+**Updated 2026-10-01: aeration is now full loop run #1** (with peroxide as #2; seaweed, shellfish
+and curcumin dropped because the device must run fully autonomously; `EXECUTION_PLAN.md`, "Plan
+change 2026-10-01"). Two changes for this method:
+- **It is judged on delay, not peak cut** (written down before any tank data). Primary outcome: **days
+  held below `C_ok`** in arm B vs untreated arm A, with **hours ON** and the **number of ON episodes**
+  (reruns). The ≥ 50% peak cut is reported as secondary. In real water, tides flush nutrients and
+  conditions change, so holding a bloom back lets its window pass, and the device re-runs when the
+  forecast fires again. H3 (regrowth after OFF) tells how often reruns are needed.
+- **The screen uses a cell-size panel:** *Nannochloropsis* (2-3 µm), *Micromonas pusilla* (~2 µm),
+  *Skeletonema* (diatom) and the dinoflagellate *Akashiwo sanguinea* (backup *P. triestinum*).
+
 ## Why this method
 - **Evidence:** Sung & Gobler (2026), *Journal of Environmental Management*, [doi:10.1016/j.jenvman.2026.129015](https://doi.org/10.1016/j.jenvman.2026.129015). Full text read 2026-09-26 (through Columbia Libraries).
   - At the high rate, coarse bubbles cut *Margalefidinium polykrikoides* **21-58% (strain CPSB-1G) and 34-63% (strain CP1)** against unaerated controls; 78% by day 10 in the screening test. The ">60%" in the paper's highlights is the top of these ranges.
@@ -63,7 +74,7 @@ Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/ph
 | **`X` (ON time)** | **48 h**, then re-measure. This is a starting value; the bench's arm-B pilot also tests 24 h and 96 h |
 | **Re-measure** | chlorophyll, cell count, DO, pH, temperature, non-target survival |
 | **OFF rule** | the shared rule (`p < T_off`, `chl < C_ok`, not rising) → relay OFF |
-| **`MAX_ON`** | 192 h (4 × X) |
+| **`MAX_ON`** | 192 h (4 × X) per episode. After OFF (or `MAX_ON`), a new forecast alert starts a new episode: a **rerun**, counted as an outcome (2026-10-01) |
 | **Method safety limits** | water temperature rising more than 2 °C above control (pump heat); evaporation over 5% of volume (top up with fresh water to hold salinity) |
 
 **Why 48 h:** it matches the 2-3 day timescale over which the seaweed and peroxide studies saw most
@@ -71,7 +82,8 @@ of their effect, and it's long enough to separate a real effect from a 1-day art
 
 ## Bench setup
 - **Columns:** 3 clear tubes per arm, about 1 m tall × 7-10 cm wide (acrylic or 2 L soda bottles stacked), artificial seawater at salinity 30, 12:12 light, 18-20 °C.
-- **Culture:** non-toxic dinoflagellate (*Prorocentrum micans*); optional second series with a diatom (*Phaeodactylum*).
+- **Culture (updated 2026-10-01):** the screen tests the panel (*Nannochloropsis*, *Micromonas pusilla*, *Skeletonema*, *Akashiwo sanguinea* or *P. triestinum*). The loop run uses the dinoflagellate the screen shows is slowed (fallback: the panel species with the largest growth pause). *P. micans* is not the test organism (bubbling promoted *Prorocentrum*; see above). The ~2 µm algae are measured by fluorometer plus hemocytometer counts at 400×, which are hard at school; say so in the write-up.
+- **Loop tanks (2026-10-01):** 4-10 L tanks with an air stone at 0.6 L/min per litre (2.4-6 L/min per tank), one relay-switched air supply per treated tank (B, C, D). Check that the pumps reach that flow through the stones; if not, use 4 L of water per tank.
 - **Air:** one aquarium pump per arm via a manifold, with an **open tube end or wide-bore outlet** (coarse) at the bottom and a needle valve so every column gets the same flow. Measure flow with a bubble-counter or a rotameter.
 - **Extra arm worth adding:** a fine airstone at the same airflow, which replicates the paper's coarse-versus-fine contrast.
 - **Hidden confounder: carbon supply (added 2026-09-28; can hide the effect).** In still flasks, dense cultures run short of dissolved CO₂ and their pH climbs. Bubbling with air puts CO₂ back, which **helps** growth and can cancel out the turbulence stress.
@@ -84,6 +96,8 @@ of their effect, and it's long enough to separate a real effect from a 1-day art
 - **Controller:** the Arduino Uno alerter (`hardware/alerter_uno/`) + relay → pump; fluorometer + DO/pH/temperature sensors → state machine.
 
 ## Measurements specific to bubbles
+- **Delay outcome (primary in the loop run, 2026-10-01):** days each tank spends below `C_ok` from nutrients-in to the end of the bloom phase; the day it first exceeds `C_ok`; total hours ON; number of ON episodes (reruns); days from each OFF back to `C_ok` (H3).
+- **Screen:** regrowth after the 48 h OFF in every panel species (days to reach the still control's 48 h density), as an early estimate of how often the loop has to re-run.
 - Airflow (L/min) per column, logged.
 - Water temperature (pump heat), plus salinity by refractometer at each re-measure.
 - Cell integrity under the microscope: are cells broken (shear) or intact but suppressed?
@@ -93,6 +107,7 @@ of their effect, and it's long enough to separate a real effect from a 1-day art
 | Item | Approx. cost |
 |---|---|
 | 2 aquarium air pumps + manifold, needle valves, tubing | $40 |
+| Loop run (2026-10-01): air pumps for the 9 treated tanks, airline, check valves, air stones | $60 |
 | 12 clear columns (or soda bottles) + stands | $40 |
 | Arduino Uno alerter + relay + wiring (built) | $0-25 |
 | DIY fluorometer parts (LED, photodiode, filter, op-amp) | $30 |

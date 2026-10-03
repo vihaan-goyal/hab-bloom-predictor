@@ -1,7 +1,10 @@
 # Forecast-triggered bloom disruption: the shared control loop
 
 Written 2026-09-24. Every method file in this folder (01-05) plugs into this loop. Only the
-"treatment" block and the numbers change. Evidence for each method is in
+"treatment" block and the numbers change. **Since 2026-10-01 the plan uses two methods only:
+aeration (`01_BUBBLES.md`) and peroxide (`03_PEROXIDE_BAG.md`).** Seaweed, curcumin and shellfish
+were dropped because the device must run fully autonomously (switchable by relay or pump, no living
+stock, weeks with at most a refill); reasons in `EXECUTION_PLAN.md` ("Plan change 2026-10-01"). Evidence for each method is in
 `notes/HAB_MITIGATION_LITERATURE.md` (Part 3) and `notes/snowball/*.md`.
 
 ## The idea in one sentence
@@ -52,7 +55,7 @@ flowchart TD
 | `T_off` | forecast probability needed to switch off | 0.8 × `T_on` | hysteresis |
 | `C_ok` | chlorophyll that counts as "no bloom" | 5 µg/L in the field (half the 10 µg/L bloom line); in the bench, **50% of the pilot bloom run's untreated peak** (known before nutrients go in) | leaves a margin under the bloom threshold |
 | `X` | treatment ON time before re-measuring | **per method** (see 01-05) | set from the literature, then tuned on the bench |
-| `MAX_ON` | the most total ON time for one event | 4 × `X`; per-pulse methods count pulses (peroxide 3, curcumin 4) | if it hasn't worked by then, it isn't working |
+| `MAX_ON` | the most total ON time for one event | 4 × `X`; peroxide counts pulses (3) | if it hasn't worked by then, it isn't working |
 | `Y` | cool-down monitoring after OFF | 14 days (field), 5 days (bench) | rebound time seen in the literature |
 
 ## Where the forecast comes from: the Narragansett sensor model
@@ -131,11 +134,11 @@ prospective season already does for the WLIS and EXRX buoys (live-season rules i
 
 **Sampling rules for the fluorometer (added 2026-09-28).** The fluorometer measures glow, not
 cells. Glow per cell changes with time of day (light history) and with treatments that damage
-photosynthesis or bleach cells (seaweed, peroxide, curcumin), so a fake drop could trigger OFF.
+photosynthesis or bleach cells (peroxide), so a fake drop could trigger OFF.
 - Sample every tank at the **same time each day**.
 - **Keep each sample in the dark for 15 min** before reading it.
-- Cell counts are the ground truth: report **glow per cell** at each count, and the OFF rule uses counts for seaweed and curcumin.
-- Counting workload: 24 tanks × ~10 min is too much daily. Photograph the counting chamber through the microscope with a phone and count later (ImageJ); count every 2 days, and daily only around trigger and OFF; split the work between both team members.
+- Cell counts are the ground truth: report **glow per cell** at each count, and the OFF rule uses counts for peroxide (it bleaches cells). For the ~2 µm algae, counts are hemocytometer counts at 400×, which are hard at school; the fluorometer is their main measure and the counts are a check (2026-10-01).
+- Counting workload: 28 tanks × ~10 min is too much daily. Photograph the counting chamber through the microscope with a phone and count later (ImageJ); count every 2 days, and daily only around trigger and OFF; split the work between both team members.
 
 **Safety limits (EMERGENCY OFF at any time):** DO < 4 mg/L; pH outside the method's range (marine 7.6-8.6); non-target survival more than 20 percentage points below control; any method-specific limit in its file.
 
@@ -165,22 +168,35 @@ so it does 0-4% by construction (Layer 2) and a judge can call it a strawman. St
 of the expected peak is the reactive strategy a lake or bay manager actually uses, so B beating
 it is a real test of "early matters". The Layer 2 simulation was re-run with this arm C (and the
 floor, handover and pilot-based C_ok) on 2026-09-28: C starts about 3 days after B and cuts the
-peak 14-24%, against B's 72-81% for seaweed, shellfish and peroxide (`LAYER2_SIM_RESULTS.md`).
+peak 14-24%, against B's 72-81% for seaweed, shellfish and peroxide (`LAYER2_SIM_RESULTS.md`;
+seaweed and shellfish were dropped on 2026-10-01, the numbers are kept as a record).
 
 **Pilot bloom run (added 2026-09-28):** on about **day 7** of the warm-up, 2 spare tanks get the
 bloom pulse with no treatment. They confirm the culture actually blooms in our tanks (if arm A doesn't
 bloom, every hypothesis fails), and give the expected peak height and timing that arm C's start
 and `C_ok` are set from. Keep backup culture flasks going through the run.
 
-**Pre-registered hypothesis (H1), revised 2026-09-26 after the Layer 2 simulation:**
+**Aeration is judged on delay, not peak cut (written down 2026-10-01, before any tank data).**
+- **H1-delay (aeration primary):** arm B spends more days below `C_ok` than arm A, counted from nutrients-in to the end of the bloom phase (3-tank means; Welch 95% interval of B − A above 0). Reported with it: total **hours ON** and the **number of ON episodes** (reruns: a new forecast alert after OFF starts a new episode). The same comparison is made for B vs C.
+- **Secondary for aeration:** H1a and H1b below (≥ 50% peak cut; B beats C on peak cut).
+- *Why:* in real water, tides flush nutrients and conditions change, so holding a bloom back lets its window pass, and the device simply re-runs when the forecast fires again. Layer 2 already predicts bubbles mostly delay the bloom (25% peak cut, B hits `MAX_ON` in 99% of runs). H3 (below) tells how often reruns are needed.
+
+**Pre-registered hypothesis (H1), revised 2026-09-26 after the Layer 2 simulation** (primary for
+peroxide; secondary for aeration since 2026-10-01):
 - **H1a:** arm B's peak chlorophyll is at least 50% lower than arm A's.
 - **H1b:** arm B's peak cut is larger than arm C's (reactive treatment, started at 50% of the expected peak).
 - Total treatment (hours ON, or grams or mg dosed) is reported for B and C, plus treatment per percent of peak cut.
 - *Why it changed:* the original H1 also required B to use **less treatment than C**. The simulation (`LAYER2_SIM_RESULTS.md`) showed that late treatment starts when the bloom is already crashing, so it's short and does almost nothing. "Less treatment than C" then fails even when B works.
 **H2:** arm D shows no loss of non-target survival compared with arm A.
 **H3 (reported, no pass mark; added from the evidence reviews):** after B's last OFF, record the days
-until chlorophyll is back above `C_ok`. Bubble and seaweed effects stop when the treatment is removed,
-so regrowth is expected, and measuring it is part of the result.
+until chlorophyll is back above `C_ok`. Bubble effects stop when the treatment is removed,
+so regrowth is expected, and measuring it is part of the result. For aeration it sets how often the
+device has to re-run.
+**H5 (secondary, screens; added 2026-10-01): peroxide sensitivity falls with cell size.** On the
+species panel, the percent cut at each dose is largest in the ~2 µm algae (*Micromonas pusilla*,
+*Nannochloropsis*) and smaller in *Skeletonema*, *T. weissflogii* and *P. micans*; the larger cells
+and the arm-D non-target check are spared at 0.8 mg/L, as Randhawa et al. 2012 reported (peroxide-03,
+where *Micromonas* was eradicated). *Nannochloropsis* is untested in our papers.
 **H4 (added 2026-09-28): trim the bloom, don't remove the algae.** Diatoms at normal levels make
 oxygen and feed the food web, so the loop must cut the *peak*, not push the algae below normal.
 - **Pass:** in arm B, the 3-tank mean chlorophyll (and cell count) never falls below **80% of the warm-up mean** (the normal, pre-bloom level), from nutrients-in to the end of the cool-down.
@@ -194,8 +210,9 @@ oxygen and feed the food web, so the loop must cut the *peak*, not push the alga
 
   That is the same logic as H4 and as treating early and small. See also Texas A&M AquaPlant, [filamentous algae](https://aquaplant.tamu.edu/management-options/filamentous-algae/), which warns that post-treatment oxygen depletion is the main danger of any chemical control.
 
-**Outcome measures:** peak chlorophyll; area under the chlorophyll curve; days above `C_ok`;
-total ON time or dose; non-target survival; number of ON/OFF cycles.
+**Outcome measures:** peak chlorophyll; area under the chlorophyll curve; days above `C_ok`
+(equivalently days held below it, the aeration primary outcome); total ON time (hours) or dose;
+non-target survival; number of ON episodes (reruns) and ON/OFF cycles.
 
 **Statistics:** H1a compares B with A using both arms' tank-to-tank spread: Welch t-interval on the
 log peaks (B vs A), reported as a percent cut with its 95% interval. Single-arm summaries use mean ±
@@ -205,6 +222,19 @@ clears 50% with 3 tanks, 78-92% with 4); report it that way rather than over-cla
 per arm if space allows.
 
 ## Organisms (non-toxic stand-ins)
+
+**Species panel for both screens (added 2026-10-01), smallest to largest:**
+- ***Micromonas pusilla*** (~2 µm), from NCMA; eradicated by peroxide in Randhawa et al. 2012 (peroxide-03).
+- ***Nannochloropsis*** (2-3 µm), sold live as reef-aquarium food; harmless; its peroxide sensitivity is untested in our papers. Check it under the microscope and keep a clean sub-culture (NCMA as backup).
+- the diatom ***Skeletonema*** (and *T. weissflogii* in the peroxide screen);
+- the dinoflagellate already in each screen: *Akashiwo sanguinea* (backup *P. triestinum*) for bubbles; *P. micans* for peroxide.
+
+The ~2 µm cells are measured by the fluorometer plus hemocytometer counts at 400×; that is stated
+in the write-up as a limitation.
+
+**Loop cultures (2026-10-01):** aeration runs on the dinoflagellate its screen shows is slowed;
+peroxide runs on the small alga its screen shows is cut, mixed with *Skeletonema*. If the cultures
+differ, each method gets its own arm A and pilot tanks (28 tanks in all; `EXECUTION_PLAN.md` §7).
 - **Dinoflagellate:** *Prorocentrum micans* (used as the non-toxic control in Mardones et al. 2023). **Not as the main test organism for bubbles:** bubbling *promoted* *Prorocentrum* in Sung & Gobler 2026, so for bubbles it's only an "expected to resist" comparison (see `01_BUBBLES.md`).
 - **Diatom:** ***Skeletonema*** first (added 2026-09-28: the dominant diatom of Long Island Sound blooms, so the most relevant stand-in), then *Thalassiosira*. *Phaeodactylum tricornutum* is a very hardy lab species and may under-respond to seaweed; keep it only as a backup. Long Island Sound blooms are mostly diatoms.
 - **Source:** the National Center for Marine Algae and Microbiota (NCMA, Bigelow Laboratory, Maine) sells cultures.
@@ -215,8 +245,8 @@ per arm if space allows.
 - **Controller:** the Arduino Uno alerter (`hardware/alerter_uno/`) reads the sensors, runs the state machine above (including the floor OFF rule and the handover, `mode H`), and the laptop link (`alerter_link.py`) logs every reading and state change to a CSV.
 - **Actuators by method:**
   - relay → air pump (bubbles)
-  - servo (`USE_SERVO`, D11) → lowers and raises a seaweed panel or shellfish bag
-  - relay → peristaltic dosing pump (peroxide and curcumin working solutions)
+  - relay → peristaltic dosing pump (12 V; 3% H₂O₂ from a reservoir, peroxide)
+  - *(servo, `USE_SERVO`, D11: was for the seaweed panel or shellfish bag; not used since 2026-10-01)*
 - **Forecast input:** once a day the laptop runs the fork's `predict_anywhere.py` on the logged readings and sends `p` to the Uno over USB. The rule trigger runs on the Uno itself, so it still works if the laptop link fails.
 - **Keep a design log from day one:** version, what failed, the measured improvement. Engineering judges score documented iteration.
 
@@ -225,17 +255,19 @@ per arm if space allows.
 | File | Method | Where it could really work | Retrievable? | `X` (ON time) |
 |---|---|---|---|---|
 | `01_BUBBLES.md` | coarse-bubble aeration | fish or shellfish pens, tanks, marinas | yes (switch off) | 48 h |
-| `02_SEAWEED.md` | seaweed panels (*Ulva*, sugar kelp) | shellfish and kelp farms, small bays | yes (lift out) | 72 h |
+| `02_SEAWEED.md` | *dropped 2026-10-01:* seaweed panels (*Ulva*, sugar kelp) | - | - | - |
 | `03_PEROXIDE_BAG.md` | liquid H₂O₂ pumped in pulses (sodium percarbonate as the comparison) | ponds, enclosed basins | no, but it breaks down to water and oxygen in 1-2 days | 24 h |
-| `04_CURCUMIN.md` | curcumin dosing | enclosed canals, tanks | no (dosed into the water) | 24 h |
-| `05_SHELLFISH.md` | clam or oyster bags | shellfish farms, small bays | yes (lift out) | 3 days |
+| `04_CURCUMIN.md` | *dropped 2026-10-01:* curcumin dosing | - | - | - |
+| `05_SHELLFISH.md` | *dropped 2026-10-01:* clam or oyster bags | - | - | - |
 
 **Left out:**
 - Barley straw needs 2-8 weeks to become active and has weak marine evidence.
 - Ultrasound failed all four independent field tests.
 - Clay and alum stay in the environment (the counselor's objection).
+- **Dropped 2026-10-01 (not autonomous):** seaweed (live stock in a cold holding tank, swapped; sugar kelp dies back above ~18-20 °C, the summer bloom season); shellfish (always filtering, so not switchable; live animals; permits; feeding stops in dense blooms); curcumin (its yellow colour absorbs the ~470 nm excitation light and blinds the device's fluorometer, giving a false "bloom gone" and an early OFF; effective dose ≥ 3 mg/L overlaps the zebrafish larval LD50 of 1.8-2.8 mg/L; one organism tested, no diatom or field data).
 
 ## Never claim
-- That it prevents blooms in the open Sound. The scale is tanks and enclosed sites.
+- That it prevents blooms in the open Sound. The scale is tanks; the target is enclosed or semi-enclosed water (harbors, shellfish beds, aquaculture pens, coastal ponds).
+- That the device is field-ready.
 - That it is safe without the non-target data from arm D.
 - Any result before it's measured. Pre-register first, then run.

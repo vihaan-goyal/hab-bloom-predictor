@@ -1,5 +1,7 @@
 # Method 5: deployable shellfish bags (clams or oysters)
 
+> **Dropped 2026-10-01 (kept as a record).** The device must be able to switch a treatment on and off by itself. Shellfish are always filtering (not switchable), are live animals, need permits, and stop feeding in dense blooms. The full loop runs are now aeration and peroxide (`EXECUTION_PLAN.md`, "Plan change 2026-10-01").
+
 Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/plants_grazers.md`
 #26-#36.
 

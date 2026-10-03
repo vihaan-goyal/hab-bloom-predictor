@@ -1,5 +1,7 @@
 # Method 4: curcumin dosing
 
+> **Dropped 2026-10-01 (kept as a record).** Curcumin's yellow colour absorbs the ~470 nm excitation light, so it blinds the device's own fluorometer (a false "bloom gone" and an early OFF). Its effective dose (≥ 3 mg/L) overlaps the zebrafish larval LD50 (1.8-2.8 mg/L). It was tested on one organism only, with no diatom or field data. The full loop runs are now aeration and peroxide (`EXECUTION_PLAN.md`, "Plan change 2026-10-01").
+
 Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/marine.md` #9-#10,
 `notes/snowball/natural_compounds.md`; Part 1 #3.
 
