@@ -31,19 +31,20 @@ BASE + tidal_gt_anom + tidal_msl_anom + chl_roll14_mean + chl_roll21_mean +
 sal_lag2 + sal_lag3 + sal_lag4 + percent_saturation + max_gust_3d.
 Requires `data/gust_features_daily.csv` (`python src/features/add_gust_features.py`).
 
-Current numbers (after the 2026-09-28 audit) live ONLY in `notes/S1_NUMBERS_SHEET.md`. In short:
-- **28-day test 2023-25** (683 rows, 65 events, base 9.5%): AUC 0.767 [0.647, 0.857].
-  - At the alert-budget threshold t = 0.47 (≤ 8 alerts/month on validation): precision 0.354, lift 3.72.
-  - At the validation POD rule t* = 0.25: precision 0.151, recall 0.785.
-- **21-day walk-forward CV:** AUC 0.693. It beats a past-years calendar over 2016-2025 (+0.077, p < 0.001, pre-registered) and ties it in 2023-25.
+Current numbers live ONLY in `notes/S1_NUMBERS_SHEET.md` (updated 2026-10-02: 2024 is now on DEEP's corrected scale). In short:
+- **28-day test 2023-25** (683 rows, 25 events, base 3.7%): AUC 0.590 [0.427, 0.757].
+  - Per year: 2023 0.433 (12 events), 2024 0.952 (9), 2025 0.537 (4). The old 0.767 rested on raw-sensor 2024 events.
+  - At t = 0.47: precision 0.163, lift 4.45. At t* = 0.25: precision 0.045, recall 0.520.
+- **21-day walk-forward CV:** AUC 0.660. It beats a past-years calendar over 2016-2025 (+0.088, p < 0.001, pre-registered); in 2023-25 the calendar is ahead (not significant).
 - The 21-day operating threshold is `locked_pipeline.T_STAR_21` (0.20, validation rule); import it, never hard-code.
+- 2022-2023 are still raw-sensor scale. The clean test is the 2026 season (`notes/PROSPECTIVE_2026_PREREG.md`).
 
 Rules learned the hard way (2026-09-28 audit):
 - Any climatology, anomaly or monthly feature must use only data dated before the row (and, for monthly series, only completed months).
 - Forward labels come only from `label_utils.forward_window_label`: an unobserved or unfinished window is NaN, not 0.
 - Thresholds are chosen on validation only; purge training rows whose label window reaches the next split.
 - The forecast is issued at the end of sampling day t from that day's measurements.
-- Disclose that the 35 features were chosen partly on 2023-25, and that 2022-24 S1 is raw-sensor scale.
+- Disclose that the 35 features were chosen partly on 2023-25, and that 2022-23 S1 is raw-sensor scale (2024 corrected 2026-10-02).
 
 ## Key scripts
 

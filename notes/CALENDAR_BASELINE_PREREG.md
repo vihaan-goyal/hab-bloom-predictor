@@ -75,3 +75,10 @@ date (date + 21 d ≤ t).
 - **Held out 2023-25** (reported once): locked 0.736, hybrid 0.735, calendar 0.749. Hybrid minus calendar −0.014, p = 0.64: a tie.
 - **Why it doesn't help:** the locked model already carries the seasonal and site information (`month`, station latitude/longitude, the causal `chl_climatology`). Adding the calendar rate again gives the regularized LR nothing new. The recent-years tie is a real limit of the current features, not a missing calendar input.
 - Per the protocol, no other variants were tried.
+
+## Rerun 2026-10-02 after the 2024 correction (data fix, rules unchanged; `data/rerun_2024fix_calendar.log`, `data/rerun_2024fix_hybrid.log`)
+2024 chlorophyll is now on DEEP's corrected (lab) scale, so the 2024 bloom days fell from 13.3% to 4.1%, and pooled events from 121 to 94.
+- **Primary: still PASS.** Model 0.660 vs calendar 0.573, **+0.088 [+0.042, +0.135], p < 0.001**. The model wins 6 of 10 folds.
+- **Secondary, 2023-25:** model 0.602 vs calendar 0.706, −0.104 [−0.258, +0.046], p = 0.91, on 16 events. Not significant either way. The calendar is ahead.
+- **Hybrid:** rule 1 still fails (development: hybrid 0.668 < locked 0.676), so it is not adopted.
+- **Reading:** the decade-long edge over the calendar holds. In recent years the boat-sampled model does not beat the season. The clean check is the pre-registered 2026 season (`notes/PROSPECTIVE_2026_PREREG.md`).

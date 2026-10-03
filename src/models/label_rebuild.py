@@ -40,6 +40,11 @@ RATIO_CSV = "data/sensor_vs_lab_chl.csv"
 OUT_TMPL = "data/hab_features_tidal_{}.csv"
 PREDS_TMPL = "data/test_predictions_{}.csv"
 RESULTS_CSV = "data/label_rebuild_results.csv"
+# DEEP profile file (M. Lyman, 2026-10-02): raw and corrected chlorophyll, Jan 2024 - Jul 2026.
+# DEEP's correction is exactly linear per cruise (corrected = a * raw + b, residuals ~1e-15), and
+# those lines reproduce our existing 2025 Corrected_Chlorophyll with zero difference, so they fill
+# the missing 2024 values. 2022-2023 remain uncorrected until DEEP sends them.
+DEEP_PROFILE_XLSX = "data/raw/deep_lab_chla/DEEP Profile Chla data 2024_2026.xlsx"
 
 BLOOM = 10.0
 HORIZON_D = 28
@@ -73,6 +78,43 @@ def s1_year_factors(df):
     ratio = (both.Corrected_Chlorophyll / both.Chlorophyll).groupby(both.year)
     fac = ratio.median().where(ratio.size() >= MIN_FILL_ROWS)
     return fac.reindex(sorted(df.year.unique())).fillna(1.0)
+
+
+def deep_cruise_correction(path=DEEP_PROFILE_XLSX):
+    """Per-cruise (slope, intercept) of DEEP's correction, plus each station-day's cruise."""
+    if not os.path.exists(path):
+        return None
+    p = pd.read_excel(path)
+    p["date"] = pd.to_datetime(p.Activity_Date).dt.normalize()
+    p = p.dropna(subset=["Chlorophyll ug/L", "Corrected Chlorophyll ug/L"])
+    coef = {c: np.polyfit(g["Chlorophyll ug/L"], g["Corrected Chlorophyll ug/L"], 1)
+            for c, g in p.groupby("cruise") if len(g) >= 3}
+    day = (p.assign(station_name=p.Station_Name.astype(str))
+             .groupby(["station_name", "date"]).cruise.first())
+    span = p.groupby("cruise").date.agg(["min", "max"])
+    return coef, day, span
+
+
+def fill_corrected(frame, corr):
+    """Corrected_Chlorophyll with gaps filled from DEEP's per-cruise line where a cruise matches:
+    first by (station, date), else by the single cruise whose date span covers the date."""
+    out = frame.Corrected_Chlorophyll.copy()
+    if corr is None:
+        return out
+    coef, day, span = corr
+    need = out.isna() & frame.Chlorophyll.notna()
+    keys = list(zip(frame.station_name[need].astype(str), frame.date[need]))
+    cruises = []
+    for st, dt in keys:
+        c = day.get((st, dt))
+        if c is None:
+            hit = span.index[(span["min"] <= dt) & (span["max"] >= dt)]
+            c = hit[0] if len(hit) == 1 else None
+        cruises.append(c if c in coef else None)
+    raw = frame.Chlorophyll[need].values
+    vals = [coef[c][0] * r + coef[c][1] if c else np.nan for c, r in zip(cruises, raw)]
+    out.loc[need] = vals
+    return out
 
 
 def s2_year_ratios():
@@ -240,6 +282,14 @@ def build():
                                              "Corrected_Chlorophyll"],
                        dtype={"station_name": str}, low_memory=False)
     prof["date"] = pd.to_datetime(prof.time, utc=True).dt.tz_localize(None).dt.normalize()
+    corr = deep_cruise_correction()
+    if corr is not None:
+        n0 = df.Corrected_Chlorophyll.notna().sum(), prof.Corrected_Chlorophyll.notna().sum()
+        df["Corrected_Chlorophyll"] = fill_corrected(df, corr)
+        prof["Corrected_Chlorophyll"] = fill_corrected(prof, corr)
+        print(f"DEEP per-cruise correction ({len(corr[0])} cruises) filled Corrected_Chlorophyll on "
+              f"{df.Corrected_Chlorophyll.notna().sum() - n0[0]} station-days and "
+              f"{prof.Corrected_Chlorophyll.notna().sum() - n0[1]} profile rows")
     s1_fac = s1_year_factors(df)
     s2_ratio, s2_fallback = s2_year_ratios()
     print("S1 gap-fill factor (Corrected/raw) for years not fully covered:")

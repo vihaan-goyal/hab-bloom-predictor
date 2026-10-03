@@ -1,5 +1,50 @@
 # Current numbers on the lab-consistent label (S1), after the 2026-09-28 audit
 
+## UPDATE 2026-10-02: 2024 now on the corrected (lab) scale. These numbers supersede the ones below where they differ.
+
+**What changed.** DEEP (M. Lyman) sent profile chlorophyll, raw and corrected, for Jan 2024 - Jul 2026.
+- DEEP's correction is exactly linear per cruise. Those lines reproduce our 2025 `Corrected_Chlorophyll`
+  with zero difference.
+- Our 2024 raw values equal DEEP's raw on all 812 casts.
+- `label_rebuild.py` now fills 2024 from these lines (`fill_corrected`). Corrected/lab median for 2024
+  is 1.02.
+- The 2024 one-day share above 10 µg/L fell from 0.133 (raw sensor) to 0.041.
+- 2022-2023 are still on the raw scale (requested from DEEP).
+- Train and validation (≤ 2022) are unchanged, so the model and both thresholds are unchanged.
+
+**28-day test 2023-25** (`data/rerun_2024fix_eval28.log`; 683 rows, **25 events**, base 3.7%):
+- **AUC 0.590 [0.427, 0.757].**
+- **Per year:**
+  - 2023: AUC 0.433, 12 events (unchanged);
+  - **2024: AUC 0.952, 9 events** (was 0.848 on 49 raw-scale events);
+  - 2025: AUC 0.537, 4 events.
+- **Budget threshold t = 0.47:** precision 0.163, recall 0.280 (7 of 25), lift 4.45, 2.1 alerts/month.
+- **POD rule t* = 0.25:** precision 0.045, recall 0.520, lift 1.22.
+- **Reading:**
+  - The old pooled 0.767 was carried by about 40 raw-sensor 2024 "events" that the lab scale does not
+    confirm.
+  - On the corrected label the model ranks 2024 very well and is near chance in 2023 and 2025, with
+    only 16 events between them.
+  - The pooled AUC is low partly because one model score scale is pooled across very different years.
+
+**21-day walk-forward CV 2016-2025** (`data/rerun_2024fix_cv21.log`): pooled AUC **0.660**, 1,971 rows,
+94 events.
+
+**Pre-registered calendar test, rerun on the corrected data** (`data/rerun_2024fix_calendar.log`):
+- **2016-25:** model 0.660 vs calendar 0.573, **+0.088 [+0.042, +0.135], p < 0.001. Still PASS.**
+- **2023-25:** model 0.602 vs calendar 0.706, −0.104 [−0.258, +0.046], p = 0.91.
+  - Not significant either way (16 events), but the calendar is ahead.
+  - Honest claim: "no better than the calendar in 2023-25".
+
+**Hybrid:** still not adopted. On development folds the hybrid is below the locked model, −0.008
+(`data/rerun_2024fix_hybrid.log`).
+
+**Not yet rerun on the corrected 2024:** station-specific models, basin alert, decision value, LR
+geometry, point of no return, and the `warning_*` scripts (they read `cv_pred_orig_h21.csv`). Treat their
+numbers below as "(pre-2024-fix)".
+
+**Clean test ahead:** `notes/PROSPECTIVE_2026_PREREG.md` (2026 season, pre-registered 2026-10-02).
+
 Every number here comes from a re-run output file on the default (S1) path. The source file is
 given for each group. The rationale and history are in `notes/LABEL_REBUILD_PREREG.md` §§10-15.
 Use only these numbers when updating documents. For any result **not** listed, add the label
