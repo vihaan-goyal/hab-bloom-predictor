@@ -38,6 +38,8 @@ Dates fit `EXECUTION_PLAN.md`: build and calibrate by Oct 24, cultures Oct 15-31
 
 **Progress:** stages 1 and 2 passed on 2026-09-26: Test A, lights, buzzer, and the bare relay
 clicking on D10 (LED as the pretend pump; the real pump isn't bought yet).
+On 2026-09-30 the new Uno (COM5) passed Tests A, B and C by hand, every line matching, and the bare
+relay clicked on D10 with `hardware/relay_click_test/relay_click_test.ino` (toggles D10 every second).
 
 ## Shopping list (what to order now)
 

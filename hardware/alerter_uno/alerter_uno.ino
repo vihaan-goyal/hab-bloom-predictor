@@ -55,7 +55,7 @@
 #define USE_TSL2591 0   // chlorophyll (fluorometer)    needs Adafruit TSL2591 Library + Adafruit Unified Sensor
 #endif
 #ifndef USE_PH
-#define USE_PH 0        // pH module (analog)           no library
+#define USE_PH 1        // pH module (analog)           no library
 #endif
 #ifndef USE_SERVO
 #define USE_SERVO 0     // servo that lowers/lifts the seaweed panel or shellfish bag (D11)

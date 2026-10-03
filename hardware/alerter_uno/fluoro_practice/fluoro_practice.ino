@@ -7,10 +7,10 @@
   signal drops. A dilution series of green food colouring gives a calibration curve, the same
   procedure the real chlorophyll sensor will use.
 
-  This Uno's analog header (A0-A5) broke off, so there are two ways to read the photoresistor:
+  Two ways to read the photoresistor (the first Uno's analog header broke off, hence option 2):
 
-  USE_ANALOG 1 -- analog, on A5 (hold a jumper pressed into the bare A5 hole while testing)
-      5V -> photoresistor -> node;  node -> A5;  node -> 10k -> GND
+  USE_ANALOG 1 -- analog, on A0 (the new board, 2026-09-30; A2 is the pH module, A4/A5 the TSL2591)
+      5V -> photoresistor -> node;  node -> A0;  node -> 10k -> GND
       signal = lit - dark   (0-1023 counts; more light = higher)
   USE_ANALOG 0 -- digital timing, on D8 (no analog pins needed; breadboard_practice.png)
       5V -> photoresistor -> node;  node -> D8;  node -> 0.1 uF ("104") capacitor -> GND
@@ -22,7 +22,7 @@
 */
 #define USE_ANALOG 1
 
-const int PIN_LED = 7, PIN_A = A2, PIN_RC = 8;
+const int PIN_LED = 7, PIN_A = A0, PIN_RC = 8;
 const unsigned long TIMEOUT_US = 300000;  // digital mode: 0.3 s = "too dark"
 bool autoMode = true;
 
@@ -65,7 +65,7 @@ void measure() {
 void setup() {
   pinMode(PIN_LED, OUTPUT);
   Serial.begin(115200);
-  Serial.println(USE_ANALOG ? F("fluoro_practice ready (analog, A5).") : F("fluoro_practice ready (digital timing, D8)."));
+  Serial.println(USE_ANALOG ? F("fluoro_practice ready (analog, A0).") : F("fluoro_practice ready (digital timing, D8)."));
   Serial.println(F("r = one reading, a = auto on/off"));
 }
 
