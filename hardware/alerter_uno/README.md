@@ -14,7 +14,7 @@ later, if the box must run without a laptop.
 |---|---|---|---|---|
 | Chlorophyll | model input (required), OFF rule | DIY fluorometer | auto | 5 |
 | Temperature | model input, safety | DS18B20 probe | auto | 3 |
-| pH | safety (seaweed, peroxide raise it) | analog pH probe | auto | 4 |
+| pH | safety (bubbling and percarbonate shift it) | analog pH probe | auto | 4 |
 | Dissolved oxygen | model input (optional), safety < 4 mg/L | aquarium DO kit | by hand, daily | 6 |
 | Salinity | model input (optional) | refractometer | by hand, every 2-3 days | 6 |
 | Cell counts | the real endpoint; checks the fluorometer | microscope + Sedgewick-Rafter slide | by hand, every 1-2 days | 6 |
@@ -150,12 +150,24 @@ states (Python reference, 2026-09-28). Run it on the board too: 0 mismatches is 
 - `mode F` (forecast only), `mode R` + `warm 1.8` (rule trigger: chl rose on 2 calendar days AND
   > 2 × warm-up mean), `mode H` + `warm 1.8` (forecast, with the 2-day handover to the rule: arm B)
 - `floor 0.8` (H4: 2 readings in a row below 0.8 × warm while ON → `OFF_FLOOR`; `floor 0` for the
-  false-alarm arm D), `maxon 3` (MAX_ON in days; 0 = 4 × X; peroxide 3, curcumin 4)
-- `temp 10 20` (temperature warning window; default 10-20 °C for the planned 12-18 °C run)
+  false-alarm arm D), `maxon 3` (MAX_ON in **days since START**; 0 = 4 × X; peroxide 3 with `x 1`)
+- `pulse <s>` (added 2026-10-02, peroxide dosing pump): while ON, the relay runs for `<s>` seconds at
+  START and at each check day that continues the episode, then switches off; the state still prints
+  `ON`, and the day line ends with `pulse=<s>s`. `pulse 0` (default) holds the relay for the whole
+  episode (air pump), so Tests A-C are unchanged.
+- `skip`: the next pulse is skipped (the day line shows `pulse=skipped`); send it when the low-range
+  kit reads an H₂O₂ residual above 0.5 mg/L.
+- **Peroxide setup:** `x 1`, `maxon 3`, `pulse <s>`, where `<s>` = seconds the calibrated pump needs to
+  deliver the pulse volume (0.265 mL of 3% per 10 L for 0.8 mg/L; from the weigh-calibration in
+  mL/s). Because MAX_ON counts days since START, this gives at most 3 pulses (START day and the next
+  two check days) and `STOP_MAX_ON` on day 4. The 2.8 mg/L residual stop and the pH > 9.0 stop are
+  **not** automatic in the firmware: send `stop` by hand, or use `alerter_link.py --stop "..."` /
+  `--ph-max 9.0`.
+- `temp 10 17` (temperature warning window; default 10-17 °C for the planned 12-15 °C run)
 - `stop` for a safety stop, e.g. when the DO kit reads < 4 mg/L. With the laptop link, use
   `--today ... --stop "DO 3.6 mg/L"` instead, so the stop is logged and replayed after a reset.
 
-**Done when:** Tests A and B print exactly the lines above, and the LEDs and buzzer match.
+**Done when:** Tests A, B and C print exactly the lines above, and the LEDs and buzzer match.
 
 ## Stage 2: relay + pump (~$25)
 
@@ -198,7 +210,7 @@ sponsor's OK.
 **Code:**
 - Arduino IDE → Library Manager → install `OneWire` and `DallasTemperature`.
 - Set `USE_DS18B20 1` at the top of `alerter_uno.ino` (the code is already written and compile-checked).
-- It reads every 10 s and alarms outside the window (default 10-20 °C, set with `temp <lo> <hi>`;
+- It reads every 10 s and alarms outside the window (default 10-17 °C, set with `temp <lo> <hi>`;
   white LED, fast beeps). `read` prints all sensors; `status` shows the temperature.
 
 **Done when:**
@@ -221,7 +233,7 @@ header: the old Uno's broke off, so use the new board or a re-soldered header.
 3. `read` now shows `ph=` (and the raw `ph_v=` volts). Calibration is stored in the Uno's EEPROM and
    survives unplugging; `cal` shows it, `calclear` erases it.
 - `alerter_link.py --today` sends a **safety stop** if pH is outside 7.6-8.6 (change with
-  `--ph-min/--ph-max`; seaweed runs use `--ph-max 9.0`). A safety stop ends a running treatment; it
+  `--ph-min/--ph-max`; peroxide runs use `--ph-max 9.0`). A safety stop ends a running treatment; it
   doesn't block a new start that day (same as the Python controller's `force_off`).
 
 **Tips:**
@@ -235,6 +247,21 @@ header: the old Uno's broke off, so use the new board or a re-soldered header.
 ## Stage 5: the fluorometer, chlorophyll (~$20, the hard part)
 
 A blue LED makes chlorophyll glow red. A light sensor behind a red filter measures that glow.
+
+**Autonomous accuracy (added 2026-10-02; the device must keep itself honest between service visits).**
+Only the first item is built. The reference target, wiper, drift alarm and automatic rescaling are
+**planned, not yet built**; the target and wiper need the servo (D11, `USE_SERVO`), which is
+otherwise unused since 2026-10-01.
+- **Dark reading every measurement:** LED off, LED on, subtract. Already in the code.
+- **Reference target (planned):** once a day the servo swings a small piece of fluorescent plastic (or a sealed
+  dye vial) in front of the sensor. Its reading should never change, so the device rescales `chlk`
+  automatically when the LED or sensor drifts.
+- **Wiper (planned):** the servo sweeps a soft rubber blade across the window before each reading, as RIDEM's
+  sondes do.
+- **Drift alarm (planned):** the device tracks its clear-water floor (lowest readings). If the floor rises for 3 or
+  more days, it flags "needs cleaning".
+- **Initial calibration** (blank + multiplier) is done once at setup against a reference: lab chlorophyll,
+  cell counts, or a sonde. Service visits re-check it with 1-2 reference samples.
 
 **Parts:**
 - TSL2591 light-sensor breakout (Adafruit, works on 5 V);
@@ -273,8 +300,6 @@ blue SDA, yellow SCL.
 **Done when:**
 - the blank (seawater only) reading is stable within ±5% over 10 minutes;
 - the dilution series is a straight line (R² > 0.95).
-
-**Curcumin** is yellow and fools the reading. Use cell counts for that method.
 
 ## Stage 6: hand-measurement kit (~$90 + borrowed microscope)
 
@@ -316,7 +341,7 @@ python hardware/alerter_uno/alerter_link.py --today --p 0.62 --chl 7.4 --start 2
 - Later: read chlorophyll, temperature and pH from the Uno's sensors, and get `p` from the model automatically.
 
 - **Loop settings (2026-09-28):** `--mode H` (default; arm B), `--warm <mean>`, `--floor 0.8` (0 for arm D),
-  `--maxon 0|3|4`, `--temp-lo 10 --temp-hi 20`, `--stop "reason"` (logged manual safety stop). Values
+  `--maxon 0|3`, `--temp-lo 10 --temp-hi 17`, `--stop "reason"` (logged manual safety stop). Values
   are sent with 6 significant figures and the Python reference uses the sent value, so a reading right
   at a threshold cannot disagree.
 
@@ -337,9 +362,11 @@ will run:
 
 Then the real 21-day warm-up starts on Nov 10.
 
-## Optional: servo for the seaweed panel or shellfish bag (added 2026-09-28)
+## Optional: servo (D11; planned for the fluorometer wiper and reference target)
 
-The two full runs (seaweed, shellfish) move a panel or bag in and out of the tank.
+Since 2026-10-01 no treatment needs a servo (aeration and peroxide are switched by the relay). It is
+kept for the planned wiper and reference target (stage 5, "Autonomous accuracy"); that code is not
+written yet, and today `USE_SERVO` only moves the servo with the treatment state.
 - **Wiring:** servo signal (orange/yellow) → **D11**; servo red → an external 5-6 V supply (not the
   Uno's 5 V pin: a stalled servo browns out the Uno); servo brown/black → GND, **shared with the Uno's GND**.
 - **Code:** set `USE_SERVO 1` (Servo library, built in). The servo goes to the ON angle while

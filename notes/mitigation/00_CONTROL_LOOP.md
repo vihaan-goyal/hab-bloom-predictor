@@ -51,7 +51,7 @@ flowchart TD
 
 | Symbol | Meaning | Default | Why |
 |---|---|---|---|
-| `T_on` | forecast probability that switches treatment on | **0.50** (the Narragansett model's frozen threshold, saved inside `release/narragansett_bloom_model.joblib`) | the operating point the model was evaluated at (precision 0.70 at home) |
+| `T_on` | forecast probability that switches treatment on | **0.45 on the bench** (see "Bench trigger" below); the firmware and `loop_controller.py` default stays 0.50 because the Layer 1-2 simulations and the Uno equivalence tests use it | the v2 release's threshold, chosen by the fork's rolling CV |
 | `T_off` | forecast probability needed to switch off | 0.8 × `T_on` | hysteresis |
 | `C_ok` | chlorophyll that counts as "no bloom" | 5 µg/L in the field (half the 10 µg/L bloom line); in the bench, **50% of the pilot bloom run's untreated peak** (known before nutrients go in) | leaves a margin under the bloom threshold |
 | `X` | treatment ON time before re-measuring | **per method** (see 01-05) | set from the literature, then tuned on the bench |
@@ -66,11 +66,15 @@ Sound model.
 - With daily sensor data (Narragansett) the loop was ON for about 80% of bloom starts, switched on a median 3 days early, and beat random timing.
 - The Long Island Sound model stays the project's regional *forecasting* study.
 
-**The model:** the fork's `release/narragansett_bloom_model.joblib`, run through the fork's
-`predict_anywhere.py`.
+**Bench trigger (the one place this is set; 2026-10-02):** Narragansett v2 release
+(`release/narragansett_bloom_model_v2.joblib`), p ≥ 0.45, set on the Uno with `ton 0.45`;
+Layers 1-2 simulations used v1 at 0.50. (v1, `release/narragansett_bloom_model.joblib`, threshold
+0.50, stays frozen for the fork's prospective test and is not re-exported.)
+
+**The model:** the fork's v2 release, run through the fork's `predict_anywhere.py`.
 - Gradient boosting on 23 features: chlorophyll lags, rolling means, trend, anomaly and site climatology; dissolved oxygen, temperature and salinity with lags; month.
 - It predicts whether daily-mean chlorophyll will exceed the bloom level **within the next 7 days**. It updates **once per day**.
-- Home skill (after the 2026-09-28 fork audit, model v2): onset AUC 0.829, precision 0.68, lift 1.94 (Narragansett, 2023). It beats a past-years calendar on bloom starts in 9 of 9 years (pooled +0.060 AUC, p < 0.0001, pre-registered). On 74 sites it had never seen, with leak-free scoring: median lift 1.51, median AUC 0.74.
+- Home skill (v2, after the 2026-09-28 fork audit): onset AUC 0.829, precision 0.68, lift 1.94 (Narragansett, 2023). It beats a past-years calendar on bloom starts in 9 of 9 years (pooled +0.060 AUC, p < 0.0001, pre-registered). On 74 sites it had never seen, with leak-free scoring: median lift 1.51, median AUC 0.74.
 
 **Inputs it needs from our sensors:**
 

@@ -50,14 +50,14 @@ Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/pe
 
 | Loop step | What happens |
 |---|---|
-| **Trigger** | Narragansett model `p ≥ 0.50` on daily sensor means (backup: the rule trigger in `00_CONTROL_LOOP.md`) → the relay runs the **pump**, which doses liquid 3% H₂O₂ from a reservoir |
+| **Trigger** | Narragansett v2 model, `p ≥ 0.45` (bench trigger, `00_CONTROL_LOOP.md`) on daily sensor means (backup: the rule trigger in `00_CONTROL_LOOP.md`) → the relay runs the **pump**, which doses liquid 3% H₂O₂ from a reservoir |
 | **Dose** | **0.8 mg/L H₂O₂ per pulse, up to 3 daily pulses** (re-run 2026-09-28). The source (peroxide-03) shows **one** 0.8 mg/L dose gives only a transient effect (24-h EC50 0.91 mg/L; simulated back-test median 48% at 24 h). The re-run Layer 2 simulation (liquid pulses decaying with the H₂O₂ half-life) gives a 74% peak cut from up to 3 daily 0.8 mg/L pulses with 1% non-target harm, against 62% harm at 1.6 mg/L (`LAYER2_SIM_RESULTS.md`). Liquid 3% H₂O₂: 0.27 mL per 10 L; for flasks use the 0.1% working dilution (PROCEDURES). Percarbonate (screen comparison only): ~2.9 mg/L, dissolved fresh, content confirmed with the low-range kit |
 | **`X` (ON time)** | **24 h** per pulse (brown-tide kill within 24 h; H₂O₂ half-life in seawater is hours), then re-measure |
-| **Re-measure** | chlorophyll, cell count, **H₂O₂ residual** (test strips, 0.5-25 mg/L range), pH, DO, non-target survival |
+| **Re-measure** | chlorophyll, cell count, **H₂O₂ residual** (low-range kit; strips only for the 2.8 mg/L check), pH, DO, non-target survival |
 | **OFF rule** | the shared rule. **Each ON is one pulse; "ON again" means a new pulse** |
-| **`MAX_ON`** | 3 pulses per event (evidence review, 2026-09-25); on the Uno: `maxon 3` with `x 1` |
-| **Re-dose rule (one rule everywhere)** | a new pulse only if the measured residual is **≤ 0.5 mg/L** (low-range kit); otherwise skip that day's pulse |
-| **Method safety limits** | residual **> 2.8 mg/L** at any check → emergency stop (no more pulses this episode); pH above 9.0; non-target survival more than 20 points below control |
+| **`MAX_ON`** | 3 pulses per event (evidence review, 2026-09-25). On the Uno: `x 1`, `maxon 3`, `pulse <s>` (`<s>` = pump seconds for 0.265 mL of 3% per 10 L, from the weight calibration). The relay then runs the pump for `<s>` seconds at START and at each daily check that continues the episode; `maxon` counts days since START, so this is at most 3 pulses, with `STOP_MAX_ON` on day 4 |
+| **Re-dose rule (one rule everywhere)** | a new pulse only if the measured residual is **≤ 0.5 mg/L** (low-range kit); otherwise send `skip` before that day's line, and the Uno skips the pulse |
+| **Method safety limits** | residual **> 2.8 mg/L** at any check → emergency stop (no more pulses this episode); pH above 9.0; non-target survival more than 20 points below control. **These stops are not automatic in the firmware:** send `stop` by hand, or use `alerter_link.py --stop "..."` (residual, survival) and `--ph-max 9.0` (pH from the probe) |
 
 **Important difference from the other methods:** each ON is a **single 24 h pulse** whatever
 happens, then the OFF rule decides whether to send another. This keeps exposure short by design.
@@ -76,7 +76,7 @@ happens, then the OFF rule decides whether to send another. This keeps exposure 
 - **Counting ~2 µm cells:** they're hard to count on a school microscope, and the write-up says so. In the screen each flask holds one species, so the **fluorometer** measures the small algae directly, with **hemocytometer counts at 400×** as the check. In the mixed loop tanks, use **size-fractionated chlorophyll**: push a sample through a **5 µm syringe filter**. What passes through is small cells, and total minus filtrate is large cells. It's a standard oceanography method and cheap.
 
 ## Measurements specific to peroxide
-- H₂O₂ residual (strips) at 1, 4, 12 and 24 h in the first cycle.
+- H₂O₂ residual (low-range kit) at 1, 4, 12 and 24 h in the first cycle.
 - pH (percarbonate adds washing soda, a small rise).
 - Size-class cell counts (small vs large cells).
 - Optional, with sponsor approval and BSL review: coliform plates, to check the "pollution swapping" finding.
@@ -94,7 +94,6 @@ happens, then the OFF rule decides whether to send another. This keeps exposure 
 
 ## Safety and forms
 - **Sodium percarbonate is an oxidizer** (milder than CaO₂, but still): goggles and gloves, keep it away from organics and heat, and store it dry. That means a **Form 3 risk assessment**, with the Designated Supervisor present.
-- Keep drugstore 3% H₂O₂ for comparison only.
 - Dispose of treated water after the peroxide has decayed (check with strips).
 
 ## Environment

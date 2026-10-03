@@ -58,10 +58,10 @@ change 2026-10-01"). Two changes for this method:
 - **Dose can be stated in physical units without the Gobler numbers:**
   - superficial gas velocity = airflow ÷ column cross-section;
   - entrance velocity = airflow ÷ outlet area.
-  - Example: 2 L/min through a 4 mm tube into an 8 cm column gives an entrance velocity of ~2.7 m/s and a superficial velocity of ~0.007 m/s. Both are far below the lethal levels in Barbosa, so an aquarium pump won't shred cells, and any effect is turbulence stress on division. Log both numbers for every column.
+  - Example: 2 L/min through a 4 mm tube into an 8 cm column gives an entrance velocity of ~2.7 m/s and a superficial velocity of ~0.007 m/s. Both are far below the lethal levels in Barbosa, so an aquarium pump won't shred cells, and any effect is turbulence stress on division. Log both numbers for every flask and tank.
 - **Pilot flow rates (updated 2026-09-26 to match Sung & Gobler per litre):** the earlier plan of 0.5 and 2 L/min per 5 L column is only 0.1 and 0.4 L/min per L, below the paper's high rate. Two options:
   - **Copy the paper exactly (preferred for the screen):** 500 mL cultures in 1 L flasks, air stone, 25 and 300 mL/min, n = 4. Cheap and directly comparable.
-  - **Columns:** 5 L columns at 0.25 and 3 L/min (the same 0.05 and 0.6 L/min per L). Check that one pump manifold can deliver 3 L/min per column.
+  - *(Dropped 2026-10-02: 5 L columns. The loop run uses 4-10 L tanks at 0.6 L/min per L instead.)*
 - **The choice of species matters more than the flow rate.** Several dinoflagellates grow *faster* when stirred, so the stand-in must be screened in the pilot. The first candidate is a species published as "inhibited" (*Ceratium fusus*-type, or a *Lingulodinium* strain from NCMA).
 - **Diatom warning confirmed in the field** (Huang 2022): mixing swapped dinoflagellates for diatoms. Keep the diatom check arm.
 
@@ -69,7 +69,7 @@ change 2026-10-01"). Two changes for this method:
 
 | Loop step | What happens |
 |---|---|
-| **Trigger** | Narragansett model `p ≥ 0.50` on the column's daily sensor means (backup: the rule trigger in `00_CONTROL_LOOP.md`) → relay switches the air pump ON |
+| **Trigger** | Narragansett v2 model, `p ≥ 0.45` (bench trigger, `00_CONTROL_LOOP.md`) on the tank's daily sensor means (backup: the rule trigger in `00_CONTROL_LOOP.md`) → relay switches the air pump ON |
 | **Treatment** | coarse bubbles (> 100 µm) from a standard aquarium **air stone** (what Sung & Gobler used) at the bottom of the vessel, at **0.6 L/min per litre** (the paper's high rate). The screen also tests 0.05 L/min per L, because the low rate won in one bloom-water test |
 | **`X` (ON time)** | **48 h**, then re-measure. This is a starting value; the bench's arm-B pilot also tests 24 h and 96 h |
 | **Re-measure** | chlorophyll, cell count, DO, pH, temperature, non-target survival |
@@ -77,19 +77,19 @@ change 2026-10-01"). Two changes for this method:
 | **`MAX_ON`** | 192 h (4 × X) per episode. After OFF (or `MAX_ON`), a new forecast alert starts a new episode: a **rerun**, counted as an outcome (2026-10-01) |
 | **Method safety limits** | water temperature rising more than 2 °C above control (pump heat); evaporation over 5% of volume (top up with fresh water to hold salinity) |
 
-**Why 48 h:** it matches the 2-3 day timescale over which the seaweed and peroxide studies saw most
-of their effect, and it's long enough to separate a real effect from a 1-day artefact. The bench tunes it.
+**Why 48 h:** it matches the 2-3 day timescale over which the peroxide studies (and the dropped
+methods' studies) saw most of their effect, and it's long enough to separate a real effect from a 1-day artefact. The bench tunes it.
 
 ## Bench setup
-- **Columns:** 3 clear tubes per arm, about 1 m tall × 7-10 cm wide (acrylic or 2 L soda bottles stacked), artificial seawater at salinity 30, 12:12 light, 18-20 °C.
+- **Vessels (updated 2026-10-02):** the screen uses 500 mL cultures in 1 L flasks and the loop run uses 4-10 L tanks (below); the earlier 1 m column design is dropped. Water: Sound-matched seawater at salinity 27.5, 12:12 light, 12-15 °C (`WATER_RECIPE.md`).
 - **Culture (updated 2026-10-01):** the screen tests the panel (*Nannochloropsis*, *Micromonas pusilla*, *Skeletonema*, *Akashiwo sanguinea* or *P. triestinum*). The loop run uses the dinoflagellate the screen shows is slowed (fallback: the panel species with the largest growth pause). *P. micans* is not the test organism (bubbling promoted *Prorocentrum*; see above). The ~2 µm algae are measured by fluorometer plus hemocytometer counts at 400×, which are hard at school; say so in the write-up.
 - **Loop tanks (2026-10-01):** 4-10 L tanks with an air stone at 0.6 L/min per litre (2.4-6 L/min per tank), one relay-switched air supply per treated tank (B, C, D). Check that the pumps reach that flow through the stones; if not, use 4 L of water per tank.
-- **Air:** one aquarium pump per arm via a manifold, with an **open tube end or wide-bore outlet** (coarse) at the bottom and a needle valve so every column gets the same flow. Measure flow with a bubble-counter or a rotameter.
+- **Air:** one aquarium pump per arm via a manifold, with an air stone (coarse bubbles) at the bottom and a needle valve so every flask or tank gets the same flow. Measure flow with a bubble-counter or a rotameter.
 - **Extra arm worth adding:** a fine airstone at the same airflow, which replicates the paper's coarse-versus-fine contrast.
 - **Hidden confounder: carbon supply (added 2026-09-28; can hide the effect).** In still flasks, dense cultures run short of dissolved CO₂ and their pH climbs. Bubbling with air puts CO₂ back, which **helps** growth and can cancel out the turbulence stress.
   - Log **pH in every flask** daily, still controls included.
   - Add a **gentle-bubbling control:** a very low airflow (a few bubbles per second) that gives gas exchange with almost no stirring. The bubble effect is then measured against it, not only against still water.
-- **Reframe (2026-09-28): aeration may be worth more against the bloom's *harm* than against the bloom.** Pond managers use bottom aeration for prevention, not to kill algae. It adds oxygen to bottom water, feeds the aerobic bacteria that break down organic matter, and prevents fish kills when oxygen-poor bottom water mixes up (Sink et al. 2022, Texas A&M AgriLife Extension RWFM-PU-154). This matches Layer 2, where bubbles barely cut the bloom (median 19%).
+- **Reframe (2026-09-28): aeration may be worth more against the bloom's *harm* than against the bloom.** Pond managers use bottom aeration for prevention, not to kill algae. It adds oxygen to bottom water, feeds the aerobic bacteria that break down organic matter, and prevents fish kills when oxygen-poor bottom water mixes up (Sink et al. 2022, Texas A&M AgriLife Extension RWFM-PU-154). This matches Layer 2, where bubbles barely cut the bloom (median 25% in the 2026-09-28 re-run).
   - **Present bubbles as** reducing the oxygen crash after a bloom, which is what drives western Long Island Sound hypoxia, rather than as stopping the bloom.
   - **Add to the screen:** DO at dawn (the daily low) in bubbled vs still flasks after the bloom peaks, to test that role directly.
 - **Species first:** many dinoflagellates grow *faster* when stirred. The screen decides the species; a "no effect" result is still reportable.
@@ -98,7 +98,7 @@ of their effect, and it's long enough to separate a real effect from a 1-day art
 ## Measurements specific to bubbles
 - **Delay outcome (primary in the loop run, 2026-10-01):** days each tank spends below `C_ok` from nutrients-in to the end of the bloom phase; the day it first exceeds `C_ok`; total hours ON; number of ON episodes (reruns); days from each OFF back to `C_ok` (H3).
 - **Screen:** regrowth after the 48 h OFF in every panel species (days to reach the still control's 48 h density), as an early estimate of how often the loop has to re-run.
-- Airflow (L/min) per column, logged.
+- Airflow (L/min) per flask or tank, logged.
 - Water temperature (pump heat), plus salinity by refractometer at each re-measure.
 - Cell integrity under the microscope: are cells broken (shear) or intact but suppressed?
 
@@ -108,7 +108,6 @@ of their effect, and it's long enough to separate a real effect from a 1-day art
 |---|---|
 | 2 aquarium air pumps + manifold, needle valves, tubing | $40 |
 | Loop run (2026-10-01): air pumps for the 9 treated tanks, airline, check valves, air stones | $60 |
-| 12 clear columns (or soda bottles) + stands | $40 |
 | Arduino Uno alerter + relay + wiring (built) | $0-25 |
 | DIY fluorometer parts (LED, photodiode, filter, op-amp) | $30 |
 | pH probe + DS18B20 temperature sensor; DO test kit | $60 |
@@ -127,5 +126,5 @@ of their effect, and it's long enough to separate a real effect from a 1-day art
 
 ## Before building
 - Answered from other sources: dose units, pilot flow rates, rebound risk (see "Other sources").
-- Settle in the pilot, not from papers: which stand-in species is inhibited at 0.5 and 2 L/min.
+- Settle in the screen, not from papers: which panel species is slowed at 0.05 and 0.6 L/min per litre.
 - Done 2026-09-26: Sung & Gobler flow per litre (0.05 and 0.6 L/min per L) read from the full text; the screen now matches it.

@@ -26,9 +26,9 @@ Run from repo root (needs `pip install pyserial` for a real Uno):
 Options: --port COM4, --x 3 (days between re-measures), --cok 5 (C_ok, ug/L),
          --mode H (F forecast / R rule / H forecast with the 2-day handover to the rule; arm B = H),
          --warm <warm-up mean chl> (needed by the rule and the floor), --floor 0.8 (H4 floor OFF;
-         0 for the false-alarm arm D), --maxon 0 (0 = 4 X; peroxide 3, curcumin 4),
-         --ph-min 7.6 --ph-max 8.6 (safety band; seaweed runs use 9.0 as the max),
-         --temp-lo 10 --temp-hi 20 (warning window; the planned run is 12-18 C).
+         0 for the false-alarm arm D), --maxon 0 (0 = 4 X; peroxide 3),
+         --ph-min 7.6 --ph-max 8.6 (safety band; peroxide runs use 9.0 as the max),
+         --temp-lo 10 --temp-hi 17 (warning window; the planned run is 12-15 C).
 Every value is sent with 6 significant figures and the Python reference uses the sent value, so
 the two cannot disagree at a threshold. A manual safety stop given with --stop is logged and
 replayed after a reset.
@@ -388,7 +388,7 @@ def main():
     ap.add_argument("--floor", type=float, default=0.8, help="H4 floor as a share of warm; 0 = off (arm D)")
     ap.add_argument("--maxon", type=int, default=0, help="MAX_ON days (0 = 4 x X)")
     ap.add_argument("--temp-lo", type=float, default=10.0)
-    ap.add_argument("--temp-hi", type=float, default=20.0)
+    ap.add_argument("--temp-hi", type=float, default=17.0)
     ap.add_argument("--stop", help="log a manual safety stop with this reason (--today)")
     ap.add_argument("--ph-min", type=float, default=7.6)
     ap.add_argument("--ph-max", type=float, default=8.6)

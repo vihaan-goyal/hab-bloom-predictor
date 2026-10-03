@@ -7,12 +7,13 @@
   2. Kitchen check (does the probe respond?). Rinse the probe between liquids, wait for "steady", then
      type one letter + Enter to record that liquid:
         t = tap water    v = vinegar (~pH 3)    b = baking soda, 1 tsp per cup (~pH 8.3)
-     After all three, it prints PASS if vinegar reads clearly higher than tap and baking soda lower.
+     After all three, it prints PASS if vinegar reads >= 0.30 V above tap and baking soda >= 0.03 V below.
   Serial Monitor at 115200, "Newline". Re-upload alerter_uno.ino afterwards.
 */
 const int PIN_PH = A2;
 const float STEADY_V = 0.005;      // max change over the last 10 readings (~5 s) to count as settled
 const float VINEGAR_MIN_RISE = 0.30;
+const float SODA_MIN_DROP = 0.03;  // baking soda must read at least this far below tap (noise margin)
 float hist[10];
 int n = 0;
 float vTap = NAN, vVin = NAN, vSoda = NAN;
@@ -41,12 +42,12 @@ void verdict() {
   Serial.print(F("RESULT tap=")); Serial.print(vTap, 3);
   Serial.print(F(" vinegar=")); Serial.print(vVin, 3);
   Serial.print(F(" soda=")); Serial.print(vSoda, 3);
-  bool vinOk = vVin - vTap >= VINEGAR_MIN_RISE, sodaOk = vSoda < vTap;
+  bool vinOk = vVin - vTap >= VINEGAR_MIN_RISE, sodaOk = vSoda < vTap - SODA_MIN_DROP;
   if (vinOk && sodaOk) Serial.println(F("  -> PASS: probe responds (acid up, base down). Order buffers to calibrate."));
   else {
     Serial.print(F("  -> CHECK:"));
     if (!vinOk) Serial.print(F(" vinegar should read at least 0.30 V above tap;"));
-    if (!sodaOk) Serial.print(F(" baking soda should read below tap;"));
+    if (!sodaOk) Serial.print(F(" baking soda should read at least 0.03 V below tap;"));
     Serial.println(F(" rinse, wait longer for steady, and retry."));
   }
 }

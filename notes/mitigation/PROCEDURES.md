@@ -29,11 +29,11 @@ NaH₂PO₄·H₂O, Na₂SiO₃·9H₂O), f/2 trace metals and vitamins, scale, 
 ### P3. Calibrate and read the fluorometer
 **Materials:** alerter (Arduino + TSL2591 dark box), cuvettes, culture, seawater, pipettes, a chlorophyll reference (acetone extraction with a borrowed spectrophotometer, or a borrowed calibrated fluorometer).
 1. Set the gain first (`gain m`; `l` if it saturates). The gain is saved with the calibration, so a later gain change means redoing steps 2-3.
-2. Make a dilution series of one culture (100%, 50%, 25%, 12.5%, 0%) and read each; send `blank` for the 0% sample.
+2. Make a dilution series of one culture (100%, 50%, 25%, 12.5%, 6%, 0%) and read each 3 times; send `blank` for the 0% sample.
 3. Measure the **reference chlorophyll in µg/L** of the 100% sample (and ideally the 50%), and fit µg/L against the fluorometer signal `fl`: the slope is `chlk` (**µg/L per signal count**; type `chlk <slope>`). C_ok, the warm-up mean and the floor are then all in µg/L.
    - Also count cells in the 100% sample (P4) and record glow per cell. That is a check, not the calibration.
    - If no µg/L reference is available, fit **cells/mL** against `fl` instead, and give C_ok, `warm` and the floor in cells/mL too. Never mix the units.
-3. **Reading rules:** sample every vessel at the same time each day; keep each sample in the dark for 15 minutes; read 3 times and average.
+4. **Reading rules:** sample every vessel at the same time each day; keep each sample in the dark for 15 minutes; read 3 times and average.
 
 ### P4. Count cells
 **Materials:** microscope, Sedgewick-Rafter slide, hemocytometer, pipettes, phone camera.
@@ -142,7 +142,7 @@ run.
 4. **Day 21:** add the **bloom pulse** to arms A, B and C: per 10 L, nitrate 1.02 mL, phosphate 1.01 mL, silicate 4.98 mL. **Arm D gets none.**
 5. **Days 21-40 (bloom phase):** the loop runs each tank's treatment by its own rule:
    - **A:** never treated.
-   - **B:** switches ON by the forecast (or by the rule trigger if the model is still silent 2 days after it). It re-measures every X days and switches OFF when chlorophyll is below C_ok and not rising, when it falls 2 days below 80% of warm-up, or on a safety stop. A new alert after OFF starts a new episode (a rerun). Alerter settings: `mode H`, `warm <warm-up mean>`, `floor 0.8`, `cok <50% of the pilot peak>`, `x <X>` (aeration: `x 2`; peroxide: `x 1`, `maxon 3`).
+   - **B:** switches ON by the forecast (or by the rule trigger if the model is still silent 2 days after it). It re-measures every X days and switches OFF when chlorophyll is below C_ok and not rising, when it falls 2 days below 80% of warm-up, or on a safety stop. A new alert after OFF starts a new episode (a rerun). Alerter settings: `mode H`, `warm <warm-up mean>`, `floor 0.8`, `cok <50% of the pilot peak>`, `ton 0.45` (bench trigger, `00_CONTROL_LOOP.md`), `x <X>` (aeration: `x 2`; peroxide: `x 1`, `maxon 3`, `pulse <s>`). With `pulse <s>`, the relay runs the peristaltic pump for `<s>` seconds (the weight calibration's time for 0.265 mL of 3% per 10 L) at START and at each daily check that continues the episode; `maxon` counts days since START, so at most 3 pulses. Before each check, measure the residual: above 0.5 mg/L, send `skip` (that pulse is skipped); above 2.8 mg/L or pH above 9.0, send `stop` (or `alerter_link.py --stop "..."` / `--ph-max 9.0`): these stops are not automatic in the firmware.
    - **C:** switches ON when chlorophyll reaches 50% of the expected peak (from the pilot), then follows the same OFF rule.
    - **D:** forced ON on day 21 with no bloom, for one full episode, with the floor switched off (`floor 0`).
 6. **Days 40-45 (cool-down):** keep logging, with no new ON switches.

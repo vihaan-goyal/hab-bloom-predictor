@@ -21,8 +21,12 @@
   Loop commands:
       x <days>   cok <ug/L>   ton <p>   mode F|R|H   warm <mean chl>
       floor <frac>   floor OFF level as a share of warm (default 0.8; 0 = off, e.g. arm D)
-      maxon <days>   MAX_ON in days (0 = 4 x X; peroxide 3, curcumin 4)
-      temp <lo> <hi> temperature warning window, C (default 10 20)
+      maxon <days>   MAX_ON in days since START (0 = 4 x X; peroxide 3 with x 1)
+      pulse <s>  dosing-pump mode (peroxide): while ON, the relay runs for <s> seconds at START
+                 and at each check day that continues the episode, then switches off; the state
+                 still prints ON. 0 (default) = relay held ON for the whole episode (air pump)
+      skip       skip the next pulse (e.g. H2O2 residual > 0.5 mg/L at the check)
+      temp <lo> <hi> temperature warning window, C (default 10 17)
       servo <on> <off>   servo angles for ON / OFF (USE_SERVO)
       stop       (safety stop: OFF at the next daily line, e.g. DO kit < 4 mg/L)
       mute 0|1   (silence the buzzer; alerter_link.py uses it to replay history after a reset)
@@ -38,7 +42,7 @@
       cal        show the stored calibration        calclear   erase it
       Calibration is kept in EEPROM, so it survives resets and uploads.
 
-  Outputs:  green LED = idle, blue LED + relay = treatment ON,
+  Outputs:  green LED = idle, blue LED = treatment ON, relay = ON (or the timed pulse, `pulse`),
             white LED = warning (safety stop, temperature out of range, missed reading),
             buzzer: 3 beeps = ON, 1 long = OFF, fast beeps = temperature alarm.
 
@@ -58,7 +62,7 @@
 #define USE_PH 1        // pH module (analog)           no library
 #endif
 #ifndef USE_SERVO
-#define USE_SERVO 0     // servo that lowers/lifts the seaweed panel or shellfish bag (D11)
+#define USE_SERVO 0     // spare servo on D11 (planned: fluorometer wiper / reference target; not built)
 #endif
 
 #if USE_DS18B20
@@ -81,7 +85,7 @@ const int PIN_FLUOR_LED = 7;   // fluorometer's blue excitation LED (TSL2591 its
 const int PIN_PH = A2;         // pH module Po (A4/A5 are taken by SDA/SCL)
 const int PIN_SERVO = 11;      // servo signal (USE_SERVO)
 const bool RELAY_ACTIVE_LOW = false;  // false: bare relay via transistor, or LED stand-in; true for most opto relay modules
-float tempLo = 10.0, tempHi = 20.0;   // planned run 12-18 C (WATER_RECIPE.md), +/- 2 C; `temp` changes it
+float tempLo = 10.0, tempHi = 17.0;   // planned run 12-15 C (WATER_RECIPE.md), +/- 2 C; `temp` changes it
 const int FLOOR_DAYS = 2, HANDOVER_DAYS = 2;
 
 float tOn = 0.50, cOk = 5.0, warmMean = NAN, floorFrac = 0.8;
@@ -96,6 +100,9 @@ long histDay = -100000;        // calendar day of chlHist[2]
 long pendingDay = -1;          // handover: day the rule fired while idle (-1 = none)
 int episodes = 0, belowCount = 0;
 bool safetyStop = false;
+unsigned int pulseSec = 0;     // 0 = relay held for the whole ON episode
+bool skipNext = false, pumpOn = false;
+unsigned long pumpStartMs = 0;
 
 #if USE_DS18B20
 OneWire oneWire(PIN_TEMP);
@@ -132,7 +139,8 @@ void setOutputs() {
   digitalWrite(PIN_GREEN, on ? LOW : HIGH);
   digitalWrite(PIN_RED, on ? HIGH : LOW);
   digitalWrite(PIN_YELLOW, (warn || tempAlarm) ? HIGH : LOW);
-  digitalWrite(PIN_RELAY, (on != RELAY_ACTIVE_LOW) ? HIGH : LOW);
+  bool relay = pulseSec > 0 ? (on && pumpOn) : on;
+  digitalWrite(PIN_RELAY, (relay != RELAY_ACTIVE_LOW) ? HIGH : LOW);
 #if USE_SERVO
   servo.write(on ? servoOnDeg : servoOffDeg);
 #endif
@@ -156,7 +164,7 @@ void stepDay(long day, float p, float chl) {
   float tOff = 0.8 * tOn;
   int maxOn = maxOnDays > 0 ? maxOnDays : 4 * X;
 
-  bool was = on, ended = false, maxed = false;
+  bool was = on, ended = false, maxed = false, recheck = false;
   warn = false;
   if (was && day >= checkDay) {
     if (isnan(chl)) {
@@ -166,7 +174,7 @@ void stepDay(long day, float p, float chl) {
       bool notRising = isnan(lastChl) || chl <= lastChl;
       bool stopOk = !isnan(p) && p < tOff && chl < cOk && notRising;
       maxed = !stopOk && (day - startDay >= maxOn);
-      if (!stopOk && !maxed) { lastChl = chl; checkDay = day + X; }
+      if (!stopOk && !maxed) { lastChl = chl; checkDay = day + X; recheck = true; }
       ended = stopOk || maxed;
     }
   }
@@ -192,6 +200,12 @@ void stepDay(long day, float p, float chl) {
     on = true; started = true; pendingDay = -1;
     startDay = day; checkDay = day + X; lastChl = chl; episodes++;
   }
+  // pulse mode: one timed pump run at START and at each check day that continues the episode
+  bool dose = pulseSec > 0 && (started || (on && recheck));
+  bool skipped = dose && skipNext;
+  if (dose) skipNext = false;
+  if (!on) pumpOn = false;
+  if (dose && !skipped) { pumpOn = true; pumpStartMs = millis(); }
   setOutputs();
   if (started) beep(120, 3, 120);
   else if (was && ended) beep(800, 1, 0);
@@ -204,7 +218,9 @@ void stepDay(long day, float p, float chl) {
   else if (was && ended) Serial.print(maxed ? F("STOP_MAX_ON") : floorHit ? F("OFF_FLOOR") : F("OFF"));
   else Serial.print(on ? F("ON") : F("idle"));
   if (on) { Serial.print(F(" next_check=")); Serial.print(checkDay); }
-  Serial.print(F(" episodes=")); Serial.println(episodes);
+  Serial.print(F(" episodes=")); Serial.print(episodes);
+  if (dose) { Serial.print(F(" pulse=")); if (skipped) Serial.print(F("skipped")); else { Serial.print(pulseSec); Serial.print('s'); } }
+  Serial.println();
 }
 
 // ------------------------------------------------------------------ sensors
@@ -314,6 +330,7 @@ void printStatus() {
   Serial.print(F(" warm=")); Serial.print(warmMean, 2);
   Serial.print(F(" floor=")); Serial.print(floorFrac, 2);
   Serial.print(F(" temp_win=")); Serial.print(tempLo, 1); Serial.print(F("-")); Serial.print(tempHi, 1);
+  if (pulseSec > 0) { Serial.print(F(" pulse=")); Serial.print(pulseSec); Serial.print(skipNext ? F("s(skip next)") : F("s")); }
   Serial.print(F(" state=")); Serial.print(on ? F("ON") : F("idle"));
   Serial.print(F(" temp=")); Serial.println(tempC, 1);
 }
@@ -340,11 +357,14 @@ void handleLine(char *line) {
   else if (!strcmp(a, "warm") && b) warmMean = atof(b);
   else if (!strcmp(a, "floor") && b) floorFrac = atof(b);
   else if (!strcmp(a, "maxon") && b) maxOnDays = max(0, atoi(b));
+  else if (!strcmp(a, "pulse") && b) { pulseSec = max(0, atoi(b)); pumpOn = false; setOutputs(); }
+  else if (!strcmp(a, "skip"))      skipNext = true;
   else if (!strcmp(a, "temp") && b && c) { tempLo = atof(b); tempHi = atof(c); }
   else if (!strcmp(a, "servo") && b && c) { servoOnDeg = constrain(atoi(b), 0, 180); servoOffDeg = constrain(atoi(c), 0, 180); setOutputs(); }
   else if (!strcmp(a, "stop"))      { safetyStop = true; Serial.println(F("safety stop at the next daily line")); return; }
   else if (!strcmp(a, "mute") && b) muted = atoi(b) != 0;
   else if (!strcmp(a, "reset"))     { on = false; warn = false; episodes = 0; lastChl = NAN; belowCount = 0; pendingDay = -1;
+                                      pumpOn = false; skipNext = false;
                                       histDay = -100000; for (int i = 0; i < 3; i++) chlHist[i] = NAN; setOutputs(); }
   else if (strcmp(a, "status"))     { Serial.println(F("? unknown command")); return; }
   printStatus();
@@ -392,6 +412,7 @@ char buf[64];
 byte len = 0;
 
 void loop() {
+  if (pumpOn && millis() - pumpStartMs >= pulseSec * 1000UL) { pumpOn = false; setOutputs(); }
   while (Serial.available()) {
     char ch = Serial.read();
     if (ch == '\n') { buf[len] = '\0'; handleLine(buf); len = 0; }

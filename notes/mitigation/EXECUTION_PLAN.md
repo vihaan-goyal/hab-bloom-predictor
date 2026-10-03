@@ -117,10 +117,21 @@ The fixed points:
 | **Nov 10** | Warm-up start | 28 tanks start logging at low nutrients (the model's 21-day warm-up) | controller working |
 | Nov 16 - Nov 25 | 3. Decide and pre-register | Apply the go rule; choose each loop's species; write `LOOP_PREREG.md` (arms, n, X, dose, endpoints, stats, the aeration delay outcome) and commit it **before** nutrients go in | screen results |
 | **Dec 1** | Nutrients in | Arms A-C get nutrients; D doesn't. The loop runs on both triggers (model and rule) | prereg committed |
-| Dec 1 - Dec 19 | 4. Loop runs | Both methods run at once. Bloom phase ~2-3 weeks; re-measure at every X; cell counts on school days | lab access |
-| Dec 19 - Dec 24 | Cool-down | 5 days of logging (the controller runs unattended; one visit for counts and the peroxide reservoir) | |
+| Dec 1 - Dec 20 | 4. Loop runs | Both methods run at once (days 21-40). Bloom phase ~2-3 weeks; re-measure at every X; cell counts on school days | lab access |
+| Dec 20 - Dec 25 | Cool-down | Days 40-45: 5 days of logging, overlapping the start of winter break (the controller runs unattended; one visit for counts and the peroxide reservoir) | |
 | **Jan 4 - Feb 1** | 5. Analyse and write | `src/lab/analyze_lab.py` (mean ± 95% t, n = 3); figures; board; update `SCIENTIFIC_METHOD.md` | |
 | Feb | Backup window | If a run fails, repeat the best method once (another 6-7 weeks is too long, so use a shortened warm-up and report it) | |
+
+> **DECIDED 2026-10-03: option 1 (warm up all candidate cultures in parallel from Nov 10; keep only the tanks the screens choose after Nov 25).** Original note:
+> **Warm-up Day 0 comes before the culture choice.** Warm-up Day 0
+> (Nov 10, when every tank is inoculated with "that method's culture") and the pilot pulse (~Nov 17)
+> both come before the screens choose each loop's culture (Nov 16-25). Decide before ordering tanks:
+> 1. **Warm up all candidate cultures in parallel** (e.g. both small algae + *Skeletonema*, and the
+>    dinoflagellate candidates) and keep only the chosen tanks after Nov 25; this needs extra tanks
+>    and lab space, but keeps the timeline; or
+> 2. **Shift Day 0 to after the decision** (about Nov 26), which moves nutrients-in to about Dec 17
+>    and the bloom phase into winter break, so the loop runs would move to January (see §10, "No
+>    sponsor by mid-October").
 
 ## 5. What you need to do (in order)
 
@@ -186,7 +197,7 @@ If the screens point both methods at the **same** culture, arm A and the pilots 
 | Sodium percarbonate, 3% H₂O₂, low-range kit and strips | peroxide | $60-90 |
 | *Artemia* eggs | non-target | $10 |
 | *(Curcumin, ethanol, kelp, mesh cages, oysters, mesh bags: dropped 2026-10-01)* | | |
-| **Total** | | **about $1,100-1,300** |
+| **Total** | | **about $1,100-1,300, assuming the sponsor lends the microscope, scale, micropipettes, glassware and meters** (about $1,575-1,865 without borrowing; `MATERIALS_LIST.md`) |
 
 Much of this can be borrowed: ask the sponsor for the microscope, glassware and the pH/DO meters.
 
@@ -208,7 +219,7 @@ Much of this can be borrowed: ask the sponsor for the microscope, glassware and 
 | 2 µm cells can't be counted reliably | weak cell counts for the small algae | fluorometer is the main measure for the small algae, hemocytometer at 400× as a check, 5 µm size fraction in mixed tanks; say so in the write-up |
 | Fluorometer disagrees with cell counts | the OFF rule is wrong | the OFF rule uses cell counts for peroxide; report glow per cell for both methods |
 | Model never fires in a tank (month term, rescaling) | arm B has no model trigger | the rule trigger drives arm B; report the model's behaviour as a finding |
-| Lab closed over break | missed counts | the bloom phase ends Dec 19 by design |
+| Lab closed over break | missed counts | the bloom phase ends Dec 20 by design; the cool-down runs unattended |
 | Arm A culture doesn't bloom in our tanks | every hypothesis fails | pilot bloom run during warm-up; backup culture flasks (§11) |
 | Peroxide reservoir runs low or loses strength | doses drift | check the reservoir weekly with the low-range kit; refill (the one allowed maintenance) |
 
