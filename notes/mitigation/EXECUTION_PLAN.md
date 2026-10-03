@@ -38,6 +38,8 @@ a record of what was considered and why it was dropped.
 | 04 | Curcumin | 25 | Weak-moderate (one organism, *K. brevis*) | Unknown; blinds the 470 nm fluorometer | **Dropped 2026-10-01** (fluorometer interference, dose overlaps zebrafish LD50, one organism) |
 | 05 | Shellfish bags | 24 | Strong in tanks, weak at larger scale | Filters, but can't be switched off | **Dropped 2026-10-01** (not switchable, live animals, permits, stops feeding in dense blooms) |
 
+**Peroxide dosing (2026-10-03):** field stock is 7% H₂O₂ diluted inline (circulation pump + mixing hose; 0.0112 L of 7% per m³ per pulse); the bench keeps the 0.1% working dilution through the same module (`03_PEROXIDE_BAG.md`; `hardware/alerter_uno/README.md` stage 9).
+
 **Evidence files:** `evidence/01_BUBBLES_EVIDENCE.md`, `02_SEAWEED_`, `03_PEROXIDE_`,
 `04_CURCUMIN_`, `05_SHELLFISH_EVIDENCE.md`. Each file has a master table, per-source detail,
 aggregated data, hypotheses, mechanisms, design numbers and gaps. The dropped methods' files are
@@ -111,7 +113,7 @@ The fixed points:
 | Dates (2026-27) | Phase | What happens | Blocking on |
 |---|---|---|---|
 | **Now - Oct 10** | 0. Admin | Find a sponsor or Designated Supervisor and a lab space. Forms 1, 1A, 1B, and Form 3 (sodium percarbonate oxidizer, 3% H₂O₂). Ask NCMA about the strains, including *Micromonas pusilla* (§5). Buy live *Nannochloropsis* (reef-aquarium phytoplankton). Optional: email Dr. Gobler for the bubble PDF | **You** |
-| Oct 5 - Oct 24 | 1. Build and calibrate | Arduino Uno alerter with relay → air pump and peristaltic dosing pump; DIY fluorometer; calibrate to µg/L with a dilution series. Percarbonate peroxide-content check in seawater without algae (low-range kit at 0, 15 min, 1 h, 24 h). Calibrate the peristaltic pump by weight. Start the design log | parts ordered |
+| Oct 5 - Oct 24 | 1. Build and calibrate | Arduino Uno alerter with relay → air pump and peristaltic dosing pump; dosing module with inline dilution (Oct 12-24: circulation pump, flow and float switches, 2-channel relay; pump calibration, dry test and 10 L mixing test, `PROCEDURES.md` P7); DIY fluorometer; calibrate to µg/L with a dilution series. Percarbonate peroxide-content check in seawater without algae (low-range kit at 0, 15 min, 1 h, 24 h). Calibrate the peristaltic pump by weight. Start the design log | parts ordered |
 | Oct 15 - Oct 31 | Culture up | Grow the panel (*Nannochloropsis*, *Micromonas*, *Skeletonema*, *T. weissflogii*, the dinoflagellates) to working density; check the aquarium *Nannochloropsis* under the microscope and sub-culture it clean; hatch *Artemia* test batches | cultures arrive |
 | **Oct 26 - Nov 14** | 2. Screens | Two screens on the species panel, in flasks, n = 3 each (§6). 4 and 3 days, run in parallel; repeat a failed flask set if time allows | cultures, forms |
 | **Nov 10** | Warm-up start | 28 tanks start logging at low nutrients (the model's 21-day warm-up) | controller working |

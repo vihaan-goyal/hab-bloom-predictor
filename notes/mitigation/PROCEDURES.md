@@ -63,6 +63,24 @@ Flask volumes below are **200 mL** of culture in a 250 mL flask; tanks are **10 
 - The loop's pump doses tanks through a **peristaltic dosing pump** (calibrated by weighing what it delivers). The 12 V diaphragm pump in the kit moves air or water, not microdoses.
 - The 0.01 g scale can't weigh the 0.6 mg a flask needs, which is why every small dose goes through a 1 mg/mL working solution.
 
+### P7. Calibrate the dosing pump and test the dosing module (added 2026-10-03)
+**Materials:** the dosing module (`hardware/alerter_uno/README.md` stage 9: circulation pump, dosing
+pump, tee and mixing hose, flow and float switches, 2-channel relay), the 0.1% working dilution (P6),
+a 10 or 25 mL graduated cylinder, a 10 L tank of P1 water, the low-range peroxide kit, goggles and gloves.
+1. **Calibrate:** run the dosing pump for 30 s into the graduated cylinder, 3 times; rate (mL/s) =
+   mean volume ÷ 30. Pulse seconds = 8 mL (0.8 mg/L in 10 L) ÷ rate, rounded; send `pulse <s>`. Log the
+   rate, and re-check it at each service visit.
+2. **Dry test (board only, LEDs for the pumps):** `x 1`, `maxon 3`, `pulse 3`, flow jumper in, `2 0.6 4`
+   → prime, dose, flush in order; flow jumper out on the next check day → `DOSE_ABORT no_flow`; float
+   jumper grounded → `REFILL`.
+3. **Water mixing test:** one pulse into the 10 L tank; measure H₂O₂ at the outlet and the far corner
+   at 1, 5 and 15 min. **Pass:** far corner 0.8 ± 0.2 mg/L by 15 min, and outlet < 5 mg/L at 5 min.
+   **Blast radius (added 2026-10-03):** at the same times, also read H₂O₂ at 10, 25 and 50 cm from the
+   outlet along the outflow direction (mid-depth). Report the distance where the reading falls below
+   2.8 mg/L (emergency-stop level) and below 0.86 mg/L (krill harm level) at each time. Field estimates
+   of ~1 m and ~1-2 m are calculations only until this is measured.
+4. Record everything in the design log. The peroxide loop run does not start until P7 passes.
+
 ---
 
 ## Part 1: Screens (small flasks, days)
@@ -136,7 +154,7 @@ run.
 - Microscope, hemocytometer, Sedgewick-Rafter slide, DO kit, brine shrimp.
 
 **Setup (one run per method; both run on the same dates):**
-1. **Days −7 to 0:** calibrate the fluorometer (P3) and the peristaltic pump (by weight), dry-run the controller, and pre-register both runs in `LOOP_PREREG.md` (commit it), including the aeration delay outcome.
+1. **Days −7 to 0:** calibrate the fluorometer (P3) and the dosing pump and module (P7), dry-run the controller, and pre-register both runs in `LOOP_PREREG.md` (commit it), including the aeration delay outcome.
 2. **Day 0:** fill all tanks with P1 water, and inoculate the same number of cells of that method's culture in each.
 3. **Days 0-21 (warm-up):** log readings daily, with no nutrients added. On about day 7, give the **2 pilot tanks** of each culture the bloom pulse early: they show that the culture blooms and set the expected peak.
 4. **Day 21:** add the **bloom pulse** to arms A, B and C: per 10 L, nitrate 1.02 mL, phosphate 1.01 mL, silicate 4.98 mL. **Arm D gets none.**

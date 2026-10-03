@@ -17,6 +17,23 @@ pump plus a 3% H₂O₂ reservoir meets that rule (`EXECUTION_PLAN.md`, "Plan ch
 - **New secondary hypothesis (H5):** peroxide sensitivity falls with cell size. The small cells are
   hit; the larger diatoms and dinoflagellates, and the arm-D non-target check, are spared at 0.8 mg/L.
 
+**Added 2026-10-03: inline-dilution dosing module (field design).**
+- **Field stock is 7% H₂O₂** (plain, no surfactant; ~71.7 g/L), not drugstore 3%. A 200 m³ pen needs
+  5.3 L of 3% per 0.8 mg/L pulse, up to ~74 L in a worst-case 2 weeks (14 pulses); 7% needs 2.4× less.
+  35% is a hazard a student can't handle, and 7% stays **below the ~8% line** where peroxide becomes
+  corrosive.
+- **Sizing rule:** 7% volume per pulse (L) = **0.0112 × water volume (m³)** (0.8 g per m³ ÷ 71.7 g/L).
+  200 m³ pen: **2.24 L per pulse**, about **7 L in a typical 2 weeks** (3 pulses) and **31 L worst
+  case** (14 pulses), so one 40 L jug lasts a service interval.
+- **Inline dilution:** a circulation pump draws water in, the peristaltic pump meters the 7% into that
+  stream (e.g. 100 mL/min into 15 L/min, about 1:150), and a mixing hose blends it, so the mix leaves
+  the outlet at **~470 mg/L**, beside the aerator, and spreads to 0.8 mg/L in the pen. **No hot spot:**
+  there is never a jet of 71,700 mg/L stock at the outlet.
+- **Bench stays at the 0.1% working dilution** (`PROCEDURES.md` P6; 8 mL per 10 L), with the same
+  plumbing and firmware, because 0.8 mg/L in 10 L would be only 0.11 mL of 7%, too little to meter.
+- Hardware, interlocks (no-flow abort, reservoir-low alert) and tests: `hardware/alerter_uno/README.md`,
+  stage 9; procedure `PROCEDURES.md` P7.
+
 Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/peroxides.md` #3,
 #5, #6, #15, #18, #34, #39; Part 1 #1.
 

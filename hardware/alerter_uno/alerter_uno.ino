@@ -26,6 +26,14 @@
                  and at each check day that continues the episode, then switches off; the state
                  still prints ON. 0 (default) = relay held ON for the whole episode (air pump)
       skip       skip the next pulse (e.g. H2O2 residual > 0.5 mg/L at the check)
+      flush <s>  (USE_DOSER) seconds the circulation pump keeps running after a pulse (default 90)
+  Dosing module (USE_DOSER 1, added 2026-10-03; README "Dosing module"): each pulse runs
+      PRIME (circulation pump D12 only, 5 s) -> DOSE (circulation + dosing pump D10, <pulse> s)
+      -> FLUSH (circulation only, <flush> s) -> IDLE.
+      No flow (D8 HIGH) at the end of PRIME, or for > 0.5 s during DOSE -> both pumps stop,
+      "DOSE_ABORT no_flow", beep, warning LED; later pulses print pulse=aborted until `pulse <s>`
+      is sent again (after the intake is fixed) or `reset`.
+      Reservoir float (D4 LOW) -> "REFILL" once and the warning LED; dosing is still allowed.
       temp <lo> <hi> temperature warning window, C (default 10 17)
       servo <on> <off>   servo angles for ON / OFF (USE_SERVO)
       stop       (safety stop: OFF at the next daily line, e.g. DO kit < 4 mg/L)
@@ -61,6 +69,9 @@
 #ifndef USE_PH
 #define USE_PH 1        // pH module (analog)           no library
 #endif
+#ifndef USE_DOSER
+#define USE_DOSER 0     // inline-dilution dosing module: circulation relay D12, flow D8, float D4
+#endif
 #ifndef USE_SERVO
 #define USE_SERVO 0     // spare servo on D11 (planned: fluorometer wiper / reference target; not built)
 #endif
@@ -84,6 +95,12 @@ const int PIN_GREEN = 6, PIN_YELLOW = 9, PIN_RED = 5, PIN_BUZZ = 2, PIN_RELAY = 
 const int PIN_FLUOR_LED = 7;   // fluorometer's blue excitation LED (TSL2591 itself is on SDA/SCL)
 const int PIN_PH = A2;         // pH module Po (A4/A5 are taken by SDA/SCL)
 const int PIN_SERVO = 11;      // servo signal (USE_SERVO)
+#if USE_DOSER
+const int PIN_CIRC = 12;       // relay channel 2: circulation pump (D10 = dosing pump)
+const int PIN_FLOW = 8;        // flow switch to GND, INPUT_PULLUP: LOW = water flowing
+const int PIN_LEVEL = 4;       // reservoir float switch to GND, INPUT_PULLUP: LOW = reservoir low
+const unsigned long PRIME_MS = 5000, NOFLOW_GRACE_MS = 500;
+#endif
 const bool RELAY_ACTIVE_LOW = false;  // false: bare relay via transistor, or LED stand-in; true for most opto relay modules
 float tempLo = 10.0, tempHi = 17.0;   // planned run 12-15 C (WATER_RECIPE.md), +/- 2 C; `temp` changes it
 const int FLOOR_DAYS = 2, HANDOVER_DAYS = 2;
@@ -103,6 +120,13 @@ bool safetyStop = false;
 unsigned int pulseSec = 0;     // 0 = relay held for the whole ON episode
 bool skipNext = false, pumpOn = false;
 unsigned long pumpStartMs = 0;
+#if USE_DOSER
+enum DoseState : byte { D_IDLE, D_PRIME, D_DOSE, D_FLUSH };
+DoseState dState = D_IDLE;
+unsigned int flushSec = 90;
+unsigned long dStartMs = 0, noFlowMs = 0;
+bool doseFault = false, refillShown = false;
+#endif
 
 #if USE_DS18B20
 OneWire oneWire(PIN_TEMP);
@@ -139,12 +163,47 @@ void setOutputs() {
   digitalWrite(PIN_GREEN, on ? LOW : HIGH);
   digitalWrite(PIN_RED, on ? HIGH : LOW);
   digitalWrite(PIN_YELLOW, (warn || tempAlarm) ? HIGH : LOW);
+#if USE_DOSER
+  bool relay = pulseSec > 0 ? (dState == D_DOSE) : on;
+  bool circ = dState != D_IDLE;
+  digitalWrite(PIN_CIRC, (circ != RELAY_ACTIVE_LOW) ? HIGH : LOW);
+#else
   bool relay = pulseSec > 0 ? (on && pumpOn) : on;
+#endif
   digitalWrite(PIN_RELAY, (relay != RELAY_ACTIVE_LOW) ? HIGH : LOW);
 #if USE_SERVO
   servo.write(on ? servoOnDeg : servoOffDeg);
 #endif
 }
+
+#if USE_DOSER
+void doserTo(DoseState st) {
+  dState = st; dStartMs = millis(); noFlowMs = 0;
+  setOutputs();
+  Serial.println(st == D_PRIME ? F("DOSER prime") : st == D_DOSE ? F("DOSER dose") :
+                 st == D_FLUSH ? F("DOSER flush") : F("DOSER idle"));
+}
+
+void doseAbort() {
+  dState = D_IDLE; doseFault = true; warn = true;
+  setOutputs();
+  Serial.println(F("DOSE_ABORT no_flow"));
+  beep(400, 3, 150);
+}
+
+void doserTick() {                          // called from loop(): advances PRIME -> DOSE -> FLUSH -> IDLE
+  unsigned long t = millis() - dStartMs;
+  bool flow = digitalRead(PIN_FLOW) == LOW;
+  if (dState == D_PRIME && t >= PRIME_MS) { if (flow) doserTo(D_DOSE); else doseAbort(); }
+  else if (dState == D_DOSE) {
+    if (flow) noFlowMs = 0;
+    else if (noFlowMs == 0) noFlowMs = millis() | 1;
+    if (noFlowMs && millis() - noFlowMs >= NOFLOW_GRACE_MS) doseAbort();
+    else if (t >= pulseSec * 1000UL) doserTo(D_FLUSH);
+  }
+  else if (dState == D_FLUSH && t >= flushSec * 1000UL) doserTo(D_IDLE);
+}
+#endif
 
 void pushHist(float v) { chlHist[0] = chlHist[1]; chlHist[1] = chlHist[2]; chlHist[2] = v; }
 
@@ -204,8 +263,13 @@ void stepDay(long day, float p, float chl) {
   bool dose = pulseSec > 0 && (started || (on && recheck));
   bool skipped = dose && skipNext;
   if (dose) skipNext = false;
+#if USE_DOSER
+  bool aborted = dose && !skipped && doseFault;
+  if (aborted) warn = true;                   // a no-flow abort blocks dosing until `pulse <s>` re-arms it
+#else
   if (!on) pumpOn = false;
   if (dose && !skipped) { pumpOn = true; pumpStartMs = millis(); }
+#endif
   setOutputs();
   if (started) beep(120, 3, 120);
   else if (was && ended) beep(800, 1, 0);
@@ -219,8 +283,19 @@ void stepDay(long day, float p, float chl) {
   else Serial.print(on ? F("ON") : F("idle"));
   if (on) { Serial.print(F(" next_check=")); Serial.print(checkDay); }
   Serial.print(F(" episodes=")); Serial.print(episodes);
-  if (dose) { Serial.print(F(" pulse=")); if (skipped) Serial.print(F("skipped")); else { Serial.print(pulseSec); Serial.print('s'); } }
+  if (dose) {
+    Serial.print(F(" pulse="));
+    if (skipped) Serial.print(F("skipped"));
+#if USE_DOSER
+    else if (aborted) Serial.print(F("aborted"));
+#endif
+    else { Serial.print(pulseSec); Serial.print('s'); }
+  }
   Serial.println();
+#if USE_DOSER                                 // after the day line, so the link sees it first
+  if (!on && (dState == D_PRIME || dState == D_DOSE)) doserTo(D_FLUSH);
+  if (dose && !skipped && !aborted) doserTo(D_PRIME);
+#endif
 }
 
 // ------------------------------------------------------------------ sensors
@@ -331,6 +406,13 @@ void printStatus() {
   Serial.print(F(" floor=")); Serial.print(floorFrac, 2);
   Serial.print(F(" temp_win=")); Serial.print(tempLo, 1); Serial.print(F("-")); Serial.print(tempHi, 1);
   if (pulseSec > 0) { Serial.print(F(" pulse=")); Serial.print(pulseSec); Serial.print(skipNext ? F("s(skip next)") : F("s")); }
+#if USE_DOSER
+  Serial.print(F(" flush=")); Serial.print(flushSec);
+  Serial.print(F(" circ=")); Serial.print(dState != D_IDLE ? F("on") : F("off"));
+  Serial.print(F(" flow=")); Serial.print(digitalRead(PIN_FLOW) == LOW ? F("yes") : F("no"));
+  Serial.print(F(" level=")); Serial.print(digitalRead(PIN_LEVEL) == LOW ? F("LOW") : F("ok"));
+  if (doseFault) Serial.print(F(" dose=FAULT"));
+#endif
   Serial.print(F(" state=")); Serial.print(on ? F("ON") : F("idle"));
   Serial.print(F(" temp=")); Serial.println(tempC, 1);
 }
@@ -357,7 +439,14 @@ void handleLine(char *line) {
   else if (!strcmp(a, "warm") && b) warmMean = atof(b);
   else if (!strcmp(a, "floor") && b) floorFrac = atof(b);
   else if (!strcmp(a, "maxon") && b) maxOnDays = max(0, atoi(b));
-  else if (!strcmp(a, "pulse") && b) { pulseSec = max(0, atoi(b)); pumpOn = false; setOutputs(); }
+  else if (!strcmp(a, "pulse") && b) { pulseSec = max(0, atoi(b)); pumpOn = false;
+#if USE_DOSER
+                                      doseFault = false; if (dState != D_IDLE) doserTo(D_IDLE);
+#endif
+                                      setOutputs(); }
+#if USE_DOSER
+  else if (!strcmp(a, "flush") && b) flushSec = max(0, atoi(b));
+#endif
   else if (!strcmp(a, "skip"))      skipNext = true;
   else if (!strcmp(a, "temp") && b && c) { tempLo = atof(b); tempHi = atof(c); }
   else if (!strcmp(a, "servo") && b && c) { servoOnDeg = constrain(atoi(b), 0, 180); servoOffDeg = constrain(atoi(c), 0, 180); setOutputs(); }
@@ -365,6 +454,9 @@ void handleLine(char *line) {
   else if (!strcmp(a, "mute") && b) muted = atoi(b) != 0;
   else if (!strcmp(a, "reset"))     { on = false; warn = false; episodes = 0; lastChl = NAN; belowCount = 0; pendingDay = -1;
                                       pumpOn = false; skipNext = false;
+#if USE_DOSER
+                                      doseFault = false; dState = D_IDLE;
+#endif
                                       histDay = -100000; for (int i = 0; i < 3; i++) chlHist[i] = NAN; setOutputs(); }
   else if (strcmp(a, "status"))     { Serial.println(F("? unknown command")); return; }
   printStatus();
@@ -374,6 +466,9 @@ void handleLine(char *line) {
 void setup() {
   pinMode(PIN_GREEN, OUTPUT); pinMode(PIN_YELLOW, OUTPUT); pinMode(PIN_RED, OUTPUT);
   pinMode(PIN_BUZZ, OUTPUT); pinMode(PIN_RELAY, OUTPUT); pinMode(PIN_FLUOR_LED, OUTPUT);
+#if USE_DOSER
+  pinMode(PIN_CIRC, OUTPUT); pinMode(PIN_FLOW, INPUT_PULLUP); pinMode(PIN_LEVEL, INPUT_PULLUP);
+#endif
   setOutputs();
   Serial.begin(115200);
 #if USE_SERVO
@@ -407,12 +502,23 @@ void setup() {
   printStatus();
 }
 
-unsigned long lastTempMs = 0, lastReportMs = 0;
+unsigned long lastTempMs = 0, lastReportMs = 0, lastLevelMs = 0;
 char buf[64];
 byte len = 0;
 
 void loop() {
+#if USE_DOSER
+  doserTick();
+  if (millis() - lastLevelMs > 10000) {      // reservoir float: REFILL once per low event
+    lastLevelMs = millis();
+    if (digitalRead(PIN_LEVEL) == LOW) {
+      if (!refillShown) { Serial.println(F("REFILL")); refillShown = true; }
+      if (!warn) { warn = true; setOutputs(); }
+    } else refillShown = false;
+  }
+#else
   if (pumpOn && millis() - pumpStartMs >= pulseSec * 1000UL) { pumpOn = false; setOutputs(); }
+#endif
   while (Serial.available()) {
     char ch = Serial.read();
     if (ch == '\n') { buf[len] = '\0'; handleLine(buf); len = 0; }

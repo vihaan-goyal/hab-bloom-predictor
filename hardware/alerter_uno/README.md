@@ -35,6 +35,7 @@ Dates fit `EXECUTION_PLAN.md`: build and calibrate by Oct 24, cultures Oct 15-31
 | 6 | Hand-measurement kit | Oct 12-24 | ~$90 + borrowed microscope |
 | 7 | Laptop link + logging | Oct 19-24 | $0 |
 | 8 | Dry run on a real tank | Oct 26 - Nov 9 | $0 |
+| 9 | Dosing module (inline dilution, peroxide) | Oct 12-24 | ~$70 |
 
 **Progress:** stages 1 and 2 passed on 2026-09-26: Test A, lights, buzzer, and the bare relay
 clicking on D10 (LED as the pretend pump; the real pump isn't bought yet).
@@ -361,6 +362,64 @@ will run:
 - nothing overheats, leaks or drifts.
 
 Then the real 21-day warm-up starts on Nov 10.
+
+## Stage 9: dosing module, inline dilution (added 2026-10-03; ~$70)
+
+The peroxide is never squirted straight into the water. A circulation pump draws water in, the dosing
+pump meters peroxide into that stream, a mixing hose blends it, and the mix leaves beside the air
+stone. In the field the reservoir holds **7% H₂O₂**; on the bench it holds the **0.1% working
+dilution** (`PROCEDURES.md` P6), because 0.8 mg/L in 10 L is only 0.11 mL of 7%, too little to meter.
+
+```
+water → intake (2-5 mm screen) → circulation pump (12 V) → mixing tee → 1 m mixing hose → outlet beside the air stone
+H₂O₂ jug (opaque HDPE, float switch) → peristaltic dosing pump → check valve ──────┘ (into the tee)
+```
+
+**Parts:** 2-channel 5 V relay module; 12 V circulation pump (bench: small aquarium pump; field:
+10-20 L/min); the peristaltic dosing pump (stage 2); intake screen; check valve; tee + 1 m hose (or an
+inline static mixer); flow switch; float switch; opaque HDPE jug; peroxide-compatible tubing
+(silicone in the pump head, PE/PVC elsewhere). Details in `notes/mitigation/MATERIALS_LIST.md`.
+
+**Wiring:**
+- Relay channel 1 IN → **D10** (dosing pump, as before); channel 2 IN → **D12** (circulation pump).
+  Each pump's 12 V + goes through its channel's COM → NO. A 2-channel module is usually active-low:
+  set `RELAY_ACTIVE_LOW = true` (it applies to both channels).
+- Flow switch between **D8** and GND (closed = flow). Float switch between **D4** and GND (closed =
+  reservoir low). Both use the Uno's internal pull-ups, so no resistors.
+- Set `USE_DOSER 1` at the top of `alerter_uno.ino` (with it at 0 the sketch behaves exactly as before).
+
+**What the firmware does** (with `pulse <s>` > 0): each pulse runs **PRIME** (circulation only, 5 s) →
+**DOSE** (circulation + dosing pump, `pulse` seconds) → **FLUSH** (circulation only, `flush` seconds,
+default 90) → idle, printing `DOSER prime`, `DOSER dose`, `DOSER flush`, `DOSER idle`.
+- **No-flow interlock:** no flow at the end of PRIME, or flow lost for more than 0.5 s during DOSE →
+  both pumps stop, `DOSE_ABORT no_flow`, 3 beeps, white LED. Later pulses print `pulse=aborted` and
+  do not run until the intake is fixed and `pulse <s>` is sent again (or `reset`).
+- **Reservoir low:** the float is checked every 10 s; on LOW it prints `REFILL` once and lights the
+  white LED. Dosing still runs (the jug holds a margin below the float).
+- `status` adds `flush=`, `circ=`, `flow=`, `level=` (and `dose=FAULT` after an abort).
+
+**Pump calibration:**
+1. Fill the jug with the solution it will dose (bench: 0.1%). Prime the dosing pump's tube.
+2. Run the dosing pump for **30 s** into a 10 or 25 mL graduated cylinder; repeat 3 times; average.
+3. Rate (mL/s) = volume ÷ 30. `pulse` seconds = pulse volume ÷ rate, rounded to whole seconds.
+   Bench example: 50 mL in 30 s = 1.67 mL/s; 8 mL of 0.1% per 10 L → `pulse 5`. If the rounding error
+   is over 5%, use a slower pump or a weaker working dilution.
+4. Record the rate in the design log; re-check it at every service visit (tubing wears).
+
+**Dry bench test** (LEDs in place of the pumps, jumper wires as the switches):
+1. `x 1`, `maxon 3`, `pulse 3`, flow jumper D8 → GND, then `2 0.6 4` → `START ... pulse=3s`, then
+   `DOSER prime`, `DOSER dose` (3 s), `DOSER flush` (90 s), `DOSER idle`, with the LEDs in that order.
+2. Remove the flow jumper and send the next check day (`3 0.6 4`) → `DOSE_ABORT no_flow` after 5 s, 3
+   beeps, white LED. The next check day prints `pulse=aborted`; `pulse 3` re-arms it.
+3. Ground D4 → `REFILL` within 10 s, white LED on.
+
+**Water mixing test** (10 L tank of seawater, 0.1% in the jug, pump calibrated): run one pulse, then
+measure H₂O₂ with the low-range kit at the **outlet** and the **far corner** at 1, 5 and 15 min.
+
+**Done when:**
+- the dry test prints the three sequences above;
+- in the water test the far corner reads **0.8 ± 0.2 mg/L by 15 min** and the outlet reads **< 5 mg/L
+  at 5 min** (no hot spot).
 
 ## Optional: servo (D11; planned for the fluorometer wiper and reference target)
 

@@ -105,6 +105,23 @@ the daily fluorometer readings; it needs no extra kit.
 | Tanks, 4-10 L (arms B, C, D) | 9 | $80 | The treated tanks | Arm B = forecast loop, C = reactive start, D = false alarm |
 | 3% H₂O₂ reservoir bottle (dark, capped) feeding the peristaltic pump | 1 | $5 | Holds the peroxide the pump draws from | Stable for weeks, so the device runs with at most a refill; strength checked weekly with the low-range kit |
 
+**Dosing module, inline dilution (added 2026-10-03; `hardware/alerter_uno/README.md` stage 9).** The
+bench module doses the 0.1% working dilution; the 7% stock is for the field design (one bottle to
+show and test the parts with, not dosed into tanks).
+
+| Item | Qty | Approx. | What it does | Why we need it |
+|---|---|---|---|---|
+| 7% H₂O₂, plain (no surfactant, fragrance or stabiliser blend) | 1 L | $15 | The field-design stock | 2.4× less volume than 3% for a 2-week service interval, and below the ~8% corrosive line; surfactants would harm non-targets |
+| Opaque HDPE jug with vented cap | 1 | $10 | Holds the stock in the dark | Light and heat break peroxide down; HDPE resists it; the vent stops gas building up |
+| 12 V circulation pump (bench: small aquarium pump; field: 10-20 L/min) | 1 | $15 | Draws water in and pushes it through the mixing hose | Dilutes the peroxide inline so there is no concentrated jet at the outlet |
+| Intake screen (2-5 mm mesh) | 1 | $3 | Covers the circulation pump's intake | Keeps debris and animals out of the pump and the flow switch |
+| Check valve (peroxide-compatible) | 1 | $4 | One-way valve between the dosing pump and the tee | Stops water pushing back into the dosing line or siphoning stock |
+| Tee + 1 m mixing hose (or an inline static mixer) | 1 | $6 | Joins the dose into the water stream and mixes it | Blends the dose before the outlet (~1:150 in the field) |
+| Flow switch (inline, closes on flow) | 1 | $8 | Tells the Uno that water is moving (D8) | The no-flow interlock: never dose into a dead line |
+| Float switch | 1 | $4 | Closes when the jug runs low (D4) | Prints `REFILL` so the service visit is not missed |
+| 2-channel 5 V relay module | 1 | $8 | Switches the dosing pump (D10) and the circulation pump (D12) | Two pumps, two independent switches |
+| Peroxide-compatible tubing (silicone in the pump head; PE or PVC elsewhere) | 2 m | $6 | Carries the stock and the mix | Some rubbers and metals break peroxide down or corrode |
+
 ⚠ Sodium percarbonate is an oxidizer: it needs Form 3 and the supervisor present.
 
 ## Dropped 2026-10-01 (do not buy)

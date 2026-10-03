@@ -19,6 +19,7 @@ so the change is visible to the reviewer. Added: *Micromonas pusilla* (NCMA) and
 |---|---|---|
 | Sodium percarbonate (pure oxygen-bleach powder, Na₂CO₃·1.5H₂O₂), ≤ 100 g | peroxide comparison arm (same active ingredient as registered pond algaecides) | oxidizer; eye irritant (can cause serious eye damage); can intensify fire with organic materials; releases washing soda (raises pH slightly) |
 | Hydrogen peroxide, 3% (drugstore) | main peroxide treatment, dosed by pump (target 0.8 mg/L in tanks) | eye and skin irritant at 3% |
+| Hydrogen peroxide, 7% (plain, no surfactant), ≤ 1 L (added 2026-10-03) | field-design stock for the inline-dilution dosing module; shown and used to test the parts only. **The bench doses 3% and its 0.1% working dilution only** | eye and skin irritant (below the ~8% corrosive line); oxidizer; decomposes to oxygen, so it builds pressure in a sealed container |
 | ~~Curcumin (≥ 95% curcuminoids), ≤ 25 g~~ | ~~natural algicide screen~~ **No longer used (2026-10-01).** | low hazard; stains; dust irritant |
 | ~~Ethanol, food grade (e.g. Everclear), ≤ 100 mL~~ | ~~dissolves curcumin~~ **No longer used (2026-10-01).** | flammable |
 | Sodium metasilicate nonahydrate (Na₂SiO₃·9H₂O) | silicate nutrient stock | corrosive to eyes and skin (alkaline) |
@@ -89,6 +90,7 @@ before use, so wild microorganisms are not cultured.
 - **Chemicals:**
   - Buy and use small quantities only, and review each SDS before first use.
   - Store sodium percarbonate dry in a closed, labeled container, away from heat, organics and acids; dissolve it fresh on the day of use.
+  - Store 7% H₂O₂ (2026-10-03) in its opaque HDPE jug with a **vented cap**, shaded and cool, away from organics and metals; handle it with splash goggles and nitrile gloves, and rinse any splash with plenty of water.
   - Keep stock solutions labeled with contents, concentration and date, refrigerated and out of reach.
   - Weigh powders slowly to avoid dust.
   - Never mix bleach with ammonia-containing water, acids or peroxide; disinfect each separately.
