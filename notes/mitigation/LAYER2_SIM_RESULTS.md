@@ -263,3 +263,52 @@ The other numbers (H1a, ON days, harm, H2) match the earlier run within 1-2 poin
 - **The floor rule:** a "switch OFF below 80% of warm-up" rule (`FLOOR_ON` in `method_mc.py`) was tested. It never fired during treatment, and it only cut the false-alarm arm D short on noise, so it is off by default in the simulation.
 - **Decision:** overshoot is measured on the bench instead (H4 in `00_CONTROL_LOOP.md`).
 - **New caveat:** no nutrient recycling means the model can't predict late regrowth or overshoot.
+
+## Tiered dosing (2026-10-04, exploratory, not pre-registered)
+
+**Question:** does a tiered start to the peroxide loop cut false-alarm exposure without losing much benefit on real blooms?
+
+**Code and outputs:**
+- Code: `src/sim/tiered_dosing.py`, which reuses the tank model, controller, pilot run, `C_ok`, floor, 2.8 mg/L pull and harm check.
+- Outputs: `data/sim/tiered_dosing_summary.csv`, `tiered_dosing_draws.csv` and `figures/sim/fig_tiered_dosing.png`.
+- Run: 2,000 accepted peroxide draws (seed 42), n = 3 tanks per arm.
+- Arms: A untreated, B forecast trigger with the handover, D false alarm.
+- Every strategy sees the same draws and the same noise stream.
+
+**Strategies:**
+- All three use 0.8 mg/L pulses, the ≤ 0.5 mg/L re-dose rule, `MAX_ON` 3 and X = 1 d.
+- **FULL:** the current plan.
+- **Half first:** the first pulse is 0.4 mg/L. The tank goes on to full pulses only if CONFIRMED at the next check; otherwise it switches OFF.
+- **Aeration first:** bubbles run until CONFIRMED, then full peroxide pulses replace them. If the start is never confirmed, aeration stops by the normal OFF rule.
+- **CONFIRMED** = forecast ≥ T_on AND (the rule trigger holds OR chl today > chl at START). It is sticky for the tank.
+
+| (median [5-95%] across draws) | FULL | Half first | Aeration first |
+|---|---|---|---|
+| B peak cut vs A | **74%** [57, 83] | 66% [49, 80] | 70% [54, 81] |
+| Paired change vs FULL (points) | — | −6.8 [−14, +1] | −3.2 [−14, +6] |
+| ≥ 50% cut, mean / 95% CI (H1a), n = 3 | 99% / **81%** | 94% / 60% | 97% / 66% |
+| B days below C_ok minus A | +9.7 [6.7, 15] | +9.7 [6.7, 15] | +9.7 [6.7, 15] |
+| B H2O2 dosed (mg per 10 L tank) | 56 [37, 91] | 44 [28, 76] | 48 [29, 80] |
+| B days to first full dose | 0 | 1 | 1 |
+| D H2O2 dosed (mg per 10 L tank) | 8 | 4 | 0 (dosed in 4% of runs) |
+| D peak H2O2 (mg/L) | 0.80 | 0.40 | 0 |
+| D non-target harm | 0% | 0% | 0% |
+
+**Reading:**
+1. **With the existing harm check, FULL already shows 0% false-alarm harm,** so tiering has no harm to cut.
+   - One 0.8 mg/L pulse sits just under the lowest drawn harm threshold (0.86 mg/L, krill LC50).
+   - Tiering widens that margin: half first halves the false-alarm dose and peak; aeration first almost removes them.
+2. **The cost falls on real blooms:**
+   - half first −7 points of peak cut, aeration first −3;
+   - the honest H1a chance (CI clears 50%, n = 3) drops from 81% to 60% or 66%.
+   - Days held below C_ok do not change.
+3. **If a tier is wanted, aeration first is the better one.** It is nearly free in arm D and loses less on real blooms. FULL stays the stronger design for the H1 test.
+
+**Caveats:**
+- The model has no aeration–peroxide interaction, so the two act independently (growth pause × peroxide kill).
+- The bubbles parameters come from dinoflagellates and are applied to the small alga as the "inhibited" class. That transfer is untested, and it is optimistic for aeration first.
+- Harm is a single threshold on peak H2O2 per tank. Exposure time and repeated sub-threshold pulses are not modelled.
+- The confirmation rule and the `MAX_ON` accounting are choices made for this run:
+  - the half pulse counts as pulse 1 of 3;
+  - aeration days do not count toward the 3 pulses.
+- One organism, no nutrient recycling. This run is exploratory; FULL reproduces the 2026-09-28 peroxide numbers (74% [57, 83], CI version 80-81%).
