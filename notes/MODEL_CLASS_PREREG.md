@@ -31,5 +31,11 @@ gradient-boosted tree model rank LIS bloom risk better than the locked logistic 
 
 **Whatever the result, it is reported as is.**
 
-## Result
-*(empty until run)*
+## Result (run 2026-10-05, after the rule above was written and pushed; `src/models/model_class_cv.py`, `data/model_class_cv.log`)
+- **Development 2016-2022** (1,411 rows, 78 events): LR **0.676**, GB **0.648**.
+  - GB − LR **−0.028 [−0.068, +0.011]**, one-sided p = 0.93.
+  - **The rule fails, so LR stays.** The LR numbers reproduce the locked walk-forward exactly (0.676 dev, 0.660 all).
+- **Held out 2023-25** (reported only; 560 rows, 16 events): LR 0.602, GB 0.622, +0.020 [−0.105, +0.150], p = 0.39. A tie.
+- **All 2016-2025:** LR 0.660, GB 0.644, −0.016 [−0.053, +0.023].
+- **Per fold:** GB wins 3 of 10 (2017, 2024, 2025, all with 7 or fewer events) and loses badly in 2020-21 (0.26 / 0.18 vs 0.71 / 0.46).
+- **Reading:** on the consistent lab-scale label, a more flexible model does not help. The tree model overfits small, sparse folds. As expected, the limit is the ~3-week sampling, not the model class.
