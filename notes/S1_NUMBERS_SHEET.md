@@ -145,7 +145,7 @@ allowed, the same as the day-t chlorophyll.
 
 ## 21-day operating point (`T_STAR_21` = 0.20)
 - **Walk-forward CV** (`rolling_origin_cv.py --horizon 21`): pooled AUC **0.693**, 1,971 rows / 121 events (was 0.759 before the audit and 0.772 before 2026-09-28).
-- **Test 2023-25 at t* = 0.20** (`warning_robustness.py`): POD **0.791** [0.636, 0.904], precision **0.115** [0.065, 0.165], FAR 0.885; 34 TP / 261 FP / 9 FN, 560 rows.
+- **Test 2023-25 at t* = 0.20** (`scripts/warning/warning_robustness.py`): POD **0.791** [0.636, 0.904], precision **0.115** [0.065, 0.165], FAR 0.885; 34 TP / 261 FP / 9 FN, 560 rows.
   - Extra years 2016-19: POD 0.500, precision 0.095.
 - **Locked fit ≤ 2019, station-day** (`reference_baselines.py`): base 7.7%, model POD 0.791, precision 0.125, lift **1.63**.
   - Against always-alert: +0.63 [+0.35, +0.92], clearly better.

@@ -26,15 +26,15 @@ spec (LogisticRegression, C=0.05, balanced) matches it; training here is a
 refit of that spec on the train years.
 
 Usage:
-    python warning_threshold_selection.py
-    python warning_threshold_selection.py --target-pod 0.8
+    python scripts/warning/warning_threshold_selection.py
+    python scripts/warning/warning_threshold_selection.py --target-pod 0.8
 """
 
 import argparse
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 import numpy as np
 import pandas as pd
 import matplotlib

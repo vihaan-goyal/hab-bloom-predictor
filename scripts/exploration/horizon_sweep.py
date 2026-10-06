@@ -17,7 +17,7 @@ matchable target readings. Always read the AUC curve next to the n_test curve.
 A high AUC on 12 samples is noise, not skill.
 
 Usage:
-    python horizon_sweep.py --data deep_wq.csv --date-col time --max-horizon 50 --tol 7
+    python scripts/exploration/horizon_sweep.py --data deep_wq.csv --date-col time --max-horizon 50 --tol 7
 """
 
 import argparse

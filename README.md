@@ -71,7 +71,7 @@ figures/
 paper/                              LaTeX (Overleaf)
 ```
 
-Warning-system scripts (repo root): `warning_operating_point.py` (threshold selection), `warning_robustness.py` (CIs, extra years, per-station), `warning_station_gate.py` (rejected gate experiment), `grouped_station_report.py`.
+Warning-system scripts (`scripts/warning/`): `scripts/warning/warning_operating_point.py` (threshold selection), `scripts/warning/warning_robustness.py` (CIs, extra years, per-station), `scripts/warning/warning_station_gate.py` (rejected gate experiment), `scripts/warning/grouped_station_report.py`.
 
 ## Data sources
 
@@ -88,8 +88,8 @@ The `data/` folder is not in git. Reproduce it from the public sources above; th
 ```
 conda activate base
 python src/models/rolling_origin_cv.py --horizon 21      # pooled AUC 0.693 (S1, after the audit)
-python warning_operating_point.py --target-pod 0.8 --test-from-cv
-python warning_robustness.py --t-star 0.20
+python scripts/warning/warning_operating_point.py --target-pod 0.8 --test-from-cv
+python scripts/warning/warning_robustness.py --t-star 0.20
 ```
 
 These use the S1 default input, `data/hab_features_tidal_S1.csv` (built by `python src/models/label_rebuild.py build`). Prefix with `HAB_FEATURES_CSV=data/hab_features_tidal.csv` to reproduce the original sensor label (pooled AUC 0.852 there).

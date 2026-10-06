@@ -16,8 +16,8 @@ horizon (the number that makes the monitoring-cadence limitation concrete).
 
 Usage:
     conda activate hab
-    python sampling_interval.py
-    python sampling_interval.py --data data/hab_features_final.csv --out data/station_sampling_intervals.csv
+    python scripts/exploration/sampling_interval.py
+    python scripts/exploration/sampling_interval.py --data data/hab_features_final.csv --out data/station_sampling_intervals.csv
 
 Defaults match the schema used by src/deploy/daily_inference.py.
 """

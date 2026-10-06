@@ -14,3 +14,6 @@ hardware/alerter_uno/logs/
 
 # CSEF registration forms: personal contact details (local only)
 forms/
+
+# Jupyter autosaves
+.ipynb_checkpoints/
