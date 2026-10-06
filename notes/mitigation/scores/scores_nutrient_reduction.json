@@ -1,0 +1,182 @@
+[
+ {
+  "paper_id": "nutrient_reduction-01",
+  "reproducibility": 1,
+  "effectiveness": 2,
+  "cost": 1,
+  "time": 1,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Review of watershed-to-coast N and P load policy; typical experiment is watershed management, not repeatable by a student.",
+   "effectiveness": "Perspective essay; its evidence is nutrient-addition bioassays in one estuary (Neuse) showing N limitation downstream, with no measured bloom reduction.",
+   "cost": "Watershed load reduction costs millions.",
+   "time": "Load reductions act over years to decades.",
+   "environment": "Nothing added to the water; treats the cause."
+  }
+ },
+ {
+  "paper_id": "nutrient_reduction-02",
+  "reproducibility": 3,
+  "effectiveness": 2,
+  "cost": 3,
+  "time": 4,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Nutrient dilution/enrichment bioassays in microcosms are bench-doable with a sponsor, though mesocosms were in Lake Taihu.",
+   "effectiveness": "A threshold study, not a load cut: 2-day dilution bioassays and a 10-day bucket gradient show P limits in spring and N in summer, and recommend TN 1.26 / TP 0.082 mg/L via 61-71% TN load cuts.",
+   "cost": "1 L cubitainers, 100 L buckets and nutrient/chlorophyll analyses are roughly $150-500.",
+   "time": "Bioassays ran 2 days (up to 10 days for the gradient test).",
+   "environment": "Dilution adds nothing harmful; informs targets."
+  }
+ },
+ {
+  "paper_id": "nutrient_reduction-03",
+  "reproducibility": 1,
+  "effectiveness": 2,
+  "cost": 1,
+  "time": 1,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Neuse River Estuary watershed-scale P ban and wastewater upgrades.",
+   "effectiveness": "P-only control removed upstream cyanobacterial blooms, but mid-estuary dinoflagellate and cryptomonad blooms grew larger in 1989-2003; monitoring only, no control.",
+   "cost": "Wastewater upgrades cost millions.",
+   "time": "Decades.",
+   "environment": "Nothing added, but single-nutrient control moved the problem downstream."
+  }
+ },
+ {
+  "paper_id": "nutrient_reduction-04",
+  "reproducibility": 1,
+  "effectiveness": 3,
+  "cost": 1,
+  "time": 1,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Analysis of 35 lakes' long-term TP-load reductions; field management, not repeatable.",
+   "effectiveness": "Chl a fell in 71% of shallow and 69-70% of deep lakes and cyanobacteria share fell in 80% of deep lakes, but not in shallow ones; no control lakes and some lakes worsened.",
+   "cost": "Catchment load reduction costs far over $5,000.",
+   "time": "New equilibrium after 10-15 years (mean 16 years of data).",
+   "environment": "Nothing added; internal loading delayed recovery but no harm."
+  }
+ },
+ {
+  "paper_id": "nutrient_reduction-05",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 1,
+  "time": 1,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "37-year whole-lake fertilization experiment in the Experimental Lakes Area.",
+   "effectiveness": "Cutting N from 308 to 0 kg/yr let N-fixers take over; mean biomass (9,306 mg/m3) did not differ among N:P periods in this single unreplicated lake.",
+   "cost": "Whole-lake decades-long experiment far exceeds $5,000.",
+   "time": "37 years.",
+   "environment": "N reduction adds nothing; no non-target harm reported."
+  }
+ },
+ {
+  "paper_id": "nutrient_reduction-06",
+  "reproducibility": 1,
+  "effectiveness": 3,
+  "cost": 1,
+  "time": 1,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Tampa Bay estuary program with multi-entity N load reduction.",
+   "effectiveness": "After ~60% N-load cuts, Hillsborough Bay chl a fell from 25-35 to typically <15 ug/L, but attribution is observational (no control estuary) and it is general chl a, not a HAB taxon.",
+   "cost": "Estuary-wide management costs millions.",
+   "time": "1982 to mid-2000s.",
+   "environment": "Nothing added; seagrass recovered."
+  }
+ },
+ {
+  "paper_id": "nutrient_reduction-07",
+  "reproducibility": 1,
+  "effectiveness": 2,
+  "cost": 1,
+  "time": 1,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Chesapeake Bay management-driven N reductions over 30 years.",
+   "effectiveness": "Outcome is seagrass (+316%), not phytoplankton; chl a appears only as a modelled path, and water-column P fell just 8%.",
+   "cost": "Bay-wide program costs billions.",
+   "time": "1984-2015.",
+   "environment": "Nothing added; habitat recovery."
+  }
+ },
+ {
+  "paper_id": "nutrient_reduction-08",
+  "reproducibility": 1,
+  "effectiveness": 3,
+  "cost": 1,
+  "time": 1,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Danish national coastal N (~50%) and P (56%) load cuts.",
+   "effectiveness": "Annual chl a fell from 7 to ~2.5 ug/L (~64%) after ~50% N and 56% P cuts, but it is observational with no control area and Secchi barely rose.",
+   "cost": "National program costs far over $5,000.",
+   "time": "25 years.",
+   "environment": "Nothing added; filter-feeding benthos declined, cause uncertain."
+  }
+ },
+ {
+  "paper_id": "nutrient_reduction-09",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 1,
+  "time": 1,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Review of US watershed BMP performance; not repeatable by a student.",
+   "effectiveness": "Negative: BMPs achieve <=50% (in practice <25%) P reduction when >80% is needed, explaining few successes.",
+   "cost": "Watershed BMPs cost far over $5,000.",
+   "time": "Years to decades.",
+   "environment": "BMPs add nothing to water."
+  }
+ },
+ {
+  "paper_id": "nutrient_reduction-10",
+  "reproducibility": 1,
+  "effectiveness": 3,
+  "cost": 1,
+  "time": 1,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Lake Rotorua catchment load targets plus alum dosing of two tributaries.",
+   "effectiveness": "Chl a and TP declined significantly (p<0.001) and target TLI was reached in 2012, but much of the gain tracks tributary alum dosing rather than load cuts, with no control lake.",
+   "cost": "Catchment program and alum dosing cost far over $5,000.",
+   "time": "2001-2015.",
+   "environment": "About 496 t of aluminium as alum was dosed into two tributaries over 9 years; catchment load targets were not yet met."
+  }
+ },
+ {
+  "paper_id": "nutrient_reduction-11",
+  "reproducibility": 1,
+  "effectiveness": 3,
+  "cost": 1,
+  "time": 1,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "EPA consensus statements; the typical intervention is watershed nutrient management.",
+   "effectiveness": "Consensus review with correlational cases, e.g. Seto Inland Sea red tides fell to <30% of a >300/yr peak after loads were halved; no controlled data.",
+   "cost": "Watershed programs far exceed $5,000.",
+   "time": "Years.",
+   "environment": "Nothing added; treats the cause."
+  }
+ },
+ {
+  "paper_id": "nutrient_reduction-12",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 1,
+  "time": 1,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "14-year mass balance of Lake Taihu.",
+   "effectiveness": "External loads fluctuated rather than fell; TN fell 40% but TP did not and chl a rose slightly (peak 44 ug/L in 2017), with internal P supplying 23-90% of demand.",
+   "cost": "Lake-scale program and monitoring far exceed $5,000.",
+   "time": "14 years.",
+   "environment": "Nothing added; no harm reported."
+  }
+ }
+]

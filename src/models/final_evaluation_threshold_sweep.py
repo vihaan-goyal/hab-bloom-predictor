@@ -34,16 +34,31 @@ import argparse
 _ap = argparse.ArgumentParser()
 _ap.add_argument('--bloom-threshold', type=float, default=10.0,
                  help='chlorophyll-a ug/L cutoff defining a bloom day (locked value: 10)')
-_ap.add_argument('--preds-out', default='data/test_predictions.csv',
-                 help='where to dump per-row test predictions')
+_ap.add_argument('--preds-out', default=None,
+                 help='where to dump per-row test predictions '
+                      '(default data/test_predictions{tag}.csv)')
+# Label rebuild (notes/LABEL_REBUILD_PREREG.md). Defaults leave every path unchanged.
+_ap.add_argument('--input',
+                 default=__import__('os').environ.get('HAB_FEATURES_CSV', 'data/hab_features_tidal_S1.csv'),
+                 help='feature file (default: lab-consistent S1; the raw-fluorometer original '
+                      'is data/hab_features_tidal.csv)')
+_ap.add_argument('--label-col', default=None,
+                 help='use this prebuilt column as the label instead of bloom_28d (S3)')
+_ap.add_argument('--no-censor', action='store_true',
+                 help='reproduce the old label: windows running past a station last visit '
+                      'count as 0 instead of being dropped')
+_ap.add_argument('--tag', default='',
+                 help='suffix for every output file, e.g. _S1')
 _args, _ = _ap.parse_known_args()
 BLOOM_THRESHOLD = _args.bloom_threshold
+TAG = _args.tag
+PREDS_OUT = _args.preds_out or f'data/test_predictions{TAG}.csv'
 
 # ---------------------------------------------------------------------------
 # Load + recompute features
 # ---------------------------------------------------------------------------
-print("Loading data/hab_features_tidal.csv...")
-df = pd.read_csv("data/hab_features_tidal.csv")
+print(f"Loading {_args.input}...")
+df = pd.read_csv(_args.input)
 df['date'] = pd.to_datetime(df['date'])
 
 
@@ -93,23 +108,33 @@ for n, min_p in [(3, 2), (6, 3), (9, 5), (14, 7), (21, 10)]:
           .transform(lambda x: x.rolling(n, min_periods=min_p).mean())
     )
 
+def _slope(v):
+    """Slope over the window's positions, skipping missing values; identical to
+    np.polyfit when the window has no gaps (the lab-only S4 series has gaps)."""
+    m = np.isfinite(v)
+    return np.polyfit(np.arange(len(v))[m], v[m], 1)[0] if m.sum() >= 2 else np.nan
+
+
 df['chl_trend'] = (
     df.groupby('station_name')['Chlorophyll']
-      .transform(lambda x: x.rolling(4, min_periods=3)
-                 .apply(lambda v: np.polyfit(range(len(v)), v, 1)[0]))
+      .transform(lambda x: x.rolling(4, min_periods=3).apply(_slope, raw=True))
 )
 
-df['bloom_28d'] = 0
+# Right-censored (fix ported from worktree-climatology-fix 572ff7d, 2026-09-28): a window that
+# runs past the station's last visit and has no bloom in it is unresolved, so it is NaN (dropped)
+# rather than scored 0. --no-censor reproduces the old label.
+# 2026-09-28: a window with no visit inside it is also unresolved (NaN), the same rule as the
+# lab-only S4 label (label_utils.forward_window_label).
+from label_utils import forward_window_label
+df['bloom_28d'] = np.nan
 for station, grp in df.groupby('station_name'):
-    idx   = grp.index
-    dates = grp['date'].values
-    chl   = grp['Chlorophyll'].values
-    labels = np.zeros(len(grp), dtype=int)
-    for i in range(len(grp)):
-        mask = (dates > dates[i]) & (dates <= dates[i] + np.timedelta64(28, 'D'))
-        if mask.any() and (chl[mask] > BLOOM_THRESHOLD).any():
-            labels[i] = 1
-    df.loc[idx, 'bloom_28d'] = labels
+    df.loc[grp.index, 'bloom_28d'] = forward_window_label(
+        grp['date'].values, grp['Chlorophyll'].values > BLOOM_THRESHOLD, 28,
+        unresolved_as_zero=_args.no_censor)
+
+if _args.label_col:
+    print(f"Label: {_args.label_col} (rows where it is empty are dropped)")
+    df['bloom_28d'] = df[_args.label_col]
 
 # ---------------------------------------------------------------------------
 # Feature set
@@ -135,8 +160,10 @@ FEATURES = [f for f in FEATURES_ALL if f in df.columns]
 # ---------------------------------------------------------------------------
 # Splits
 # ---------------------------------------------------------------------------
-train = df[df['date'].dt.year <= 2019]
-val   = df[(df['date'].dt.year >= 2020) & (df['date'].dt.year <= 2022)]
+# Purge (2026-09-28): a row's 28-day label window must not reach into the next split.
+_H = pd.Timedelta(days=28)
+train = df[df['date'] <= pd.Timestamp('2020-01-01') - _H]
+val   = df[(df['date'].dt.year >= 2020) & (df['date'] <= pd.Timestamp('2023-01-01') - _H)]
 test  = df[df['date'].dt.year >= 2023]
 
 def prepare(split):
@@ -182,12 +209,56 @@ pd.DataFrame({
     "date":         _test_meta['date'].values,
     "y_true":       y_test.values,
     "y_prob":       lr_test_p,
-}).to_csv(_args.preds_out, index=False)
-print(f"Saved {_args.preds_out} ({len(y_test):,} rows)")
+}).to_csv(PREDS_OUT, index=False)
+print(f"Saved {PREDS_OUT} ({len(y_test):,} rows)")
 
 print(f"\nLR Val AUC  (2020-2022):      {roc_auc_score(y_val,  lr_val_p):.4f}")
 print(f"LR Test AUC (2023-2025): {roc_auc_score(y_test, lr_test_p):.4f}")
 print(f"LR Test AP  (2023-2025): {average_precision_score(y_test, lr_test_p):.4f}")
+
+# Threshold chosen on VALIDATION only (the sweep below picks best_t on test, for display)
+_grid = np.round(np.arange(0.10, 0.91, 0.05), 2)
+_val_f1 = [f1_score(y_val, (lr_val_p >= t).astype(int), zero_division=0) for t in _grid]
+VAL_T = float(_grid[int(np.argmax(_val_f1))])
+print(f"Validation-F1 threshold (2020-2022): {VAL_T:.2f}")
+
+# Operating threshold (2026-09-28): the project's pre-registered rule, applied on VALIDATION only --
+# the highest threshold whose validation recall (POD) is still >= 0.80. The earlier headline t=0.60
+# was picked on the 2023-25 test sweep, so its test precision/lift were not independent estimates.
+TARGET_POD = 0.80
+_val_pod = [recall_score(y_val, (lr_val_p >= t).astype(int), zero_division=0) for t in _grid]
+_ok = [t for t, p in zip(_grid, _val_pod) if p >= TARGET_POD]
+OP_T = float(max(_ok)) if _ok else float(_grid[0])
+_op = (lr_test_p >= OP_T).astype(int)
+_tp = int(((_op == 1) & (y_test == 1)).sum()); _fp = int(((_op == 1) & (y_test == 0)).sum())
+_fn = int(((_op == 0) & (y_test == 1)).sum())
+_prec = _tp / (_tp + _fp) if _tp + _fp else float('nan')
+print(f"Operating threshold (validation POD >= {TARGET_POD}): t* = {OP_T:.2f} "
+      f"(validation POD {_val_pod[list(_grid).index(OP_T)]:.3f})")
+print(f"  Test at t*: precision {_prec:.3f}  recall {_tp / (_tp + _fn):.3f}  "
+      f"lift {_prec / y_test.mean():.2f}  TP {_tp} / FP {_fp} / FN {_fn}")
+
+# Alert-budget threshold (2026-09-28): the lowest threshold whose VALIDATION alerts average at most
+# ALERT_BUDGET per month across the network. The budget is the project's existing sampling budget
+# (8 station-visits a month, src/models/decision_value.py), fixed before this threshold was chosen.
+ALERT_BUDGET = 8
+_val_meta = val.loc[val[FEATURES + ['bloom_28d']].dropna(subset=['bloom_28d']).index]
+_val_month = _val_meta['date'].dt.to_period('M').values
+_n_val_months = len(pd.unique(_val_month))
+_fine = np.round(np.arange(0.05, 0.96, 0.01), 2)
+_per_month = [(lr_val_p >= t).sum() / _n_val_months for t in _fine]
+BUDGET_T = float(next(t for t, a in zip(_fine, _per_month) if a <= ALERT_BUDGET))
+_test_meta_b = test.loc[test[FEATURES + ['bloom_28d']].dropna(subset=['bloom_28d']).index]
+_n_test_months = len(pd.unique(_test_meta_b['date'].dt.to_period('M').values))
+_bb = (lr_test_p >= BUDGET_T).astype(int)
+_btp = int(((_bb == 1) & (y_test == 1)).sum()); _bfp = int(((_bb == 1) & (y_test == 0)).sum())
+_bfn = int(((_bb == 0) & (y_test == 1)).sum())
+_bprec = _btp / (_btp + _bfp) if _btp + _bfp else float('nan')
+print(f"Alert-budget threshold (<= {ALERT_BUDGET} alerts/month on validation, "
+      f"{_n_val_months} months): t_budget = {BUDGET_T:.2f}")
+print(f"  Test at t_budget: {(_btp + _bfp) / _n_test_months:.1f} alerts/month over {_n_test_months} "
+      f"sampled months | precision {_bprec:.3f}  recall {_btp / (_btp + _bfn):.3f}  "
+      f"lift {_bprec / y_test.mean():.2f}  TP {_btp} / FP {_bfp} / FN {_bfn}")
 
 # ---------------------------------------------------------------------------
 # Threshold sweep -- LR on test set
@@ -234,7 +305,7 @@ for _, r in sweep.iterrows():
           f"{r['f1']:>6.3f}  {r['TP']:>5,}  {r['FP']:>5,}  {r['FN']:>5,}  "
           f"{r['false_alarm_rate']:>7.3f}{marker}")
 
-sweep.to_csv("data/threshold_sweep_results.csv", index=False)
+sweep.to_csv(f"data/threshold_sweep_results{TAG}.csv", index=False)
 print("\nSaved data/threshold_sweep_results.csv")
 
 # ---------------------------------------------------------------------------
@@ -277,8 +348,8 @@ ax2.set_xlim(0, 1)
 ax2.set_ylim(0, 1)
 
 plt.tight_layout()
-plt.savefig("figures/threshold_sweep.png", dpi=150, bbox_inches='tight')
-print("Saved figures/threshold_sweep.png")
+plt.savefig(f"figures/threshold_sweep{TAG}.png", dpi=150, bbox_inches="tight")
+print(f"Saved figures/threshold_sweep{TAG}.png")
 
 # ---------------------------------------------------------------------------
 # Summary

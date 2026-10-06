@@ -1,0 +1,215 @@
+{
+  "oxidation-01": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.watres.2013.05.057",
+    "updates": {
+      "dose": "CuSO4 0.5, 1.0, 1.5 mg/L as Cu; chlorine 3, 4, 5 mg/L; KMnO4 1, 3, 5, 10 mg/L; H2O2 10.2, 51, 102 mg/L; ozone 2, 4, 6 mg/L",
+      "scale": "bench cultures of toxic M. aeruginosa strain 338 in ASM-1, initial 7.0 x 10^5 cells/mL, triplicate",
+      "result": "All five treatments compromised membranes (flow cytometry, SYTOX Green): chlorine >=88% of cells within 1 min, ozone 6 mg/L 90% in 5 min, KMnO4 10 mg/L no intact cells after 6 h. Cell densities fell much less: about 22% after 3 days with 1.0-1.5 mg/L Cu, about 15% with 10 mg/L KMnO4, and no significant change with ozone or H2O2.",
+      "effect_pct": null
+    },
+    "key_details": "Lab time-course experiments on a toxic Microcystis aeruginosa strain (7.0 x 10^5 cells/mL, 20 C, pH 7.5) with untreated controls; triplicate analyses. The endpoint is membrane integrity by flow cytometry, not cell removal. CuSO4 1.5 mg/L gave >95% compromised cells; with 1.0 mg/L 98% were impaired at day 2 but intact cells rose again after day 3. H2O2 left 16%, 31% and 7% intact on day 2 at 10.2, 51 and 102 mg/L, yet 82% were viable again by day 7 at 51 mg/L and densities did not differ significantly from controls. Ozone 2, 4, 6 mg/L compromised about 50%, 70% and 90% of cells in 5 min with no significant density change.",
+    "discrepancy": "effect_pct 90 was the ozone membrane-compromise percentage, not a reduction in algae; cell densities barely changed for ozone and H2O2 (at most ~22% drop with CuSO4). The H2O2 'algistatic' claim is weak: cells recovered integrity after day 3 and densities did not differ from controls."
+  },
+  "oxidation-02": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1021/es4027024",
+    "updates": {
+      "dose": "KMnO4 or ozone 0-2.0 mg/L preoxidation (10 min, pH 7.0), then coagulation-sedimentation or chlorination (Cl2:TOC 3:1, 3 days)",
+      "scale": "bench suspensions of M. aeruginosa (1.01 x 10^6 cells/mL, TOC 5 mg/L) in simulated drinking water, duplicate tests",
+      "result": "Preozonation at 0.4-2.0 mg/L left <=1% intact cells, while permanganate 0.4-2.0 mg/L kept >97% live cells. Both preoxidants raised cell removal by coagulation-sedimentation from 56.7% to 78.0% (KMnO4 1.0 mg/L) and 80.2% (ozone 2.0 mg/L).",
+      "effect_pct": 80.2
+    },
+    "key_details": "Bench study in simulated drinking water (pH 7.0, 25 C) with M. aeruginosa washed free of extracellular organic matter; tests in duplicate with an unoxidized control. Endpoints were flow-cytometric cell integrity, coagulation removal, DOC and 3-day chlorination by-products. Ozone raised DOC after coagulation from 0.42 to 1.00 mg/L; permanganate left DOC unchanged. Common DBPs (TCM, DCAA, TCAA) rose >40% at 2.0 mg/L ozone, CH and TCNM by 262% and 471%; permanganate changed most DBPs only slightly. Removal gains levelled off above 1.0 mg/L oxidant.",
+    "discrepancy": "effect_pct 98 was the share of cells lysed by ozone (not removal); the actual removal endpoint is coagulation-sedimentation removal, 80.2% with ozone vs 56.7% without preoxidation."
+  },
+  "oxidation-05": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.scitotenv.2020.137986",
+    "updates": {
+      "result": "UV-C suppresses microalgal growth in proportion to dose, but sensitivity varies between species and cells can regrow through photoreactivation and dark repair. Field cases cited: a UV boat (48 mJ/cm2 killed all Peridinium bipes at <=5.0 x 10^3 cells/mL; 700 m3/h) and a boat killing 80% of Chattonella in 40 s in the Ariake Sea."
+    },
+    "key_details": "Literature review, no new experiments. Cited field tests: a 1991 Japanese mesocosm with a 30 W UV lamp removed almost all live Peridinium bipes within 2 days; a UV boat treated 2.0 x 10^4 m2 in 5 h, needing 120 mJ/cm2 for 90% kill at >1.0 x 10^4 cells/mL. The authors note most studies are static lab tests on M. aeruginosa in culture medium and call for larger field tests, multi-species work and repeated irradiation to counter regrowth. Efficacy depends on UV transmittance, salinity and pH.",
+    "discrepancy": ""
+  },
+  "oxidation-06": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/s0043-1354(00)00357-2",
+    "updates": {
+      "dose": "UV-C 254 nm at 37, 75 and 150 mW s/cm2 (1-1.5 mW/cm2 for 30 s to 2 min)",
+      "scale": "40 mL samples in petri dishes (0.67 cm deep), then incubated in 60 mL tubes; ~10^5 cells/mL; triplicate",
+      "result": "By day 3 all irradiated samples had <25% of the control cell density; 150 mW s/cm2 killed all cells by day 7, while 37 and 75 mW s/cm2 left cells alive but not dividing for 7 days. Over 90% of cells settled within 3 days at all doses (all settled at 75 mW s/cm2)."
+    },
+    "key_details": "Lab study with axenic M. aeruginosa (NIES) in CT medium, pH 9.0, 25 C, irradiated with low-pressure mercury lamps and incubated with unirradiated controls; growth runs in triplicate, counting only undamaged cells. Control density rose from 54 x 10^3 to 1039 x 10^3 cells/mL over 7 days while 37 and 75 mW s/cm2 samples stayed flat. Separate tests showed UV-irradiated algal extracellular products had a residual growth-suppression effect and UV produced micromolar H2O2. Authors propose UV before the bloom season for small eutrophic lakes; no field test.",
+    "discrepancy": "The record says 75 mW s/cm2 was lethal; in the full text 150 mW s/cm2 was the lethal dose (all cells dead by day 7), while 37 and 75 mW s/cm2 both stopped division without killing cells. The 150 dose was missing from the record."
+  },
+  "oxidation-07": {
+    "status": "no_access",
+    "source_url": "https://doi.org/10.1016/j.jhazmat.2012.03.030",
+    "updates": {},
+    "key_details": "",
+    "discrepancy": ""
+  },
+  "oxidation-08": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.jenvman.2025.125593",
+    "updates": {
+      "dose": "electrolysed artificial seawater (DSA, Pt or BDD anode, Ti cathode; up to 0.75 A/cm2, 4 min) added as 250 or 500 uL aliquots to 50 mL algal suspension; 580 mg/L hypochlorite in electrolyte = 5.8 mg/L initial in the suspension",
+      "result": "Best removal was 81.69 +/- 2.27% (DSA), 69.89 +/- 3.07% (Pt) and 64.43 +/- 4.10% (BDD). Hypochlorite (>95% of total chlorine) was the main algicide; H2O2 at 0.025 mg/L gave only 15% removal.",
+      "effect_pct": 81.69,
+      "env_effects": "Active oxidant is hypochlorite from seawater electrolysis; authors note chlorine can rupture Heterosigma membranes and may release intracellular toxin, and call for trials on ecological impacts. DSA used 25% and 17% less power than BDD and Pt."
+    },
+    "key_details": "Bench study with cultured Heterosigma akashiwo in L1 medium; electrolyte was produced separately and pipetted into 50 mL algal suspensions in cuvettes. Removal was estimated from in vivo fluorescence (linear with cell counts from 0.1 x 10^8 to 2.5 x 10^8 cells/L); results given as mean +/- SD. The authors cite 70-80% removal as the threshold needed in the field to stop recurrence. No field or ecological tests were done; the treatment is effectively electro-chlorination.",
+    "discrepancy": "Minor: the device does not treat algae directly by electrolysis; electrolysed seawater is dosed into the suspension (initial hypochlorite ~5.8 mg/L for >80% inactivation)."
+  },
+  "oxidation-09": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.envres.2021.111295",
+    "updates": {
+      "dose": "50 wt% g-C3N4/TiO2 film on FTO glass (7.065 cm2 coating) under visible light (>=420 nm)",
+      "scale": "bench photochemical reactor; K. mikimotoi (Daya Bay strain) ~3.78 x 10^4 cells/mL",
+      "env_effects": "About 71% of intracellular organic matter was released after 1 h of treatment (possible secondary pollution); acute toxicity tests showed cytotoxicity decreased significantly after treatment. Films are immobilized and reusable."
+    },
+    "key_details": "Lab study with dark control (photocatalyst without light) and light control (light without photocatalyst). Chlorophyll-a fluorescence fell in all lit systems within 10 min, but in the light-only control it recovered to the starting level after 60 min of darkness, while with the photocatalyst it did not; net inactivation was 64% in 60 min. Cell density used (3.78 x 10^4 cells/mL) was higher than typical blooms. Mechanism: h+ and singlet oxygen causing oxidative damage, antioxidant enzyme collapse and cell lysis.",
+    "discrepancy": "The record says the released organic matter had no cytotoxicity; the full text says cytotoxicity decreased significantly, while 71% of intracellular organic matter was released."
+  },
+  "oxidation-12": {
+    "status": "failed",
+    "source_url": "",
+    "updates": {},
+    "key_details": "News coverage with no DOI; not a journal article, so there is nothing to open through the library proxy.",
+    "discrepancy": ""
+  },
+  "p_inactivation-10": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.ecoenv.2013.06.008",
+    "updates": {
+      "organism": "Microcystis ichthyoblabe strain TAC95 (produces only microcystin-LR); sediment bacteria",
+      "setting": "lab",
+      "scale": "3 acrylic microcosm chambers (5 L Microcystis suspension each; +sediment, +alum, +alum+sediment) plus bottle experiments",
+      "dose": "Alum at the maximum dose keeping pH 6.0: 48 mg/L as Al (microcosm) and 35 mg/L as Al (bottles)",
+      "result": "Alum co-precipitated the cells so chlorophyll-a and intracellular MC-LR in the water fell sharply within 1 day, but in the +alum microcosm >95% of intracellular MC-LR was released to the water by day 7. With sediment present, extracellular MC-LR rose for 3 days and then fell."
+    },
+    "key_details": "Lab microcosms (320 x 180 x 150 mm chambers) with washed M. ichthyoblabe in dechlorinated tap water; one chamber per treatment (+sediment control, +alum, +alum+sediment), with sediment from a eutrophic pond. Alum was dosed at the jar-test maximum that keeps pH at 6.0. No Microcystis-lysing bacterial plaques appeared in the +alum microcosm, and plaque counts in +alum+sediment were far lower than in +sediment alone; alum also reduced microcystin-degrading bacterial activity. Chlorophyll-a and phycocyanin fell in the precipitated cells. The authors conclude alum is not suitable for removing toxic blooms because floc remains in sediment for a long time. Caveat: very high dose and apparently a single chamber per treatment.",
+    "discrepancy": "The organism is Microcystis ichthyoblabe (TAC95), not M. aeruginosa; the setting is indoor lab microcosms (5 L chambers), not a mesocosm. The record omits that alum first removed chlorophyll-a from the water column by co-precipitation within 1 day."
+  },
+  "p_inactivation-12": {
+    "status": "no_access",
+    "source_url": "https://doi.org/10.1139/f97-078",
+    "updates": {},
+    "key_details": "",
+    "discrepancy": ""
+  },
+  "shading-04": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1002/naaq.10128",
+    "updates": {
+      "scale": "6 earthen ponds (~0.05 ha, ~0.7 m deep, ~325 m3), 3 treated vs 3 untreated, randomly assigned; Stoneville, Mississippi, 1988",
+      "dose": "Aquashade 1.0 uL/L on June 8, then monthly through September 8 (four treatments)",
+      "duration": "June-October 1988 (fish stocked mid-April, harvested mid-October)",
+      "result": "Chlorophyll-a did not differ between dyed and undyed ponds (early season 152 vs 145 ug/L; late season 117 vs 208 ug/L, P = 0.140). Odorous cyanobacteria appeared in 15 of 42 samples across all six ponds, and at the end two ponds per treatment had off-flavored fish.",
+      "env_effects": "No difference in nitrite, ammonia or aeration hours. About half the dye was gone 10 days after each application, possibly through anaerobic degradation in sediment."
+    },
+    "key_details": "Randomized pond trial with 3 treated and 3 control commercial-style catfish ponds, sampled biweekly for chlorophyll-a, nitrogen and dye concentration, with microscopic checks for odour-producing algae and flavor tests. Late-season chlorophyll-a looked lower in dyed ponds (117 vs 208 ug/L) but did not differ statistically because of large pond-to-pond variation. Nine of the 15 samples with odorous cyanobacteria came from dyed ponds and six from undyed ponds; three ponds had very strong off-flavors (two dyed, one control). The dye's major absorbance is 550-680 nm, peaking at 630 nm.",
+    "discrepancy": "The record says Planktothrix was present in two ponds of each treatment; the full text says odorous cyanobacteria (Planktothrix perornata or Microcystis) were found in all six ponds, and two ponds per treatment had unacceptable off-flavor fish at the end. The late-season chlorophyll-a was 44% lower in dyed ponds but not significantly so, so effect_pct 0 means no significant effect rather than an identical value."
+  },
+  "shading-05": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1111/j.1749-7345.2009.00331.x",
+    "updates": {
+      "scale": "9 fertilized 0.04-ha ponds (~70 cm deep), Stuttgart, Arkansas, 2006; 3 early-dye, 3 late-dye, 3 control, randomly assigned",
+      "dose": "Aquashade 4.8 mg/L (label rate for macrophyte control is 2 mg/L), applied at filling (May 18) or at day 25 (June 12)",
+      "duration": "47 days from stocking to fingerling harvest",
+      "result": "Mean chlorophyll-a over the whole study was significantly higher in dyed ponds (86.5 early, 75.5 late) than in controls (66.7 ug/L; P = 0.02); cyanobacteria densities did not differ among treatments. Respiration, gross and net primary productivity, fish size and condition did not differ.",
+      "effect_pct": -29.7,
+      "env_effects": "Two control ponds had the lowest fish survival (4.4% and 1.8%) and the highest unionized ammonia (0.14 and 0.10 mg/L average, up to 0.48 mg/L) and pH up to 9.73; differences in pH and unionized ammonia among treatments were not statistically significant."
+    },
+    "key_details": "Randomized pond trial with three treatments (dye at filling, dye at day 25, no dye), n = 3 ponds each, fertilized with rice bran and stocked with sunshine bass larvae at 15,000 per 0.04 ha. Water chemistry was sampled throughout, with phytoplankton identified to species. Secchi visibility did not differ overall (44.2, 52.3, 47.4 cm). Chlorophyll-a was higher, not lower, in dyed ponds; macrophytes (Najas sp.) were still present at draining. effect_pct -29.7 is computed from 86.5 vs 66.7 ug/L (early dye vs control).",
+    "discrepancy": "Dose was 4.8 mg/L, not 4 mg/L. The record says there were few differences in chlorophyll-a; in fact chlorophyll-a was significantly higher in dyed ponds than in controls (P = 0.02). The record's claim that undyed ponds reached harmful pH/ammonia is from two control ponds only and was not statistically significant."
+  },
+  "shading-06": {
+    "status": "no_access",
+    "source_url": "https://doi.org/10.1577/1548-8659(1982)2<193:ATOCCP>2.0.CO;2",
+    "updates": {},
+    "key_details": "",
+    "discrepancy": ""
+  },
+  "shading-07": {
+    "status": "no_access",
+    "source_url": "https://doi.org/10.1080/07438149909353958",
+    "updates": {},
+    "key_details": "",
+    "discrepancy": ""
+  },
+  "ultrasound-05": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.ultsonch.2005.09.012",
+    "updates": {
+      "dose": "20, 80, 150, 410, 690, 1320 kHz; 32, 48, 64, 80 W (power series at 80 kHz)",
+      "duration": "minutes (sampling every 2 min; 90% removal took 100 min at 80 W and 328 min at 32 W, 80 kHz)",
+      "result": "Removal (OD684) followed first-order kinetics; k rose from 0.007 to 0.023 /min as power went from 32 to 80 W at 80 kHz, and was 0.114 /min at 1320 kHz vs 0.0224 /min at 20 kHz. Reaching 90% removal needed 100 min at 80 W (0.134 kWh) vs 328 min at 32 W (0.175 kWh).",
+      "effect_pct": 90,
+      "env_effects": "No microcystin release at 32 W for 5 min and little at 15 min (safe below 48 W); at 80 kHz, 80 W, 5 min raised extracellular microcystins from 0.87 to 3.1 ug/L (MC-LR 0 to 2.11 ug/L)."
+    },
+    "key_details": "Bench study with lab-cultured M. aeruginosa in BG11 (near 10^9 cells/L at 14 days), sonicated in two home-made multi-frequency cells. Removal was tracked as OD684 decrease, so it reflects cell removal/decolorization rather than verified kill. Exponential- and stationary-phase cells responded similarly. Higher frequencies (410-1320 kHz) worked much better than 20-150 kHz, explained by resonance with gas-vesicle size. The authors recommend low power for drinking-water use to avoid toxin release; no replication statistics were reported in the extracted text.",
+    "discrepancy": "effect_pct was null; the paper reports times to 90% removal (100 min at 80 W, 80 kHz). The microcystin rise was 0.87 to 3.1 ug/L total extracellular microcystins, not 3.11."
+  },
+  "ultrasound-06": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.envres.2023.116422",
+    "updates": {
+      "setting": "lab",
+      "scale": "Lab microcosm glass bottles (18.5 cm tall, 7.2 cm diameter; 200 mL lake sediment + 300 mL water), 27 bottles (3 treatments x 3 sampling batches x triplicate)",
+      "dose": "29.4 kHz at 0.059 W/mL for 15 min, applied once before incubation",
+      "result": "Sonication cut M. aeruginosa from 6.19 x 10^8 to 4.12 x 10^8 cells/L (33.49%), but microcystin was 20.54 ug/L right after treatment (5.70-fold higher than unsonicated) and peaked at 41.18 ug/L on day 6. Cumulative CH4 by day 40 was 531.40 vs 371.67 umol/dm2 (1.43-fold).",
+      "env_effects": "Sonicated treatments went anaerobic immediately (DO 0.07 mg/L, ORP -360.03 mV on day 0, DO <0.1 mg/L until day 20); DOC and microcystin significantly higher than unsonicated throughout (p < 0.05); CH4 flux peaked at 41.43 vs 32.06 umol/dm2/d on day 17; shift in methanogen community."
+    },
+    "key_details": "Lab microcosms with sediment and filtered water from a campus landscape lake (Tongji University) during a bloom. Three treatments: sediment + water control, unsonicated M. aeruginosa, and pre-sonicated M. aeruginosa, each in triplicate with destructive sampling, incubated 40 days at 25 C. The design simulates bloom collapse after one sonication rather than ongoing field treatment. Both algae treatments became anoxic, but the sonicated one did so from day 0 while the unsonicated one did so by day 9-12.",
+    "discrepancy": "The setting is a lab bottle microcosm (500 mL per bottle), not a mesocosm. The record omits the 5.70-fold higher microcystin right after sonication (20.54 ug/L) and the 41.18 ug/L peak."
+  },
+  "ultrasound-08": {
+    "status": "no_access",
+    "source_url": "https://doi.org/10.1080/09593332808618800",
+    "updates": {},
+    "key_details": "",
+    "discrepancy": ""
+  },
+  "ultrasound-09": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1021/es010711c",
+    "updates": {
+      "scale": "Lake Senba, Mito, Japan (33 ha, 365,000 m3, mean depth 1.0 m); 10 USRS units (12 calculated as needed), each with two 100 W, 200 kHz transducers plus a water-jet circulator",
+      "dose": "Ultrasonic radiation + jet circulation combined with river-water flushing at a target 75,600 m3/day (residence time 4.8 days)",
+      "duration": "2 years (January 1998-1999), compared with 1996-1997",
+      "result": "Before the test, chlorophyll-a peaked at 200 ug/L and SS at 100 mg/L with transparency <10 cm; in 1998, with the target flushing volume, SS stayed low and transparency improved, though a chlorophyll-a peak still occurred in June. In 1999 flushing fell below target and chlorophyll-a and SS rose again in summer.",
+      "env_effects": "Summer COD peaks fell from 30 mg/L to 12 (1998) and 18 mg/L (1999); the summer T-P peak (0.35 mg/L) disappeared, with T-P around 0.1 mg/L; the jet circulator also aerates the bottom."
+    },
+    "key_details": "Whole-lake before/after trial with no control lake, sampled at three stations. Ultrasound was used only to slow cyanobacterial growth (M. aeruginosa) below the flushing dilution rate of 0.207/day; flushing was the main removal mechanism. Only 10 of the 12 calculated units were installed because of budget, positioned by computer simulation. Correlation analysis before and after the test was used to separate the effects; results depended strongly on inflow volume. Each unit drew about 1.9 kW in total (0.2 kW for sonication).",
+    "discrepancy": ""
+  },
+  "ultrasound-10": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.5942/jawwa.2015.107.0149",
+    "updates": {
+      "dose": "4 LG Sonic MPC buoys (1 master, 3 slaves); programs changed during the season (Anabaena, then general cyanobacteria on Aug 25, then Aphanizomenon on Sep 9)",
+      "duration": "May 13 to (mid) November 12, 2014; master buoy lost communication Sep 24",
+      "result": "Algae stayed <2,000/mL until Aug 13, when opening the Reservoir 2 inlet seeded Aphanizomenon, which the Anabaena and general-cyanobacteria programs did not control (counts >20,000/mL). After the Aphanizomenon-specific program, Sep 17-24 showed ~93% removal by cell counts and ~63% by phycocyanin/chlorophyll fluorescence; counts rose again weeks after the master buoy failed.",
+      "effect_pct": 93,
+      "env_effects": "Not assessed for non-target organisms; geosmin generally lower in Reservoir 1 than Reservoir 2."
+    },
+    "key_details": "Utility field study at Canoe Brook Reservoir 1 (Short Hills, NJ) with weekly sampling for algal counts (including dynamic particle imaging), TOC, fluorescence EEM, geosmin/MIB and plant operating data. Comparisons were against earlier years (copper-treated before 2012; DAF plant from 2012) and against untreated Reservoir 2, whose cyanobacteria counts were up to an order of magnitude higher through early August. 2014 weather was within the 2008-2013 range but slightly drier. Unreplicated single reservoir; the effect depended on picking the right program for the dominant taxon, and the 93% figure covers one week.",
+    "discrepancy": "The record gives no algal effect size; the full text shows the device failed against Aphanizomenon for several weeks (counts >20,000/mL) until the program was changed, then ~93% cell-count removal over Sep 17-24. Reservoir 2 served as an untreated comparison, so 'no control reservoir' is not quite right."
+  },
+  "ultrasound-12": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1080/10402381.2022.2077865",
+    "updates": {
+      "dose": "One Quattro-DB ultrasonic unit (Hydro BioScience): 468 ms pulses every second, energy 2-250 kHz (to 500 kHz), mean SPL 199.9 dB and max 212.3 dB re 1 uPa; estimated source level 215.5 dB",
+      "scale": "Oneida Lake nearshore surveys (on/off) plus hydroacoustics; lab: 700 L tanks, 20 fish per tank, device on in 2 of 3 tanks per species trial",
+      "duration": "14-day lab exposures",
+      "result": "Nearshore fish density (excluding round goby, 88% of observations) was 0.12 fish/m2 with the unit off and 0.13 with it on, with no significant difference. In 14-day tank exposures, no effects were detected on behaviour, feeding or tissues of fish or tadpoles."
+    },
+    "key_details": "Non-target safety study, not an algal efficacy test. The authors first measured the device's actual acoustic output with calibrated hydrophones in the field and lab, finding energy well outside the manufacturer's stated bands (down to ~9.8 kHz and up to 500 kHz). Field work at Oneida Lake compared fish communities with the device on and off; lab trials used resident New York species and wild tadpoles (Lithobates spp., American toad), 20 animals per tank, 2 exposed tanks and 1 control per trial. Tank replication per species is small (2 vs 1).",
+    "discrepancy": "One device model (Quattro-DB) was tested, not several devices."
+  }
+}

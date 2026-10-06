@@ -1,0 +1,92 @@
+[
+ {
+  "paper_id": "peroxide-01",
+  "reproducibility": 1,
+  "effectiveness": 5,
+  "cost": 1,
+  "time": 5,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Whole-lake H2O2 dosing (after lab and enclosure tests) needs permits and field equipment.",
+   "effectiveness": "Cyanobacteria and microcystin fell 99% within days and stayed low for 7 weeks.",
+   "cost": "Whole-lake peroxide dosing exceeds $5,000.",
+   "time": "99% drop within a few days.",
+   "environment": "H2O2 was gone within days and most non-target groups were largely unaffected."
+  }
+ },
+ {
+  "paper_id": "seaweed-01",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 2,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Flasks are simple, but it uses PSP-toxic Alexandrium catenella, 300 L mesocosms and mussel saxitoxin assays.",
+   "effectiveness": "-17-74% at 2-3 d and -42-96% at ~1 wk; kelp gave -73% in 48 h in mesocosms, though total chlorophyll did not fall.",
+   "cost": "Mesocosms and saxitoxin analysis put it at $500-5,000.",
+   "time": "Kelp gave -73% within 48 h.",
+   "environment": "Seaweed is retrievable, but Ulva pushed pH to 9.0-9.5 (sometimes >10) and other algae replaced the target."
+  }
+ },
+ {
+  "paper_id": "shellfish-01",
+  "reproducibility": 1,
+  "effectiveness": 2,
+  "cost": 1,
+  "time": 1,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Stocking 3.2 million clams across 64 plots in Shinnecock Bay is field-scale and needs permits.",
+   "effectiveness": "Brown tide fell from 0.3-1.9x10^6 to <10^4 cells/mL, but the link is correlational with no control bay.",
+   "cost": "Millions of clams and years of surveys exceed $5,000.",
+   "time": "Results took 2012-2019.",
+   "environment": "Native clams added; clam densities rose 18x and harvests 16x with no harm reported."
+  }
+ },
+ {
+  "paper_id": "clay-01",
+  "reproducibility": 3,
+  "effectiveness": 4,
+  "cost": 3,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Typical reviewed lab work needs surface-modified clays that must be prepared or sourced with a sponsor.",
+   "effectiveness": "Modified clays remove HAB cells far better than natural clay and are widely used in China, but no percent is given.",
+   "cost": "Lab-scale modified clay trials are roughly $150-500.",
+   "time": "Flocculation removes cells within hours.",
+   "environment": "Clay is applied at 4-10 t/km^2, settles to the seabed and is never retrieved, despite the authors' no-harm claim."
+  }
+ },
+ {
+  "paper_id": "barley_straw-01",
+  "reproducibility": 1,
+  "effectiveness": 2,
+  "cost": 3,
+  "time": 1,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "A field trial in a disused UK canal, so field-scale.",
+   "effectiveness": "Reported only that straw reduced filamentous algae; no numbers or controls seen in the secondary summary.",
+   "cost": "Dose not seen; straw is cheap but canal-scale use scored conservatively at $150-500.",
+   "time": "Duration not seen; the summary calls it a long-term method, so seasons.",
+   "environment": "Not reported; rotting straw is removable but its decomposition may lower oxygen."
+  }
+ },
+ {
+  "paper_id": "oxidation-01",
+  "reproducibility": 3,
+  "effectiveness": 5,
+  "cost": 3,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Bench cultures of Microcystis with common oxidants, but ozone generation and cell-integrity (flow cytometry) need a sponsor.",
+   "effectiveness": "Chlorine compromised >=88% of cells within 1 minute and 6 mg/L ozone lysed 90% in 5 minutes.",
+   "cost": "Culture, oxidants and cell-integrity assays are roughly $150-500.",
+   "time": "Lysis within minutes.",
+   "environment": "All oxidants burst cells and released intracellular toxins, and copper sulphate adds a persistent metal."
+  }
+ }
+]

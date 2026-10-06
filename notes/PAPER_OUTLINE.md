@@ -1,3 +1,15 @@
+> **SUPERSEDED — do not write from this file.** Marked 2026-08-30.
+> **Superseded 2026-09-23: the LIS label was rebuilt on the lab scale (the CTD fluorometer read 2-3x high before 2016); current numbers in notes/S1_NUMBERS_SHEET.md, rationale in notes/LABEL_REBUILD_PREREG.md.**
+> Written on the old MODIS + 28-day + aeration framing. It shares **no headline number**
+> with the current README. Specifically stale: MODIS as a contribution (tested and
+> rejected, -7.8pp), the 28-day horizon (standardised at 21), AUC 0.814 (now 0.852
+> pooled), precision 0.465 / 0.500 at t=0.60 (threshold-selection inflation; the honest
+> h21 value is 0.175), the single temporal split (now rolling-origin CV, 11 folds),
+> 34 features (now 35), the aeration framework (pending rerun), and "sends email alerts"
+> (no email code exists). It also predates the entire current thesis: the precision
+> ceiling, the 13 rejected attempts, the sampling-cadence mechanism, and the POD/FAR/CSI
+> vocabulary. A rewrite, not an edit. Use README.md `## Findings` as the current framing.
+
 # Spatiotemporal Prediction of Harmful Algal Blooms in Long Island Sound
 # Using Machine Learning and NASA MODIS Satellite Data
 

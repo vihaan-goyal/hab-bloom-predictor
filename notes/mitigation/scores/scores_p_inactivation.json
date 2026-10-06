@@ -1,0 +1,182 @@
+[
+ {
+  "paper_id": "p_inactivation-01",
+  "reproducibility": 1,
+  "effectiveness": 4,
+  "cost": 1,
+  "time": 1,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Whole-lake treatment with 2 t PAC and 18 t Phoslock needs permits and industrial application.",
+   "effectiveness": "Chl-a fell from 19.5 to 3.7 ug/L (81%) and stayed low to 2013, but it is one lake without a control lake.",
+   "cost": "Tonnes of PAC and Phoslock cost far above $5,000.",
+   "time": "Evaluated over 2008-2013.",
+   "environment": "Aluminium and lanthanum clay are left permanently in the sediment."
+  }
+ },
+ {
+  "paper_id": "p_inactivation-02",
+  "reproducibility": 1,
+  "effectiveness": 3,
+  "cost": 1,
+  "time": 1,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Whole-lake iron chloride plus lanthanum bentonite treatment of a 6.7 ha lake.",
+   "effectiveness": "Summer chl a fell 16 to 6 ug/L and bathing standards were met six summers, but there was no reference lake, a winter Planktothrix bloom occurred and sediment P release crept back up.",
+   "cost": "Whole-lake dosing exceeds $5,000.",
+   "time": "Evaluated over six years.",
+   "environment": "Adds iron and lanthanum permanently to sediment."
+  }
+ },
+ {
+  "paper_id": "p_inactivation-03",
+  "reproducibility": 1,
+  "effectiveness": 2,
+  "cost": 1,
+  "time": 1,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Typical reviewed use is whole-lake LMB dosing across ~200 water bodies.",
+   "effectiveness": "LMB cut SRP >98% in lab and 83-96% TP in mesocosms, but algal outcomes are sparse, one 58-day trial showed no TP difference from control, and much evidence is industry grey literature.",
+   "cost": "Whole-lake LMB dosing exceeds $5,000.",
+   "time": "Lake responses take seasons to years.",
+   "environment": "Lanthanum accumulates, with risk in low-alkalinity and saline waters."
+  }
+ },
+ {
+  "paper_id": "p_inactivation-04",
+  "reproducibility": 1,
+  "effectiveness": 3,
+  "cost": 1,
+  "time": 1,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Synthesis of 114 whole-lake alum treatments.",
+   "effectiveness": "Across 114 lakes chl a fell 42.7 to 16.3 ug/L (~62%) with benefits lasting ~8.8 years, but there were no untreated control lakes and polymictic lakes lasted only 4.6-5.7 years.",
+   "cost": "Whole-lake alum costs far above $5,000.",
+   "time": "Outcomes span years.",
+   "environment": "Adds aluminium to sediments."
+  }
+ },
+ {
+  "paper_id": "p_inactivation-05",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 1,
+  "time": 1,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Meta-analysis of 18 whole-lake Phoslock treatments at 1.4-6.7 t/ha.",
+   "effectiveness": "Despite TP falling 0.08 to 0.03 mg/L, median annual chl a was essentially unchanged (10.1 to 10.0 ug/L); only spring chl a fell (14.0 to 6.2) and there were no control lakes.",
+   "cost": "Whole-lake dosing exceeds $5,000.",
+   "time": "24-month pre/post comparisons.",
+   "environment": "Lanthanum clay persists in sediment, though macrophyte diversity rose."
+  }
+ },
+ {
+  "paper_id": "p_inactivation-06",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 1,
+  "time": 1,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Monitoring data from 16 whole-lake Phoslock applications.",
+   "effectiveness": "Reports lanthanum concentrations only; no algae outcome is given.",
+   "cost": "Whole-lake dosing exceeds $5,000.",
+   "time": "Up to 60 months of monitoring.",
+   "environment": "Filterable La exceeded the C. dubia EC50 (0.08 mg/L) in two lakes, and in at least two lakes never returned to the <0.001 mg/L baseline."
+  }
+ },
+ {
+  "paper_id": "p_inactivation-07",
+  "reproducibility": 3,
+  "effectiveness": 1,
+  "cost": 3,
+  "time": 3,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Lab jars with Phoslock and humic substances are simple, but phosphorus and lanthanum analyses need a sponsor.",
+   "effectiveness": "No algae measured; even without humics Phoslock removed only 46% of FRP in 24 h, and humics cut removal further.",
+   "cost": "Phoslock, humics and P/La analyses are roughly $150-500.",
+   "time": "Runs were 1 d and 42 d; the long-term result needs 6 weeks.",
+   "environment": "Filterable La exceeded 270 ug/L within a week, over the 10.1 ug/L Dutch standard."
+  }
+ },
+ {
+  "paper_id": "p_inactivation-08",
+  "reproducibility": 1,
+  "effectiveness": 3,
+  "cost": 1,
+  "time": 1,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Whole-lake alum treatments of four Minneapolis lakes.",
+   "effectiveness": "Chl a fell in all four lakes (e.g. Calhoun 12.2 to 3.7, Cedar 15.5 to 4.9 ug/L), but Lake of the Isles returned to pretreatment levels by 2002-2005 and there was no reference lake.",
+   "cost": "Whole-lake alum exceeds $5,000.",
+   "time": "Evaluated over ~4-9 years.",
+   "environment": "Alum floc adds aluminium and drifted to deeper sediments."
+  }
+ },
+ {
+  "paper_id": "p_inactivation-09",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 1,
+  "time": 1,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Whole-lake FeCl3 dosing (0.5-1 mol Fe/m^2) of a peat lake.",
+   "effectiveness": "P stayed low for only ~1.5 years after 1.5 years of FeCl3 dosing, then internal loading produced the highest surface P since 1986.",
+   "cost": "Whole-lake dosing exceeds $5,000.",
+   "time": "Evaluated ~10 years after treatment.",
+   "environment": "Added iron persists in organic sediment that released 10-84x more P under anoxia; the treatment backfired."
+  }
+ },
+ {
+  "paper_id": "p_inactivation-10",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 2,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Bottle and microcosm alum tests with Microcystis are bench-feasible, but microcystin analysis needs a sponsor.",
+   "effectiveness": "Alum (48 mg Al/L) co-precipitated cells so water-column chl a fell sharply within 1 day, but with one chamber per treatment and cells simply moved to the floc.",
+   "cost": "Microcystin ELISA kits and cultures are $500-5,000.",
+   "time": "Chlorophyll dropped within 1 day.",
+   "environment": ">95% of intracellular MC-LR leaked into the water by day 7, and Microcystis-lysing and toxin-degrading bacteria were suppressed."
+  }
+ },
+ {
+  "paper_id": "p_inactivation-11",
+  "reproducibility": 1,
+  "effectiveness": 2,
+  "cost": 1,
+  "time": 1,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Whole-lake Phoslock treatment of a 5.5 ha urban lake.",
+   "effectiveness": "TP fell from 0.247 to 0.060 mg/L, but phytoplankton biomass fell only in year 2 and no percent is given.",
+   "cost": "Whole-lake dosing exceeds $5,000.",
+   "time": "Two years of follow-up.",
+   "environment": "Lanthanum clay persists, and goose nutrient inputs mean repeat dosing may be needed."
+  }
+ },
+ {
+  "paper_id": "p_inactivation-12",
+  "reproducibility": 1,
+  "effectiveness": 4,
+  "cost": 2,
+  "time": 4,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "In-lake limnocorrals with lime-alum and the herbicide Reglone A need field access and permits.",
+   "effectiveness": "Both lime-alum and Reglone A removed phytoplankton, and lime-alum kept toxin release 32-fold lower, though no percent is given.",
+   "cost": "Limnocorrals and chemicals are $500-5,000.",
+   "time": "Removal seen over >5 days.",
+   "environment": "Aluminium floc persists, and lime alone raised pH above 10 and released microcystin."
+  }
+ }
+]

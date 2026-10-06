@@ -6,5 +6,6 @@
       "PowerShell(Get-Command *)",
       "PowerShell(& \"C:\\\\Users\\\\vihaa\\\\anaconda3\\\\envs\\\\hab\\\\python.exe\" -c \"import xgboost, shap, sklearn; print\\('packages ok'\\)\")"
     ]
-  }
+  },
+  "outputStyle": "Concise"
 }

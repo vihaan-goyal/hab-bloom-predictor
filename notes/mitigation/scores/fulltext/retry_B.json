@@ -1,0 +1,283 @@
+{
+  "mixing-12": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.4319/lo.2009.54.4.1243",
+    "updates": {
+      "scale": "Couette flow chambers, 170 mL culture each; 12 chambers per paired experiment (4 still controls + 4 per flow treatment)",
+      "dose": "Steady shear 1.8-8 s⁻¹ vs oscillatory (unsteady) flow, average absolute shear 1.8-4 s⁻¹ (max 6.4-6.7 s⁻¹), periods 60-600 s",
+      "duration": "Daily flow exposure 5 min to 2 h (standard 2 h/d, starting 2 h before end of night phase), over multi-day growth experiments",
+      "result": "At average absolute shear 4 s⁻¹ for 2 h/d, unsteady flow gave 93.5% ± 35.4% growth inhibition vs 46.5% ± 26.7% for steady flow (p = 0.014); at 1.8 s⁻¹ the two were similar (45% vs 43%). Even 5 min/d of unsteady flow gave 11% inhibition, rising with duration.",
+      "effect_pct": null
+    },
+    "key_details": "Lab study of one L. polyedrum strain in oscillatory Couette chambers with analytically characterised shear. Paired design: each experiment had 4 still controls run simultaneously with two flow treatments of 4 chambers; still-control net growth was 0.14 ± 0.03 d⁻¹ (n = 57 chambers). Unsteady flow at 4 s⁻¹ average absolute shear nearly stopped net growth (93.5% inhibition over periods 60-300 s), 50% more than steady 4 s⁻¹, and was not different from steady 8 s⁻¹. Oscillation period (60-600 s) and flow-direction reversal did not matter; inhibition rose with daily exposure from 11% at 5 min. Effect is growth inhibition (not cell kill) and the difference between steady and unsteady shrank at lower shear.",
+    "discrepancy": "Record gives 'mean |γ| 4 s⁻¹' but omits the headline numbers (93.5% vs 46.5% inhibition) and that the unsteady-vs-steady difference vanishes at 1.8 s⁻¹. Duration '5-120 min' is daily exposure, not total experiment length."
+  },
+  "mixing-13": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.3354/ame042055",
+    "updates": {
+      "scale": "Eight 2 L Plexiglas containers with oscillating grids (4 replicates per level in Expt 1)",
+      "dose": "Four turbulence levels, ε = 0.0001, 0.005, 0.05 and 1 cm² s⁻³ (10⁻⁸ to 10⁻⁴ m² s⁻³)",
+      "result": "Net growth was ~0.42 d⁻¹ at all turbulence levels while pH < 8.9; once densities exceeded 3 × 10⁴ cells/mL, growth was 0.17 d⁻¹ at the highest turbulence vs 0.07 d⁻¹ at the lowest (p = 0.006), because turbulence lowered pH via CO2 exchange. Turbulence did not suppress this dinoflagellate.",
+      "effect_pct": null,
+      "negative_result": true
+    },
+    "key_details": "Lab batch cultures of Heterocapsa triquetra (clone K-0481) in f/2 at 15°C, grids at 4 turbulence levels spanning calm to storm conditions, 10 d. Expt 1 compared T1 vs T4 (4 replicates); Expt 2 compared T1-T3. No growth difference among levels for Days 0-5 (p = 0.914 and 0.909). At high density, T4 (0.17 d⁻¹) and T3 (0.13 d⁻¹) grew faster than T1/T2 (0.07 d⁻¹); pH was lower at high turbulence (p = 0.041). Cell volume (~3000 µm³) unaffected. Turbulence helped rather than hindered the bloom-former at high pH.",
+    "discrepancy": ""
+  },
+  "mixing-16": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.3354/ame029051",
+    "updates": {
+      "organism": "Natural NW Mediterranean coastal plankton (phytoplankton and bacteria), <150 µm",
+      "scale": "Twelve 15 L microcosms (6 turbulent, 6 still), 2 replicates per nutrient treatment (control, N-surplus N:P 160, Redfield N:P 16)",
+      "dose": "Oscillating grids, ε = 0.055 cm² s⁻³ (5.5 × 10⁻⁶ m² s⁻³)",
+      "result": "With nutrients added, turbulence raised total chl a (turbulent NP peaked at 19.0 ± 1.1 µg/L vs still maximum 4.2 ± 0.2 µg/L) and the >10 µm (diatom) fraction; without nutrients turbulence had no effect. Turbulence increased, not reduced, phytoplankton.",
+      "effect_pct": null,
+      "negative_result": true
+    },
+    "key_details": "Coastal water from Masnou (Catalan coast) enclosed March 1998 in 15 L microcosms at 15°C for 8 d. Design: 3 nutrient conditions x still/turbulent, 2 replicate microcosms each (no replicates for TN and TNP on Day 8). In N and NP treatments turbulent chl a was significantly higher than still from Day 2 (p < 0.001); turbulent N reached 10.2 µg/L, still N peaked at 3.7 ± 2.5 µg/L. Bacterial abundance did not differ between still and turbulent. Turbulence shifted the community to larger cells and diatoms; small replication (n = 2).",
+    "discrepancy": "Record does not state that turbulence roughly quadrupled chlorophyll in nutrient-enriched microcosms (i.e. mixing enhanced growth)."
+  },
+  "mixing-14": {
+    "status": "no_access",
+    "source_url": "https://doi.org/10.1016/j.hal.2024.102666",
+    "updates": {},
+    "key_details": "Not read: ScienceDirect showed only the abstract; Columbia proxy reports the library does not subscribe.",
+    "discrepancy": ""
+  },
+  "mixing-25": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1061/(ASCE)EE.1943-7870.0001289",
+    "updates": {
+      "organism": "Cyanobacteria (chl-a 40-80 µg/L; 0.5-2.0 × 10⁶ cells/mL)",
+      "scale": "Santo Anastácio Lake, Fortaleza, Brazil (tropical, ~0.3 hm³, max depth 3.8 m, hypereutrophic); single point-source bubble diffuser at 1.5 m depth, samples inside plume (x = 0) vs outside (x = 2 m)",
+      "dose": "Air flow rates Q = 1.9, 3.8, 5.7 and 7.6 NL/s (7.5 kW compressor; diffuser with 160 × 1 mm holes)",
+      "duration": "120 min per aeration test (November 2014; pre-aeration survey November 2013)",
+      "result": "After each 120-min test, depth-averaged chl-a was 5-20% lower inside the bubble plume than outside, the gap growing with air flow; first-order net reduction rates scaled with plume hydrodynamics/ε and tracked pheophytin-a production, indicating cell death.",
+      "effect_pct": null
+    },
+    "key_details": "Field test in a shallow hypereutrophic Brazilian lake: a pre-aeration survey (Nov 2013) characterised natural variability, then four aeration tests at different air flows (Nov 2014), with repeat tests at 3.8 and 5.7 NL/s on 11 Nov 2014. Samples every 5-30 min at several depths and distances; the 'control' is water 2 m from the plume, where plume velocity was negligible (no separate control lake). In one test chl-a rose both inside and outside the plume (slower inside); in the other three it fell in both, faster inside. First-order fits had r > 0.97. Local, short-term effect only; whole-lake effect is extrapolated by simulation, not measured.",
+    "discrepancy": "Record lacks the magnitude (chl-a 5-20% lower inside vs outside plume after 120 min), the air flow rates (1.9-7.6 NL/s) and duration (120-min tests); the effect is local to the plume, not lake-wide."
+  },
+  "mixing-L07": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1080/10402381.2013.872739",
+    "updates": {
+      "dose": "Selective hypolimnetic discharge through dam flood gates, target ~300,000 m³/d (sized to sediment oxygen demand of 0.67 g O2/m²/d), applied adaptively when DO declined",
+      "result": "With selective hypolimnetic withdrawal in 2008-2011, maximum gaps between deep-mixing events were 10-18 d, the hypolimnion stayed mostly oxic and no nuisance cyanobacterial blooms occurred; in drought year 2012 (no withdrawal) the lake stayed stratified 35 d, sediments released P, and an Aphanizomenon bloom followed a cold-front mixing event.",
+      "negative_result": false
+    },
+    "key_details": "Observational before/after-style field study in Ford Lake, Michigan (17.4 × 10⁶ m³ hydroelectric reservoir), June-August 2008-2012, with YSI temperature (6 depths), DO (3 depths) and one chlorophyll fluorescence sensor at 3 m logged every 30 min, plus weekly P sampling. No separate control lake; 2012 (drought, no withdrawal) serves as an unplanned contrast year, n = 1. Convective cooling, not wind, dominated mixing energy (KEstir < 1 J/m²/h 99.4% of the time). In August 2012 lake TP export exceeded river input by 11.3 µg/L (SE 3.7, n = 5), about 164 kg P for the month. Even 300,000 m³/d did not guarantee deep mixing in 2010-2011 around the solstice. Blooms were tracked by fluorescence and microscopy, not quantified as a % reduction.",
+    "discrepancy": ""
+  },
+  "mixing-L11": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.scitotenv.2025.178738",
+    "updates": {
+      "result": "Of 59 bubble-plume cases reporting cyanobacteria, 37% reduced them, 12% partly, 34% had no effect and 17% increased them; where thermal destratification succeeded, 63% reported full or partial reduction, and where it failed all 6 cases saw no reduction or an increase. Mechanical mixers: of 12 cases, 5 successful, 2 partial, 3 no improvement, 2 net negative.",
+      "negative_result": true
+    },
+    "key_details": "Global literature review of 138 destratification systems (84% bubble plume, 16% mechanical mixers) in 114 reservoirs, scored against success criteria for thermal, DO, nutrient/metal and cyanobacteria outcomes. Cyanobacteria outcomes were far more variable than thermal or DO outcomes. Reservoirs >100,000 ML had only 30% full/partial success vs 53% in smaller ones; >15 m deep 54% vs 47% for shallower. Cyanobacteria success tracked the volumetric destratification coefficient (air flow per volume); all 5 successful mechanical-mixer cases used draft tubes. Caveat: case reports are heterogeneous and success categories are qualitative, not % biomass change.",
+    "discrepancy": "Record says reduction was 'mixed'; full text quantifies it: only 37% of 59 bubble-plume cases fully succeeded and 17% made cyanobacteria worse."
+  },
+  "mixing-L12": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.hal.2021.102119",
+    "updates": {
+      "env_effects": "Artificial mixing: resuspension of sediment nutrients/ions, sedimentation of organic matter, warming of the water column may impact cold-water habitats; ineffective in shallow, large-surface-area waters; may need continuous operation."
+    },
+    "key_details": "Narrative review of mechanical (artificial mixing, hypolimnetic oxygenation/aeration, dredging, sonication) and biological (biomanipulation, macrophytes, barley straw) cyanobacteria controls in drinking-water sources, with tables of field and pilot studies. Artificial mixing is credited with DO increase, suppressed release of P, Fe, Mn and NH3, and cyanobacterial control via light limitation and sedimentation, with benefits up to 7 years under continuous operation; hypolimnetic oxygenation 10-23 years. Main conclusion: all these methods give temporary relief and are commonly derailed by continued external nutrient inputs, so external loading must be controlled first. Sonication lacks field-scale validation. No pooled effect size.",
+    "discrepancy": ""
+  },
+  "seaweed-07": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1080/09670260400019741",
+    "updates": {
+      "result": "Fresh Ulva tissue above 0.625 g/L and dry powder above 0.15 g/L significantly cut P. micans growth; 10 g/L fresh tissue and 2.4 g/L powder killed the cultures (EC50 fresh 1.8 and 2.3 g/L; powder 0.7 and 0.8 g/L). Aqueous and methanol extracts inhibited, other solvents did not; a single filtrate dose had no effect but semi-continuous addition did.",
+      "effect_pct": 100
+    },
+    "key_details": "Lab flasks in f/2 at 20°C with an axenic P. micans strain and antibiotic-treated Ulva collected during a Qingdao bloom (May 2003); n = 4 replicates per treatment with untreated controls. Fresh-tissue doses 0.625-10 g/L and powder 0.15-2.4 g/L; at 2.4 g/L powder cultures died completely within 4 days. Methanol extract EC50 was 0.015 ppt (U. pertusa) and 0.017 ppt (U. linza); aqueous extract inhibited above 0.1 ppt over 6 d. P. micans had no effect on Ulva growth in 20-day co-culture. Doses are high (grams of seaweed per litre) relative to open water.",
+    "discrepancy": ""
+  },
+  "seaweed-17": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.ecoenv.2022.113767",
+    "updates": {
+      "organism": "Gracilaria bailiniae → Nitzschia closterium (fouling benthic diatom)",
+      "scale": "Lab flask co-cultures, n = 3 replicates per concentration",
+      "dose": "Four concentrations each of fresh thalli (GFT) and aqueous extract (GAE); allelochemicals citrate, hydroxyethanesulfonic (isethionic) acid, taurine",
+      "duration": "10 d (IC50 reported at day 4)",
+      "result": "Fresh thalli suppressed N. closterium at all concentrations by day 4 (IC50-4d 0.667 × 10⁻³ g/mL, i.e. 0.667 g/L); aqueous extract inhibited above 1 × 10⁻³ g/mL (IC50-4d 3.889 × 10⁻³ g/mL). Hydroxyethanesulfonic acid damaged PSII."
+    },
+    "key_details": "Lab co-culture of an antibiotic-treated commercial N. closterium strain with G. bailiniae thalli collected from Fengjia Bay (Hainan), 22°C, salinity 30, 10 d, controls without seaweed, n = 3. Inhibition was dose-dependent with a significant concentration x time interaction (P < 0.01); the lowest extract dose (1 × 10⁻³ g/mL) was not inhibitory by day 10. Metabolomics identified citrate, hydroxyethanesulfonic acid and taurine as main intracellular compounds; HA damaged PSII (OEC, reaction centres). Target is a fouling diatom in seaweed aquaculture, not a toxic HAB species.",
+    "discrepancy": "Record duration '4 d' is the IC50 time point; experiments ran 10 d. Target is a benthic fouling diatom, not a bloom-forming HAB."
+  },
+  "seaweed-19": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.3354/meps11331",
+    "updates": {
+      "organism": "Saccharina latissima (sugar kelp) cultivation; nutrient bioextraction (no algae target)",
+      "scale": "Two 50 m longlines per site at WLIS (Fairfield, CT) and CLIS (Branford, CT) and at the Bronx River Estuary mouth; N removal extrapolated to a hypothetical farm with 1.5 m longline spacing",
+      "dose": "Kelp seedstrings outplanted on longlines at 0.5 and 1.0 m depth",
+      "duration": "2012-2013 winter-spring growing season (outplant late 2012 to harvest ~May-June 2013)",
+      "result": "Estimated N removal up to 180 (BRE), 67 (WLIS) and 38 (CLIS) kg N/ha and C 1350/1800/1100 kg C/ha per season in a hypothetical farm; yield did not differ significantly among sites (p = 0.072), CLIS 62-69% of the others.",
+      "effect_pct": null
+    },
+    "key_details": "Field cultivation trial of native sugar kelp at three sites differing in temperature, salinity and nutrients (BRE >> WLIS ~ CLIS for DIN). Yield (kg FW per m longline) showed no depth effect (0.5 vs 1.0 m) and no significant site effect. N and C removal per hectare were extrapolated from tissue content and yield to a hypothetical 1.5 m-spaced farm; potential N-credit value up to $1600/ha (BRE). No phytoplankton, chlorophyll or HAB outcome was measured, so this is nutrient extraction only, one season, no replication across years.",
+    "discrepancy": "Per-hectare removals are model extrapolations to a hypothetical farm, not measured farm-scale removal; no HAB/algae endpoint."
+  },
+  "clay-03": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.3354/meps210041",
+    "updates": {
+      "scale": "Triplicate borosilicate test tubes; 25 US clays + Korean loess",
+      "duration": "2.5 h removal tests under quiescent conditions; viability/recovery followed over days",
+      "env_effects": "G. breve fully recovered at clay <0.03 g/L (growth delayed 24 h); mortality up to 100% with no recovery at ≥0.50 g/L; mortality near zero after 2.5 h contact but rose significantly after 12 h."
+    },
+    "key_details": "Lab screening of 26 clays against G. breve (CCMP 718) and A. anophagefferens (BP3B) in triplicate tubes, removal measured by in vivo fluorescence after 2.5 h versus clay-free controls corrected for sinking. Twelve clays (mostly montmorillonite, bentonite, Florida phosphatic clay) removed >90% of G. breve at 0.25 g/L; IMC-P2 phosphatic clay reached 80% at 0.04 g/L. No clay removed >40% of A. anophagefferens at 0.25 g/L unless dispersed through the culture (then 80%). Alum, PAC and organic flocculants alone removed only 30-50%, but 5 ppm PAC cut the clay needed for G. breve by an order of magnitude. Removed cells can survive and regrow at low loadings, so removal is not always kill.",
+    "discrepancy": ""
+  },
+  "clay-05": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.hal.2024.102609",
+    "updates": {
+      "scale": "Twelve 1400 L indoor mesocosm tanks (Mote Marine Lab, Sarasota, April 2022), 4 treatments x 3 tanks: seawater only, MC II only, K. brevis only, K. brevis + MC II; each tank with 12 hard clams, 6 sea urchins, 2 blue crabs",
+      "env_effects": "Dissolved P significantly lower in MC II tanks after 2 h; DIC and alkalinity reduced, pCO2 higher (MC II only) at 2 h; turbidity back to control by 48 h. No lethal or sublethal differences in clams, urchins or crabs vs untreated K. brevis within 72 h. Some brevetoxin analogs (BTx-3, BTx-B5) higher in treated water and floc."
+    },
+    "key_details": "Randomised mesocosm experiment: K. brevis (CCMP 2228) at 1 × 10⁶ cells/L sprayed with MC II (PAC-modified kaolinite) slurry at 0.2 g/L, with wavemaker circulation (~26 cm/s), static (no recirculation) for 72 h, n = 3 tanks per treatment. Cell removal was 57% at 8 h and 95% at 48 h, slightly lower than earlier lab work; authors suggest flow (>10 cm/s) reduces particle-collision removal. BTx-1 and BTx-2 were higher in untreated water at 24-48 h, but toxin removal was less than expected. Animal endpoints (mortality, physiology) showed no MC II effect over 72 h; longer exposure not tested.",
+    "discrepancy": ""
+  },
+  "clay-06": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.ecoenv.2023.114667",
+    "updates": {
+      "scale": "1 L glass cylinders, 2000 cells/mL A. pacificum (strain ATHK), 4 treatments + control in triplicate",
+      "dose": "PMPS-MC (kaolin:potassium peroxymonosulfate 20:1 by mass) at 5 and 10 mg/L expressed as PMPS content; PMPS alone at 5 and 10 mg/L as comparison",
+      "result": "PMPS-MC removed >95% of cells from the water column within 3 h and kept it low for 48 h; extracellular PSTs fell below detection within 15 min and total toxin content fell 56-73% within 15 min. Over 70% of cells turned into pellicle cysts within 3 h.",
+      "effect_pct": 95
+    },
+    "key_details": "Lab cylinder experiment (triplicate) comparing oxidant PMPS alone with PMPS-modified kaolin at 5 and 10 mg/L PMPS, sampled at 0, 15 min, 3, 9, 24 and 48 h against an untreated control. Water-column removal exceeded 95% at 3 h for both PMPS-MC doses; PMPS alone removed slightly less and low-dose PMPS let the water-column density rise again within 48 h. Toxin profile shifted from GTX1/4 toward less toxic GTX2/3 and C1/2. Caveat: many treated cells formed pellicle cysts and some viable cells in the floc kept releasing toxin, so removal is not complete kill.",
+    "discrepancy": "Record dose '10 mg/L' is the PMPS (oxidant) content, not the clay loading; with the 20:1 kaolin:PMPS ratio the clay itself is about 20 times higher. Record omits the >95% cell removal and the pellicle-cyst formation."
+  },
+  "clay-07": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.envpol.2005.08.041",
+    "updates": {
+      "scale": "Jar flocculation tests; 26 clays/minerals; cultured M. aeruginosa (FACHB) resuspended in 0.5% NaCl at 4.86 × 10⁹ cells/L",
+      "result": "At 0.7 g/L, Type I materials (sepiolite, talc, ferric oxide, kaolinite) had Q8h > 90% with t50 < 15 min; 14 Type III clays had Q8h < 50% (no practical value). At 0.2 g/L all materials fell below 60% except sepiolite (~97%)."
+    },
+    "key_details": "Lab screening of 26 commercially available clays and minerals (<90 µm) against a lab culture of M. aeruginosa, removal tracked by chlorophyll a over 8 h, when curves reached equilibrium. Table 2 lists 8-h removal at 0.7 g/L: talc 97.6%, ferric oxide 96.5%, sepiolite I 96.3%, ferroferric oxide 95.0%, kaolinite 93.9%, argillaceous rocks 92.6%, down to ~29% for pumice/scoria; Ca-bentonite only 34.7%. Sepiolite's performance at low dose was attributed to netting and bridging. Cells were harvested and resuspended in saline, not natural lake water, and replication is not stated in the sections read.",
+    "discrepancy": "Record's '4 of 26 removed >90%' follows the abstract's Type I grouping; Table 2 actually shows 6 materials above 90% at 0.7 g/L (incl. ferroferric oxide 95.0% and argillaceous rocks 92.6%), grouped also by removal rate."
+  },
+  "clay-09": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.ecoenv.2021.113134",
+    "updates": {
+      "scale": "Removal test in triplicate colorimetric tubes; rotifer test in 24-well plates (10 larvae/well, triplicate, 4 groups); mussel test in 14 L tanks, 30 M. edulis per concentration, one tank per treatment",
+      "dose": "PAC-modified kaolin 0.1 g/L for removal and rotifer tests; 0, 0.1, 0.5 and 1.0 g/L for mussels (0.1 g/L stated as the field application concentration)",
+      "duration": "2 h settling for removal; rotifer life-table over days (~180 h); mussel exposure with clay held in suspension",
+      "env_effects": "Rotifers: clay-treated Karenia supernatant did not worsen Karenia-induced growth/reproduction effects within 2 h and survival/reproduction improved by 2 d. Mussels: gill and digestive-gland damage, and changes in filtration rate, digestive enzymes, condition index and mortality at 0.5 and 1.0 g/L; little impact at 0.1 g/L."
+    },
+    "key_details": "Removal of K. mikimotoi (1.5 × 10⁵ cells/mL) by 0.1 g/L PAC-modified clay was 81 ± 2.3% after 2 h standing (triplicate). Rotifer groups were control, clay-only supernatant, Karenia, and clay-treated Karenia supernatant. The mussel system contained clay and mussels only (no Karenia) at 0-1.0 g/L, with one 10 L tank of 30 mussels per concentration, so tank-level replication is n = 1. AOP and integrated biomarker analyses flagged risk only at 0.5 and 1.0 g/L. Rotifers in the clay-only group began dying earlier (78 h) than controls (122 h).",
+    "discrepancy": "Mussel experiment did not include K. mikimotoi and had one tank per dose (pseudoreplication); 'little impact' applies to 0.1 g/L only."
+  },
+  "clay-10": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1111/j.1365-2109.2003.00958.x",
+    "updates": {
+      "scale": "Lab clearance (depletion) trials at UConn Avery Point (1999), Friday Harbor WA (2000) and Southampton NY (2000); Rhodomonas lens 2.5 × 10⁴ cells/mL as food; hydroid polyp opening by video (20 polyps per treatment)",
+      "dose": "Yellow loess 0.01, 0.1, 1 and 10 g/L",
+      "result": "All species were negatively affected. Bay scallops were most sensitive (significant clearance drop at 10 mg/L, 1 g/L and 10 g/L; 100 mg/L not significant, p = 0.076); Obelia polyps closed longer from 10 mg/L; mussels, both oysters and Crepidula were affected only at ≥1 g/L."
+    },
+    "key_details": "Seven benthic suspension feeders were exposed to five loess concentrations (0.01-10 g/L) at 14-18°C and 28-32 ppt, with algae-only controls; pure loess suspensions caused little to no feeding, so Rhodomonas was added. Analysed with one-way ANOVA and Dunnett tests (nested ANOVA for hydroids). Pseudofaeces were seen in all bivalves at ≥0.01 g/L but not quantified. Authors conclude clay use against HABs 'should be approached with extreme caution'. Short-term feeding trials only; no growth or mortality endpoints and no HAB cells present.",
+    "discrepancy": ""
+  },
+  "p_inactivation-08": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1080/07438141.2011.601400",
+    "updates": {
+      "result": "Growing-season chl-a fell from 12.2 to 3.7 µg/L (Calhoun), 7.2 to 4.1 (Harriet), 15.5 to 4.9 (Cedar, 5 yr post) and 35.3 to 17.4 (Isles, 5 yr post); Lake of the Isles (lowest dose) returned to pretreatment levels by 2002-2005, while internal P release still stayed suppressed in all four lakes.",
+      "effect_pct": null
+    },
+    "key_details": "Before-after field evaluation of alum treatments in four Minneapolis lakes (Cedar and Isles 1996; Harriet, littoral-only, and Calhoun 2001) using biweekly monitoring since 1991, with no untreated reference lake. Secchi depth rose significantly in all lakes (e.g. Calhoun 2.7 to 4.7 m). Internal P release fell from 9.7 to 1.3 mg/m²/d in Cedar (rising to 4.8 in 2002-2003), from 10.6 to 1.6 mg/m²/d in Harriet (85%), was nearly eliminated in Calhoun, and fell from 5.9 to 1.7 mg/m²/d in Isles. In Harriet the floc drifted to deeper sediments, giving unexpected improvement. Isles' TP and chl-a in 2002-2005 were not significantly different from pretreatment despite lower sediment release, pointing to external loading.",
+    "discrepancy": ""
+  },
+  "mixing-06": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1111/j.1529-8817.2007.00392.x",
+    "updates": {
+      "result": "Shaking cut net growth rate to 33% of still controls in A. minutum (0.108 vs 0.328 d⁻¹) and to 28% in P. triestinum (0.136 vs 0.485 d⁻¹), i.e. roughly two-thirds lower; small Gymnodinium sp. was not significantly affected. Cell volume rose up to 1.4x/2.5x and DNA per cell 1.8x/5.3x; swimming speed halved; cells recovered in still water."
+    },
+    "key_details": "Lab flask experiments at 20°C, orbital shaker at 100 rpm (bulk ε ≈ 2 cm² s⁻³, measured by acoustic Doppler velocimeter), comparing still controls with flasks shaken during exponential growth, then returned to still conditions. Replication was two flasks per treatment once shaking began (six before). Table 3 gives turbulent/still growth ratios (T/S) of 33% (A. minutum, p = 0.009) and 28% (P. triestinum, p = 0.003); after shaking stopped, growth recovered to 62% and 46% of control rates. Gymnodinium sp. T/S was 79-99%, not significant. Response was species-specific with no clear link to taxonomy or morphology; shaker turbulence is far above typical ocean levels.",
+    "discrepancy": "Record reads the abstract's '33% and 28%' as reductions; Table 3 shows these are turbulent/still growth-rate ratios, so growth was reduced by about 67% and 72%."
+  },
+  "mixing-20": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1002/bit.10657",
+    "updates": {
+      "organism": "Dunaliella tertiolecta, Chlamydomonas reinhardtii wild type and cell-wall-lacking mutant (non-HAB production strains)",
+      "scale": "Lab bubble columns (continuous and batch) plus a pilot-plant bubble column",
+      "result": "No cell damage in D. tertiolecta or wild-type C. reinhardtii up to superficial gas velocities of 0.076 and 0.085 m/s; the wall-less mutant died at 0.46 ± 0.08 h⁻¹ (0.076 m/s) and 1.01 ± 0.29 h⁻¹ (0.085 m/s). Varying sparger nozzles gave D. tertiolecta death of 0.047 ± 0.016 h⁻¹ at high gas entrance velocity, implicating the sparger rather than bubble bursting."
+    },
+    "key_details": "Photobioreactor engineering study, not a bloom-control test. Superficial gas velocity alone did not kill walled cells; the cell wall protected against hydrodynamic shear. In a pilot-plant column at up to 0.026 m/s with low gas entrance velocities, D. tertiolecta showed no damage. Authors conclude gas entrance velocity at the sparger is the likely main cause of cell death. Relevance to HAB mitigation is indirect: bubbling is unlikely to kill walled algae except at the nozzle.",
+    "discrepancy": ""
+  },
+  "mixing-L01": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1046/j.1365-2427.1996.00093.x",
+    "updates": {
+      "scale": "Whole lake: Lake Nieuwe Meer, Amsterdam (1.32 km², 18 × 10⁶ m³, mean depth 18 m, max 30 m); two compressors (55 kW and 30 kW) feeding seven perforated aeration tubes, 13 m³/min air in total",
+      "dose": "Deep bubble-plume mixing, continuous April-October 1993; intermittent in spring 1994 and near-continuous July-September 1994",
+      "env_effects": "Stratification removed, homogeneous temperature and oxygen; no oxygen problems reported. Intermittent spring mixing cut energy use by 75% in April-June 1994 (whole-season 1994 energy 27% of 1993). Depth-integrated chlorophyll (per m²) increased with mixing."
+    },
+    "key_details": "Whole-lake before-after comparison: two mixed years (1993, 1994) against two preceding unmixed control years (1990, 1991), no separate control lake. Microcystis colonies per litre and per m² were lower in mixed years and hardly any nuisance scums occurred, while the community shifted to flagellates, greens and diatoms. Volumetric chlorophyll fell but areal (m⁻²) chlorophyll and peak areal content rose, so total phytoplankton was not reduced, only redistributed and shifted away from cyanobacteria. Colony buoyancy showed Microcystis escaped entrainment at some distance from the plumes. Works because the lake is deep (mixing depth >> euphotic depth).",
+    "discrepancy": "Full text notes total depth-integrated phytoplankton biomass increased under mixing; benefit is a species shift away from Microcystis, not less algae overall."
+  },
+  "p_inactivation-01": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.watres.2013.08.019",
+    "updates": {
+      "organism": "Aphanizomenon flos-aquae (lake); Microcystis aeruginosa scum from pond De Ploeg (lab)",
+      "scale": "Lab: 18 tubes of 100 mL, triplicates; whole lake: Lake Rauwbraken (NL), 4 ha, max depth 15 m, stratifying, groundwater-fed with no in/outflow",
+      "dose": "Lab: PAC 0, 2.2, 4.4 mg Al/L with or without 390 mg/L La-modified bentonite; lake: 2 t PAC + 18 t Phoslock over 21-23 April 2008",
+      "duration": "Lab 2 h; lake monitored April 2008 through 2013"
+    },
+    "key_details": "Lab test on Microcystis scum (~845 µg chl-a/L): after 2 h, PAC alone at 2.2 mg Al/L and LMB alone did not sink the buoyant cells (4.4 mg Al/L helped somewhat), but PAC + LMB together moved chlorophyll to the tube bottoms (significant PAC, LMB and interaction effects). Whole-lake 'Flock & Lock' in April 2008 sank a developing Aphanizomenon bloom; mean chl-a fell from 19.5 (±36.5) µg/L in the two years before to 3.7 (±4.5) µg/L after, and TP from 169 (±126) to 14 (±15) µg/L. The lake stayed oligo-mesotrophic through 2013. Single small, isolated, groundwater-fed lake with no control lake; the lake had a 4-month swimming ban in 2007.",
+    "discrepancy": ""
+  },
+  "p_inactivation-02": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.watres.2015.11.034",
+    "updates": {
+      "scale": "Whole lake, Lake De Kuil (NL): 6.7 ha, mean depth 4 m, max 9 m, 268,000 m³, residence time 3.7 y",
+      "dose": "4.38 t FeCl3 (3 m³) over 6.7 ha, buffered with 200 kg Ca(OH)2; LMB 13.65 t spread over 6.7 ha plus 27.85 t injected over 2.2 ha deeper than 6.4 m; May 2009",
+      "env_effects": "Secchi rose from 1.5 m to 5 m immediately after treatment; macrophyte cover tripled 2009-2011. Sediment P release fell from 5.2 (2009) to 0.4 mg P/m²/d (2010) but increased in later years, risking reversion."
+    },
+    "key_details": "Before-after whole-lake study with long-term monitoring (1992-2008 vs 2009-2014), no reference lake. Iron(III) chloride was used instead of PAC because an aluminium permit was refused. Mean summer TP fell from 0.05 to 0.02 mg/L, chlorophyll a from 16 to 6 µg/L and Secchi rose from 2.31 to 3.12 m; bathing-water requirements were met six summers in a row. A Planktothrix rubescens bloom occurred in winter 2010/2011, but summer cyanobacteria biomass was lower than before treatment. Success relied on external P loading being near the critical load; rising sediment P release in later years limits longevity.",
+    "discrepancy": ""
+  },
+  "p_inactivation-07": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1016/j.watres.2014.01.059",
+    "updates": {
+      "dose": "Phoslock 50 mg/L (4.37% La measured by ICP-MS) with ~0.6 mg/L FRP and humic substances 0-14 mg/L DOC",
+      "result": "Humic substances lowered Phoslock's FRP removal in both the 1-d and 42-d experiments, matching equilibrium modelling; even without DOC, 24-h FRP removal was only 46% and 42-d residual FRP was ~34% higher than predicted. Filterable La rose above 270 µg/L within a week with humics, vs the Dutch standard of 10.1 µg/L.",
+      "env_effects": "Filterable lanthanum exceeded 270 µg/L in the presence of humic substances, far above the Dutch surface-water La standard of 10.1 µg/L."
+    },
+    "key_details": "Controlled lab experiments plus CHEAQS/WHAM chemical equilibrium modelling of La-humic complexation at pH 7 and 8. Short-term (24 h) series compared FRP solutions with and without 50 mg/L Phoslock across eight DOC levels (0-14 mg/L); a 42-day experiment followed. Modelling predicted only 81.7% of P could bind as LaPO4 at the dose used, and DOC reduced this further. Authors conclude the recommended Phoslock dose seems too low and DOC-rich waters need site-specific testing. No algae were measured; FRP of 600 µg/L is higher than typical field values.",
+    "discrepancy": ""
+  },
+  "p_inactivation-11": {
+    "status": "full_read",
+    "source_url": "https://doi.org/10.1080/10402381.2015.1133739",
+    "updates": {
+      "scale": "Whole lake, Swan Lake (Greater Toronto), 5.5 ha, max depth 4.4 m, polymictic former gravel pit, terminal lake with limited flushing",
+      "dose": "Phoslock (La-modified bentonite) 25.2 metric tonnes, 4.6 t/ha, applied 29 April-1 May 2013",
+      "duration": "Pre-treatment monitoring from August 2011; 2 years post-treatment (2013-2014)",
+      "result": "Mean TP fell from 0.247 to 0.099 mg/L (year 1) and 0.060 mg/L (year 2); phytoplankton biomass fell only in year 2, when growing-season Secchi rose to 1.4 m from 0.5 m, moving the lake from hyper-eutrophic to eutrophic. Canada geese then supplied ~75% of nutrient input."
+    },
+    "key_details": "Before-after study of a single hyper-eutrophic urban lake without a control lake; phytoplankton tracked as chlorophyll a (uncorrected) and Secchi depth. First-year TP and TN fell 60% and 40% but trophic state did not change, attributed to late application after winter sediment P had already been taken up by phytoplankton. Mixing regime (Schmidt stability 1-6 J/m²) was similar before and after, so changes were not due to mixing. Pre-treatment internal load was estimated at 650-1100 mg/m²/yr; hypoxia remained widespread. Authors recommend goose management or repeat treatment.",
+    "discrepancy": ""
+  }
+}

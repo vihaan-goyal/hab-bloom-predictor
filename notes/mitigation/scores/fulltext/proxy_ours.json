@@ -1,0 +1,217 @@
+{
+ "seaweed-04": {
+  "status": "no_access",
+  "source_url": "https://doi.org/10.1016/j.hal.2011.03.003",
+  "updates": {},
+  "key_details": "",
+  "discrepancy": ""
+ },
+ "seaweed-05": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/S0022-0981(03)00214-4",
+  "updates": {
+   "scale": "100 mL flasks with 40 mL f/2; axenic cultures; triplicate",
+   "dose": "fresh tissue 0.625-10 g-wet/L; dry powder 0.15-2.4 g-dry/L; isolation co-culture 2.5 g-wet/L",
+   "duration": "10 d coexistence; short-term lysis assays in hours",
+   "result": "Fresh-tissue EC50 0.3 (nonsexual) / 0.6 (sexual strain) g-wet/L for H. akashiwo and 2.0 / 2.5 g-wet/L for A. tamarense; 5-10 g-wet/L killed all H. akashiwo within 2 days, but A. tamarense was never killed. Culture filtrate did not significantly inhibit either species.",
+   "effect_pct": 100
+  },
+  "key_details": "Axenic lab co-cultures of two Ulva pertusa strains (sexual and nonsexual) with H. akashiwo or A. tamarense in 40 mL f/2, n=3, t-tests; nutrients topped up to rule out competition. H. akashiwo growth was lowered at all fresh-tissue doses and all cells died within 2 d at 5 and 10 g-wet/L; A. tamarense was inhibited only above 1.25 g-wet/L with no lethal effect even at 10 g-wet/L. Dry powder EC50s were 0.4/1.0 g-dry/L (H. akashiwo) and 0.6/0.8 g-dry/L (A. tamarense); low powder doses sometimes stimulated growth (H. akashiwo at 0.6 g-dry/L sexual strain; A. tamarense day 6-7 at 0.15 g-dry/L), and survivors revived after day 4-6. Filtrate (initial or semi-continuous) had no significant effect, while physically separated (isolation) co-culture at 2.5 g-wet/L still killed H. akashiwo, suggesting labile allelochemicals needing continuous release. Lysis LT50 for H. akashiwo was 3.0-7.0 h.",
+  "discrepancy": "Record lists only the A. tamarense EC50; the much lower H. akashiwo EC50 (0.3-0.6 g-wet/L) and complete kill of H. akashiwo at 5-10 g-wet/L were missing. Low powder doses could stimulate growth."
+ },
+ "seaweed-06": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.seares.2004.04.001",
+  "updates": {
+   "scale": "100 mL flasks with 40 mL f/2; axenic; triplicate batch, nutrient-replete semi-continuous and isolated co-cultures",
+   "dose": "12.5 g-wet/L fresh U. pertusa; filtrate from 80 g-wet/L",
+   "result": "Batch co-culture killed H. akashiwo and S. costatum (100%) and cut the other six species 42-84% (A. tamarense 70%); in nutrient-replete semi-continuous culture reductions were 28-90% (A. tamarense 52%). Culture filtrate inhibited only Chroomonas placoidea.",
+   "env_effects": "Nutrient-replete cultures (NO3 >= 780 umol/L, PO4 >= 36 umol/L) still showed inhibition, ruling out nutrient competition; pH 8.7 +/- 0.3. Some microalgae reduced Ulva growth by 20-30%."
+  },
+  "key_details": "Axenic lab study: Ulva pertusa (12.5 g-wet/L) co-cultured with eight microalgae in batch, nutrient-replete semi-continuous, and isolated (separated) co-cultures, n=3 each. Percent growth reduction at end (batch/semi-continuous/isolated): H. akashiwo and S. costatum 100/100/100; A. tamarense 70/52/56; Nitzschia 59/28/21; Chaetoceros 42/70/74; Isochrysis 84/90/88; Chroomonas 76/60/67; Tetraselmis 63/60/56. Filtrate (80 g-wet/L, 3 d) inhibited only Chroomonas, so continuous contact/release is needed. Microalgae in turn changed Ulva growth (+16% with H. akashiwo, -20 to -30% with Tetraselmis, Nitzschia, Chaetoceros).",
+  "discrepancy": "Record said per-species diatom numbers were not retrieved; full table gives them (Skeletonema 100%, Nitzschia 59%, Chaetoceros 42% in batch). The ~70% A. tamarense figure is the batch value; semi-continuous nutrient-replete value is 52%."
+ },
+ "seaweed-08": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.aquabot.2006.09.013",
+  "updates": {
+   "scale": "250 mL flasks, 150 mL f/2-enriched seawater; n=3",
+   "duration": "216 h (9 d)",
+   "result": "U. pertusa thalli killed all P. donghaiense, S. trochoidea and A. tamarense within 144 h (LT50 37.9, 63.6, 59.8 h) and cut A. carterae 34%; G. lemaneiformis killed P. donghaiense (LT50 138.6 h) and cut S. trochoidea 79%, A. tamarense 24%, A. carterae 20%.",
+   "effect_pct": 100,
+   "env_effects": "Filtrates were inconsistent: U. pertusa filtrate stimulated A. carterae +78% and G. lemaneiformis filtrate stimulated A. tamarense +33%. G. lemaneiformis exhausted N and P (3.6 and 0.32 umol/L left), so its effect was partly nutrient competition (relieved by daily f/2); U. pertusa left N and P well above limiting."
+  },
+  "key_details": "Lab batch co-cultures (n=3, one-way ANOVA) of fresh U. pertusa or G. lemaneiformis thalli (0.5 g FW in 150 mL) with four dinoflagellates at 1.0x10^4 cells/mL (A. tamarense 0.4x10^4). U. pertusa was algicidal to three species (all cells dead within 144 h); G. lemaneiformis was lethal only to P. donghaiense. Culture filtrates gave species-specific inhibition or stimulation (Table 1). Nutrient tests showed G. lemaneiformis' effect on P. donghaiense was largely nutrient depletion (alleviated by daily f/2), while NaHCO3 addition did not relieve U. pertusa inhibition, pointing to allelopathy.",
+  "discrepancy": "Record's G. lemaneiformis results and its nutrient-competition caveat were missing; 'filtrate inhibited 5-27%' refers only to U. pertusa filtrate on three species. The stimulation of A. carterae (+78%) was by U. pertusa filtrate, not a general filtrate effect."
+ },
+ "seaweed-09": {
+  "status": "no_access",
+  "source_url": "https://doi.org/10.1016/j.aquabot.2008.01.005",
+  "updates": {},
+  "key_details": "",
+  "discrepancy": ""
+ },
+ "seaweed-11": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1007/s10811-008-9380-y",
+  "updates": {
+   "scale": "lab co-cultures, n=3",
+   "dose": "fresh thalli 0.34-3.4 g FW/L; filtrate from 4-40 g FW/L; water-soluble extract 0.5-4.0 mL; dry powder",
+   "duration": "72-216 h",
+   "result": "U. pertusa fresh thalli, extract and powder (3.4 g/L) killed all H. akashiwo within 120 h (LT50 45.9, 71.7, 66.7 h); fresh thalli killed all cells at >=0.68 g FW/L but only cut numbers ~53% at 0.34 g FW/L. G. lemaneiformis thalli killed all cells at 3.4 g/L (LT50 132.1 h) but stimulated growth ~56% at 0.34 g/L.",
+   "env_effects": "Ulva co-culture left NO3 470 and PO4 177.2 umol/L (not limiting); Gracilaria exhausted them to ~11.2 and 4.35 umol/L, and daily f/2 relieved its inhibition. Low doses stimulated H. akashiwo: 0.5 mL Ulva extract +72%, 0.34 g/L Gracilaria +56%, Gracilaria dry powder increased growth."
+  },
+  "key_details": "Lab co-cultures (n=3, ANOVA) of H. akashiwo (1-25x10^4 cells/mL) with fresh thalli, culture filtrate, water-soluble extract or dry powder of U. pertusa or G. lemaneiformis over 72-216 h. U. pertusa was strongly algicidal and dose-dependent (LT50 83.0, 57.9, 35.9 h at 0.68, 1.7, 3.4 g FW/L); filtrate from 40 g/L killed cells within 72 h but filtrates from 4-20 g/L acted only after 72 h, and 3.4 g/L filtrate cut cells to ~52% of control by 216 h. G. lemaneiformis acted mostly via nutrient depletion. Low doses of both algae stimulated the target (hormesis).",
+  "discrepancy": "Record had duration 'Not reported' (72-216 h) and no doses; it omitted that low doses stimulated H. akashiwo (+56% to +72%) and that Ulva needs >=0.68 g FW/L for complete kill."
+ },
+ "seaweed-12": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1007/s10811-014-0338-y",
+  "updates": {
+   "scale": "lab cultures (n=3); 48 h field bottle incubations with Long Island brown-tide water; larval fish bioassay",
+   "dose": "fresh thalli 20 and 180 mg dry wt/L (P. multiseries 80 and 320); field 1.0 and 9.0 mg dry wt/L; extracts equivalent to 180 mg dry wt/L",
+   "duration": "120 h lab (72 h for P. multiseries); 48 h field",
+   "result": "At 180 mg dry wt/L fresh P. purpurea cut A. anophagefferens >97% (also at 20 mg/L), C. marina 64%, P. multiseries 63%, K. veneficum 49%, K. brevis 44%, C. polykrikoides 30%, P. minimum 20% over 5 d. In natural brown-tide water 9.0 mg dry wt/L cut A. anophagefferens only 21-44% in 48 h (13-28% in 2010).",
+   "effect_pct": 97,
+   "env_effects": "No mortality or abnormal behaviour in 1-week-old sheepshead minnows over 120 h at 900 mg dry wt/L thalli or 180 mg/L extract. Residual nitrate >1,000 uM and phosphate >70 uM, so inhibition was not nutrient limitation."
+  },
+  "key_details": "Lab co-cultures (triplicate, two-way ANOVA) of fresh Porphyra purpurea thalli at two doses with seven HAB species for 5 d; inhibition was dose- and time-dependent with a synergistic interaction. Sensitivity order: A. anophagefferens > C. marina > K. veneficum > P. multiseries > K. brevis > C. polykrikoides > P. minimum. Extract of fresh thalli (180 mg dry wt/L equivalent) completely eliminated growth of A. anophagefferens, K. brevis, K. veneficum and C. polykrikoides and was more potent than extract of dried powder. P. purpurea was more potent than Ulva lactuca against A. anophagefferens and similar for five other species. Three 48 h field incubations with brown-tide water gave modest reductions (13-44%) only at the higher dose; nutrient addition had no effect.",
+  "discrepancy": "Record dose was a placeholder ('mg/L') and duration 'Not reported'; actual doses 20-180 mg dry wt/L and 5 d. Record said extracts of fresh or dried tissue were 'equal or stronger' than thalli; full text shows fresh-thallus extract was clearly more potent than dried-powder extract. Field-water effect (13-44%) was much weaker than lab effect."
+ },
+ "seaweed-13": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1007/s10811-014-0486-0",
+  "updates": {
+   "organism": "Gracilaria lemaneiformis -> Dunaliella salina, Prorocentrum micans, Skeletonema costatum, Scrippsiella trochoidea, Chaetoceros curvisetus, Platymonas subcordiformis, natural assemblage incl. Phaeocystis globosa",
+   "scale": "40 mL lab; 1 L in situ bottles (Zhuhai); 50 L and 1000 L mesocosms (Nan'ao Island); field survey 2010 and 2012",
+   "dose": "lab 1.25-25 g FW/L; bottles 10 and 40 g/L; 50 L mesocosm 1.0-6.0 g wet wt/L; 1000 L mesocosm 3 and 6 kg (3.0 and 6.0 g wet wt/L)",
+   "duration": "lab ~7 d; bottles 3 d; mesocosms 10 d",
+   "result": "In lab, >1.25 g/L inhibited 4 of 6 species and >12.5 g/L stopped growth completely; bloom-water bottles with P. globosa fell 75-88% vs control in 3 d, 50 L mesocosms 70-82% by day 8, and the 1000 L mesocosm Skeletonema bloom peak was about an order of magnitude lower (3.78x10^6 and 1.33x10^6 vs 3.88x10^7 cells/L).",
+   "effect_pct": 82,
+   "env_effects": "In the 1000 L mesocosm phytoplankton in treatments exceeded control by day 10 after the control bloom crashed; species richness was higher with Gracilaria. Field: phytoplankton abundance lower in farmed areas before harvest; difference vanished after harvest (correlational)."
+  },
+  "key_details": "Multi-scale study, all at least triplicate. Lab: G. lemaneiformis (0-25 g FW/L) significantly inhibited D. salina, P. micans, S. costatum and S. trochoidea above 1.25 g/L, with no effect on C. curvisetus or P. subcordiformis; a natural assemblage died within 2 days above 12.5 g/L. In situ 1 L bottles with P. globosa bloom water (~30x10^3 cells/mL): 22-38% inhibition at 1 d rising to 75-88% at 3 d at 10-40 g/L. 50 L mesocosm: 1-6 g wet wt/L all inhibited, gap growing from <20% (day 2) to 70-82% (day 8). 1000 L mesocosm: bloom peak one order of magnitude lower, but treatments overtook control after day 8. Field 2012: significantly lower abundance in cultivation area before harvest, no difference after harvest (t-tests, 3 vs 3 stations).",
+  "discrepancy": "Record species list was partly wrong (no Phaeocystis in lab tests; lab species were D. salina, P. micans, S. costatum, S. trochoidea, C. curvisetus, P. subcordiformis) and setting labelled 'field' though core evidence is lab and mesocosm. Quantitative mesocosm results (70-88% reduction) were missing; 1000 L treatments exceeded control at day 10."
+ },
+ "shellfish-05": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.3354/meps045217",
+  "updates": {},
+  "key_details": "Publisher offers only a PDF (no HTML full text); the proxied PDF link failed to load and the open PDF returned HTTP 401, so the full text was not read.",
+  "discrepancy": ""
+ },
+ "shellfish-06": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1007/BF00355249",
+  "updates": {},
+  "key_details": "Columbia has access, but this 1973 Marine Biology article is a scanned PDF only (no HTML full text on Springer), so only the abstract could be read.",
+  "discrepancy": ""
+ },
+ "shellfish-10": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.2983/0730-8000(2007)26[549:DFROFS]2.0.CO;2",
+  "updates": {
+   "organism": "Mytilus edulis, Crassostrea virginica, Mya arenaria, Mercenaria mercenaria, Argopecten irradians -> Alexandrium fundyense, Prorocentrum minimum, Heterosigma akashiwo vs Rhodomonas sp.",
+   "scale": "lab containers, NOAA Milford CT, May-Oct 2005",
+   "duration": "1 h clearance-rate incubations; 4 h behaviour and biodeposit observations",
+   "result": "Clearance of HAB cells was either equal to or higher than clearance of Rhodomonas in every mixed-diet combination (no rejection of HAB cells); e.g. quahogs and scallops cleared A. fundyense faster than Rhodomonas, oysters cleared P. minimum faster. H. akashiwo clearance could not be measured because the cells swarmed and aggregated.",
+   "env_effects": "Intact, undigested (possibly viable) HAB cells and temporary cysts of A. fundyense appeared in feces/pseudofeces of most species; oysters stayed mostly closed during 4 h exposures and produced no biodeposits with H. akashiwo; quahogs partly closed with A. fundyense."
+  },
+  "key_details": "Lab feeding study with five bivalve species exposed for 1 h to A. fundyense or P. minimum alone, Rhodomonas alone, or a mix, with empty-shell and no-shell controls (no algal loss in controls); ANOVA with LSD post hoc. Clearance rates were species- and alga-specific; the presence of Rhodomonas did not change clearance of HAB cells. H. akashiwo concentrations rose in no-shell controls due to swarming, so its clearance was not quantified. Biodeposits from most bivalves contained many intact HAB cells and A. fundyense temporary cysts, implying possible repackaging rather than destruction of HAB cells.",
+  "discrepancy": "Record's 'HAB cells mostly retained preferentially' is overstated: clearance of HAB vs Rhodomonas was either not different or higher for HAB. H. akashiwo clearance was not measurable. Oysters were mostly closed with all three HABs (not only Heterosigma)."
+ },
+ "shellfish-12": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.2983/035.031.0419",
+  "updates": {
+   "scale": "commercial FLUPSY (4 units x 10 upweller silos), East Creek off Great Peconic Bay, NY",
+   "duration": "late May-30 Sep 2010, 15-min data",
+   "result": "Median weight-specific clearance 0.95 L/h/g during active growth (12 Jun-21 Jul); chlorophyll a removal across the FLUPSY had a season median of 6.45% (15.38% in the growth period, 24-h max 40%). Whole-FLUPSY clearance (median 3.64x10^5 L/h) would need ~18 days to clear the 1.6x10^5 m3 embayment, so no large impact on local phytoplankton.",
+   "effect_pct": 6.45,
+   "env_effects": "Cochlodinium polykrikoides (~100 cells/mL from 22 Jul) coincided with unstable, low feeding, no growth and higher oyster mortality; a Peridinium quinquecorne bloom (1,460 cells/mL) coincided with pseudofeces release in early June. Negative removal values (biodeposit release) occurred; diel clearance lows (0.32 and 0.45 L/h/g) coincided with lowest and highest DO/pH."
+  },
+  "key_details": "Field monitoring of inflow/outflow of a commercial oyster-seed FLUPSY at 15-min resolution through summer 2010. Environmental variables explained 58% of day-to-day feeding variability (multiple regression); clearance rose with O2 saturation up to 150%. Diel clearance peaked at 2.21 L/h/g (21:30) and bottomed at 0.32 L/h/g (07:40). Percent chlorophyll removal was highly variable, with a season median of 6.45% and negative values when biodeposits were released. Authors conclude the FLUPSY could not meaningfully reduce embayment phytoplankton because of replenishment by growth and exchange.",
+  "discrepancy": "Record lacked the percent chlorophyll removal numbers (median 6.45%, growth-period 15.38%, max 40%) and the 18-day embayment clearance estimate."
+ },
+ "shellfish-18": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1007/s12237-008-9098-8",
+  "updates": {
+   "organism": "intertidal oyster reefs (Crassostrea virginica dominant; hard clams on one reef; few ribbed mussels) -> chl a",
+   "scale": "8 intertidal reefs (5 constructed, 3 natural), coastal South Carolina; flow lengths 5-18 m",
+   "duration": "0.3-1.3 h measurement runs, May 2005 and June 2006",
+   "result": "In situ fluorometry showed chl a removal from -9.8% to 27.9% (lab pumped samples -9.3% to 40.7%) across reefs; overall means 12.9% (in situ) and 13.6% (lab).",
+   "effect_pct": 12.9,
+   "env_effects": "One natural reef showed higher chl a downstream from wind-driven sediment resuspension. Bare planted shell with no live oysters removed no chl a."
+  },
+  "key_details": "Upstream-downstream in situ fluorometry plus pumped water samples over 8 intertidal South Carolina reefs in shallow water (26-42 cm depth, flow 2.2-13.5 cm/s), bivalve densities 217-2831 per m2. Removal averaged ~13% across reefs; two older reefs removed 15.1% and 23.0%, one young reef 21.8%, and two reefs <5%. A bare-shell control showed no physical removal. Predicted removal matched measured (11.7% vs 12.9%) only when Powell et al. 'low gear' individual feeding rates were used; lab-derived rates overpredict. Each run was a single short time series per reef (no replicate reefs per treatment).",
+  "discrepancy": "Record gave only the range; the overall mean removal (12.9% in situ, 13.6% lab) and the finding that lab-derived clearance rates overpredict field removal were missing."
+ },
+ "shellfish-19": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1007/BF02700175",
+  "updates": {},
+  "key_details": "Columbia has access, but Springer offers this 2005 Estuaries article only as a PDF (no HTML full text), so only the abstract could be read.",
+  "discrepancy": ""
+ },
+ "peroxide-01": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.watres.2011.11.016",
+  "updates": {
+   "scale": "lab incubations; duplicate lake enclosures (0, 2.5, 5, 8 mg/L); whole Lake Koetshuis, NL (~0.12 km2, max depth 2 m) with untreated Lake Langebosch as reference",
+   "dose": "2.0 mg/L H2O2 target (23 mL of 10% stock per m3 via water harrow), once; measured 1.0-2.5 mg/L within 3 h",
+   "result": "Cyanobacteria fell from 600x10^3 cells/mL the day before to <10x10^3 cells/mL within 10 days (microcystin followed with a 2-day lag) while the untreated reference lake kept rising; numbers stayed low for 7 weeks, then rose to ~200x10^3 cells/mL by end of September. In enclosures, P. agardhii was >98% below control at day 9.",
+   "env_effects": "H2O2 fell to 0.7 mg/L after 1 day and below detection after 2 days. Enclosures: zooplankton (Daphnia, Diaphanosoma) fell ~35% at 2.5 mg/L and nearly vanished at 5-8 mg/L; green algae showed cell-wall damage at 5-8 mg/L. Whole lake at 2 mg/L: zooplankton stable for 5 weeks, eukaryotic phytoplankton not strongly affected, ammonium spiked after lysis, and transparency did not improve (stayed 45-60 cm)."
+  },
+  "key_details": "Stepwise design: lab incubations (duplicates) showed 1-4 mg/L cut photosynthetic vitality to <30% within 3 h, with ~0.3 mg/L consumed by water-matrix reactions; duplicate lake enclosures at 2.5, 5 and 8 mg/L cut P. agardhii >98% vs control by day 9 but higher doses nearly eliminated zooplankton, so 2 mg/L was chosen for the whole lake. Whole-lake treatment (single lake, unreplicated, one untreated reference lake) collapsed the Planktothrix bloom within 10 days and microcystin followed. Recovery began after ~7 weeks with P. agardhii plus invading Woronichinia naegeliana. Water clarity did not improve despite the collapse.",
+  "discrepancy": "Record's '99% within a few days' is slightly compressed: counts fell from 600x10^3 to <10x10^3 cells/mL within 10 days. Record omitted that enclosure doses >=5 mg/L nearly eliminated zooplankton (and 2.5 mg/L cut it ~35%), that transparency did not improve, and that cyanobacteria returned after 7 weeks. Whole-lake part is n=1 with one reference lake."
+ },
+ "peroxide-04": {
+  "status": "no_access",
+  "source_url": "https://doi.org/10.1016/j.aquatox.2013.08.015",
+  "updates": {},
+  "key_details": "",
+  "discrepancy": ""
+ },
+ "peroxide-06": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.watres.2023.120230",
+  "updates": {
+   "scale": "10 mL batch reactors (25 mL flasks), 22 +/- 2 C; C. polykrikoides 0.5-3x10^3 cells/mL; fish 72 h acute tests",
+   "dose": "H2O2 0.1, 1, 5 and 10 mg/L (O3 0.5-5; MnO4- and NaOCl 0.1-5 mg/L)",
+   "duration": "minutes to 3 h (cell removal); 72 h (fish LC50)",
+   "result": "All four oxidants inactivated and lysed C. polykrikoides with efficacy O3 > MnO4- > NaOCl > H2O2; 10 mg/L H2O2 completely inactivated 3x10^3 cells/mL in 3 h. Fish 72-h LC50s were 1.35 (O3, estimated), 0.39 (MnO4-), 1.32 (NaOCl) and 102.61 mg/L (H2O2).",
+   "effect_pct": 100,
+   "env_effects": "O3 and NaOCl formed bromate (probable human carcinogen) via HOBr; MnO4- and H2O2 formed no detectable bromate or significant residual oxidants. Red sea bream showed no mortality at 50 mg/L H2O2 over 72 h; low H2O2 fish toxicity was also confirmed in juvenile starry flounder. Authors judge H2O2 the most practical and safe option."
+  },
+  "key_details": "Lab batch comparison of four disinfectants against cultured C. polykrikoides at several doses and initial cell densities, with triplicate sampling at each time point and sulfite quenching. Removal rates fell with higher cell density for all oxidants, but less so for H2O2 because its decay was little affected by cells. H2O2 needed higher doses (up to 10 mg/L) to match the others. Fish acute toxicity (probit LC50) showed H2O2 ~75-260x safer than the other oxidants.",
+  "discrepancy": "Record said the effective H2O2 dose was not in the abstract; full text shows complete inactivation of 3x10^3 cells/mL at 10 mg/L in 3 h, with doses tested 0.1-10 mg/L."
+ },
+ "peroxide-16": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1061/(ASCE)EE.1943-7870.0000508",
+  "updates": {
+   "organism": "Daphnia carinata (s.l.) and Moina sp. clonal cultures, Western Australia (non-target zooplankton)",
+   "scale": "lab acute tests in 1.2 um filtered lake water with food, 21 C, n=3 per concentration",
+   "dose": "Moina 14 concentrations 0-12,500 mg/L; Daphnia 16 concentrations 0-12,500 mg/L",
+   "duration": "48 h",
+   "result": "48-h LC50 (probit) 5.6 mg/L for Daphnia (95% CI 5-6.3) and 2 mg/L for Moina (linear regression 5.7 and 1.9); NOAEC 3 and 1.5 mg/L. Complete mortality at >=3 mg/L for Moina and >=12.5 mg/L for Daphnia within 48 h."
+  },
+  "key_details": "Acute 48 h exposures of 20 adults per species acclimated in filtered lake water, fed Desmodesmus, under low light to limit H2O2 breakdown, with three replicates per concentration; survival checked 10 times over 48 h. Moina reached 100% mortality within 12 h at >=6 mg/L; Daphnia needed >40 mg/L for 100% mortality within 12 h. Mean survival time was significantly longer in Daphnia at >=2 mg/L (Kaplan-Meier). Moina's NOAEC-LC50 gap is very small, so any effect already means high mortality. Context is waste stabilisation ponds; food was added, which may alter toxicity compared with standard tests.",
+  "discrepancy": "Minor: Moina LC50 is 2 mg/L (probit) / 1.9 mg/L (regression). Complete Moina mortality occurred at doses as low as 3 mg/L, within the range used for cyanobacteria treatment."
+ },
+ "peroxide-20": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1021/es060746i",
+  "updates": {
+   "organism": "Microcystis aeruginosa PCC 7806, green alga Pseudokirchneriella subcapitata, diatom Navicula seminulum",
+   "scale": "lab cultures, 27 C, irradiance 0-500 umol/m2/s",
+   "dose": "H2O2 concentration series (0.6 and 2.5 mg/L for decay tests)",
+   "duration": "3 h exposure (Fv/Fm endpoint)",
+   "result": "EC50 (photosynthetic yield) for Microcystis fell from 6.63 mg/L in the dark to 1.13 at 10, 0.45 at 40 and 0.27 mg/L at 500 umol/m2/s; the green alga (4.05-21.26 mg/L) and diatom (12.19-71.26 mg/L) were roughly 10-60x less sensitive.",
+   "env_effects": "At 500 umol/m2/s, 2.5 mg/L H2O2 fell to <4% within 3 h (half-life ~0.6 h without algae); Microcystis and Navicula cells degraded it in the dark (half-life 1.6 h). Preadaptation to high light did not reduce sensitivity."
+  },
+  "key_details": "Short-term (3 h) lab tests of H2O2 toxicity to one cyanobacterium, one green alga and one diatom at five irradiances, with photosynthetic yield (Fv/Fm, PAM fluorometry) as the endpoint and logistic dose-response fits. Light strongly increased toxicity, most for Microcystis (about 20x lower EC50 at 500 umol/m2/s than dark; 5x even at 10 umol/m2/s). Endpoint is photosynthetic inhibition, not cell death or growth. Duplicate measurements for decay tests; high light alone reduced control Fv/Fm by 20-55%.",
+  "discrepancy": "Record said green alga and diatom were 'about 10x less sensitive'; at 500 umol/m2/s they were ~15x (green alga) and ~58x (diatom) less sensitive. Duration (3 h) and the Fv/Fm endpoint were missing."
+ }
+}

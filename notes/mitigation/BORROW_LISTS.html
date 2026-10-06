@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Borrow Lists</title>
+<style>
+  :root { --ink:#1b1b1b; --muted:#5b5b5b; --line:#cfcfcf; --accent:#1f5f8b; --bg:#ffffff; }
+  body { font-family: "Segoe UI", Arial, sans-serif; color: var(--ink); background: var(--bg); margin: 0; }
+  .page { max-width: 7.5in; margin: 0 auto; padding: 0.5in 0.4in; box-sizing: border-box; }
+  .page + .page { page-break-before: always; break-before: page; }
+  h1 { font-size: 20pt; margin: 0 0 4px; color: var(--accent); }
+  .sub { color: var(--muted); font-size: 10.5pt; margin-bottom: 14px; }
+  .about { border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; font-size: 10.5pt; line-height: 1.45; margin-bottom: 14px; }
+  .ask { border-left: 4px solid var(--accent); background: #f3f7fa; padding: 8px 12px; font-size: 11pt; margin-bottom: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 10.5pt; }
+  th { text-align: left; border-bottom: 2px solid var(--ink); padding: 6px 4px; }
+  td { border-bottom: 1px solid var(--line); padding: 7px 4px; vertical-align: top; }
+  td.box { width: 22px; font-size: 14pt; line-height: 1; }
+  td.need { width: 38%; font-weight: 600; }
+  .note { color: var(--muted); font-size: 9.5pt; margin-top: 12px; }
+  .foot { margin-top: 16px; font-size: 10pt; }
+  @media print { .page { padding: 0.3in 0.2in; } }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <h1>Chemistry lab: items to borrow</h1>
+  <div class="sub">Vihaan Goyal &amp; Olivia Breiner · CSEF / ISEF 2027 project · needed late October to December 2026</div>
+  <div class="about">
+    <b>The project:</b> a model that forecasts harmful algal blooms in Long Island Sound, plus a bench test of
+    gentle ways to stop a bloom early (aeration, and a small dose of hydrogen peroxide that breaks down to water and oxygen), switched on only when the
+    forecast warns. Tests run in small tanks and flasks with <b>non-toxic</b> algae cultures.
+  </div>
+  <div class="ask">
+    <b>Would you be willing to be our Designated Supervisor?</b> The science fair requires one to sign our forms
+    before any hands-on work. We have a full plan and safety list to show you.
+  </div>
+  <table>
+    <tr><th></th><th>Item</th><th>What we'd use it for</th></tr>
+    <tr><td class="box">☐</td><td class="need">Microscope (10× and 40×)</td><td>Counting algae cells, the main result</td></tr>
+    <tr><td class="box">☐</td><td class="need">Sedgewick-Rafter slide and hemocytometer</td><td>Cell counts (the hemocytometer for 2 µm cells at 400×)</td></tr>
+    <tr><td class="box">☐</td><td class="need">Cuvettes (4 clear sides) or small glass vials</td><td>Our homemade chlorophyll sensor</td></tr>
+    <tr><td class="box">☐</td><td class="need">pH buffers (4, 7, 10) or a pH meter</td><td>Calibrating our pH probe</td></tr>
+    <tr><td class="box">☐</td><td class="need">Dissolved oxygen test kit</td><td>Daily safety check on the tanks</td></tr>
+    <tr><td class="box">☐</td><td class="need">Refractometer or hydrometer</td><td>Checking salinity of the seawater</td></tr>
+    <tr><td class="box">☐</td><td class="need">Digital scale (0.01 g)</td><td>Weighing sea salt and small chemical doses</td></tr>
+    <tr><td class="box">☐</td><td class="need">250 mL flasks, beakers, graduated cylinders</td><td>Short screening tests</td></tr>
+    <tr><td class="box">☐</td><td class="need">Transfer pipettes / micropipette</td><td>Taking samples</td></tr>
+    <tr><td class="box">☐</td><td class="need">Ammonia test strips</td><td>Safety checks</td></tr>
+    <tr><td class="box">☐</td><td class="need">Distilled water</td><td>Rinsing, making buffers</td></tr>
+    <tr><td class="box">☐</td><td class="need">Goggles and nitrile gloves</td><td>Safety</td></tr>
+    <tr><td class="box">☐</td><td class="need">A shelf or corner with an outlet (GFCI)</td><td>Tanks and flasks, late Oct to Dec</td></tr>
+  </table>
+  <div class="note">Anything already in use is fine to skip. We'll return everything clean, and nothing toxic is involved.</div>
+  <div class="foot">Contact: Vihaan Goyal</div>
+</div>
+
+<div class="page">
+  <h1>Robotics lab: items to borrow</h1>
+  <div class="sub">Vihaan Goyal &amp; Olivia Breiner · CSEF / ISEF 2027 project · needed October to December 2026</div>
+  <div class="about">
+    <b>The project:</b> an Arduino "alerter" that takes a daily bloom forecast and a tank's sensor readings, decides
+    when to switch a treatment on and off, and drives a relay that switches an air pump or a peristaltic dosing pump.
+    The logic, LEDs, buzzer and relay already work on an Arduino Uno.
+  </div>
+  <table>
+    <tr><th></th><th>Item</th><th>What we'd use it for</th></tr>
+    <tr><td class="box">☐</td><td class="need">Multimeter</td><td>Checking the 12 V supply, relay pins, wiring</td></tr>
+        <tr><td class="box">☐</td><td class="need">Soldering iron and solder (supervised use)</td><td>Attaching wires to the relay pins</td></tr>
+    <tr><td class="box">☐</td><td class="need">6-pin female header strip (+ desoldering wick)</td><td>Our Uno's analog-pin header (A0-A5) broke off; re-solder a new one</td></tr>
+    <tr><td class="box">☐</td><td class="need">3D printer time</td><td>A light-tight box for the chlorophyll sensor</td></tr>
+    <tr><td class="box">☐</td><td class="need">Heat-shrink tubing</td><td>Protecting the temperature probe from salt water</td></tr>
+    <tr><td class="box">☐</td><td class="need">Hot glue gun</td><td>Fixing sensor parts in the box</td></tr>
+    <tr><td class="box">☐</td><td class="need">Spare LEDs (red, yellow) and resistors (1 kΩ, 4.7 kΩ)</td><td>Status lights, sensor pull-up</td></tr>
+    <tr><td class="box">☐</td><td class="need">Male-female jumper wires</td><td>Connecting sensor boards</td></tr>
+    <tr><td class="box">☐</td><td class="need">Spare breadboard</td><td>Keeping the sensors on their own board</td></tr>
+    <tr><td class="box">☐</td><td class="need">Spare Arduino Uno or ESP32 (optional)</td><td>A second controller for a second tank</td></tr>
+  </table>
+  <div class="note">Anything already in use is fine to skip. We'll return everything in working order.</div>
+  <div class="foot">Contact: Vihaan Goyal</div>
+</div>
+
+</body>
+</html>

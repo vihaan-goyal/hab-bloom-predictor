@@ -1,0 +1,123 @@
+# Method 3: peroxide (liquid H₂O₂ pumped by the loop; sodium percarbonate as the off-the-shelf comparison)
+
+**Changed 2026-09-28:** calcium peroxide and the fabric "tea bag" are dropped.
+- **The loop doses liquid 3% H₂O₂ with the pump.** It is stable in a reservoir for weeks, so it suits the autonomy goal.
+- **The screen adds sodium percarbonate** (pure oxygen-bleach powder, Na₂CO₃·1.5H₂O₂), the active ingredient of registered pond algaecides (PAK 27, GreenClean, Phycomycin SCP). It shows the loop can trigger a product already approved and used at lake scale.
+- **Why:** percarbonate dissolves in minutes, so a bag of it wouldn't be retrievable. Peroxide breaks down to water and oxygen within 1-2 days anyway, so the loop controls exposure by **dose and timing**, not by retrieval. Percarbonate also raises pH less than CaO₂ (washing soda vs calcium hydroxide), its own non-target data exist (Thoo 2020: below 10 mg/L percarbonate ≈ 2.8 mg/L H₂O₂), and there is one less oxidizer to store.
+- The CaO₂ bag notes below are kept as background only.
+
+**Updated 2026-10-01: peroxide is now full loop run #2** (was screen only), with aeration as #1.
+Seaweed, shellfish and curcumin were dropped because the device must run fully autonomously; a
+pump plus a 3% H₂O₂ reservoir meets that rule (`EXECUTION_PLAN.md`, "Plan change 2026-10-01").
+- The loop keeps **H1** (≥ 50% peak cut, B vs A; B beats reactive C), the 0.8 mg/L pumped pulses,
+  `MAX_ON` 3 pulses and the re-dose rule. Sodium percarbonate stays a screen comparison only.
+- **The screen uses a cell-size panel:** *Micromonas pusilla* (~2 µm; eradicated by peroxide in
+  Randhawa et al. 2012, peroxide-03), *Nannochloropsis* (2-3 µm; untested in our papers), *Skeletonema*,
+  *T. weissflogii* and *P. micans*.
+- **New secondary hypothesis (H5):** peroxide sensitivity falls with cell size. The small cells are
+  hit; the larger diatoms and dinoflagellates, and the arm-D non-target check, are spared at 0.8 mg/L.
+
+**Added 2026-10-03: inline-dilution dosing module (field design).**
+- **Field stock is 7% H₂O₂** (plain, no surfactant; ~71.7 g/L), not drugstore 3%. A 200 m³ pen needs
+  5.3 L of 3% per 0.8 mg/L pulse, up to ~74 L in a worst-case 2 weeks (14 pulses); 7% needs 2.4× less.
+  35% is a hazard a student can't handle, and 7% stays **below the ~8% line** where peroxide becomes
+  corrosive.
+- **Sizing rule:** 7% volume per pulse (L) = **0.0112 × water volume (m³)** (0.8 g per m³ ÷ 71.7 g/L).
+  200 m³ pen: **2.24 L per pulse**, about **7 L in a typical 2 weeks** (3 pulses) and **31 L worst
+  case** (14 pulses), so one 40 L jug lasts a service interval.
+- **Inline dilution:** a circulation pump draws water in, the peristaltic pump meters the 7% into that
+  stream (e.g. 100 mL/min into 15 L/min, about 1:150), and a mixing hose blends it, so the mix leaves
+  the outlet at **~470 mg/L**, beside the aerator, and spreads to 0.8 mg/L in the pen. **No hot spot:**
+  there is never a jet of 71,700 mg/L stock at the outlet.
+- **Bench stays at the 0.1% working dilution** (`PROCEDURES.md` P6; 8 mL per 10 L), with the same
+  plumbing and firmware, because 0.8 mg/L in 10 L would be only 0.11 mL of 7%, too little to meter.
+- Hardware, interlocks (no-flow abort, reservoir-low alert) and tests: `hardware/alerter_uno/README.md`,
+  stage 9; procedure `PROCEDURES.md` P7.
+
+Plugs into the shared loop in `00_CONTROL_LOOP.md`. Evidence: `notes/snowball/peroxides.md` #3,
+#5, #6, #15, #18, #34, #39; Part 1 #1.
+
+## Why this method
+- **The bag:** Keliri et al. 2022 ([doi:10.1016/j.ceja.2022.100318](https://doi.org/10.1016/j.ceja.2022.100318), open access) sealed calcium peroxide (CaO₂) granules in fabric. 2 g/L released **up to 12 mg/L H₂O₂ within 24 h** and cut *Microcystis* fluorescence from 8,000 to under 1,000 RFU. The granules stay inside the bag, so it **can be pulled out**.
+- **Why treating early is the whole point** (Chen 2020; Buley 2023, [doi](https://doi.org/10.1007/s11356-023-25301-4)):
+  - The effective dose is about **0.03-0.12 mg/L H₂O₂ per µg/L of chlorophyll**.
+  - Dense blooms needed 20 mg/L; sparse ones 5 mg/L.
+  - Dense treatment also released nutrients and toxins.
+  - So treating at the forecast trigger, while chlorophyll is still low, needs a fraction of the dose.
+- **The selectivity lever:** 1.6 mg/L H₂O₂ wiped out Long Island–type brown tide (*Aureococcus*, about 2 µm) within 24 h, but cells larger than about 2-3 µm (diatoms, most dinoflagellates) were largely unaffected (Randhawa 2012, *PLOS ONE*, [doi](https://doi.org/10.1371/journal.pone.0047844)).
+
+- **Already a commercial pond treatment:** sodium carbonate peroxyhydrate (a solid peroxide) is a registered algaecide.
+  - Texas A&M rates it "good" control (75-89%) of **planktonic** algae, best on blue-greens (Sink et al. 2022, AgriLife RWFM-PU-154).
+  - The Army Corps of Engineers trials, as reported by AquaPlant, rate it "good" too.
+  - Our version differs in three ways: it's triggered by the forecast loop, dosed early and low, and used in marine water.
+
+**Serious caveats:**
+- **Short-lived:** blooms rebounded within 2 weeks or less in whole-pond dosing (Lusty & Gobler 2022).
+- **Pollution swapping:** repeated pond dosing **increased fecal-indicator bacteria** (Lusty & Gobler 2022).
+- **Marine dinoflagellates need 10-50+ mg/L**, which harms zooplankton. Treating even non-toxic dinoflagellates made the water **more toxic to fish gill cells** (Mardones 2023).
+- **Non-target limits (used consistently everywhere, 2026-09-28):**
+  - krill 48-h LC50 **0.86 mg/L** (the most sensitive value in the evidence);
+  - *Moina* LC50 **2 mg/L**, no-effect level 1.5 mg/L; *Daphnia* LC50 5.6 mg/L, no-effect level **3 mg/L** (Reichwaldt 2011);
+  - Thoo 2020 proposed keeping below 2.8 mg/L, but that is above the *Moina* LC50, so it is **not a
+    safe level**. We use **2.8 mg/L only as the emergency stop**, and plan doses from the 0.86-1.5
+    mg/L range: one pulse puts the peak at the target (0.8 mg/L), and it then decays.
+- **Best fit:** small-celled blooms (brown tide, cyanobacteria) in enclosed ponds and basins, **not** dinoflagellate blooms.
+
+## The loop for this method
+
+| Loop step | What happens |
+|---|---|
+| **Trigger** | Narragansett v2 model, `p ≥ 0.45` (bench trigger, `00_CONTROL_LOOP.md`) on daily sensor means (backup: the rule trigger in `00_CONTROL_LOOP.md`) → the relay runs the **pump**, which doses liquid 3% H₂O₂ from a reservoir |
+| **Dose** | **0.8 mg/L H₂O₂ per pulse, up to 3 daily pulses** (re-run 2026-09-28). The source (peroxide-03) shows **one** 0.8 mg/L dose gives only a transient effect (24-h EC50 0.91 mg/L; simulated back-test median 48% at 24 h). The re-run Layer 2 simulation (liquid pulses decaying with the H₂O₂ half-life) gives a 74% peak cut from up to 3 daily 0.8 mg/L pulses with 1% non-target harm, against 62% harm at 1.6 mg/L (`LAYER2_SIM_RESULTS.md`). Liquid 3% H₂O₂: 0.27 mL per 10 L; for flasks use the 0.1% working dilution (PROCEDURES). Percarbonate (screen comparison only): ~2.9 mg/L, dissolved fresh, content confirmed with the low-range kit |
+| **`X` (ON time)** | **24 h** per pulse (brown-tide kill within 24 h; H₂O₂ half-life in seawater is hours), then re-measure |
+| **Re-measure** | chlorophyll, cell count, **H₂O₂ residual** (low-range kit; strips only for the 2.8 mg/L check), pH, DO, non-target survival |
+| **OFF rule** | the shared rule. **Each ON is one pulse; "ON again" means a new pulse** |
+| **`MAX_ON`** | 3 pulses per event (evidence review, 2026-09-25). On the Uno: `x 1`, `maxon 3`, `pulse <s>` (`<s>` = pump seconds for 0.265 mL of 3% per 10 L, from the weight calibration). The relay then runs the pump for `<s>` seconds at START and at each daily check that continues the episode; `maxon` counts days since START, so this is at most 3 pulses, with `STOP_MAX_ON` on day 4 |
+| **Re-dose rule (one rule everywhere)** | a new pulse only if the measured residual is **≤ 0.5 mg/L** (low-range kit); otherwise send `skip` before that day's line, and the Uno skips the pulse |
+| **Method safety limits** | residual **> 2.8 mg/L** at any check → emergency stop (no more pulses this episode); pH above 9.0; non-target survival more than 20 points below control. **These stops are not automatic in the firmware:** send `stop` by hand, or use `alerter_link.py --stop "..."` (residual, survival) and `--ph-max 9.0` (pH from the probe) |
+
+**Important difference from the other methods:** each ON is a **single 24 h pulse** whatever
+happens, then the OFF rule decides whether to send another. This keeps exposure short by design.
+
+## Bench setup
+- **Screen:** 250 mL flasks, one species each (the panel above), n = 3 (Randhawa used 250 mL).
+- **Loop tanks:** 3 per arm, 4-10 L (Lusty & Gobler used 4 L bottles). The peristaltic pump doses 3% H₂O₂ from a reservoir; check the reservoir's strength weekly with the low-range kit and refill it (the one allowed maintenance).
+- **Loop culture (2026-10-01):** the small alga the screen shows is cut (*Micromonas pusilla* or *Nannochloropsis*), mixed with ***Skeletonema***. That tests the size selectivity in the tank: does the small alga crash while the diatom survives?
+- *(Dropped 2026-09-28)* **Bag:** 2-4 layers of polyester or nonwoven fabric, heat-sealed or sewn, holding the weighed CaO₂. Keliri tested four fabric types; start with the one they found released like loose granules.
+- **Percarbonate check first (replaces the CaO₂ release curve):** dissolve a weighed amount of sodium percarbonate in plain seawater and measure H₂O₂ at 0, 15 min, 1 h and 24 h with the low-range kit. That confirms its real peroxide content (theoretical 32.5% H₂O₂ by weight; commercial powder is often less), so 0.8 mg/L H₂O₂ ≈ **2.5-2.9 mg/L percarbonate (~25-29 mg per 10 L)**. Always dissolve it fresh on the day of dosing. (The old CaO₂ release-curve pilot is dropped.)
+- **Comparison arm:** sodium percarbonate at the same H₂O₂ dose, plus a **sodium carbonate control** matched to the carbonate it adds (~2.0 mg/L Na₂CO₃ per 2.9 mg/L percarbonate), which separates peroxide from carbonate and pH.
+- **Measuring 0.8 mg/L (added 2026-09-28; can break the method).** 0.5-25 mg/L strips are too coarse at the bottom of their range to confirm a 0.8 mg/L dose.
+  - Buy a **low-range peroxide test kit** (colorimetric, with steps below 1 mg/L), and keep the strips only for the 2.8 mg/L safety cutoff.
+  - Make **liquid 3% H₂O₂, dosed by the pump,** the main dosing method for the screen: the dose is then known from the arithmetic (0.8 mg/L in 10 L = 8 mg = 0.27 mL of 3%). The percarbonate arm becomes the comparison arm.
+- *(Dropped with CaO₂)* **The bag overshoots:** Keliri's 2 g/L released up to 12 mg/L, 15× the target. Build the release curve in plain seawater first (below) and **start with a very small CaO₂ mass**.
+- **Counting ~2 µm cells:** they're hard to count on a school microscope, and the write-up says so. In the screen each flask holds one species, so the **fluorometer** measures the small algae directly, with **hemocytometer counts at 400×** as the check. In the mixed loop tanks, use **size-fractionated chlorophyll**: push a sample through a **5 µm syringe filter**. What passes through is small cells, and total minus filtrate is large cells. It's a standard oceanography method and cheap.
+
+## Measurements specific to peroxide
+- H₂O₂ residual (low-range kit) at 1, 4, 12 and 24 h in the first cycle.
+- pH (percarbonate adds washing soda, a small rise).
+- Size-class cell counts (small vs large cells).
+- Optional, with sponsor approval and BSL review: coliform plates, to check the "pollution swapping" finding.
+
+## Materials (estimates)
+
+| Item | Approx. cost |
+|---|---|
+| Sodium percarbonate, pure (oxygen-bleach powder, no fragrance or surfactant) | $10 |
+| Peroxide test strips (0.5-25 mg/L) | $20 |
+| Flasks for the panel screen (93 × 250 mL); loop tanks counted in `EXECUTION_PLAN.md` §8 | $120 |
+| Arduino Uno alerter + 12 V peristaltic dosing pump (now needed for the loop run) + 3% H₂O₂ reservoir bottle; fluorometer, pH, temperature, DO kit | $110 |
+| Sea salt, f/2, cultures (NCMA, incl. *Micromonas pusilla*); live *Nannochloropsis* (reef-aquarium supplier) | $95-155 |
+| Brine shrimp eggs | $10 |
+
+## Safety and forms
+- **Sodium percarbonate is an oxidizer** (milder than CaO₂, but still): goggles and gloves, keep it away from organics and heat, and store it dry. That means a **Form 3 risk assessment**, with the Designated Supervisor present.
+- Dispose of treated water after the peroxide has decayed (check with strips).
+
+## Environment
+- Short-lived: it breaks down to water and oxygen within 1-2 days.
+- Real risks from the literature: zooplankton harm above about 2-3 mg/L, more toxic water after killing dinoflagellates, fecal-bacteria increases with repeated use, and fast rebound.
+- The cap at 2.8 mg/L and one-pulse-at-a-time dosing limit these, but **arm D (false alarm) must show no non-target harm** before any claim of safety.
+
+## Before building: verify in the full papers
+- The Keliri 2022 fabric types and release curves (open access, so read it fully).
+- The Buley 2023 dose-per-chlorophyll values and the chlorophyll range they apply to (82-371 µg/L). **Our trigger chlorophyll will be lower.** Extrapolating below that range is itself a testable question.

@@ -1,0 +1,882 @@
+{
+ "clay-02": {
+  "old": {
+   "reproducibility": 4,
+   "effectiveness": 4,
+   "cost": 4,
+   "time": 5,
+   "environment": 2
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 4,
+   "cost": 3,
+   "time": 5,
+   "environment": 2
+  }
+ },
+ "clay-03": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 4,
+   "time": 5,
+   "environment": 2
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 5,
+   "environment": 2
+  }
+ },
+ "clay-04": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 5,
+   "cost": 2,
+   "time": 5,
+   "environment": 2
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 5,
+   "cost": 2,
+   "time": 5,
+   "environment": 2
+  }
+ },
+ "clay-05": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 5,
+   "cost": 1,
+   "time": 5,
+   "environment": 2
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 5,
+   "cost": 1,
+   "time": 5,
+   "environment": 2
+  }
+ },
+ "clay-06": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 4,
+   "cost": 2,
+   "time": 5,
+   "environment": 2
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 4,
+   "cost": 2,
+   "time": 5,
+   "environment": 2
+  }
+ },
+ "clay-07": {
+  "old": {
+   "reproducibility": 4,
+   "effectiveness": 3,
+   "cost": 4,
+   "time": 5,
+   "environment": 2
+  },
+  "new": {
+   "reproducibility": 4,
+   "effectiveness": 3,
+   "cost": 4,
+   "time": 5,
+   "environment": 2
+  }
+ },
+ "clay-09": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 4,
+   "cost": 2,
+   "time": 4,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 4,
+   "cost": 2,
+   "time": 5,
+   "environment": 2
+  }
+ },
+ "clay-10": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 5,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 5,
+   "environment": 1
+  }
+ },
+ "curcumin-02": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 2,
+   "time": 5,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 5,
+   "environment": 4
+  }
+ },
+ "curcumin-03": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 4,
+   "cost": 3,
+   "time": 5,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 5,
+   "environment": 3
+  }
+ },
+ "curcumin-04": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 5,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 2,
+   "time": 5,
+   "environment": 5
+  }
+ },
+ "curcumin-05": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 3,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 1,
+   "cost": 2,
+   "time": 5,
+   "environment": 3
+  }
+ },
+ "curcumin-08": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 4,
+   "time": 2,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 4,
+   "effectiveness": 1,
+   "cost": 4,
+   "time": 3,
+   "environment": 3
+  }
+ },
+ "curcumin-10": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 5,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 3,
+   "environment": 3
+  }
+ },
+ "curcumin-11": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 5,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 5,
+   "environment": 3
+  }
+ },
+ "curcumin-13": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 5,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 5,
+   "environment": 1
+  }
+ },
+ "curcumin-14": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 5,
+   "environment": 2
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 5,
+   "environment": 3
+  }
+ },
+ "curcumin-16": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 4,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 5,
+   "environment": 2
+  }
+ },
+ "curcumin-17": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 4,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 4,
+   "environment": 3
+  }
+ },
+ "curcumin-18": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 4,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 4,
+   "effectiveness": 5,
+   "cost": 3,
+   "time": 4,
+   "environment": 3
+  }
+ },
+ "curcumin-21": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 2,
+   "cost": 3,
+   "time": 4,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 4,
+   "environment": 3
+  }
+ },
+ "curcumin-23": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 2,
+   "cost": 3,
+   "time": 3,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 3,
+   "environment": 3
+  }
+ },
+ "curcumin-25": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 3,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 2,
+   "cost": 3,
+   "time": 3,
+   "environment": 1
+  }
+ },
+ "nutrient_reduction-01": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 5
+  }
+ },
+ "nutrient_reduction-02": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 2,
+   "time": 3,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 2,
+   "cost": 3,
+   "time": 4,
+   "environment": 5
+  }
+ },
+ "nutrient_reduction-03": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 3
+  }
+ },
+ "nutrient_reduction-04": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 5
+  }
+ },
+ "nutrient_reduction-05": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 1,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 1,
+   "environment": 5
+  }
+ },
+ "nutrient_reduction-06": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 5
+  }
+ },
+ "nutrient_reduction-07": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 5
+  }
+ },
+ "nutrient_reduction-08": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 4
+  }
+ },
+ "nutrient_reduction-10": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 4,
+   "cost": 1,
+   "time": 1,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 2
+  }
+ },
+ "nutrient_reduction-11": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 5
+  }
+ },
+ "nutrient_reduction-12": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 1,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 1,
+   "environment": 5
+  }
+ },
+ "oxidation-01": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 4,
+   "cost": 3,
+   "time": 5,
+   "environment": 2
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 2,
+   "cost": 3,
+   "time": 5,
+   "environment": 2
+  }
+ },
+ "oxidation-02": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 5,
+   "cost": 2,
+   "time": 5,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 4,
+   "cost": 2,
+   "time": 5,
+   "environment": 1
+  }
+ },
+ "oxidation-03": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 3,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 3,
+   "environment": 3
+  }
+ },
+ "oxidation-04": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 3,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 4,
+   "environment": 3
+  }
+ },
+ "oxidation-05": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 5,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 5,
+   "environment": 4
+  }
+ },
+ "oxidation-06": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 4,
+   "cost": 3,
+   "time": 4,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 4,
+   "effectiveness": 5,
+   "cost": 3,
+   "time": 5,
+   "environment": 4
+  }
+ },
+ "oxidation-08": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 4,
+   "cost": 3,
+   "time": 5,
+   "environment": 2
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 4,
+   "cost": 2,
+   "time": 5,
+   "environment": 2
+  }
+ },
+ "oxidation-09": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 5,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 5,
+   "environment": 4
+  }
+ },
+ "oxidation-10": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 2,
+   "cost": 3,
+   "time": 4,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 4,
+   "effectiveness": 4,
+   "cost": 3,
+   "time": 4,
+   "environment": 5
+  }
+ },
+ "oxidation-11": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 4,
+   "cost": 2,
+   "time": 5,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 4,
+   "cost": 2,
+   "time": 5,
+   "environment": 1
+  }
+ },
+ "p_inactivation-01": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 4,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 4,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  }
+ },
+ "p_inactivation-02": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  }
+ },
+ "p_inactivation-03": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  }
+ },
+ "p_inactivation-04": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  }
+ },
+ "p_inactivation-05": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  }
+ },
+ "p_inactivation-06": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  }
+ },
+ "p_inactivation-07": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 5,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 3,
+   "environment": 1
+  }
+ },
+ "p_inactivation-08": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  }
+ },
+ "p_inactivation-09": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  }
+ },
+ "p_inactivation-10": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 2,
+   "cost": 2,
+   "time": 4,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 2,
+   "time": 5,
+   "environment": 1
+  }
+ },
+ "p_inactivation-11": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 1
+  }
+ }
+}

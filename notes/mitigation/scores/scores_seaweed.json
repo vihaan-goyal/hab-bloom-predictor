@@ -1,0 +1,302 @@
+[
+ {
+  "paper_id": "seaweed-01",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 2,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Flasks are simple, but it uses PSP-toxic Alexandrium catenella, 300 L mesocosms and mussel saxitoxin assays.",
+   "effectiveness": "-17-74% at 2-3 d and -42-96% at ~1 wk; kelp gave -73% in 48 h in mesocosms, though total chlorophyll did not fall.",
+   "cost": "Mesocosms and saxitoxin analysis put it at $500-5,000.",
+   "time": "Kelp gave -73% within 48 h.",
+   "environment": "Seaweed is retrievable, but Ulva pushed pH to 9.0-9.5 (sometimes >10) and other algae replaced the target."
+  }
+ },
+ {
+  "paper_id": "seaweed-02",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 3,
+  "time": 4,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Needs ichthyotoxic Margalefidinium, larval fish in well plates and 300 L mesocosms.",
+   "effectiveness": "-68%, -90% and -92% on days 5-7, but no reduction at all before day 5.",
+   "cost": "Culture, fish and Ulva at 0.17-0.2 g/L are roughly $150-500 at bench scale.",
+   "time": "Reductions appeared on days 5-7.",
+   "environment": "Live seaweed is retrievable and protected fish; no non-target harm reported."
+  }
+ },
+ {
+  "paper_id": "seaweed-03",
+  "reproducibility": 3,
+  "effectiveness": 4,
+  "cost": 3,
+  "time": 5,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "250 mL flasks with kelp/Ulva are simple, but Pseudo-nitzschia is a domoic-acid diatom bought from a culture centre.",
+   "effectiveness": "-74-94% at >=72 h and -69 to -81% in bloom water with 2 g/L kelp, but Gracilaria and 1 g/L kelp had no significant effect.",
+   "cost": "Culture plus seaweed and flasks is roughly $150-500.",
+   "time": "Large reductions at >=72 h (about 3 days).",
+   "environment": "Seaweed is retrievable; only target diatoms were reported affected."
+  }
+ },
+ {
+  "paper_id": "seaweed-04",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 5,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Fresh Ulva in flasks is easy, but the targets include toxic K. brevis and Karlodinium bought as cultures.",
+   "effectiveness": "Only -24% to -50% at 72 h across species, though extracts lysed two species after 5 d.",
+   "cost": "Several cultures plus seaweed are roughly $150-500.",
+   "time": "Effects measured at 72 h.",
+   "environment": "Seaweed is retrievable; allelochemicals are heat-stable but no non-target harm reported."
+  }
+ },
+ {
+  "paper_id": "seaweed-05",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 5,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Axenic Heterosigma and Alexandrium cultures co-cultured with collected Ulva need a sponsor.",
+   "effectiveness": "Ulva killed all H. akashiwo at 5-10 g-wet/L (n=3) but never killed A. tamarense, filtrate had no effect and low powder doses stimulated growth.",
+   "cost": "Two cultures, f/2 medium and Ulva cost about $150-500.",
+   "time": "H. akashiwo died within 2 days (lysis LT50 3-7 h).",
+   "environment": "Living Ulva is retrievable, though grams per litre of seaweed are needed."
+  }
+ },
+ {
+  "paper_id": "seaweed-06",
+  "reproducibility": 3,
+  "effectiveness": 4,
+  "cost": 3,
+  "time": 3,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Eight axenic microalgal cultures with fresh Ulva in flasks is sponsor-level work.",
+   "effectiveness": "Ulva killed H. akashiwo and Skeletonema 100% and cut others 21-90% in triplicate, including nutrient-replete tests that rule out competition.",
+   "cost": "Eight cultures and media cost $150-500.",
+   "time": "Experiments ran about 11 days.",
+   "environment": "Living Ulva is removable; nutrients stayed replete."
+  }
+ },
+ {
+  "paper_id": "seaweed-07",
+  "reproducibility": 4,
+  "effectiveness": 4,
+  "cost": 4,
+  "time": 4,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Collected Ulva and one P. micans culture in f/2 flasks are simple bench work.",
+   "effectiveness": "Ulva tissue and powder cut growth dose-dependently in 4 replicates and 10 g/L fresh or 2.4 g/L powder killed the cultures.",
+   "cost": "One culture plus free seaweed costs about $50-150.",
+   "time": "Powder at 2.4 g/L killed cultures within 4 days.",
+   "environment": "Seaweed is natural and removable, though powder adds organic matter at high doses."
+  }
+ },
+ {
+  "paper_id": "seaweed-08",
+  "reproducibility": 3,
+  "effectiveness": 4,
+  "cost": 3,
+  "time": 4,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Four dinoflagellate cultures (including toxic Alexandrium) with collected seaweed need a sponsor.",
+   "effectiveness": "Ulva killed three of four dinoflagellates within 144 h in triplicate; Gracilaria mostly acted through nutrient depletion.",
+   "cost": "Four cultures and media cost $150-500.",
+   "time": "LT50s were 38-64 h and all cells were dead within 6 days.",
+   "environment": "Living thalli are retrievable; filtrates stimulated some species."
+  }
+ },
+ {
+  "paper_id": "seaweed-09",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 3,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Ulva co-culture with purchased HAB cultures including toxic A. tamarense.",
+   "effectiveness": "-48% A. tamarense at 0.8 g/L; filtrate worked only for 2 d before recovery.",
+   "cost": "Cultures plus seaweed are roughly $150-500.",
+   "time": "12-day co-culture (powder EC50 at 3 d).",
+   "environment": "Not reported; live seaweed is retrievable."
+  }
+ },
+ {
+  "paper_id": "seaweed-10",
+  "reproducibility": 4,
+  "effectiveness": 3,
+  "cost": 4,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "4-hour assays in 24-well plates with dried Ulva powder and a Heterosigma culture are simple bench work.",
+   "effectiveness": "Powder LC50 0.40-0.70 g/L DW, but fresh tissue at 50 g/L killed only 1.6-6.6% in 4 h.",
+   "cost": "One culture, well plates and seaweed are about $50-150.",
+   "time": "Results within 4 hours.",
+   "environment": "Dried powder cannot be retrieved, though its PUFAs fell to 2% of peak by 48 h (short-lived)."
+  }
+ },
+ {
+  "paper_id": "seaweed-11",
+  "reproducibility": 4,
+  "effectiveness": 4,
+  "cost": 4,
+  "time": 4,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "One Heterosigma culture with fresh Ulva or Gracilaria is straightforward bench work.",
+   "effectiveness": "Ulva >=0.68 g FW/L killed all H. akashiwo in triplicate, but 0.34 g/L cut only ~53% and low Gracilaria or extract doses stimulated growth 56-72%.",
+   "cost": "One culture plus collected seaweed costs about $50-150.",
+   "time": "LT50s were 36-83 h and all cells died within 5 days.",
+   "environment": "Living seaweed is removable; Gracilaria depleted nutrients."
+  }
+ },
+ {
+  "paper_id": "seaweed-12",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 4,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Seven HAB cultures, brown-tide field water and a larval fish bioassay need a sponsor.",
+   "effectiveness": "Lab thalli cut A. anophagefferens >97% but other species only 20-64%, and in natural brown-tide water only 13-44%.",
+   "cost": "Several HAB cultures and fish cost $150-500.",
+   "time": "Lab tests ran 5 days and field bottles 48 h.",
+   "environment": "No sheepshead minnow mortality at 900 mg dry wt/L and inhibition was not nutrient competition."
+  }
+ },
+ {
+  "paper_id": "seaweed-13",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 2,
+  "time": 4,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Lab and bottle tests are doable, but the study also used 50 L and 1000 L mesocosms with kilograms of farmed Gracilaria.",
+   "effectiveness": "Bloom-water bottles fell 75-88% and 50 L mesocosms 70-82% vs controls in triplicate, though the 1000 L treatment overtook the control after day 8.",
+   "cost": "Mesocosms and kilograms of seaweed cost $500-5,000.",
+   "time": "Bottle reductions reached 75-88% by day 3, mesocosms by day 8.",
+   "environment": "Living seaweed is harvestable and species richness was higher with Gracilaria."
+  }
+ },
+ {
+  "paper_id": "seaweed-14",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 3,
+  "time": 3,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Simple 500 mL co-culture, but Ostreopsis makes palytoxin-like toxins and pH must be held at 8.",
+   "effectiveness": "Ulva co-culture ended 94% below the inoculum, but powder gave only -17-37% and filtrate stimulated growth.",
+   "cost": "Culture, seaweeds and pH control are roughly $150-500.",
+   "time": "LT50 of 12 d over a 20-day run.",
+   "environment": "Seaweed is retrievable; Ulva drew down DIN and target cells formed cysts."
+  }
+ },
+ {
+  "paper_id": "seaweed-15",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 3,
+  "time": 4,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "200 mL co-cultures are simple, but targets include toxic Ostreopsis, P. lima and A. pacificum.",
+   "effectiveness": "Growth rates fell 35-62% in benthic species and A. pacificum all died by day 6 at >=0.8 g/L.",
+   "cost": "Four cultures plus seaweed are roughly $150-500.",
+   "time": "A. pacificum was all dead by day 6.",
+   "environment": "pH, DO and nutrients did not differ from controls; seaweed is retrievable."
+  }
+ },
+ {
+  "paper_id": "seaweed-16",
+  "reproducibility": 4,
+  "effectiveness": 3,
+  "cost": 4,
+  "time": 5,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "250 mL flasks with local Gracilaria and an Aureococcus culture (no human toxin) are school-feasible.",
+   "effectiveness": "Lab reductions needed >=0.75-1 g/L and >=72 h; in field bottles only Dasysiphonia at 3 g/L gave -30% and Gracilaria was not significant.",
+   "cost": "One culture plus seaweed is about $50-150.",
+   "time": "Reductions at 72 h.",
+   "environment": "pH 9.0 alone inhibited Aureococcus, so part of the effect is a pH side-effect, and Dasysiphonia is invasive."
+  }
+ },
+ {
+  "paper_id": "seaweed-17",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 4,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "The co-culture is simple, but the mechanism work used metabolomics and PSII analysis.",
+   "effectiveness": "Fresh thalli inhibited the fouling diatom dose-dependently (IC50 0.667 g/L at day 4, n=3), but the lowest extract dose was ineffective and the target is not a HAB.",
+   "cost": "Culture and seaweed are cheap; PSII and metabolomic work bring it to $150-500.",
+   "time": "IC50 was read on day 4.",
+   "environment": "Living seaweed is removable, though it releases taurine and isethionic acid."
+  }
+ },
+ {
+  "paper_id": "seaweed-18",
+  "reproducibility": 2,
+  "effectiveness": 1,
+  "cost": 2,
+  "time": 2,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "The lab part is simple, but the headline trial uses kelp lines on an oyster farm.",
+   "effectiveness": "Measures pH (7.44 to 8.42 at 1 g/L), not any reduction of HAB cells.",
+   "cost": "Kelp lines and farm monitoring are $500-5,000.",
+   "time": "Field trial ran one month.",
+   "environment": "Kelp raised pH (+0.15 in field), a co-benefit against acidification, and is harvested."
+  }
+ },
+ {
+  "paper_id": "seaweed-19",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 1,
+  "time": 1,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "Kelp longline farming at three Long Island Sound sites needs boats and permits.",
+   "effectiveness": "No phytoplankton or HAB outcome was measured; only nutrient extraction.",
+   "cost": "Longline farms cost over $5,000.",
+   "time": "One winter-spring growing season.",
+   "environment": "Kelp removes nitrogen and carbon, with no added material."
+  }
+ },
+ {
+  "paper_id": "seaweed-20",
+  "reproducibility": 4,
+  "effectiveness": 2,
+  "cost": 4,
+  "time": 3,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "The typical reviewed experiment is a simple seaweed-microalga co-culture in flasks.",
+   "effectiveness": "Lists confounders (nutrients, shading, pH, bacteria) and notes few studies held pH constant, so reported effects are hard to trust.",
+   "cost": "A typical co-culture study is about $50-150.",
+   "time": "Typical reviewed co-cultures last several days to ~2 weeks.",
+   "environment": "Seaweed is retrievable, but Ulva can push pH above 10."
+  }
+ }
+]

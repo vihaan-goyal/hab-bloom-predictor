@@ -1,0 +1,182 @@
+[
+  {
+    "paper_id": "copper-01",
+    "reproducibility": 1,
+    "effectiveness": 1,
+    "cost": 1,
+    "time": 1,
+    "environment": 1,
+    "reasons": {
+      "reproducibility": "58 years of copper treatment of five whole lakes; impossible to repeat.",
+      "effectiveness": "Algae recovered within 7-21 days and shifted toward blue-greens.",
+      "cost": "1.5 million kg CuSO4; far over $5,000.",
+      "time": "Decades of treatment.",
+      "environment": "Fish kills, copper-laden sediments, loss of macrophytes and invertebrates."
+    }
+  },
+  {
+    "paper_id": "copper-02",
+    "reproducibility": 3,
+    "effectiveness": 2,
+    "cost": 3,
+    "time": 2,
+    "environment": 1,
+    "reasons": {
+      "reproducibility": "Lab fluctuation test with ~400 Microcystis cultures; bench scale but needs a purchased strain and a sponsor.",
+      "effectiveness": "10 uM Cu2+ destroyed sensitive cells within days, but resistant mutants regrew in 32 of 198 set-1 cultures.",
+      "cost": "Culture, media and copper for hundreds of cultures cost about $150-500.",
+      "time": "Resistant cells took about four weeks to regrow under copper.",
+      "environment": "Copper persists and repeated dosing selects for resistant toxic Microcystis."
+    }
+  },
+  {
+    "paper_id": "copper-03",
+    "reproducibility": 3,
+    "effectiveness": 3,
+    "cost": 3,
+    "time": 3,
+    "environment": 1,
+    "reasons": {
+      "reproducibility": "85 L aquaria of lake water dosed with copper sulphate; doable with a sponsor for microscopy counts.",
+      "effectiveness": "Cyanobacteria were significantly suppressed (n=3), but no bloom was present (7.5% of biomass) and total biomass regrew after 5-8 days in spring.",
+      "cost": "Nine aquaria, copper sulphate and phytoplankton counting cost about $150-500.",
+      "time": "Biomass declined for 5-8 days and was followed over 27 days.",
+      "environment": "160 ug/L shifted the community to >85% Chlorophyceae and suppressed diatoms and other groups; copper persists."
+    }
+  },
+  {
+    "paper_id": "copper-04",
+    "reproducibility": 3,
+    "effectiveness": 3,
+    "cost": 3,
+    "time": 5,
+    "environment": 2,
+    "reasons": {
+      "reproducibility": "Bench Microcystis exposures with MC-LR analysis need ELISA.",
+      "effectiveness": "Cellular MC-LR and chl-a declined sigmoidally, but aqueous toxin rose; no percent given.",
+      "cost": "Culture, copper products, ELISA about $150-500.",
+      "time": "Day-1 measurements.",
+      "environment": "Copper added, and toxin moved into the water."
+    }
+  },
+  {
+    "paper_id": "copper-05",
+    "reproducibility": 3,
+    "effectiveness": 5,
+    "cost": 3,
+    "time": 5,
+    "environment": 1,
+    "reasons": {
+      "reproducibility": "Beakers of lake water with retail algaecides at label doses; bench scale but needs toxic bloom water and cell counts.",
+      "effectiveness": "Replicated (n=3) with controls: copper products cut cells 77-95% at 3 days (SeClear >90%).",
+      "cost": "Several algaecides, beakers and microscopy/fluorometry cost about $150-500.",
+      "time": "Reductions measured 3 days after treatment.",
+      "environment": "Copper persists in sediment and copper sulphate (SeClear) released ~91% of microcystin into water at day 1."
+    }
+  },
+  {
+    "paper_id": "copper-06",
+    "reproducibility": 2,
+    "effectiveness": 3,
+    "cost": 3,
+    "time": 5,
+    "environment": 2,
+    "reasons": {
+      "reproducibility": "Toxic K. brevis at bloom density; sponsor lab needed.",
+      "effectiveness": "0.31-0.34 mg Cu/L significantly decreased cells in 24 h; no percent given.",
+      "cost": "Culture and six algaecides about $150-500.",
+      "time": "24-72 h.",
+      "environment": "Copper persists; marine non-targets not tested."
+    }
+  },
+  {
+    "paper_id": "copper-07",
+    "reproducibility": 4,
+    "effectiveness": 1,
+    "cost": 4,
+    "time": 3,
+    "environment": 1,
+    "reasons": {
+      "reproducibility": "Standard Daphnia magna acute/chronic tests with retail copper algaecides; bench scale and well documented.",
+      "effectiveness": "No algae were treated; this is a non-target toxicity study only.",
+      "cost": "Daphnia cultures, algaecides and glassware cost about $50-150.",
+      "time": "Chronic endpoints needed 21 days (acute 48 h).",
+      "environment": "At 0.4-0.5 mg Cu/L, half the US label maximum, all products cut Daphnia population growth 29-49%."
+    }
+  },
+  {
+    "paper_id": "copper-08",
+    "reproducibility": 1,
+    "effectiveness": 3,
+    "cost": 1,
+    "time": 4,
+    "environment": 1,
+    "reasons": {
+      "reproducibility": "Review of in-lake and reservoir chemical treatments; field-scale with permits.",
+      "effectiveness": "Copper gave >90% Chl a declines at low-medium densities, but blooms rebounded (mean 14 days, up to six monthly doses).",
+      "cost": "Whole-lake algaecide applications cost far over $5,000.",
+      "time": "Algaecide declines appear within days, though rebounds follow in ~2 weeks.",
+      "environment": "Over 90% of copper ends up in sediment and fauna kills are reported after treatment."
+    }
+  },
+  {
+    "paper_id": "copper-09",
+    "reproducibility": 1,
+    "effectiveness": 2,
+    "cost": 1,
+    "time": 1,
+    "environment": 1,
+    "reasons": {
+      "reproducibility": "Tonnes of CuSO4 into a drinking-water reservoir; impossible to repeat.",
+      "effectiveness": "56% surface biomass drop, but blooms returned whenever treatment stopped.",
+      "cost": "~17,000 kg CuSO4; over $5,000.",
+      "time": "April-September season.",
+      "environment": "Tonnes of copper added to a drinking-water reservoir."
+    }
+  },
+  {
+    "paper_id": "copper-10",
+    "reproducibility": 3,
+    "effectiveness": 3,
+    "cost": 3,
+    "time": 4,
+    "environment": 1,
+    "reasons": {
+      "reproducibility": "1 L flasks with retail algaecides at label doses; bench scale but needs Microcystis culture and bloom water.",
+      "effectiveness": "Copper products significantly cut cells at 1x and 2x label (n=3), but 0.5x Captain did not differ from control and no percent reduction is given.",
+      "cost": "Algaecides, cultures and toxin analysis cost about $150-500.",
+      "time": "Endpoints read at 7 days.",
+      "environment": "Total microcystin often rose 2-10x and moved into the water; copper persists."
+    }
+  },
+  {
+    "paper_id": "copper-11",
+    "reproducibility": 3,
+    "effectiveness": 3,
+    "cost": 3,
+    "time": 3,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Dose-response of five oxidants on two purchased seawater cultures; sponsor-doable.",
+      "effectiveness": "PAA and PMS strong but brief; H2O2 sustained (EC50 6.67-7.08); peroxydisulfate negligible — mixed.",
+      "cost": "Two cultures and five oxidants about $150-500.",
+      "time": "14-day test.",
+      "environment": "Not assessed; oxidants short-lived (no copper used despite file)."
+    }
+  },
+  {
+    "paper_id": "copper-12",
+    "reproducibility": 3,
+    "effectiveness": 1,
+    "cost": 3,
+    "time": 5,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Microcystis culture with 10 mg/L PAA and toxin analysis; sponsor-doable.",
+      "effectiveness": "Authors judge PAA impractically slow at neutral/alkaline pH (3-6 h lag).",
+      "cost": "Culture, PAA, microcystin analysis about $150-500.",
+      "time": "Within 12 h.",
+      "environment": "<35% of MC-LR released after 12 h; low sudden-release risk; PAA degrades."
+    }
+  }
+]

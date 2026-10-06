@@ -1,0 +1,197 @@
+[
+  {
+    "paper_id": "barley_straw-01",
+    "reproducibility": 2,
+    "effectiveness": 2,
+    "cost": 2,
+    "time": 1,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Field trial in a disused UK canal with rotting straw; needs site access.",
+      "effectiveness": "Summary says straw reduced filamentous algae but no numbers or controls seen.",
+      "cost": "Canal-scale straw and monitoring ~$500-5,000.",
+      "time": "Duration not reported; rotting-straw effects take months.",
+      "environment": "Not reported; straw is biodegradable and retrievable."
+    }
+  },
+  {
+    "paper_id": "barley_straw-02",
+    "reproducibility": 1,
+    "effectiveness": 3,
+    "cost": 2,
+    "time": 1,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Treatment of a whole UK supply reservoir at 25-50 g/m3 straw.",
+      "effectiveness": "Productivity and cyanobacterial dominance 'significantly reduced', but numbers not seen.",
+      "cost": "Reservoir-scale straw and monitoring ~$500-5,000.",
+      "time": "Duration not reported; reservoir effects take months.",
+      "environment": "'No short-term deleterious impact' reported; more grazers."
+    }
+  },
+  {
+    "paper_id": "barley_straw-03",
+    "reproducibility": 1,
+    "effectiveness": 2,
+    "cost": 2,
+    "time": 1,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Moored bales in an upland Scottish loch.",
+      "effectiveness": "Cell numbers of main species affected but diversity not; no percentage.",
+      "cost": "Bales and monitoring ~$500-5,000.",
+      "time": "Release started 6-10 months after placement.",
+      "environment": "Bales served as invertebrate habitat; natural material."
+    }
+  },
+  {
+    "paper_id": "barley_straw-04",
+    "reproducibility": 2,
+    "effectiveness": 1,
+    "cost": 3,
+    "time": 2,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Replicated limnocorrals inside a 1 ha pond need field access.",
+      "effectiveness": "Negative: no consistent inhibition of filamentous or planktonic algae over 14 weeks.",
+      "cost": "Limnocorrals and straw ~$150-500.",
+      "time": "14 weeks.",
+      "environment": "Decomposing straw caused low oxygen inside bales; zooplankton unaffected."
+    }
+  },
+  {
+    "paper_id": "barley_straw-05",
+    "reproducibility": 2,
+    "effectiveness": 1,
+    "cost": 2,
+    "time": 1,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Lab bioassays are doable, but the reported field test used six 0.2-1.6 ha ponds.",
+      "effectiveness": "Pond biomass did not differ between 4 treated and 2 control ponds on any date; lab response was species-specific (Anabaena unaffected, several algae stimulated).",
+      "cost": "Straw is cheap, but repeating a six-pond season of sampling and Chl a work costs $500-5,000.",
+      "time": "Pond trial ran May-September 1998, a full season.",
+      "environment": "Straw is biodegradable, but liquor stimulated Selenastrum, Oscillatoria and Navicula."
+    }
+  },
+  {
+    "paper_id": "barley_straw-06",
+    "reproducibility": 4,
+    "effectiveness": 3,
+    "cost": 4,
+    "time": 2,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Flask bioassays with straw and two Microcystis strains; bench scale with a sponsor for cultures.",
+      "effectiveness": "Inhibition only after decomposition, only at 1-5 g/L (20-100x field rates), varied by strain and temperature, and sometimes in 2 of 3 replicates.",
+      "cost": "Straw, flasks and a purchased Microcystis culture cost roughly $50-150.",
+      "time": "Straw inhibition peaked only after ~1000 h (~6 weeks) of decomposition.",
+      "environment": "Plant material that degrades; effect appears to work via H2O2, with no persistent residue."
+    }
+  },
+  {
+    "paper_id": "barley_straw-07",
+    "reproducibility": 3,
+    "effectiveness": 1,
+    "cost": 3,
+    "time": 2,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Lab factorial culture test, but needs a purchased Prymnesium parvum culture and fish toxicity bioassays.",
+      "effectiveness": "No barley straw extract dose (even 50x label) reduced P. parvum growth, density or fish toxicity; low dose raised growth ~10% at 30 C.",
+      "cost": "Algal culture, commercial extract and fathead minnow tests cost about $150-500.",
+      "time": "Endpoints were read after 23 days of culture.",
+      "environment": "Extract is plant-derived with negligible nutrients, but it did nothing to lower fish toxicity."
+    }
+  },
+  {
+    "paper_id": "barley_straw-08",
+    "reproducibility": 1,
+    "effectiveness": 1,
+    "cost": 2,
+    "time": 1,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Whole 240,000 m3 pond with 3 tons of straw on floating structures; not school-repeatable.",
+      "effectiveness": "Aphanizomenon still dominated in June-July despite the standard 50 g/m2 dose; single pond with no control.",
+      "cost": "3 tons of straw, 150 rolls and anchored floating rafts cost $500-5,000.",
+      "time": "Monitored February-November 2010, a full season.",
+      "environment": "Pond stayed well oxygenated and straw is biodegradable."
+    }
+  },
+  {
+    "paper_id": "barley_straw-09",
+    "reproducibility": 5,
+    "effectiveness": 3,
+    "cost": 4,
+    "time": 2,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "15 aquaria with reservoir water, sediment and 20 g straw each is a classic school setup.",
+      "effectiveness": "Barley was only the comparison; camelina inhibited cyanobacteria more, and green algae were stimulated.",
+      "cost": "Aquaria and straw ~$50-150.",
+      "time": "8 weeks.",
+      "environment": "Polyphenols stimulated filamentous green algae."
+    }
+  },
+  {
+    "paper_id": "barley_straw-10",
+    "reproducibility": 5,
+    "effectiveness": 5,
+    "cost": 5,
+    "time": 2,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Flasks of lake water with 1% chopped barley straw; common materials and a clear bench protocol.",
+      "effectiveness": "Triplicate flasks: no algal growth with barley straw vs ~10x rise in controls, and decomposed-straw extract cut Microcystis Chl a ~91% at every dose.",
+      "cost": "Straw, lake water and flasks cost under $50.",
+      "time": "Effects were tracked over 28 days, and the straw must be decomposed first.",
+      "environment": "Biodegradable plant material, though wheat straw stimulated algae via nutrient leaching."
+    }
+  },
+  {
+    "paper_id": "barley_straw-11",
+    "reproducibility": 2,
+    "effectiveness": 5,
+    "cost": 2,
+    "time": 2,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Lab tubes are simple, but the headline trial used nine 300 m2 earthen ponds.",
+      "effectiveness": "Randomized pond trial (n=3 per arm): final Chl a 81-91% and cyanobacteria ~83% below controls, backed by lab bioassays.",
+      "cost": "Straw is cheap, but nine ponds over four months of sampling cost $500-5,000.",
+      "time": "Effect built up after a ~1-month lag and was clearest after 2-4 months.",
+      "environment": "Treated ponds had doubled nitrate and a community shift to diatoms; Hydrodictyon was stimulated in the lab."
+    }
+  },
+  {
+    "paper_id": "barley_straw-12",
+    "reproducibility": 4,
+    "effectiveness": 4,
+    "cost": 3,
+    "time": 4,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Flasks of Microcystis in natural water dosed with straw extract, counted by haemacytometer; bench scale.",
+      "effectiveness": "All doses significantly cut cells and 10 mg/L gave 98% inhibition by day 8, but only duplicate runs and weaker effect in nutrient-rich water.",
+      "cost": "Purchased Microcystis culture plus haemacytometer and flasks cost about $150-500.",
+      "time": "Inhibition was clear by day 7-8.",
+      "environment": "Plant extract with no persistent residue; non-target effects not assessed."
+    }
+  },
+  {
+    "paper_id": "barley_straw-13",
+    "reproducibility": 4,
+    "effectiveness": 2,
+    "cost": 5,
+    "time": 2,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Review; the typical straw-liquor flask test uses common materials at bench scale.",
+      "effectiveness": "Responses are species-dependent (inhibition, stimulation or none) and early field studies lacked controls and replication.",
+      "cost": "Straw and jars for a typical liquor test cost under $50.",
+      "time": "Straw must rot for weeks before inhibition, so results take one to three months.",
+      "environment": "Biodegradable straw; may also help via bacteria competing for P and improved clarity."
+    }
+  }
+]

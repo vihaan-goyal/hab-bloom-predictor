@@ -1,0 +1,182 @@
+[
+ {
+  "paper_id": "clay-01",
+  "reproducibility": 3,
+  "effectiveness": 4,
+  "cost": 3,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Typical reviewed lab work needs surface-modified clays that must be prepared or sourced with a sponsor.",
+   "effectiveness": "Modified clays remove HAB cells far better than natural clay and are widely used in China, but no percent is given.",
+   "cost": "Lab-scale modified clay trials are roughly $150-500.",
+   "time": "Flocculation removes cells within hours.",
+   "environment": "Clay is applied at 4-10 t/km^2, settles to the seabed and is never retrieved, despite the authors' no-harm claim."
+  }
+ },
+ {
+  "paper_id": "clay-02",
+  "reproducibility": 3,
+  "effectiveness": 4,
+  "cost": 3,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Typical reviewed test is a jar/settling-column test with natural clay, but the target cultures (K. brevis, Heterosigma) are purchased, toxin-producing organisms needing a sponsor.",
+   "effectiveness": "Removal was 97% in lab and 90% in settling columns but fell with scale and flow (68% Florida mesocosms, 41% in a 20 cm/s flume); Korean 90-99% field figures are uncontrolled secondhand reports.",
+   "cost": "Clay is cheap, but two HAB cultures plus media and a fluorometer or counting setup run about $150-500.",
+   "time": "Clay flocculation works within hours.",
+   "environment": "Clay persists on the bottom and cell mortality and benthic impacts were studied as concerns."
+  }
+ },
+ {
+  "paper_id": "clay-03",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Culture-tube screening of clays is simple, but G. breve is a brevetoxin producer.",
+   "effectiveness": "Twelve of 26 clays removed >90% of G. breve at 0.25 g/L in triplicate vs sinking-corrected controls, but no clay beat 40% on Aureococcus unless dispersed, and cells can regrow at low loadings.",
+   "cost": "Clays are cheap, but two CCMP cultures and in vivo fluorescence measurement put it at about $150-500.",
+   "time": "Removal within hours.",
+   "environment": "Clay persists and low doses may just move live cells to the bottom where they regrow."
+  }
+ },
+ {
+  "paper_id": "clay-04",
+  "reproducibility": 2,
+  "effectiveness": 5,
+  "cost": 2,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Needs 48 adult blue crabs in tanks, PAC-modified clay and toxic K. brevis.",
+   "effectiveness": "Randomised tanks (n = 12 per treatment) showed 95% cell removal at 24 h and 98% at 48 h vs untreated K. brevis, though settled cells were not shown dead.",
+   "cost": "Crabs, tanks and cultures are $500-5,000.",
+   "time": "95% removal at 24 h.",
+   "environment": "Clay dropped pH to 7.25 vs 7.86 for ~72 h and did not lower water-column brevetoxin; no crab harm was detected, but K. brevis alone killed only 1 of 12 crabs, so power was low, and clay stays in sediment."
+  }
+ },
+ {
+  "paper_id": "clay-05",
+  "reproducibility": 1,
+  "effectiveness": 5,
+  "cost": 1,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "1,400 L mesocosms with a Sarasota Bay benthic community are far beyond school scale.",
+   "effectiveness": "0.2 g/L MC II removed 57% at 8 h and 95% at 48 h in triplicate 1,400 L tanks against untreated K. brevis controls.",
+   "cost": "Mesocosms and toxin/chemistry analyses exceed $5,000.",
+   "time": "95% removal at 48 h.",
+   "environment": "No benthic harm in 72 h, but carbonate chemistry shifted, some brevetoxin analogs rose and clay persists."
+  }
+ },
+ {
+  "paper_id": "clay-06",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 2,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Needs PSP-toxic Alexandrium, a custom oxidized modified clay and toxin analysis.",
+   "effectiveness": "PMPS-modified kaolin removed >95% of A. pacificum from the water column within 3 h in triplicate vs control, but >70% of cells turned into pellicle cysts and some viable cells in the floc kept releasing toxin.",
+   "cost": "Kaolin and Oxone-type PMPS are cheap, but a toxic Alexandrium culture and PST analysis put it at $500-5,000.",
+   "time": "Toxin cut within 15 minutes.",
+   "environment": "Toxins shifted to less toxic analogues, but viable cells and cysts in the settled floc kept secreting toxin and the clay (about 20x the stated PMPS dose) stays in sediment."
+  }
+ },
+ {
+  "paper_id": "clay-07",
+  "reproducibility": 4,
+  "effectiveness": 3,
+  "cost": 4,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Jar tests with commercial clays and a Microcystis culture are a clear bench protocol.",
+   "effectiveness": "At 0.7 g/L six materials (talc 97.6%, kaolinite 93.9%, etc.) topped 90% in 8 h, but at 0.2 g/L only sepiolite did, 14 clays were <50%, cells were in saline not lake water and replication is not stated.",
+   "cost": "Clays and a culture are about $50-150.",
+   "time": "8-hour tests.",
+   "environment": "Clay-algae floc is left in the sediment; effects not assessed."
+  }
+ },
+ {
+  "paper_id": "clay-08",
+  "reproducibility": 3,
+  "effectiveness": 5,
+  "cost": 3,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Test tubes and 1 L cylinders are simple, but it needs bloom water, PAC and lanthanum-modified bentonite.",
+   "effectiveness": "PAC plus ballast removed 97 +/- 1.8% of chlorophyll-a, 20-60x lower than controls.",
+   "cost": "PAC and lanthanum bentonite plus bloom sampling are roughly $150-500.",
+   "time": "Results in 2 hours.",
+   "environment": "PAC raised extracellular microcystin 3.5-6x, bottom-layer toxin rose up to 8x, and lanthanum persists."
+  }
+ },
+ {
+  "paper_id": "clay-09",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 2,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Needs toxic K. mikimotoi, rotifers, mussels and tissue histology.",
+   "effectiveness": "0.1 g/L PAC-modified clay removed 81 ± 2.3% of K. mikimotoi in 2 h (triplicate), a single species and short settling test.",
+   "cost": "Organisms and histology are $500-5,000.",
+   "time": "The 81% removal was measured after 2 h of settling.",
+   "environment": "Little mussel impact at 0.1 g/L, but gill and digestive-gland damage at 0.5-1.0 g/L (one tank per dose), and clay-only rotifers died earlier (78 h vs 122 h)."
+  }
+ },
+ {
+  "paper_id": "clay-10",
+  "reproducibility": 3,
+  "effectiveness": 1,
+  "cost": 3,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Clearance-rate trials with loess, shellfish and Rhodomonas food are doable with a sponsor.",
+   "effectiveness": "Does not measure HAB removal at all; it tests clay harm to filter feeders.",
+   "cost": "Several shellfish species plus loess are roughly $150-500.",
+   "time": "Short-term feeding trials give results the same day.",
+   "environment": "Loess cut scallop clearance even at 0.01 g/L; authors urge 'extreme caution'."
+  }
+ },
+ {
+  "paper_id": "clay-11",
+  "reproducibility": 1,
+  "effectiveness": 2,
+  "cost": 2,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Needs a rainbow-trout gill cell line (RTgill-W1) and ichthyotoxic cultures.",
+   "effectiveness": "Loess, zeolite, PAC and PAC-clays did not reduce toxicity; only high-swelling bentonite removed 100% at 0.1 g/L.",
+   "cost": "Cell-line culture and assays are $500-5,000.",
+   "time": "Assay-scale results within a day.",
+   "environment": "Bentonite clay persists; efficacy and side-effects are clay-specific."
+  }
+ },
+ {
+  "paper_id": "clay-12",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 3,
+  "time": 4,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Typical reviewed trials use toxic Alexandrium with PAC-modified kaolinite.",
+   "effectiveness": "Lab trials report ~75-99% removal at 0.2-1 g/L, but authors doubt scaling to blooms of hundreds of km^2.",
+   "cost": "A lab trial with modified clay is roughly $150-500.",
+   "time": "Duration not reported; scored conservatively at 4-7 days.",
+   "environment": "Cyst formation rose to 17.9-24.6% with clay dose (seeding future blooms), and clay persists."
+  }
+ }
+]

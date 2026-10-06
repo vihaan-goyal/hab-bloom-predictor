@@ -1,0 +1,182 @@
+[
+ {
+  "paper_id": "oxidation-01",
+  "reproducibility": 3,
+  "effectiveness": 2,
+  "cost": 3,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Bench Microcystis with chlorine, ozone, KMnO4, CuSO4 and H2O2 needs an ozone generator and flow cytometry.",
+   "effectiveness": "Oxidants compromised membranes (chlorine >=88% in 1 min, ozone 90% in 5 min), but cell densities fell only ~22% (Cu) and ~15% (KMnO4), not at all with ozone or H2O2, and cells recovered after day 3.",
+   "cost": "Ozone generator and cell-integrity assays about $150-500.",
+   "time": "Lysis within minutes.",
+   "environment": "All oxidants lyse membranes and release toxins; CuSO4 arm adds metal."
+  }
+ },
+ {
+  "paper_id": "oxidation-02",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 2,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Needs an ozone generator, flow cytometry and GC analysis of chlorinated by-products.",
+   "effectiveness": "Preozonation at 0.4-2.0 mg/L left <=1% intact cells and raised coagulation removal from 56.7% to 80.2%, but tests were duplicates only and permanganate kept >97% of cells alive.",
+   "cost": "Ozone and DBP analysis $500-5,000.",
+   "time": "Immediate (bench preoxidation).",
+   "environment": "Dramatically increased chlorinated disinfection by-products; releases intracellular matter."
+  }
+ },
+ {
+  "paper_id": "oxidation-03",
+  "reproducibility": 1,
+  "effectiveness": 2,
+  "cost": 1,
+  "time": 3,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "2,000 L mesocosms plus a lake-embayment field trial with nanobubble ozone gear.",
+   "effectiveness": "Triplicate 2,000 L mesocosms cut chl a 98-99% at 7-15 mg O3/L, but on water diluted 60%; two 4-week lake trials showed no effect (within +/-10% of inlet).",
+   "cost": "Nanobubble ozone system and field trials well over $5,000.",
+   "time": "4-week field trials; mesocosm effect faster, scored 1-3 weeks.",
+   "environment": "Oxidized DOC; minimal reach; no reported harm but uncertain."
+  }
+ },
+ {
+  "paper_id": "oxidation-04",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 1,
+  "time": 4,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Replicated mesocosms with nanobubble ozone and label-rate algaecides.",
+   "effectiveness": "Non-target study on a green-algae-dominated community; phytoplankton fell similarly in all treatments, so no bloom-control effect is shown.",
+   "cost": "NBOT equipment and mesocosms over $5,000.",
+   "time": "One dose, followed for 120 h.",
+   "environment": "Zooplankton grew +120% in controls but only +10% under high-dose ozone (Bosmina reduced), versus -80% copper and -90% peroxide."
+  }
+ },
+ {
+  "paper_id": "oxidation-05",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 5,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Typical reviewed experiment is UV-C on a bench culture, doable with a sponsor's UV lamp.",
+   "effectiveness": "UV-C suppresses growth with dose (e.g. 80% Chattonella kill in 40 s from a boat), but species sensitivity varies and photoreactivation/dark repair cause regrowth; mostly static lab tests.",
+   "cost": "UV-C lamp and cultures about $150-500.",
+   "time": "UV effect seen within hours to days.",
+   "environment": "No chemical residue; non-target effects on other plankton not assessed."
+  }
+ },
+ {
+  "paper_id": "oxidation-06",
+  "reproducibility": 4,
+  "effectiveness": 5,
+  "cost": 3,
+  "time": 5,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Petri-dish UV-C exposure of a Microcystis culture with a germicidal lamp for 30 s-2 min is bench work, needing a sponsor for UV safety.",
+   "effectiveness": "All doses held cells below 25% of control by day 3 in triplicate; 150 mW s/cm2 killed all cells by day 7 while 37-75 stopped division (controls grew ~20x).",
+   "cost": "UV lamp, radiometer and culture about $150-500.",
+   "time": "Density fell below 25% of control by day 3.",
+   "environment": "No chemical added; micromolar H2O2 formed; residual effect from treated exudates."
+  }
+ },
+ {
+  "paper_id": "oxidation-07",
+  "reproducibility": 3,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Chlorinating Microcystis suspensions with microcystin analysis needs ELISA/LC-MS.",
+   "effectiveness": "Low chlorine lysed cells (63% K+ release) but released toxin faster than it degraded.",
+   "cost": "Chlorine is cheap but microcystin analysis is $150-500.",
+   "time": "Minutes to hours.",
+   "environment": "Low chlorine raised dissolved microcystin; by-product precursors released."
+  }
+ },
+ {
+  "paper_id": "oxidation-08",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 2,
+  "time": 5,
+  "environment": 2,
+  "reasons": {
+   "reproducibility": "Microelectrolysis with DSA, Pt and BDD anodes is specialist electrochemistry.",
+   "effectiveness": "Electrolysed seawater (hypochlorite ~5.8 mg/L) removed 81.7 +/- 2.3% (DSA) of Heterosigma, 64-70% with Pt/BDD, measured by fluorescence.",
+   "cost": "Pt and BDD anodes plus a high-current supply push it to $500-5,000.",
+   "time": "4-min treatment.",
+   "environment": "Effectively electro-chlorination; hypochlorite can rupture cells and release toxin, and no ecological tests were done."
+  }
+ },
+ {
+  "paper_id": "oxidation-09",
+  "reproducibility": 2,
+  "effectiveness": 3,
+  "cost": 3,
+  "time": 5,
+  "environment": 4,
+  "reasons": {
+   "reproducibility": "Synthesizing g-C3N4/TiO2 films needs a materials lab.",
+   "effectiveness": "64% net inactivation of K. mikimotoi in 60 min vs dark and light-only controls (light-only fluorescence recovered).",
+   "cost": "Photocatalyst synthesis and culture $150-500.",
+   "time": "60-min result.",
+   "environment": "Film is immobilised and reusable and cytotoxicity fell, but ~71% of intracellular organic matter was released."
+  }
+ },
+ {
+  "paper_id": "oxidation-10",
+  "reproducibility": 4,
+  "effectiveness": 4,
+  "cost": 3,
+  "time": 4,
+  "environment": 5,
+  "reasons": {
+   "reproducibility": "30 mL bottles with TiO2-coated glass beads under a 365 nm LED panel and cell counts are a bench protocol a sponsor can support.",
+   "effectiveness": "In triplicate, cells fell 35% from the start while both controls grew +213-226%, leaving treated density ~70% below controls; decline began only after 48 h.",
+   "cost": "LEDs, TiO2 and beads about $150-500.",
+   "time": "7-day result.",
+   "environment": "Immobilised catalyst is retrievable, and total microcystins fell 74% with released toxin fully destroyed."
+  }
+ },
+ {
+  "paper_id": "oxidation-11",
+  "reproducibility": 2,
+  "effectiveness": 4,
+  "cost": 2,
+  "time": 5,
+  "environment": 1,
+  "reasons": {
+   "reproducibility": "Ozonation of toxic Cochlodinium in seawater needs an ozone generator and cultures.",
+   "effectiveness": "Ozone >1 mg/L removed all viable C. polykrikoides within 300 s (5 mg/L in 100 s), but efficacy fell with cell density, humics, pH and temperature and replication is not stated.",
+   "cost": "Ozone generator and bromate analysis $500-5,000.",
+   "time": "1-2 min kill.",
+   "environment": "Ozonated seawater formed bromate at 278 ug/L at 5 mg/L ozone (WHO guideline 10 ug/L), negligible below 1 mg/L."
+  }
+ },
+ {
+  "paper_id": "oxidation-12",
+  "reproducibility": 1,
+  "effectiveness": 1,
+  "cost": 1,
+  "time": 4,
+  "environment": 3,
+  "reasons": {
+   "reproducibility": "Canal-scale ozone system processing 300 gal/min; industrial gear.",
+   "effectiveness": "No cell or toxin numbers published; press says it worked 'sort of'.",
+   "cost": "Industrial ozone system over $5,000.",
+   "time": "Ran five days.",
+   "environment": "Not reported beyond scale concerns; ozone by-products in seawater uncertain."
+  }
+ }
+]

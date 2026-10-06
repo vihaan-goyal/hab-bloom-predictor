@@ -1,3 +1,12 @@
+> **PARTLY SUPERSEDED.** Marked 2026-08-30.
+> **Superseded 2026-09-23: the LIS label was rebuilt on the lab scale (the CTD fluorometer read 2-3x high before 2016); current numbers in notes/S1_NUMBERS_SHEET.md, rationale in notes/LABEL_REBUILD_PREREG.md.** This log is on the **28-day** label and the
+> retired single-split framing. Its "LOCKED BASELINE (June 2026)" block — precision
+> 0.500 / recall 0.486 / AUC 0.815 at t=0.60 — is the inflated headline killed in
+> `PRECISION_PUSH_TRACKER.md`; the honest h21 value at t=0.60 is **0.175**. The demo
+> date (2022-07-19, A4, P=0.813) comes from the superseded XGBoost/aeration pipeline.
+> **Still useful and still cited:** the REJECTED FEATURES deltas (NOAA ASOS wind -4pp,
+> MODIS CHL -7.8pp, nutrient forward-fill -10.4pp). Quote those; not the baseline block.
+
 # Precision Optimization Log
 # HAB Bloom Predictor — LR C=0.05, 28-day forward label, train<=2019 / val 2020-2022 / test 2023-2025
 

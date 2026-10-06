@@ -39,81 +39,33 @@ from sklearn.metrics import (
 
 WESTERN_STATIONS = ['A4', 'B3', 'C1', '01', '02']
 MIN_TEST_BLOOMS = 3
-FIXED_THRESH = 0.60
+FIXED_THRESH = 0.47   # 28-day alert-budget threshold, chosen on validation (final_evaluation_threshold_sweep.py); was 0.60 (test-chosen, withdrawn 2026-09-28)
 
 # ---------------------------------------------------------------------------
 # 1. Load + merge sal_lag2/3/4
 # ---------------------------------------------------------------------------
-print("Loading data/hab_features_tidal.csv...")
-df = pd.read_csv('data/hab_features_tidal.csv')
-df['date'] = pd.to_datetime(df['date'])
-
-# sal_lag2/3/4 live in hab_features_daily.csv. The current tidal CSV already
-# carries them (added in commit ce9d02c), so we only merge any that are
-# genuinely absent -- merging present columns would create _x/_y suffixes and
-# silently drop them from the feature set, breaking the match with the
-# pipeline's global model.
-need = [c for c in ['sal_lag2', 'sal_lag3', 'sal_lag4'] if c not in df.columns]
-if need:
-    print(f"  Merging missing columns from hab_features_daily.csv: {need}")
-    hab_daily = pd.read_csv('data/hab_features_daily.csv')[
-        ['date', 'station_name'] + need
-    ]
-    hab_daily['date'] = pd.to_datetime(hab_daily['date'])
-    df = df.merge(hab_daily, on=['date', 'station_name'], how='left')
-else:
-    print("  sal_lag2/3/4 already present in tidal CSV (no merge needed).")
-
-print("Merging max_gust_3d from data/gust_features_daily.csv...")
-gust = pd.read_csv('data/gust_features_daily.csv', usecols=['date', 'max_gust_3d'])
-gust['date'] = pd.to_datetime(gust['date'])
-df = df.merge(gust, on='date', how='left')
-print(f"  max_gust_3d coverage: {df['max_gust_3d'].notna().mean() * 100:.1f}%")
-
-# ---------------------------------------------------------------------------
-# 2. Recompute rolling means + bloom_28d label (identical to all pipeline scripts)
-# ---------------------------------------------------------------------------
-for n, min_p in [(3, 2), (6, 3), (9, 5), (14, 7), (21, 10)]:
-    df[f'chl_roll{n}_mean'] = (
-        df.groupby('station_name')['Chlorophyll']
-          .transform(lambda x: x.rolling(n, min_periods=min_p).mean())
-    )
-
-df['chl_trend'] = (
-    df.groupby('station_name')['Chlorophyll']
-      .transform(lambda x: x.rolling(4, min_periods=3)
-                 .apply(lambda v: np.polyfit(range(len(v)), v, 1)[0]))
-)
-
-df['bloom_28d'] = 0
+# Label rebuild: same switches as src/models/locked_pipeline.py. Default is the
+# lab-consistent S1 file; HAB_FEATURES_CSV=data/hab_features_tidal.csv gives the original.
+import os
+_IN = os.environ.get('HAB_FEATURES_CSV', 'data/hab_features_tidal_S1.csv')
+_TAG = os.environ.get('HAB_OUT_TAG', '')
+# 2026-09-28: use the shared loader (adds percent_saturation, which this script used to drop,
+# so its "global" model is the same 35-feature model as the pipeline) and the shared label rule
+# (unresolved windows -> NaN).
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from locked_pipeline import load_locked_dataframe, FEATURES_ALL as _LOCKED_FEATURES  # noqa: E402
+from label_utils import forward_window_label  # noqa: E402
+df = load_locked_dataframe(_IN)
+df['bloom_28d'] = np.nan
 for station, grp in df.groupby('station_name'):
-    idx   = grp.index
-    dates = grp['date'].values
-    chl   = grp['Chlorophyll'].values
-    labels = np.zeros(len(grp), dtype=int)
-    for i in range(len(grp)):
-        mask = (dates > dates[i]) & (dates <= dates[i] + np.timedelta64(28, 'D'))
-        if mask.any() and (chl[mask] > 10).any():
-            labels[i] = 1
-    df.loc[idx, 'bloom_28d'] = labels
+    df.loc[grp.index, 'bloom_28d'] = forward_window_label(
+        grp['date'].values, grp['Chlorophyll'].values > 10, 28)
 
 # ---------------------------------------------------------------------------
 # 3. Feature set (same as pipeline)
 # ---------------------------------------------------------------------------
-FEATURES_ALL = [
-    'Chlorophyll', 'chl_lag1', 'chl_lag2', 'chl_lag3', 'chl_lag4',
-    'chl_roll3_mean', 'chl_roll6_mean', 'chl_roll9_mean', 'chl_trend',
-    'chl_roll14_mean', 'chl_roll21_mean',
-    'chl_anomaly', 'chl_climatology',
-    'do_lag1', 'temp_lag1', 'sal_lag1', 'sal_lag2', 'sal_lag3', 'sal_lag4',
-    'sea_water_temperature', 'sea_water_salinity',
-    'oxygen_concentration_in_sea_water',
-    'month', 'latitude_x', 'longitude_x',
-    'nox_lag2', 'dip_lag2', 'dip_change', 'dip_x_month',
-    'neighbor_chl3_mean', 'neighbor_chl3_lag1',
-    'tidal_gt_anom', 'tidal_msl_anom',
-    'max_gust_3d',
-]
+FEATURES_ALL = list(_LOCKED_FEATURES)
 FEATURES = [f for f in FEATURES_ALL if f in df.columns]
 missing = [f for f in FEATURES_ALL if f not in df.columns]
 if missing:
@@ -200,7 +152,7 @@ _p_te_all, _y_te_all = global_probs(test)
 print(f"Global model fitted on {len(Xg_tr):,} train rows "
       f"({yg_tr.mean()*100:.1f}% bloom). "
       f"Global test AUC = {roc_auc_score(_y_te_all, _p_te_all):.4f} "
-      f"(pipeline reference ~0.814).")
+      f"(pipeline reference 0.590, notes/S1_NUMBERS_SHEET.md).")
 
 # ---------------------------------------------------------------------------
 # 5. Per-station evaluation
@@ -260,7 +212,7 @@ for station in WESTERN_STATIONS:
     print(f"    @best : P={A_best['precision']:.3f} R={A_best['recall']:.3f} "
           f"F1={A_best['f1']:.3f} AUC={A_best['auc']:.3f} "
           f"(TP={A_best['tp']} FP={A_best['fp']} FN={A_best['fn']})")
-    print(f"    @0.60 : P={A_60['precision']:.3f} R={A_60['recall']:.3f} "
+    print(f"    @0.47 : P={A_60['precision']:.3f} R={A_60['recall']:.3f} "
           f"F1={A_60['f1']:.3f} "
           f"(TP={A_60['tp']} FP={A_60['fp']} FN={A_60['fn']})")
 
@@ -277,7 +229,7 @@ for station in WESTERN_STATIONS:
     print(f"    @best : P={B_best['precision']:.3f} R={B_best['recall']:.3f} "
           f"F1={B_best['f1']:.3f} AUC={B_best['auc']:.3f} "
           f"(TP={B_best['tp']} FP={B_best['fp']} FN={B_best['fn']})")
-    print(f"    @0.60 : P={B_60['precision']:.3f} R={B_60['recall']:.3f} "
+    print(f"    @0.47 : P={B_60['precision']:.3f} R={B_60['recall']:.3f} "
           f"F1={B_60['f1']:.3f} "
           f"(TP={B_60['tp']} FP={B_60['fp']} FN={B_60['fn']})")
 
@@ -321,8 +273,9 @@ out_tbl = (pd.DataFrame({'station': list(thr_map.keys()),
                          'threshold': list(thr_map.values())})
            .sort_values('station')
            .reset_index(drop=True))
-out_tbl.to_csv(THRESH_CSV, index=False)
-print(f"\nUpdated {THRESH_CSV}: Strategy B thresholds written for {updated} "
+_THRESH_OUT = THRESH_CSV.replace('.csv', f'{_TAG}.csv')
+out_tbl.to_csv(_THRESH_OUT, index=False)
+print(f"\nUpdated {_THRESH_OUT}: Strategy B thresholds written for {updated} "
       f"({len(out_tbl)} stations total).")
 
 # ---------------------------------------------------------------------------
@@ -351,9 +304,9 @@ print("CONFUSION MATRIX DETAIL  (test 2023-2025)")
 print("=" * 72)
 print(f"{'Stn':>4} {'n+':>3} {'n':>4} | "
       f"{'A@best':>8}  {'TP':>3} {'FP':>3} {'FN':>3} | "
-      f"{'A@0.60':>8}  {'TP':>3} {'FP':>3} {'FN':>3} | "
+      f"{'A@0.47':>8}  {'TP':>3} {'FP':>3} {'FN':>3} | "
       f"{'B@best':>8}  {'TP':>3} {'FP':>3} {'FN':>3} | "
-      f"{'B@0.60':>8}  {'TP':>3} {'FP':>3} {'FN':>3}")
+      f"{'B@0.47':>8}  {'TP':>3} {'FP':>3} {'FN':>3}")
 print("-" * 100)
 for st in WESTERN_STATIONS:
     if st not in per_station:
@@ -398,7 +351,7 @@ print("COMBINED ACROSS WESTERN STATIONS  (pooled test rows)")
 print("=" * 72)
 print(f"{'Approach':<42} {'Prec':>6} {'Rec':>6} {'F1':>6} {'TP':>4} {'FP':>4} {'FN':>4}")
 print("-" * 72)
-print(f"{'Global model @0.60 (western subset)':<42} "
+print(f"{'Global model @0.47 (western subset)':<42} "
       f"{g_60['precision']:>6.3f} {g_60['recall']:>6.3f} {g_60['f1']:>6.3f} "
       f"{g_60['tp']:>4} {g_60['fp']:>4} {g_60['fn']:>4}")
 print(f"{'Strategy A: station-only @ station-best t':<42} "
@@ -419,8 +372,8 @@ for st in WESTERN_STATIONS:
     if st not in per_station:
         continue
     r = per_station[st]
-    for strat, key in [('A@best', 'A_best'), ('A@0.60', 'A_60'),
-                       ('B@best', 'B_best'), ('B@0.60', 'B_60')]:
+    for strat, key in [('A@best', 'A_best'), ('A@0.47', 'A_60'),
+                       ('B@best', 'B_best'), ('B@0.47', 'B_60')]:
         m = r[key]
         if m['precision'] > 0.50 and m['recall'] > 0.40:
             hits.append((st, strat, m['precision'], m['recall'], m['f1']))
@@ -436,8 +389,8 @@ else:
         if st not in per_station:
             continue
         r = per_station[st]
-        for strat, key in [('A@best', 'A_best'), ('A@0.60', 'A_60'),
-                           ('B@best', 'B_best'), ('B@0.60', 'B_60')]:
+        for strat, key in [('A@best', 'A_best'), ('A@0.47', 'A_60'),
+                           ('B@best', 'B_best'), ('B@0.47', 'B_60')]:
             m = r[key]
             if m['recall'] > 0.40:
                 cand.append((m['precision'], st, strat, m['recall'], m['f1']))

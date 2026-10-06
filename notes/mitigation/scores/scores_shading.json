@@ -1,0 +1,182 @@
+[
+  {
+    "paper_id": "shading-01",
+    "reproducibility": 3,
+    "effectiveness": 1,
+    "cost": 4,
+    "time": 3,
+    "environment": 1,
+    "reasons": {
+      "reproducibility": "Desk life-cycle calculation of water footprint; repeatable with published data.",
+      "effectiveness": "Reports no algae or water-quality data; shade-ball algae control is called an open question.",
+      "cost": "A desk analysis costs little beyond reference data.",
+      "time": "Payback of 0.2-2.5 years is a calculation; no algae result.",
+      "environment": "96 million HDPE balls cost 0.25-2.9 million m3 of water to make and become plastic waste."
+    }
+  },
+  {
+    "paper_id": "shading-02",
+    "reproducibility": 3,
+    "effectiveness": 2,
+    "cost": 3,
+    "time": 3,
+    "environment": 2,
+    "reasons": {
+      "reproducibility": "Review; the cited pool test (covered vs uncovered pools) could be copied with a sponsor.",
+      "effectiveness": "Algae evidence is second-hand plus one unreplicated unpublished pool test measured by turbidity, not algal counts.",
+      "cost": "Shade balls or cloth for small pools cost about $150-500.",
+      "time": "The pool test compared water over June-September, but differences show within weeks.",
+      "environment": "Polyethylene objects leave recalcitrant residues, possible leachates and microplastics."
+    }
+  },
+  {
+    "paper_id": "shading-03",
+    "reproducibility": 1,
+    "effectiveness": 3,
+    "cost": 1,
+    "time": 1,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Suspended shade-cloth cover over a 2,400 m2 irrigation reservoir; not school-repeatable.",
+      "effectiveness": "Algal growth 'highly limited' under the cover, but one reservoir before/after with Chl a shown only in a figure and a farmer-reported 90% filter benefit.",
+      "cost": "Cover costs EUR 7.80/m2, about EUR 19,000 for the reservoir.",
+      "time": "Compared an uncovered year with a covered year.",
+      "environment": "Near-total light removal stops all photosynthesis; cover material is durable but removable."
+    }
+  },
+  {
+    "paper_id": "shading-04",
+    "reproducibility": 1,
+    "effectiveness": 1,
+    "cost": 1,
+    "time": 1,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Randomized trial in six 0.05 ha catfish ponds; needs aquaculture ponds.",
+      "effectiveness": "Chl a did not differ significantly (late season 117 vs 208 ug/L, P=0.14) and odorous cyanobacteria occurred in all six ponds.",
+      "cost": "Six production ponds with fish over a season cost far over $5,000.",
+      "time": "Monthly dye doses June-September, judged at October harvest.",
+      "environment": "Dye half-disappeared in ~10 days; no change in ammonia, nitrite or aeration."
+    }
+  },
+  {
+    "paper_id": "shading-05",
+    "reproducibility": 1,
+    "effectiveness": 1,
+    "cost": 1,
+    "time": 1,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Randomized trial in nine fertilized 0.04 ha fish ponds; needs aquaculture facilities.",
+      "effectiveness": "Opposite effect: mean Chl a was significantly higher in dyed ponds (86.5 and 75.5 vs 66.7 ug/L, P=0.02) and cyanobacteria unchanged.",
+      "cost": "Nine stocked production ponds cost far over $5,000.",
+      "time": "Ran 47 days to fingerling harvest.",
+      "environment": "Dye at 2.4x label rate showed no significant water-quality or fish harm; short-lived residue."
+    }
+  },
+  {
+    "paper_id": "shading-06",
+    "reproducibility": 1,
+    "effectiveness": 1,
+    "cost": 1,
+    "time": 1,
+    "environment": 2,
+    "reasons": {
+      "reproducibility": "Six catfish ponds treated from April to August.",
+      "effectiveness": "Chlorophyll-a and weed cover did not differ from controls and Secchi depth barely changed.",
+      "cost": "Six production ponds, effectively unobtainable.",
+      "time": "April-August season.",
+      "environment": "Dusk dissolved oxygen was lower in treated ponds, and dye persisted, fading ~0.75 mg/L per month."
+    }
+  },
+  {
+    "paper_id": "shading-07",
+    "reproducibility": 2,
+    "effectiveness": 1,
+    "cost": 2,
+    "time": 5,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "3-m deep outdoor tanks with reservoir water and light meters; a scaled-down version is possible but the tanks are specialist.",
+      "effectiveness": "Algae were not measured; only transparency fell ~10-30%, and 1 mg/L had no significant effect with clay turbidity.",
+      "cost": "Deep tanks and an underwater light sensor likely $500-5,000.",
+      "time": "Short-term trials.",
+      "environment": "Dye residue added; visibility stays above swimming standards at label rates."
+    }
+  },
+  {
+    "paper_id": "shading-08",
+    "reproducibility": 1,
+    "effectiveness": 1,
+    "cost": 1,
+    "time": 1,
+    "environment": 1,
+    "reasons": {
+      "reproducibility": "A 0.95 ha, 1 MWp floating solar array on a drinking-water reservoir; industrial scale.",
+      "effectiveness": "Plankton barely changed, and benthic cyanobacterial mats appeared under the array.",
+      "cost": "Floating PV installation costs far over $5,000.",
+      "time": "Changes were documented over 2.5 years.",
+      "environment": "Benthic mats made geosmin up to 20 ng/L, anatoxin-a and microcystins; Chara disappeared under the array."
+    }
+  },
+  {
+    "paper_id": "shading-09",
+    "reproducibility": 1,
+    "effectiveness": 3,
+    "cost": 1,
+    "time": 1,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "40% floating PV cover on 800-3,000 m2 aquaculture ponds at three institutes; not school-repeatable.",
+      "effectiveness": "Plankton biomass ~61-68% lower under FPV, but one pond per treatment per site (pseudoreplicated sampling).",
+      "cost": "Floating PV buoys on ponds cost far over $5,000.",
+      "time": "Compared over a full culture season.",
+      "environment": "FPV ponds had significantly higher ammonia and orthophosphate at some sites."
+    }
+  },
+  {
+    "paper_id": "shading-10",
+    "reproducibility": 2,
+    "effectiveness": 2,
+    "cost": 3,
+    "time": 2,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "1-D MyLake-FPV model runs; needs specialist modelling skills and reservoir data.",
+      "effectiveness": "Modelled only, with assumed wind/light effects; big Chl a cuts only at high cover and slow-tank siting could raise Chl a up to 4%.",
+      "cost": "Model software is free but site data and setup take specialist time.",
+      "time": "A real FPV effect on peak chlorophyll would take a growing season to appear, not days.",
+      "environment": "Modelled cooling and possible shade-tolerant species shifts."
+    }
+  },
+  {
+    "paper_id": "shading-11",
+    "reproducibility": 2,
+    "effectiveness": 2,
+    "cost": 3,
+    "time": 2,
+    "environment": 2,
+    "reasons": {
+      "reproducibility": "3-D ELCD model plus field sensors on a reservoir demo; specialist tools.",
+      "effectiveness": "The 30% Chl a cut under panels is purely modelled; the 1 ha demo measured no chlorophyll.",
+      "cost": "Modelling and sonde data collection cost roughly $150-500 to repeat.",
+      "time": "A real change under FPV would take a season to show.",
+      "environment": "Model predicts DO down up to 50% and TP up 30% under panels."
+    }
+  },
+  {
+    "paper_id": "shading-12",
+    "reproducibility": 2,
+    "effectiveness": 2,
+    "cost": 3,
+    "time": 2,
+    "environment": 5,
+    "reasons": {
+      "reproducibility": "Needs purchased P. rubescens strains and single-filament picking under a microscope.",
+      "effectiveness": "Darkness killed filaments slowly and unevenly: 0% to >50% viable at 58 days, and the hardiest strain needed 111 days.",
+      "cost": "Strains, tubes and a cold incubator cost about $150-500.",
+      "time": "Viability differences took about two months (50% mortality ~70 days).",
+      "environment": "Darkness adds nothing to the water."
+    }
+  }
+]

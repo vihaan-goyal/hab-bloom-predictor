@@ -4,3 +4,13 @@ __pycache__/
 *.pyc
 .env
 !figures/
+deep_wq.csv
+.agents/
+.claude/skills/
+skills-lock.json
+
+# alerter link run logs (local)
+hardware/alerter_uno/logs/
+
+# CSEF registration forms: personal contact details (local only)
+forms/

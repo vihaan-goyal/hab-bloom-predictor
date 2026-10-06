@@ -1,0 +1,350 @@
+{
+ "algicidal_microbes-01": {
+  "status": "full_read",
+  "source_url": "https://europepmc.org/article/PMC/PMC9022068",
+  "updates": {
+   "env_effects": "Review stresses that 'environmentally neutral' claims are untested; direct dispersal of live bacteria raises biosafety concerns, so immobilized or product-based deployment is proposed. Field evidence is limited to Pseudomonas fluorescens SK09 in river enclosures, with inconsistent results."
+  },
+  "key_details": "Narrative review of algicidal bacteria (specificity, algicidal compounds, mechanisms, application strategies). Its table of application studies is almost entirely laboratory work. The only field applications to date all used Pseudomonas fluorescens HYK0210-SK09 in river enclosures against the diatom Stephanodiscus hantzschii; strong lab and indoor-mesocosm effects gave inconsistent results in the field. Authors cite temperature, the high bacterial densities required, grazing by protists, pH and nutrients as reasons for field failure. No new quantitative data.",
+  "discrepancy": "Record is broadly right; it understates how thin the field evidence is (a single bacterial strain in river enclosures, with inconsistent results)."
+ },
+ "algicidal_microbes-06": {
+  "status": "full_read",
+  "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC92399/",
+  "updates": {
+   "scale": "Field time series at surface and bottom in northern Hiroshima Bay (May-July 1998) plus cross-infection tests of H. akashiwo isolates against co-occurring HaV clones",
+   "result": "H. akashiwo reached 6.5 x 10^3 to 1.4 x 10^5 cells/mL (up to 90% of phytoplankton) and crashed as HaV rose, but persisted at 10^1-10^2 cells/mL; mean susceptibility of isolates fell from 59% (bloom) to 18% (post-bloom) of HaV clones, then recovered to 61% as resistant cells were displaced."
+  },
+  "key_details": "Observational field study of a natural bloom, not a control treatment; no virus was added and there is no untreated control. Host isolates from three periods were each challenged with the co-occurring HaV clones (lysis checked for 10-14 days). Isolate susceptibility during the post-bloom period II (18% +/- 23%) was significantly lower than in periods I and III (59% +/- 40%, 61% +/- 37%; Kruskal-Wallis P < 0.001). The bloom collapse coincided with HaV increase, but a resistant residual population of 10^1-10^2 cells/mL survived. Causation of the crash by virus is inferred from correlation.",
+  "discrepancy": "None material; record lacked the densities and the susceptibility percentages, and should note that virus causation is correlational (no manipulation)."
+ },
+ "algicidal_microbes-09": {
+  "status": "full_read",
+  "source_url": "https://europepmc.org/article/PMC/PMC9229316",
+  "updates": {
+   "env_effects": "High host specificity (many phages infect only one strain), so mixed blooms and resistant strains limit control; dosing is not standardized (many studies add an undefined 'cyanophage concentrate' at 10% v/v); propagation in the field depends on nutrients, light and temperature and is untested."
+  },
+  "key_details": "Literature review of cyanophage biology and cyanophage-host relationships for seven cyanoHAB genera; no new experiments. It reports no field or mesocosm cyanophage control trials; the evidence base is lab infection assays. Authors note that 'cyanophage concentrate' added at 10% v/v has become an accepted but imprecise dosing standard and call for standardized dose-response work before field use. Examples: Ma-LMM01 infects only one M. aeruginosa strain; PaV-LD from Lake Donghu infected only P. agardhii isolates from the same lake.",
+  "discrepancy": "Record implies minimal non-target impacts as an advantage; the full text frames extreme specificity and lack of dosing standards as major barriers, with no field evidence at all."
+ },
+ "algicidal_microbes-12": {
+  "status": "full_read",
+  "source_url": "https://europepmc.org/article/PMC/PMC5934417",
+  "updates": {
+   "organism": "White-rot fungus Trametes versicolor F21a vs Microcystis aeruginosa PCC7806",
+   "dose": "Fungal mycelia pre-grown 5 days (from a 7 mm plug in 15 mL potato medium) transferred into 100 mL of algal culture",
+   "duration": "30 h co-culture",
+   "result": "About 85% of M. aeruginosa cells were eliminated within 30 h and chlorophyll-a fell to one sixth of the initial content; fungal DEGs rose from 193 to 742 over 0-30 h. Commercial decomposition enzymes alone only partially inhibited algal growth.",
+   "effect_pct": 85
+  },
+  "key_details": "Lab co-culture of T. versicolor F21a mycelia with M. aeruginosa PCC7806 in 250 mL flasks (25 C, 90 umol photons m-2 s-1, 120 rpm). Chl-a declined gradually over the first 12 h to one sixth of initial after 30 h; about 85% of algal cells eliminated; fungal biomass rose about 12% (p < 0.05). RNA-Seq with two biological replicates per time point; qPCR validation with three. Main purpose is transcriptomic mechanism, not control efficacy; a single lab strain at flask scale with no environmental tests.",
+  "discrepancy": "Record said the target was generic 'blue algae' and gave no efficacy number; full text gives M. aeruginosa PCC7806 and 85% cell removal in 30 h."
+ },
+ "barley_straw-08": {
+  "status": "full_read",
+  "source_url": "https://journals.vilniustech.lt/index.php/JEELM/article/download/1407/1118",
+  "updates": {
+   "scale": "Whole hypertrophic pond, Northern France (240,000 m3, mean depth 1.92 m, ~39 d flushing), five sampling stations, single treated pond with no untreated control",
+   "dose": "3 tons barley straw (50 g/m2, CEH 2004 guidance) in 150 loose rolls on five floating anchored structures with 50 buoys to keep it aerobic; added early May 2010",
+   "result": "Barley straw did not prevent cyanobacteria: Aphanizomenon dominated the phytoplankton on 4 June, 17 July and 22 July 2010 (with an A. flos-aquae scum on 4 June), and Chl a ranged 8-83 ug/L. Authors judged it not appropriate for this pond type."
+  },
+  "key_details": "Before/during monitoring of one treated pond from February to November 2010 with water and sediment chemistry at five stations; no control pond, so the design cannot separate treatment from seasonal succession. Straw dose followed the UK CEH recommendation (50 g/m2, 3 t total) and was kept floating and aerobic. Cyanobacteria (Aphanizomenon, later Aphanocapsa, Anabaena) still dominated in summer; nitrate limitation and sediment P release are discussed as drivers. Pond was well oxygenated through all seasons.",
+  "discrepancy": "Dose was missing in the record (it is the standard 50 g/m2); record should state the design lacks any untreated control."
+ },
+ "biomanipulation-09": {
+  "status": "full_read",
+  "source_url": "https://www.the-innovation.org/data/article/export-pdf?id=6564a9791fbb55000b0a3282",
+  "updates": {
+   "dose": "Silver and bighead carp stocking; enclosure trials used roughly 8-480 g/m3; in Lake Donghu the 2022 release was doubled vs 2021 (silver:bighead 2:1), raising standing stock to 82 g/m3 (March 2022) and 192 g/m3 (September 2022)",
+   "env_effects": "Several enclosure and pond studies were negative (e.g. Villerest Reservoir: cyanobacteria increased at 8-32 g/m3 silver carp; bighead carp in Polish ponds raised filamentous Anabaena 4-fold to 70-fold). Carp handle colonial Microcystis better than filamentous cyanobacteria; in Donghu TN, TP and NH4+ fell (1.04 to 0.75, 0.13 to 0.10, 0.15 to 0.12 mg/L) despite over 4x more fish."
+  },
+  "key_details": "Review by the Lake Donghu (Institute of Hydrobiology) group of 42 enclosure, pond and whole-lake experiments; 88% showed substantial cyanobacteria reductions by filter-feeding carp. Most enclosure trials had only 2-3 replicates per treatment in small enclosures (e.g. 6-100 m2); examples include 91% reduction of M. aeruginosa in Dongzhou Reservoir enclosures and 60-93% Microcystis reduction within 3-7 days in an Indian lake. The Donghu whole-lake case is a single before/after comparison (bloom in 2021 after fish stock declined since 2004; no bloom in 2022 after doubling the fish release and limiting fishing to winter) with no control lake. Authors also report commercial fishing profit from the stock.",
+  "discrepancy": "Record does not mention that the review itself lists negative trials (fish raising cyanobacteria, especially filamentous forms and at low stocking), or that the Donghu result is an uncontrolled one-year before/after comparison by the proponents' own group."
+ },
+ "biomanipulation-10": {
+  "status": "full_read",
+  "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC91088/",
+  "updates": {
+   "dose": "M. aeruginosa PCC7806 wild type vs mcy- knockout mutant at 20 mm3/L biovolume (reference strain HUB 5-3 for ingestion); 14C-labelled cells for ingestion",
+   "duration": "Ingestion assays (repeated 7-9 times); 5-day life-table survival tests (4 replicates) at 20 C",
+   "result": "Wild-type PCC7806 killed D. galeata with a time to 50% mortality of 1.2-2.0 days, while no animals died on the microcystin-free mutant. Both variants were ingested at the same low rate, 75% below the harmless reference strain HUB 5-3."
+  },
+  "key_details": "Lab test separating toxicity from feeding inhibition using a microcystin-synthetase knockout of the same strain. Ingestion measured by 14C-labelled cells (n = 7 for PCC7806 variants, n = 9 for HUB 5-3). Survival compared against a no-food control in four repeat experiments; wild type differed from starvation (log rank P < 0.001) and mutant animals survived better than starved controls (P < 0.025). Daphnia on wild type became inactive after about 5 h. Single strain and single Daphnia clone.",
+  "discrepancy": "None material; adds the LT50 of 1.2-2.0 days and the 75% ingestion reduction."
+ },
+ "nutrient_reduction-01": {
+  "status": "full_read",
+  "source_url": "https://link.springer.com/content/pdf/10.1007/s12237-009-9158-8.pdf",
+  "updates": {},
+  "key_details": "Perspective essay by H.W. Paerl, not a new study. Main evidence is in situ nutrient-addition bioassays along the Neuse River Estuary, NC (N forms at 140 ug N/L, phosphate at 40 ug P/L, at 10, 25 and 50 km downstream) showing N limitation strengthening downstream of the chlorophyll maximum while P was sufficient. Argues against the Schindler et al. (2008) P-only view for estuarine and coastal systems and calls for dual N and P reductions. No treatment effect sizes.",
+  "discrepancy": "None; record should note it is an opinion/perspective piece supported mainly by bioassays from one estuary."
+ },
+ "nutrient_reduction-05": {
+  "status": "full_read",
+  "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2491484/",
+  "updates": {
+   "dose": "Lake 227 fertilizer P held near 20-32 kg/yr throughout; N cut from 308 kg/yr (1970-74, N:P 12.4) to 110 kg/yr (1975-89, N:P ~4.7) to 0 (1990-2005)",
+   "result": "After N fertilizer was cut and then stopped, N-fixing cyanobacteria (Aphanizomenon schindlerii) dominated and made up the N deficit; mean phytoplankton biomass (9,306 mg/m3) did not differ significantly among N:P periods, and annual chlorophyll a stayed 17-59 ug/L."
+  },
+  "key_details": "Single whole-lake experiment (Lake 227, ELA, Ontario) fertilized 1969-2005 with nearly constant P while N input was reduced stepwise to zero; no replicate lake. N fixation (from heterocyst counts) was negligible before 1975 and rose after N:P was lowered. Biomass ranged 1,502-39,000 mg/m3 with no significant difference among periods; chlorophyll per unit biomass fell when N was scarce, so chlorophyll alone can mislead. Pike were added in 1993-1994 (food-web manipulation superimposed).",
+  "discrepancy": "None material; record lacked the load figures and the finding that biomass did not differ among N:P periods."
+ },
+ "nutrient_reduction-07": {
+  "status": "full_read",
+  "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5889635/",
+  "updates": {
+   "result": "Water-column N fell on average 23% and P 8% since 1984; SAV cover rose 316%, from 7,878 ha (1984) to 24,874 ha (2015). Structural equation models link lower nutrients to SAV recovery, with P acting via phytoplankton chlorophyll-a and N acting directly (about 3x stronger than the chlorophyll/clarity path)."
+  },
+  "key_details": "Observational analysis of 30 years of Chesapeake Bay aerial SAV surveys and water-quality monitoring using structural equation models (120 subestuaries coupled to watershed loads, plus a bay-wide model). No experimental control; attribution to management is by model. Outcome is seagrass cover, not phytoplankton or HAB abundance; chlorophyll-a appears only as an intermediate path from phosphorus.",
+  "discrepancy": "Record implies phytoplankton outcomes; the paper reports none directly (target is SAV). Adds that P fell only 8% and that the direct N effect outweighed the chlorophyll path."
+ },
+ "nutrient_reduction-08": {
+  "status": "full_read",
+  "source_url": "https://link.springer.com/content/pdf/10.1007/s12237-015-9980-0.pdf",
+  "updates": {
+   "result": "Land-based N inputs fell ~50% and P 56% since 1990; annual mean chlorophyll a fell from a peak of 7 ug/L (1985) to ~2.5 ug/L, and Secchi depth rose only from ~4.2 m (early 1980s) to 5.1 m (2013). Bottom-water oxygen did not improve.",
+   "effect_pct": 64
+  },
+  "key_details": "Observational 25-year synthesis of Danish national monitoring data (nutrient loads, concentrations, chlorophyll a, Secchi, macroalgae, eelgrass, benthos, oxygen); no control area. Chlorophyll decline in spring followed P reductions; the continued decline since the mid-1990s mainly followed N reductions (May-October N limitation). Macroalgal cover rose 0.69%/yr and eelgrass spread deeper only in the last 5 years. Oxygen gains were offset by more frequent stratification and warming. effect_pct 64 is computed from the 7 to ~2.5 ug/L chlorophyll decline, not stated by the authors.",
+  "discrepancy": "Record had no phytoplankton magnitude; full text gives chlorophyll a 7 to ~2.5 ug/L. Secchi did not improve after 1990 despite the chlorophyll decline."
+ },
+ "nutrient_reduction-11": {
+  "status": "full_read",
+  "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5543702/",
+  "updates": {},
+  "key_details": "Consensus paper from a 2003 US EPA-sponsored roundtable; review, no new data. Case examples: Seto Inland Sea red tides rose sevenfold (1965-1976), then fell to less than 30% of the peak frequency (>300 blooms/yr) after the 1973 law halving loads; phosphate removal from sewage on a Chesapeake Bay tributary reduced Microcystis blooms; Long Island brown tides nearly disappeared in the mid-2000s alongside N reductions. Correlational evidence only.",
+  "discrepancy": "None; record could add the Seto Inland Sea example (red tides fell to <30% of a >300/yr peak after loads were halved)."
+ },
+ "copper-07": {
+  "status": "full_read",
+  "source_url": "https://edepot.wur.nl/573930",
+  "updates": {
+   "dose": "Measured-stock dilutions of CuSO4.5H2O, Captain XTR, SeClear and Lake Guard Blue; chronic top doses set at the acute EC10 (about 0.4-0.5 mg Cu/L)",
+   "result": "Acute 48 h EC50s ranged 0.50 (Lake Guard Blue) to 0.60 (Captain XTR) mg Cu/L (CuSO4 0.521). In 21 d tests the top doses (0.4-0.5 mg Cu/L) cut population growth rate by 29% (CuSO4), 49% (Captain XTR), 48% (SeClear) and 37% (Lake Guard Blue), and SeClear's top dose left only 60% survival.",
+   "env_effects": "All four products cut Daphnia reproduction and growth at 0.4-0.5 mg Cu/L, below the USEPA-allowed 1 mg Cu/L (about twice the acute EC50). Test medium contained EDTA, which chelated most copper, so field toxicity could differ."
+  },
+  "key_details": "Lab ecotoxicity on Daphnia magna only (no algae treated). Acute tests: triplicates of five neonates per concentration, 48 h immobility. Chronic tests: 10 single-animal replicates per concentration for 21 days, fed Scenedesmus; stock Cu verified by ICP-OES. First brood was delayed 1.8-3.2 days at the highest doses; reproduction EC50s 0.274 (SeClear) to 0.498 (Captain XTR) mg Cu/L. Authors still see copper as an emergency option where nutrient control is absent.",
+  "discrepancy": "Record is correct; adds that effects occur at about half the US label maximum (1 mg Cu/L) and the EDTA-medium caveat."
+ },
+ "shading-08": {
+  "status": "full_read",
+  "source_url": "https://edepot.wur.nl/693441",
+  "updates": {
+   "scale": "Kralingen drinking-water storage reservoir, Rotterdam (shallow); sun-tracking FPV of 0.95 ha (24% of surface, 1.00 MWp) installed April 2020; under-array site compared with open water ~35 m away, diving surveys before (2019) and after",
+   "duration": "Up to 2.5 years after installation (2020-2022)",
+   "result": "Direct light under the array peaked at 23% of open water in summer; benthic cyanobacterial mats (Gomphosphaeria, then Phormidium) developed under the FPV while Chara and other macrophytes disappeared there. Planktonic phytoplankton composition was generally very similar under the array and in open water.",
+   "env_effects": "Benthic mats produced geosmin up to 20 ng/L (odour threshold ~5 ng/L), 2-MIB, anatoxin-a (0.014 ug/g) and microcystins (8.8 ug/g wet weight in 2022), though not problematic for the treatment plant; loss of Chara; heavy Dreissena biofouling on floats; DO and temperature little affected."
+  },
+  "key_details": "Field monitoring of one reservoir with a single FPV array (no replicate reservoirs); comparisons are before/after plus under-array vs open-water points. Light modelling explained the shift: bottom light under the array fell below the ~3% surface level assumed for Chara but stayed above the 1% level for cyanobacteria. No benthic cyanobacterial mats were found in July 2019 before installation. Overall phytoplankton biovolume decreased but cyanobacteria became relatively more abundant over time. Evides (the utility) authors.",
+  "discrepancy": "None material; record lacked the toxin and odour numbers and the fact that planktonic phytoplankton hardly changed."
+ },
+ "shading-10": {
+  "status": "full_read",
+  "source_url": "https://eprints.lancs.ac.uk/id/eprint/177114/1/Manuscript_JEM_revised_clean_2.pdf",
+  "updates": {
+   "scale": "MyLake-FPV 1-D model of a UK two-tank reservoir (existing 4.5% FPV array), 0-100% extra coverage in 10% steps, three siting scenarios (fast-flowing tank, central, slow-flowing tank), with uncertainty (GLUE-style) ensembles",
+   "result": "Peak total chlorophyll-a declined roughly exponentially with coverage: in Scenario-Fast by 10.21 ug/L at 10% cover, 20.40 at 50% and 22.09 at 90% (negligible chl-a above 60% cover); Scenario-Central by 4.01, 19.69 and 22.01 ug/L. With the slow-tank siting, up to 30% cover gave anything from a 19% decrease to a 4% increase."
+  },
+  "key_details": "Modelling only, no field validation of FPV effects (no published values existed for FPV effects on wind or light, so they were assumed). Phytoplankton simulated as three functional groups (diatoms, cyanobacteria, greens; grazed/ungrazed). FPV mostly cooled surface water (Tmax -0.55 C per 10% cover up to 70% in Scenario-Fast), with a few warmer days at low cover. Total cyanobacteria biomass fell with coverage, but authors warn functional-group aggregation could miss shade-tolerant species becoming dominant.",
+  "discrepancy": "Record gave no magnitudes; full text shows large chlorophyll cuts only at high coverage and possible increases at low coverage in one siting."
+ },
+ "shading-11": {
+  "status": "full_read",
+  "source_url": "https://link.springer.com/content/pdf/10.1007/s10201-022-00698-y.pdf",
+  "updates": {
+   "scale": "Tengeh Reservoir, Singapore: field sampling at 6 sites (May 2015-May 2017), 6 m2 mock-up and 1 ha demonstration FPV (2017) for temperature, pH, DO and radiation; 3-D ELCD model predicting a hypothetical 30 MW (42 ha) array",
+   "env_effects": "Model: DO under panels down up to 50%, TOC down 15%, TN +10% and TP +30%, mixing energy 9e-7 to 7e-7 W/kg. Measured under the 1 ha demo: DO 7.96 mg/L (105% sat.) vs 8.48 mg/L (111%) in open water, higher pH, surface water +0.32 C on average."
+  },
+  "key_details": "The 30% chlorophyll-a decline is a model prediction for the hypothetical 42 ha installation, not a measurement; the field demo measured physical/chemical variables only (no chlorophyll comparison reported). Model was calibrated/validated against the 2015-2017 field sampling. Effects were confined to the area under the panels. Tropical reservoir setting.",
+  "discrepancy": "Record said the model was 'validated with a 1 ha demo'; the model was validated against 2015-2017 field sampling, and the demo supplied temperature, radiation, pH and DO only, so the 30% chlorophyll cut is purely modelled."
+ },
+ "oxidation-10": {
+  "status": "full_read",
+  "source_url": "https://pureadmin.qub.ac.uk/ws/files/215429115/STOTEN_2020_745_141154_Final_Accepted_Version.pdf",
+  "updates": {
+   "scale": "Bench: 30 mL cell suspension in 40 mL bottles, triplicates, with UV-only and TiO2-without-UV controls",
+   "dose": "700 mg TiO2 (P25)-coated foamed recycled-glass beads (0.2% w/v TiO2) in mesh pods; 90-LED 365 nm panel, 2.8 umol photons m-2 s-1 (67.5 mW total output) at 100 mm; air sparged",
+   "result": "Cell density fell from 15 to 10 x 10^6 cells/mL (35%) in 7 days while both controls grew to 32-34 x 10^6 cells/mL (+213-226%); intracellular microcystins fell 49% (0.69 to 0.35 ug/mL), total microcystin removal was 74%, and released microcystins were fully removed."
+  },
+  "key_details": "Lab test with M. aeruginosa PCC7813 at a very high start density (15 x 10^6 cells/mL) in artificial freshwater. Three treatments in triplicate: TiO2 beads + UV, UV only, TiO2 beads under ambient light only; UV-only and TiO2-only controls did not differ (p > 0.05). Decline began after 48 h; biovolume was 66% of the TiO2 control. Low-energy UV-LEDs are not germicidal alone. No in-reservoir testing; the in-reservoir unit is a proposal.",
+  "discrepancy": "Record called the scale a 'prototype in-reservoir unit'; it was 30 mL bottles. The 35% is the drop from the starting density; relative to controls the treated density was about 70% lower (10 vs 32-34 x 10^6 cells/mL)."
+ },
+ "ultrasound-04": {
+  "status": "full_read",
+  "source_url": "https://link.springer.com/content/pdf/10.1007/s10452-015-9563-y.pdf",
+  "updates": {
+   "result": "Field evidence for ultrasound is weak: in a 365,000 m3 reservoir with 10 x 2 x 100 W (200 kHz) units, chl-a was 81 (+/-56) ug/L before vs 74 (+/-42) ug/L during treatment, and a 9,000 m3 pond study (630 W, 22 kHz) showed no difference by the end. Field intensities (~5.5e-9 to 7e-8 W/mL) are orders of magnitude below lab intensities, and commercial 20-200 kHz units cannot resonate 60-70 nm gas vesicles."
+  },
+  "key_details": "Critical review (Lurling et al., Aquatic Ecology 2016) of effective microorganisms, golden algae, plant extracts, ultrasound and mixing of non-stratifying waters. For ultrasound it re-analyses published field studies (data digitized from figures) and applies resonance physics to gas vesicle sizes. Cites controlled lab tests where commercial transducers (20, 28, 44 kHz, 0.7 W) failed to control Anabaena, Cylindrospermopsis, Microcystis or Scenedesmus even in 800 mL. Concludes these end-of-pipe measures treat symptoms and none is a widely applicable solution.",
+  "discrepancy": "None; record lacked the specific field re-analysis numbers."
+ },
+ "shading-02": {
+  "status": "full_read",
+  "source_url": "http://hdl.handle.net/10045/118897",
+  "updates": {
+   "result": "Review: studies of suspended shade-cloth covers report evaporation cuts close to 85% and a 'dramatic limitation of algal blooms', but the evidence base is scarce; the author's own unpublished pool test (one uncovered vs two shade-ball pools, June-September 2014) found clearer water and up to 90% less evaporation under shade balls.",
+   "env_effects": "Polyethylene shade objects: high energy and raw-material cost, recalcitrant residues, possible endocrine-disrupting leachates after long sun exposure (~10 years), unstudied microplastic release, visual pollution."
+  },
+  "key_details": "Short single-author narrative review (Sustainability, 2021) of suspended shade-cloth covers and floating shade objects (balls, hexagons) on reservoirs. No quantitative algal data beyond citing Martinez-Alvarez et al. for 'dramatic limitation of algal blooms'. Includes an unpublished, unreplicated pool experiment (1 control, 2 covered pools) measured by turbidity and OD600 rather than algal counts. Main point is the unresolved cost and plastic-waste trade-off.",
+  "discrepancy": "None material; record should note the algae evidence is second-hand plus one small unpublished pool test."
+ },
+ "shading-03": {
+  "status": "full_read",
+  "source_url": "https://sjar.revistas.csic.es/index.php/sjar/article/download/1355/1308",
+  "updates": {
+   "scale": "One agricultural irrigation reservoir, Segura basin, SE Spain: 2,400 m2 surface, 5 m deep, 11,920 m3; uncovered year 1 (2007-08) vs covered year 2 (2008-09); no simultaneous control reservoir",
+   "dose": "Black polyethylene suspended shade-cloth cover (<1% solar transmission); cost EUR 7.80/m2 (EUR 5.30 structure + 2.50 cloth)",
+   "result": "Evaporation fell close to 85% (84% used in economics). Under the cover photosynthesis dropped massively and algal growth was highly limited (chlorophyll shown only in a figure, 0-30 ug/L axis); farmers reported a 90% cut in filter cleaning."
+  },
+  "key_details": "Before/after design on a single reservoir: year 1 uncovered (used to validate an open-water evaporation model), year 2 covered; monthly samples at 1-4 m for algal cells (inverted microscope) plus YSI profiles of EC, chlorophyll and turbidity. No numerical chlorophyll values are given in text; the 90% filtration benefit is an anecdotal landholder report. Discounted cash-flow analysis found the cover not economically viable when saved water is valued at purchase price (EUR 0.15-0.50/m3), but viable where water shortage limits cropped area.",
+  "discrepancy": "Record right in substance; adds the unreplicated before/after design, the cost, and that algae reductions are shown only graphically."
+ },
+ "oxidation-03": {
+  "status": "full_read",
+  "source_url": "https://repository.library.noaa.gov/view/noaa/68341/noaa_68341_DS1.pdf",
+  "updates": {
+   "dose": "Mesocosm applied ozone 4.8 +/- 0.6, 7.1 +/- 0.8 and 15 +/- 1 mg O3/L (O3:DOC 0.68, 1.21, 2.04; DOC ~7.2 mg C/L), plus oxygen-only nanobubble control; field: two NBOT units in a 3.2 x 10^4 m2, ~1.5 m deep embayment (4.8 x 10^4 m3) at lower O3:DOC",
+   "result": "In 2,000 L mesocosms (3 tanks per dose, 100% of water passed through the unit) medium and high doses cut chl-a and phycocyanin 98-99% and microcystins 62% and 92%; low dose cut chl-a >70%. In the embayment trials there was no effect: chl-a at the outlet and 3.3 m away was within +/-10% of the inlet except one sample (-34.3%)."
+  },
+  "key_details": "Replicated mesocosm (triplicate tanks per dose, untreated and oxygen-only controls, sampled 1-96 h) plus two 4-week field deployments in the Sunset Beach embayment of Grand Lake St Marys, Ohio. The mesocosm bloom was diluted with 60% filtered Lake Erie water, so starting biomass was lower than in the lake, flattering the mesocosm result. Oxygen-only nanobubbles had no effect. Field failure attributed to high biomass and DOC, O3:DOC below the lowest mesocosm dose, and only a small fraction of lake water treated at any time; SUVA254 showed ozone reacted only near the outlet.",
+  "discrepancy": "Record is accurate; it omits that the mesocosm water was diluted 60% with filtered Lake Erie water, and the absolute ozone doses (4.8-15 mg O3/L)."
+ },
+ "oxidation-04": {
+  "status": "full_read",
+  "source_url": "https://repository.library.noaa.gov/view/noaa/75906/noaa_75906_DS1.pdf",
+  "updates": {
+   "scale": "15 outdoor ~2,000 L mesocosm tanks at Stone Lab, Lake Erie; 5 treatments x 3 replicate tanks; Lake Erie plankton inoculum with added N and P",
+   "dose": "Untreated control; SeClear copper algaecide 1 mg Cu/L; GreenClean Liquid 5.0 at 10 mg H2O2/L; NBOT at 0.9 and 4.6 mg O3/L",
+   "duration": "Single treatment on day 8 after inoculation; zooplankton followed to 120 h",
+   "result": "At 120 h total zooplankton changed +120% in controls, +90% (low NBOT) and +10% (high NBOT), but -80% (copper) and -90% (peroxide); cladocerans fell 70-100% under both algaecides. Phytoplankton declined similarly in all treatments over the first 48 h."
+  },
+  "key_details": "Replicated mesocosm (n = 3 tanks per treatment) testing non-target effects only; the phytoplankton was mostly green algae (72.7% of chl-a; cyanobacteria 15.4%) at 30 ug/L chl-a, so it is not a test of bloom control. Differences in zooplankton were attributed to direct toxicity because phytoplankton responses were similar; chl-a in the peroxide tanks rebounded to control levels by 120 h but zooplankton did not. Calanoids and Leptodora showed no significant effects owing to low densities. Tanks were shaded ~55% and mixed twice daily.",
+  "discrepancy": "Record said duration unknown; it is 120 h after one dose. The test community was green-algae dominated, not a cyanobacterial bloom."
+ },
+ "algicidal_microbes-03": {
+  "status": "failed",
+  "source_url": "https://www.sciencedirect.com/science/article/am/pii/S1568988320300780?via%3Dihub",
+  "updates": {},
+  "key_details": "Not read: ScienceDirect accepted-manuscript link returns 403 / bot check; no other free copy found.",
+  "discrepancy": ""
+ },
+ "algicidal_microbes-11": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1016/j.ecoenv.2021.112913",
+  "updates": {},
+  "key_details": "Not read: Elsevier (open access) link resolves to ScienceDirect, which serves a captcha; no repository copy found.",
+  "discrepancy": ""
+ },
+ "barley_straw-04": {
+  "status": "failed",
+  "source_url": "https://www.tandfonline.com/doi/pdf/10.1080/07438140309354091?needAccess=true&role=button",
+  "updates": {},
+  "key_details": "Not read: Taylor & Francis PDF returned 403 to scripted and WebFetch requests; no repository copy found.",
+  "discrepancy": ""
+ },
+ "biomanipulation-03": {
+  "status": "failed",
+  "source_url": "https://www.mdpi.com/2073-4441/9/1/43/pdf?version=1484146038",
+  "updates": {},
+  "key_details": "Not read: MDPI and Aarhus University (pure.au.dk) PDFs both returned 403 bot checks.",
+  "discrepancy": ""
+ },
+ "biomanipulation-12": {
+  "status": "failed",
+  "source_url": "https://www.sciencedirect.com/science/article/pii/S0272771413002680",
+  "updates": {},
+  "key_details": "Not read: ScienceDirect captcha; the CONICET repository PDF link returned 404.",
+  "discrepancy": ""
+ },
+ "copper-05": {
+  "status": "failed",
+  "source_url": "https://www.sciencedirect.com/science/article/pii/S014765132031071X/pdf",
+  "updates": {},
+  "key_details": "Not read: Open-access Elsevier article, but ScienceDirect serves a captcha; no repository copy found.",
+  "discrepancy": ""
+ },
+ "copper-06": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1016/j.hal.2022.102347",
+  "updates": {},
+  "key_details": "Not read: Open-access Elsevier article, but ScienceDirect serves a captcha; no repository copy found.",
+  "discrepancy": ""
+ },
+ "copper-08": {
+  "status": "failed",
+  "source_url": "https://www.sciencedirect.com/science/article/pii/S1568988321001293/pdf",
+  "updates": {},
+  "key_details": "Not read: Open-access Elsevier article, but ScienceDirect serves a captcha; the Minerva Access (Melbourne) record has no attached file.",
+  "discrepancy": ""
+ },
+ "nutrient_reduction-04": {
+  "status": "failed",
+  "source_url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/j.1365-2427.2005.01415.x",
+  "updates": {},
+  "key_details": "Not read: Wiley pdfdirect returned 403; the KOPS (Konstanz) copy sits behind an Anubis bot check.",
+  "discrepancy": ""
+ },
+ "nutrient_reduction-10": {
+  "status": "failed",
+  "source_url": "https://www.tandfonline.com/doi/pdf/10.5268/IW-6.2.998?needAccess=true&role=button",
+  "updates": {},
+  "key_details": "Not read: Taylor & Francis PDF returned 403; no repository copy found.",
+  "discrepancy": ""
+ },
+ "oxidation-11": {
+  "status": "not_free",
+  "source_url": "http://www.sciencedirect.com/science/article/pii/S0043135416309010",
+  "updates": {},
+  "key_details": "Not read: The only OA location (UNIST repository) points back to the ScienceDirect article, which is behind a captcha and is a subscription Water Research paper; no free full text found.",
+  "discrepancy": ""
+ },
+ "shading-01": {
+  "status": "failed",
+  "source_url": "https://www.dora.lib4ri.ch/eawag/dload/eawag:17185/PDF2/view",
+  "updates": {},
+  "key_details": "Not read: Eawag DORA and University of Twente accepted-manuscript PDFs both returned 403.",
+  "discrepancy": ""
+ },
+ "shading-09": {
+  "status": "failed",
+  "source_url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/are.15665",
+  "updates": {},
+  "key_details": "Not read: Wiley pdfdirect returned 403 to scripted and WebFetch requests.",
+  "discrepancy": ""
+ },
+ "shading-12": {
+  "status": "failed",
+  "source_url": "https://www.tandfonline.com/doi/pdf/10.1080/09670260801904822?needAccess=true&role=button",
+  "updates": {},
+  "key_details": "Not read: Taylor & Francis PDF returned 403; no repository copy found.",
+  "discrepancy": ""
+ },
+ "ultrasound-01": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1016/j.ultsonch.2017.03.003",
+  "updates": {},
+  "key_details": "Not read: Elsevier link leads to a ScienceDirect captcha; the UCF STARS record is metadata only.",
+  "discrepancy": ""
+ },
+ "ultrasound-02": {
+  "status": "not_free",
+  "source_url": "https://research.wur.nl/en/publications/beating-the-blues-is-there-any-music-in-fighting-cyanobacteria-wi",
+  "updates": {},
+  "key_details": "Not read: The OA link is a WUR Research Portal page with the abstract only and no attached full text; the Water Research article itself is behind ScienceDirect.",
+  "discrepancy": ""
+ },
+ "ultrasound-07": {
+  "status": "failed",
+  "source_url": "https://www.sciencedirect.com/science/article/pii/S135041771831126X/pdf",
+  "updates": {},
+  "key_details": "Not read: Open-access Elsevier article, but ScienceDirect serves a captcha; no repository copy found.",
+  "discrepancy": ""
+ },
+ "ultrasound-11": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1016/j.jenvman.2025.125057",
+  "updates": {},
+  "key_details": "Not read: Elsevier link leads to a ScienceDirect captcha; no repository copy found.",
+  "discrepancy": ""
+ }
+}

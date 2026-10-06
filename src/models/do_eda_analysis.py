@@ -2,7 +2,8 @@
 Dissolved Oxygen (DO) EDA — mirrors the chlorophyll temporal analysis.
 
 Generates:
-  figures/do_lag_correlation_decay.png   — r vs. lag (0,3,7,14,21 days)
+  figures/do_lag_correlation_decay.png   — r vs. lag (0,3,7,14,21 prior VISITS,
+                                           median 21 d apart, NOT days)
   figures/do_distribution_by_bloom.png   — DO distribution: bloom vs. non-bloom
   figures/do_seasonal_pattern.png        — monthly median DO vs. bloom frequency
   figures/do_station_gradient.png        — mean DO by station (west→east)
@@ -36,7 +37,9 @@ print(f"Rows after dropping NA in DO/bloom: {len(df):,}")
 print(f"Bloom rate: {df['bloom'].mean():.1%}")
 
 # ── 1. Lag Correlation Decay ───────────────────────────────────────────────────
-# Build lagged DO features per station (same logic as chl lags in eda_features.ipynb)
+# Build lagged DO features per station (same logic as chl lags in eda_features.ipynb).
+# NOTE: .shift(k) moves k ROWS = k station VISITS, not k days. Visits are spaced a
+# median of 21 days apart, so "lag 21" is roughly 14 months. Labels below say visits.
 print("\nBuilding DO lag features...")
 df = df.sort_values(["station_name", "date"]).reset_index(drop=True)
 
@@ -54,17 +57,18 @@ roll_corr = df["do_roll7_mean"].corr(df["bloom"])
 
 print("\nDO lag correlations with bloom label:")
 for l, c in zip(lags, corrs):
-    print(f"  do_lag{l:2d}: {c:.3f}")
-print(f"  do_roll7_mean: {roll_corr:.3f}")
+    print(f"  do_lag{l:2d} visits (~{l * 21:3d} d): {c:.3f}")
+print(f"  do_roll7_mean (7 visits): {roll_corr:.3f}")
 
 fig, ax = plt.subplots(figsize=(10, 5))
 ax.plot(lags, corrs, "o-", color="darkorange", linewidth=2, markersize=8, label="DO at lag k")
 ax.fill_between(lags, corrs, alpha=0.15, color="darkorange")
 ax.axhline(roll_corr, linestyle="--", color="firebrick", linewidth=1.5,
-           label=f"7-day rolling mean (r = {roll_corr:.3f})")
-ax.set_xlabel("Lag (days)", fontsize=12)
+           label=f"7-visit rolling mean (r = {roll_corr:.3f})")
+ax.set_xlabel("Lag (prior station visits; median 21 d apart)", fontsize=12)
 ax.set_ylabel("Pearson r with bloom label", fontsize=12)
-ax.set_title("Dissolved Oxygen: Predictive Signal Decay with Lag Distance", fontsize=13)
+ax.set_title("Dissolved Oxygen vs. Bloom Label by Lag\n"
+             "(lag in prior VISITS, not days)", fontsize=13)
 ax.set_xticks(lags)
 ax.grid(True, alpha=0.3)
 ax.legend()

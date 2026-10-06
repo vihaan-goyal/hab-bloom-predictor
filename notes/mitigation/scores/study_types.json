@@ -1,0 +1,1026 @@
+{
+ "algicidal_microbes-01": {
+  "type": "efficacy",
+  "note": "review of efficacy: Algicidal bacteria vs marine and freshwater HAB"
+ },
+ "algicidal_microbes-02": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Marine algicidal bacteria vs eukaryotic microalgae"
+ },
+ "algicidal_microbes-03": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Shewanella sp. IRI-160 vs Karlodinium veneficum and"
+ },
+ "algicidal_microbes-04": {
+  "type": "non_target",
+  "note": "fish cortisol response to algicide; no algal endpoint"
+ },
+ "algicidal_microbes-05": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: RNA virus HcRNAV vs Heterocapsa circularisquama"
+ },
+ "algicidal_microbes-06": {
+  "type": "efficacy",
+  "note": "natural virus dynamics during bloom crash; host abundance outcome"
+ },
+ "algicidal_microbes-07": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Six algicidal bacteria vs Cochlodinium (Margalefidinium) polykrikoides"
+ },
+ "algicidal_microbes-08": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Cyanophage PhiMa05 vs microcystin-producing Microcystis"
+ },
+ "algicidal_microbes-09": {
+  "type": "efficacy",
+  "note": "review of efficacy: Cyanophages vs Synechococcus"
+ },
+ "algicidal_microbes-10": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Enriched multi-species algicidal bacteria (Bacillus"
+ },
+ "algicidal_microbes-11": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Bacterial pigment prodigiosin vs Prorocentrum donghaiense"
+ },
+ "algicidal_microbes-12": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: White-rot fungus Trametes versicolor F21a vs cyanobacteria"
+ },
+ "barley_straw-01": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Filamentous algae"
+ },
+ "barley_straw-02": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Phytoplankton incl. cyanobacteria"
+ },
+ "barley_straw-03": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Algal blooms driven by a black-headed gull"
+ },
+ "barley_straw-04": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Filamentous and planktonic algae"
+ },
+ "barley_straw-05": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: 12 freshwater algae incl. Microcystis aeruginosa"
+ },
+ "barley_straw-06": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Cyanobacteria (test strains)"
+ },
+ "barley_straw-07": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Prymnesium parvum (golden alga)"
+ },
+ "barley_straw-08": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Cyanobacteria"
+ },
+ "barley_straw-09": {
+  "type": "off_topic",
+  "note": "camelina straw is the tested agent; barley only comparison"
+ },
+ "barley_straw-10": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Lake-water algae"
+ },
+ "barley_straw-11": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis aeruginosa"
+ },
+ "barley_straw-12": {
+  "type": "efficacy",
+  "note": "rice straw extract, close variant; Microcystis cell counts"
+ },
+ "barley_straw-13": {
+  "type": "efficacy",
+  "note": "review of efficacy: Freshwater algae and cyanobacteria"
+ },
+ "biomanipulation-01": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Lake phytoplankton incl. cyanobacteria"
+ },
+ "biomanipulation-02": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Roach (Rutilus rutilus)"
+ },
+ "biomanipulation-03": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Roach and bream"
+ },
+ "biomanipulation-04": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Planktivorous and piscivorous fish"
+ },
+ "biomanipulation-05": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Piscivorous and zooplanktivorous fish"
+ },
+ "biomanipulation-06": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Daphnia pulicaria vs toxic Microcystis and Anabaena"
+ },
+ "biomanipulation-07": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Daphnia magna vs natural cyanobacteria (Aphanizomenon"
+ },
+ "biomanipulation-08": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Juvenile perch (Perca fluviatilis)"
+ },
+ "biomanipulation-09": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Silver and bighead carp vs Microcystis and"
+ },
+ "biomanipulation-10": {
+  "type": "feeding",
+  "note": "Daphnia ingestion and poisoning by Microcystis; no bloom reduction"
+ },
+ "biomanipulation-11": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Ciliate Strombidinopsis jeokjo vs Cochlodinium (Margalefidinium) polykrikoides"
+ },
+ "biomanipulation-12": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Artemia salina (non-native) and Acartia tonsa (native"
+ },
+ "clay-01": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Various marine HAB species (dinoflagellates"
+ },
+ "clay-02": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Karenia brevis"
+ },
+ "clay-03": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Gymnodinium (Karenia) breve"
+ },
+ "clay-04": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Karenia brevis"
+ },
+ "clay-05": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Karenia brevis"
+ },
+ "clay-06": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Alexandrium pacificum (paralytic shellfish toxins)"
+ },
+ "clay-07": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis aeruginosa (Lake Taihu)"
+ },
+ "clay-08": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Dolichospermum circinalis"
+ },
+ "clay-09": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Karenia mikimotoi"
+ },
+ "clay-10": {
+  "type": "non_target",
+  "note": "loess effects on bivalve clearance rates; no algal endpoint"
+ },
+ "clay-11": {
+  "type": "efficacy",
+  "note": "clay removal of HAB ichthyotoxicity; toxin endpoint only"
+ },
+ "clay-12": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Alexandrium spp. (paralytic shellfish toxins)"
+ },
+ "copper-01": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: phytoplankton (green algae and cyanobacteria)"
+ },
+ "copper-02": {
+  "type": "efficacy",
+  "note": "copper resistance in Microcystis; growth under Cu"
+ },
+ "copper-03": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: natural phytoplankton communities (spring and summer)"
+ },
+ "copper-04": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis aeruginosa"
+ },
+ "copper-05": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: microcystin-producing cyanobacteria (Lake Okeechobee water)"
+ },
+ "copper-06": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Karenia brevis"
+ },
+ "copper-07": {
+  "type": "non_target",
+  "note": "Daphnia magna toxicity of copper algaecides"
+ },
+ "copper-08": {
+  "type": "efficacy",
+  "note": "review of efficacy: cyanobacteria"
+ },
+ "copper-09": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis aeruginosa"
+ },
+ "copper-10": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis aeruginosa (culture)"
+ },
+ "copper-11": {
+  "type": "off_topic",
+  "note": "oxidation/peroxide: five oxidants, no copper tested"
+ },
+ "copper-12": {
+  "type": "off_topic",
+  "note": "oxidation: peracetic acid on Microcystis, no copper"
+ },
+ "curcumin-01": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Karenia brevis"
+ },
+ "curcumin-02": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Karenia brevis"
+ },
+ "curcumin-03": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Chattonella marina (raphidophyte)"
+ },
+ "curcumin-04": {
+  "type": "mechanism",
+  "note": "enzyme (thioredoxin reductase) inhibition assay, no cell outcome"
+ },
+ "curcumin-05": {
+  "type": "feeding",
+  "note": "curcumin reduces DST accumulation in mussels; no bloom reduction"
+ },
+ "curcumin-06": {
+  "type": "mechanism",
+  "note": "curcumin chemistry and degradation"
+ },
+ "curcumin-07": {
+  "type": "mechanism",
+  "note": "curcumin stability in buffers"
+ },
+ "curcumin-08": {
+  "type": "mechanism",
+  "note": "curcumin stability vs pH and emulsions"
+ },
+ "curcumin-09": {
+  "type": "mechanism",
+  "note": "curcumin hydrolytic/photochemical stability in carriers"
+ },
+ "curcumin-10": {
+  "type": "mechanism",
+  "note": "cyclodextrin carrier solubility and stability"
+ },
+ "curcumin-11": {
+  "type": "mechanism",
+  "note": "curcumin photochemistry"
+ },
+ "curcumin-12": {
+  "type": "mechanism",
+  "note": "photodynamic dose on bacteria, not algae"
+ },
+ "curcumin-13": {
+  "type": "non_target",
+  "note": "zebrafish embryo toxicity"
+ },
+ "curcumin-14": {
+  "type": "non_target",
+  "note": "Daphnia and zebrafish toxicity of formulations"
+ },
+ "curcumin-15": {
+  "type": "non_target",
+  "note": "mosquito larvicide ecotoxicity and photodegradation"
+ },
+ "curcumin-16": {
+  "type": "non_target",
+  "note": "zebrafish embryo toxicity of nanoformulation"
+ },
+ "curcumin-17": {
+  "type": "efficacy",
+  "note": "plant-compound comparator tested on algae (berberine/chitosan, curcumin not reported)"
+ },
+ "curcumin-18": {
+  "type": "efficacy",
+  "note": "plant-compound comparator tested on algae (berberine)"
+ },
+ "curcumin-19": {
+  "type": "efficacy",
+  "note": "plant-compound comparator tested on algae (berberine)"
+ },
+ "curcumin-20": {
+  "type": "efficacy",
+  "note": "plant-compound comparator tested on algae (tannic acid)"
+ },
+ "curcumin-21": {
+  "type": "efficacy",
+  "note": "plant-compound comparator tested on algae (artemisinin derivatives)"
+ },
+ "curcumin-22": {
+  "type": "efficacy",
+  "note": "plant-compound comparator tested on algae (artemisinin)"
+ },
+ "curcumin-23": {
+  "type": "efficacy",
+  "note": "plant-compound comparator tested on algae (luteolin)"
+ },
+ "curcumin-24": {
+  "type": "efficacy",
+  "note": "plant-compound comparator tested on algae (tannic acid)"
+ },
+ "curcumin-25": {
+  "type": "efficacy",
+  "note": "plant-compound comparator tested on algae (gallic acid)"
+ },
+ "mixing-01": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Margalefidinium polykrikoides (culture + bloom water)"
+ },
+ "mixing-02": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Lingulodinium (Gonyaulax) polyedra"
+ },
+ "mixing-03": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Lingulodinium polyedra"
+ },
+ "mixing-04": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Lingulodinium polyedra"
+ },
+ "mixing-05": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Akashiwo sanguinea (= Gymnodinium nelsonii)"
+ },
+ "mixing-06": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Alexandrium minutum"
+ },
+ "mixing-07": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Alexandrium minutum"
+ },
+ "mixing-08": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Alexandrium minutum"
+ },
+ "mixing-09": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: 10 dinoflagellate species"
+ },
+ "mixing-10": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Lingulodinium polyedrum"
+ },
+ "mixing-11": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Lingulodinium polyedrum"
+ },
+ "mixing-12": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Lingulodinium polyedrum"
+ },
+ "mixing-13": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Heterocapsa triquetra"
+ },
+ "mixing-14": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Dinophysis acuminata"
+ },
+ "mixing-15": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: many phytoplankton (review)"
+ },
+ "mixing-16": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: natural coastal plankton"
+ },
+ "mixing-17": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Thalassiosira pseudonana"
+ },
+ "mixing-18": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Thalassiosira pseudonana"
+ },
+ "mixing-19": {
+  "type": "mechanism",
+  "note": "bioreactor agitation/bubble shear damage thresholds"
+ },
+ "mixing-20": {
+  "type": "mechanism",
+  "note": "sparged bioreactor hydrodynamic stress thresholds"
+ },
+ "mixing-21": {
+  "type": "mechanism",
+  "note": "cell-bubble hydrodynamic force thresholds"
+ },
+ "mixing-22": {
+  "type": "mechanism",
+  "note": "shear-stress viability threshold in diatom"
+ },
+ "mixing-23": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: spring dinoflagellate bloom"
+ },
+ "mixing-24": {
+  "type": "efficacy",
+  "note": "review of efficacy: cyanobacteria (review)"
+ },
+ "mixing-25": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: cyanobacteria (40-80 µg/L chl-a)"
+ },
+ "mixing-26": {
+  "type": "off_topic",
+  "note": "oxidation: ozone nanobubbles (duplicate of oxidation-03)"
+ },
+ "mixing-27": {
+  "type": "mechanism",
+  "note": "review of turbulence-generation methods"
+ },
+ "mixing-L01": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis"
+ },
+ "mixing-L02": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis"
+ },
+ "mixing-L03": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis vs diatoms and green algae"
+ },
+ "mixing-L04": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis and Ceratium"
+ },
+ "mixing-L05": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Cylindrospermopsis raciborskii"
+ },
+ "mixing-L06": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Cylindrospermopsis raciborskii"
+ },
+ "mixing-L07": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Cyanobacteria (Aphanizomenon)"
+ },
+ "mixing-L08": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis"
+ },
+ "mixing-L09": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis aeruginosa"
+ },
+ "mixing-L10": {
+  "type": "mechanism",
+  "note": "hydrodynamic design simulation; no algal numbers"
+ },
+ "mixing-L11": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Cyanobacteria (review)"
+ },
+ "mixing-L12": {
+  "type": "efficacy",
+  "note": "review of efficacy: Cyanobacteria (review)"
+ },
+ "nutrient_reduction-01": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Phytoplankton / HABs along the freshwater-marine continuum"
+ },
+ "nutrient_reduction-02": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis spp."
+ },
+ "nutrient_reduction-03": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Phytoplankton / nuisance blooms"
+ },
+ "nutrient_reduction-04": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Phytoplankton"
+ },
+ "nutrient_reduction-05": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: N-fixing cyanobacteria"
+ },
+ "nutrient_reduction-06": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Phytoplankton (chlorophyll a)"
+ },
+ "nutrient_reduction-07": {
+  "type": "non_target",
+  "note": "N and seagrass recovery only; no phytoplankton endpoint"
+ },
+ "nutrient_reduction-08": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Phytoplankton (chlorophyll a)"
+ },
+ "nutrient_reduction-09": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Phytoplankton (lake eutrophication)"
+ },
+ "nutrient_reduction-10": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Phytoplankton / cyanobacteria (chlorophyll a)"
+ },
+ "nutrient_reduction-11": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Harmful algal blooms (general)"
+ },
+ "nutrient_reduction-12": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis-dominated cyanoHABs"
+ },
+ "oxidation-01": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis aeruginosa"
+ },
+ "oxidation-02": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis aeruginosa"
+ },
+ "oxidation-03": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Planktothrix (cyanobacteria bloom)"
+ },
+ "oxidation-04": {
+  "type": "non_target",
+  "note": "zooplankton effects of ozone vs algaecides"
+ },
+ "oxidation-05": {
+  "type": "efficacy",
+  "note": "review of efficacy: microalgae and cyanobacteria (multiple species)"
+ },
+ "oxidation-06": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis aeruginosa"
+ },
+ "oxidation-07": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis aeruginosa"
+ },
+ "oxidation-08": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Heterosigma akashiwo (red tide raphidophyte)"
+ },
+ "oxidation-09": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Karenia mikimotoi"
+ },
+ "oxidation-10": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis aeruginosa PCC7813"
+ },
+ "oxidation-11": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Cochlodinium polykrikoides"
+ },
+ "oxidation-12": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Karenia brevis (Florida red tide)"
+ },
+ "p_inactivation-01": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Aphanizomenon flos-aquae"
+ },
+ "p_inactivation-02": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Cyanobacteria incl. Planktothrix rubescens"
+ },
+ "p_inactivation-03": {
+  "type": "efficacy",
+  "note": "review of efficacy: Cyanobacteria / phytoplankton (general)"
+ },
+ "p_inactivation-04": {
+  "type": "mechanism",
+  "note": "P-inactivation longevity; TP only, no algal endpoint"
+ },
+ "p_inactivation-05": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Phytoplankton (chlorophyll a)"
+ },
+ "p_inactivation-06": {
+  "type": "mechanism",
+  "note": "lanthanum fate in lake water"
+ },
+ "p_inactivation-07": {
+  "type": "mechanism",
+  "note": "humic interference with phosphate binding"
+ },
+ "p_inactivation-08": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Phytoplankton (chlorophyll a)"
+ },
+ "p_inactivation-09": {
+  "type": "mechanism",
+  "note": "sediment P dynamics after iron; no algal endpoint"
+ },
+ "p_inactivation-10": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis (microcystin-LR)"
+ },
+ "p_inactivation-11": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Phytoplankton"
+ },
+ "p_inactivation-12": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Cyanobacteria (microcystin)"
+ },
+ "peroxide-01": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Planktothrix agardhii (freshwater cyanobacterium)"
+ },
+ "peroxide-02": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Alexandrium ostenfeldii (dinoflagellate)"
+ },
+ "peroxide-03": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Aureococcus anophagefferens + 11 marine species (Phaeodactylum"
+ },
+ "peroxide-04": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Aureococcus anophagefferens"
+ },
+ "peroxide-05": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Alexandrium catenella"
+ },
+ "peroxide-06": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Cochlodinium polykrikoides"
+ },
+ "peroxide-07": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Karenia brevis"
+ },
+ "peroxide-08": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Prymnesium parvum"
+ },
+ "peroxide-09": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Prymnesium parvum"
+ },
+ "peroxide-10": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Prymnesium parvum + phytoplankton community"
+ },
+ "peroxide-11": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Karenia brevis"
+ },
+ "peroxide-12": {
+  "type": "mechanism",
+  "note": "natural H2O2 decay rates in seawater"
+ },
+ "peroxide-13": {
+  "type": "non_target",
+  "note": "copepod mortality and behaviour"
+ },
+ "peroxide-14": {
+  "type": "non_target",
+  "note": "shrimp gill damage and mortality"
+ },
+ "peroxide-15": {
+  "type": "non_target",
+  "note": "krill mortality"
+ },
+ "peroxide-16": {
+  "type": "non_target",
+  "note": "Daphnia and Moina acute toxicity"
+ },
+ "peroxide-17": {
+  "type": "non_target",
+  "note": "Daphnia safety of sodium percarbonate"
+ },
+ "peroxide-18": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: 3 cyanobacteria + 23 non-target species"
+ },
+ "peroxide-19": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Planktothrix lake community"
+ },
+ "peroxide-20": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis"
+ },
+ "peroxide-21": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: 4 freshwater algal divisions"
+ },
+ "peroxide-22": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis"
+ },
+ "peroxide-23": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Lake Erie cyanobacteria"
+ },
+ "peroxide-24": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Long Island lake/pond cyanobacteria"
+ },
+ "peroxide-25": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: 4 cyanobacteria"
+ },
+ "peroxide-26": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis"
+ },
+ "peroxide-27": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis"
+ },
+ "seaweed-01": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Saccharina latissima"
+ },
+ "seaweed-02": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Ulva"
+ },
+ "seaweed-03": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: kelp"
+ },
+ "seaweed-04": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Ulva lactuca → 7 HAB species"
+ },
+ "seaweed-05": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Ulva pertusa (2 strains) → Heterosigma akashiwo"
+ },
+ "seaweed-06": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Ulva pertusa → 8 microalgae incl. Skeletonema"
+ },
+ "seaweed-07": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Ulva pertusa"
+ },
+ "seaweed-08": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Ulva pertusa"
+ },
+ "seaweed-09": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Ulva lactuca → HAB microalgae"
+ },
+ "seaweed-10": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Ulva fasciata"
+ },
+ "seaweed-11": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Ulva pertusa"
+ },
+ "seaweed-12": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Porphyra purpurea → 7 HAB species"
+ },
+ "seaweed-13": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Gracilaria lemaneiformis → Skeletonema"
+ },
+ "seaweed-14": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Ulva rigida"
+ },
+ "seaweed-15": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Ulva rigida"
+ },
+ "seaweed-16": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Gracilaria tikvahiae"
+ },
+ "seaweed-17": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Gracilaria bailiniae → Nitzschia closterium (diatom)"
+ },
+ "seaweed-18": {
+  "type": "mechanism",
+  "note": "kelp raises pH; no HAB endpoint"
+ },
+ "seaweed-19": {
+  "type": "mechanism",
+  "note": "kelp nitrogen extraction; no HAB endpoint"
+ },
+ "seaweed-20": {
+  "type": "mechanism",
+  "note": "allelopathy methods/confounders review"
+ },
+ "shading-01": {
+  "type": "mechanism",
+  "note": "water footprint of shade balls; no algae"
+ },
+ "shading-02": {
+  "type": "mechanism",
+  "note": "shade-cover review; cost and plastics, no algae data"
+ },
+ "shading-03": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Phytoplankton (chlorophyll)"
+ },
+ "shading-04": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Planktothrix perornata and pond phytoplankton"
+ },
+ "shading-05": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Phytoplankton"
+ },
+ "shading-06": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Pond phytoplankton"
+ },
+ "shading-07": {
+  "type": "mechanism",
+  "note": "dye light attenuation measurements"
+ },
+ "shading-08": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Benthic cyanobacteria"
+ },
+ "shading-09": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Plankton"
+ },
+ "shading-10": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Phytoplankton community"
+ },
+ "shading-11": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Phytoplankton (chlorophyll-a)"
+ },
+ "shading-12": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Planktothrix rubescens (6 strains)"
+ },
+ "shellfish-01": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: hard clam → brown tide (Aureococcus)"
+ },
+ "shellfish-02": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: hard clam → Aureococcus + natural phytoplankton"
+ },
+ "shellfish-03": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: hard clam"
+ },
+ "shellfish-04": {
+  "type": "feeding",
+  "note": "clam filtration models and sedimentation"
+ },
+ "shellfish-05": {
+  "type": "feeding",
+  "note": "particle retention and filtration rates"
+ },
+ "shellfish-06": {
+  "type": "feeding",
+  "note": "feeding and biodeposition across food levels"
+ },
+ "shellfish-07": {
+  "type": "feeding",
+  "note": "clearance-rate meta-analysis"
+ },
+ "shellfish-08": {
+  "type": "feeding",
+  "note": "clearance-rate methodology review"
+ },
+ "shellfish-09": {
+  "type": "feeding",
+  "note": "clam clearance on Margalefidinium"
+ },
+ "shellfish-10": {
+  "type": "feeding",
+  "note": "bivalve feeding responses to HAB species"
+ },
+ "shellfish-11": {
+  "type": "feeding",
+  "note": "clearance and toxin accumulation on Dinophysis"
+ },
+ "shellfish-12": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: oyster seed → natural phytoplankton"
+ },
+ "shellfish-13": {
+  "type": "feeding",
+  "note": "mussel feeding reduction during brown tide"
+ },
+ "shellfish-14": {
+  "type": "feeding",
+  "note": "PST uptake kinetics in mussels"
+ },
+ "shellfish-15": {
+  "type": "feeding",
+  "note": "PST uptake and loss in clams"
+ },
+ "shellfish-16": {
+  "type": "feeding",
+  "note": "oyster feeding/pseudofeces on P. minimum"
+ },
+ "shellfish-17": {
+  "type": "feeding",
+  "note": "microcystin uptake in oysters and clams"
+ },
+ "shellfish-18": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: oyster reefs → chl a"
+ },
+ "shellfish-19": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: oysters → Chesapeake Bay phytoplankton"
+ },
+ "shellfish-20": {
+  "type": "mechanism",
+  "note": "reef nutrient fluxes and denitrification"
+ },
+ "shellfish-21": {
+  "type": "mechanism",
+  "note": "aquaculture nitrogen removal estimate"
+ },
+ "shellfish-22": {
+  "type": "mechanism",
+  "note": "theory of benthic filtration control"
+ },
+ "shellfish-23": {
+  "type": "feeding",
+  "note": "culture plankton removal in tanks; clearance comparison"
+ },
+ "shellfish-24": {
+  "type": "off_topic",
+  "note": "clay: loess effect on bivalve clearance (dup of clay-10)"
+ },
+ "ultrasound-01": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Cyanobacteria and HAB algae (review)"
+ },
+ "ultrasound-02": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Anabaena sp."
+ },
+ "ultrasound-03": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis aeruginosa PCC 7820"
+ },
+ "ultrasound-04": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Cyanobacteria (review)"
+ },
+ "ultrasound-05": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis aeruginosa"
+ },
+ "ultrasound-06": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Microcystis aeruginosa"
+ },
+ "ultrasound-07": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Natural algae / cyanobacteria (Microcystis measured via"
+ },
+ "ultrasound-08": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Cyanobacteria"
+ },
+ "ultrasound-09": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Cyanobacteria"
+ },
+ "ultrasound-10": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Algae and cyanobacteria (taste-and-odour producers)"
+ },
+ "ultrasound-11": {
+  "type": "efficacy",
+  "note": "algal/bloom outcome: Cyanobacteria (chlorophyll-a"
+ },
+ "ultrasound-12": {
+  "type": "non_target",
+  "note": "fish and tadpole effects of ultrasonic devices"
+ }
+}

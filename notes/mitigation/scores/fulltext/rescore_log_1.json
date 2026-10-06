@@ -1,0 +1,1026 @@
+{
+ "mixing-01": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 3,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 4,
+   "environment": 3
+  }
+ },
+ "mixing-06": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 2,
+   "cost": 3,
+   "time": 4,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 4,
+   "environment": 5
+  }
+ },
+ "mixing-07": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 2,
+   "cost": 2,
+   "time": 4,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 3,
+   "cost": 2,
+   "time": 3,
+   "environment": 5
+  }
+ },
+ "mixing-08": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 4,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 3,
+   "environment": 5
+  }
+ },
+ "mixing-09": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 3,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 1,
+   "cost": 2,
+   "time": 3,
+   "environment": 5
+  }
+ },
+ "mixing-11": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 3,
+   "cost": 2,
+   "time": 3,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 3,
+   "cost": 2,
+   "time": 4,
+   "environment": 5
+  }
+ },
+ "mixing-12": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 3,
+   "cost": 2,
+   "time": 4,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 4,
+   "cost": 2,
+   "time": 4,
+   "environment": 5
+  }
+ },
+ "mixing-13": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 3,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 3,
+   "environment": 5
+  }
+ },
+ "mixing-15": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 3,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 3,
+   "environment": 5
+  }
+ },
+ "mixing-16": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 3,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 4,
+   "environment": 4
+  }
+ },
+ "mixing-17": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 3,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 4,
+   "environment": 5
+  }
+ },
+ "mixing-19": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 2,
+   "cost": 2,
+   "time": 3,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 2,
+   "environment": 5
+  }
+ },
+ "mixing-20": {
+  "old": {
+   "reproducibility": 4,
+   "effectiveness": 1,
+   "cost": 4,
+   "time": 5,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 4,
+   "effectiveness": 1,
+   "cost": 4,
+   "time": 5,
+   "environment": 5
+  }
+ },
+ "mixing-21": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 5,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 5,
+   "environment": 5
+  }
+ },
+ "mixing-22": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 5,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 5,
+   "environment": 5
+  }
+ },
+ "mixing-23": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 4,
+   "cost": 1,
+   "time": 1,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 3,
+   "environment": 4
+  }
+ },
+ "mixing-24": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 4
+  }
+ },
+ "mixing-25": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 2,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 5,
+   "environment": 4
+  }
+ },
+ "mixing-27": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 2,
+   "cost": 3,
+   "time": 3,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 2,
+   "cost": 3,
+   "time": 3,
+   "environment": 4
+  }
+ },
+ "mixing-L01": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 4,
+   "cost": 1,
+   "time": 1,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 4
+  }
+ },
+ "mixing-L03": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 3,
+   "environment": 4
+  }
+ },
+ "mixing-L04": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 4
+  }
+ },
+ "mixing-L05": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 1,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 1,
+   "environment": 3
+  }
+ },
+ "mixing-L06": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 3
+  }
+ },
+ "mixing-L07": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 4,
+   "cost": 1,
+   "time": 1,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 3
+  }
+ },
+ "mixing-L08": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 2,
+   "time": 1,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 2,
+   "time": 1,
+   "environment": 4
+  }
+ },
+ "mixing-L09": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 2,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 2,
+   "environment": 4
+  }
+ },
+ "mixing-L11": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 1,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 4
+  }
+ },
+ "mixing-L12": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 1,
+   "environment": 3
+  }
+ },
+ "peroxide-01": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 5,
+   "cost": 1,
+   "time": 5,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 5,
+   "cost": 1,
+   "time": 3,
+   "environment": 3
+  }
+ },
+ "peroxide-06": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 2,
+   "cost": 2,
+   "time": 4,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 4,
+   "cost": 2,
+   "time": 5,
+   "environment": 4
+  }
+ },
+ "peroxide-08": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 3,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 3,
+   "environment": 4
+  }
+ },
+ "peroxide-10": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 3,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 5,
+   "environment": 2
+  }
+ },
+ "peroxide-11": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 4,
+   "cost": 3,
+   "time": 5,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 4,
+   "cost": 3,
+   "time": 5,
+   "environment": 2
+  }
+ },
+ "peroxide-13": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 5,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 5,
+   "environment": 1
+  }
+ },
+ "peroxide-14": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 3,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 1,
+   "cost": 2,
+   "time": 4,
+   "environment": 1
+  }
+ },
+ "peroxide-15": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 5,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 1,
+   "cost": 3,
+   "time": 5,
+   "environment": 1
+  }
+ },
+ "peroxide-16": {
+  "old": {
+   "reproducibility": 4,
+   "effectiveness": 1,
+   "cost": 4,
+   "time": 5,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 4,
+   "effectiveness": 1,
+   "cost": 4,
+   "time": 5,
+   "environment": 1
+  }
+ },
+ "peroxide-17": {
+  "old": {
+   "reproducibility": 4,
+   "effectiveness": 1,
+   "cost": 4,
+   "time": 5,
+   "environment": 2
+  },
+  "new": {
+   "reproducibility": 5,
+   "effectiveness": 1,
+   "cost": 5,
+   "time": 5,
+   "environment": 1
+  }
+ },
+ "peroxide-18": {
+  "old": {
+   "reproducibility": 2,
+   "effectiveness": 3,
+   "cost": 2,
+   "time": 5,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 4,
+   "cost": 1,
+   "time": 5,
+   "environment": 2
+  }
+ },
+ "peroxide-20": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 4,
+   "cost": 3,
+   "time": 5,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 2,
+   "time": 5,
+   "environment": 4
+  }
+ },
+ "peroxide-21": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 4,
+   "environment": 2
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 2,
+   "time": 5,
+   "environment": 2
+  }
+ },
+ "peroxide-22": {
+  "old": {
+   "reproducibility": 4,
+   "effectiveness": 4,
+   "cost": 4,
+   "time": 5,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 4,
+   "effectiveness": 4,
+   "cost": 4,
+   "time": 5,
+   "environment": 3
+  }
+ },
+ "peroxide-23": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 3,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 4,
+   "cost": 3,
+   "time": 4,
+   "environment": 3
+  }
+ },
+ "peroxide-24": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 2,
+   "time": 5,
+   "environment": 2
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 4,
+   "cost": 2,
+   "time": 4,
+   "environment": 3
+  }
+ },
+ "peroxide-25": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 2,
+   "time": 4,
+   "environment": 2
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 4,
+   "cost": 2,
+   "time": 4,
+   "environment": 3
+  }
+ },
+ "peroxide-26": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 2,
+   "time": 3,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 2,
+   "time": 5,
+   "environment": 3
+  }
+ },
+ "peroxide-27": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 4,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 5,
+   "cost": 3,
+   "time": 4,
+   "environment": 3
+  }
+ },
+ "seaweed-05": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 3,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 5,
+   "environment": 4
+  }
+ },
+ "seaweed-06": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 4,
+   "cost": 3,
+   "time": 3,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 4,
+   "cost": 3,
+   "time": 3,
+   "environment": 4
+  }
+ },
+ "seaweed-07": {
+  "old": {
+   "reproducibility": 4,
+   "effectiveness": 3,
+   "cost": 4,
+   "time": 3,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 4,
+   "effectiveness": 4,
+   "cost": 4,
+   "time": 4,
+   "environment": 4
+  }
+ },
+ "seaweed-08": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 4,
+   "cost": 3,
+   "time": 5,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 4,
+   "cost": 3,
+   "time": 4,
+   "environment": 4
+  }
+ },
+ "seaweed-11": {
+  "old": {
+   "reproducibility": 4,
+   "effectiveness": 5,
+   "cost": 4,
+   "time": 3,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 4,
+   "effectiveness": 4,
+   "cost": 4,
+   "time": 4,
+   "environment": 4
+  }
+ },
+ "seaweed-12": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 3,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 4,
+   "environment": 5
+  }
+ },
+ "seaweed-13": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 3,
+   "cost": 1,
+   "time": 2,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 4,
+   "cost": 2,
+   "time": 4,
+   "environment": 4
+  }
+ },
+ "seaweed-17": {
+  "old": {
+   "reproducibility": 4,
+   "effectiveness": 3,
+   "cost": 4,
+   "time": 4,
+   "environment": 4
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 4,
+   "environment": 4
+  }
+ },
+ "seaweed-19": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 1,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 1,
+   "environment": 5
+  }
+ },
+ "shellfish-10": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 3,
+   "cost": 3,
+   "time": 5,
+   "environment": 3
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 2,
+   "cost": 3,
+   "time": 5,
+   "environment": 2
+  }
+ },
+ "shellfish-11": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 3,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 2,
+   "effectiveness": 2,
+   "cost": 2,
+   "time": 5,
+   "environment": 1
+  }
+ },
+ "shellfish-12": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 2,
+   "environment": 2
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 1,
+   "cost": 1,
+   "time": 2,
+   "environment": 3
+  }
+ },
+ "shellfish-17": {
+  "old": {
+   "reproducibility": 3,
+   "effectiveness": 2,
+   "cost": 3,
+   "time": 5,
+   "environment": 1
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 2,
+   "cost": 3,
+   "time": 5,
+   "environment": 1
+  }
+ },
+ "shellfish-18": {
+  "old": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 5,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 1,
+   "effectiveness": 2,
+   "cost": 1,
+   "time": 5,
+   "environment": 5
+  }
+ },
+ "shellfish-21": {
+  "old": {
+   "reproducibility": 4,
+   "effectiveness": 1,
+   "cost": 5,
+   "time": 1,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 3,
+   "effectiveness": 1,
+   "cost": 5,
+   "time": 1,
+   "environment": 5
+  }
+ },
+ "shellfish-23": {
+  "old": {
+   "reproducibility": 4,
+   "effectiveness": 5,
+   "cost": 4,
+   "time": 4,
+   "environment": 5
+  },
+  "new": {
+   "reproducibility": 4,
+   "effectiveness": 3,
+   "cost": 4,
+   "time": 4,
+   "environment": 5
+  }
+ }
+}

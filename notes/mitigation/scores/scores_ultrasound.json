@@ -1,0 +1,182 @@
+[
+  {
+    "paper_id": "ultrasound-01",
+    "reproducibility": 3,
+    "effectiveness": 2,
+    "cost": 2,
+    "time": 4,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Review plus 50 L container tests with a commercial ultrasound unit; doable with a sponsor.",
+      "effectiveness": "The authors' own unreplicated test gave a transient 30-55% Microcystis cut that vanished by day 11; field efficacy 'still debatable'.",
+      "cost": "A commercial LG Sonic unit costs $500-5,000.",
+      "time": "Largest difference seen at 4.8-7.8 days.",
+      "environment": "No chemical residue, but toxin release from lysed cells is a concern."
+    }
+  },
+  {
+    "paper_id": "ultrasound-02",
+    "reproducibility": 3,
+    "effectiveness": 1,
+    "cost": 2,
+    "time": 4,
+    "environment": 1,
+    "reasons": {
+      "reproducibility": "800 mL jar cultures with commercial pond transducers; bench scale but needs purchased strains and devices.",
+      "effectiveness": "No kill: Anabaena fragmented and Microcystis grew faster under ultrasound (0.74 vs 0.59 /d).",
+      "cost": "Four commercial pond transducers plus cultures cost $500-5,000.",
+      "time": "Growth compared over 5-19 days; Microcystis 7 days.",
+      "environment": "All Daphnia died within 15 min of exposure."
+    }
+  },
+  {
+    "paper_id": "ultrasound-03",
+    "reproducibility": 3,
+    "effectiveness": 1,
+    "cost": 2,
+    "time": 4,
+    "environment": 1,
+    "reasons": {
+      "reproducibility": "Bench suspensions of purchased Microcystis PCC 7820 with commercial Flexidal transducers; feasible with a sponsor but needs a toxic strain and specific gear.",
+      "effectiveness": "Chlorophyll-a rose as much as in controls and PSII efficiency fell only 0.56 to 0.52-0.53; authors call the transducers ineffective.",
+      "cost": "Commercial Flexidal AL-05/AL-10 units plus a culture-collection strain likely cost $500-5,000.",
+      "time": "Result visible after the 5-day exposure.",
+      "environment": "Dissolved microcystin share rose to 19% vs 5% in controls, i.e. toxin release."
+    }
+  },
+  {
+    "paper_id": "ultrasound-04",
+    "reproducibility": 3,
+    "effectiveness": 1,
+    "cost": 3,
+    "time": 3,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Critical review; the typical test is a jar culture with a commercial transducer.",
+      "effectiveness": "Field chl-a 81 vs 74 ug/L before/during treatment and no pond difference; commercial frequencies cannot resonate gas vesicles.",
+      "cost": "A typical jar test with a small transducer costs about $150-500.",
+      "time": "Typical tests run one to three weeks.",
+      "environment": "No chemicals, but treats symptoms without addressing nutrients."
+    }
+  },
+  {
+    "paper_id": "ultrasound-05",
+    "reproducibility": 2,
+    "effectiveness": 3,
+    "cost": 2,
+    "time": 5,
+    "environment": 1,
+    "reasons": {
+      "reproducibility": "Custom multi-frequency sonication reactors up to 1,320 kHz; specialist equipment.",
+      "effectiveness": "90% OD684 removal in 100 min at 80 W, but OD is not verified kill and no replication statistics were reported.",
+      "cost": "Multi-frequency ultrasonic generators cost $500-5,000.",
+      "time": "90% removal within 100-328 minutes.",
+      "environment": "At 80 W extracellular microcystin rose from 0.87 to 3.1 ug/L in 5 min."
+    }
+  },
+  {
+    "paper_id": "ultrasound-06",
+    "reproducibility": 3,
+    "effectiveness": 2,
+    "cost": 3,
+    "time": 5,
+    "environment": 1,
+    "reasons": {
+      "reproducibility": "Bottle microcosms with lake sediment and a lab sonicator; doable with a sponsor.",
+      "effectiveness": "One 15 min sonication cut M. aeruginosa by only 33.5%.",
+      "cost": "Sonicator access, bottles and cell counts cost about $150-500.",
+      "time": "Cell reduction was immediate after 15 min sonication (harm tracked over 40 days).",
+      "environment": "Microcystin rose 5.7x at once (peak 41 ug/L), water went anoxic and methane rose 1.43x."
+    }
+  },
+  {
+    "paper_id": "ultrasound-07",
+    "reproducibility": 2,
+    "effectiveness": 3,
+    "cost": 1,
+    "time": 5,
+    "environment": 1,
+    "reasons": {
+      "reproducibility": "Customized 300-650 W ultrasound system with 100 L and 4 m3 reactors; industrial gear.",
+      "effectiveness": "~80% Chl a/cell cut in the 100 L pilot but >40-60% in the raceway, measured after 1 h settling with no untreated controls or regrowth follow-up.",
+      "cost": "A custom 650 W multi-frequency system costs over $5,000.",
+      "time": "Reductions appeared after 10-20 min.",
+      "environment": "Extracellular microcystin rose as Chl a fell, more at 36 kHz and higher power."
+    }
+  },
+  {
+    "paper_id": "ultrasound-08",
+    "reproducibility": 1,
+    "effectiveness": 2,
+    "cost": 1,
+    "time": 1,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Field trial in a 9,000 m3 eutrophic pond with an ultrasonic apparatus plus water pumps.",
+      "effectiveness": "Chlorophyll-a 61% of control (39% reduction) in one unreplicated pond, and cyanobacteria rebounded within days after switch-off.",
+      "cost": "Pond-scale ultrasonic device and pumps run a full season, well over $5,000.",
+      "time": "Evaluated over one season (2003).",
+      "environment": "Nothing added; only a shift toward green algae was reported."
+    }
+  },
+  {
+    "paper_id": "ultrasound-09",
+    "reproducibility": 1,
+    "effectiveness": 2,
+    "cost": 1,
+    "time": 1,
+    "environment": 4,
+    "reasons": {
+      "reproducibility": "Whole 33 ha lake with 10 ultrasound-plus-jet units and river flushing; not school-repeatable.",
+      "effectiveness": "No control lake; flushing was the main mechanism, a June Chl a peak still occurred and 1999 relapsed when flushing fell.",
+      "cost": "Ten 1.9 kW units plus flushing works cost far over $5,000.",
+      "time": "Judged over two years against 1996-1997.",
+      "environment": "No chemicals; jets aerate the bottom and summer COD and TP peaks fell."
+    }
+  },
+  {
+    "paper_id": "ultrasound-10",
+    "reproducibility": 1,
+    "effectiveness": 3,
+    "cost": 1,
+    "time": 3,
+    "environment": 3,
+    "reasons": {
+      "reproducibility": "Four commercial ultrasonic buoys on a utility reservoir; not school-repeatable.",
+      "effectiveness": "Failed against Aphanizomenon for weeks (>20,000/mL), then ~93% cell (63% fluorescence) removal for one week after a program change; single reservoir.",
+      "cost": "Four LG Sonic buoys cost far over $5,000.",
+      "time": "After the right program was set, removal showed within about 1-2 weeks.",
+      "environment": "Non-target effects not assessed; geosmin generally lower than in the untreated reservoir."
+    }
+  },
+  {
+    "paper_id": "ultrasound-11",
+    "reproducibility": 1,
+    "effectiveness": 1,
+    "cost": 1,
+    "time": 1,
+    "environment": 5,
+    "reasons": {
+      "reproducibility": "Five drinking-water reservoirs with commercial units and hydrophone mapping; not school-repeatable.",
+      "effectiveness": "No change in chlorophyll, phycocyanin or turbidity with distance from units; pressures far below gas-vesicle collapse.",
+      "cost": "Commercial units and hydrophone surveys cost far over $5,000.",
+      "time": "Studied over two field seasons.",
+      "environment": "No water-quality change detected."
+    }
+  },
+  {
+    "paper_id": "ultrasound-12",
+    "reproducibility": 1,
+    "effectiveness": 1,
+    "cost": 2,
+    "time": 3,
+    "environment": 5,
+    "reasons": {
+      "reproducibility": "Nearshore lake surveys plus 700 L fish tanks with a commercial ultrasonic unit; needs fish permits.",
+      "effectiveness": "Algal efficacy was not measured; this is a non-target safety study.",
+      "cost": "One Quattro-DB unit and tanks cost $500-5,000.",
+      "time": "Lab exposures lasted 14 days.",
+      "environment": "No effect on fish density (0.12 vs 0.13 fish/m2) or on fish and tadpole behaviour or tissues."
+    }
+  }
+]

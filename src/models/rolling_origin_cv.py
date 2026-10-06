@@ -30,6 +30,7 @@ Run from repo root:
 
 import argparse
 import glob
+import os
 import warnings
 warnings.filterwarnings('ignore', category=UserWarning)
 
@@ -83,8 +84,11 @@ def load_percent_saturation():
 
 
 def build_dataset(clean_labels=False, sustain_window=14, horizon=28):
-    print("Loading data/hab_features_tidal.csv...")
-    df = pd.read_csv("data/hab_features_tidal.csv")
+    # Default: lab-consistent S1 (notes/LABEL_REBUILD_PREREG.md); the raw-fluorometer
+    # original is HAB_FEATURES_CSV=data/hab_features_tidal.csv.
+    src = os.environ.get("HAB_FEATURES_CSV", "data/hab_features_tidal_S1.csv")
+    print(f"Loading {src}...")
+    df = pd.read_csv(src)
     df['date'] = pd.to_datetime(df['date'])
 
     if 'percent_saturation' not in df.columns:

@@ -1,0 +1,134 @@
+{
+ "mixing-01": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.jenvman.2026.129015",
+  "updates": {
+   "scale": "lab flasks: 150 mL (shaking) or 500 mL cultures in 1 L Erlenmeyer flasks; field bloom water 500 mL flasks in a flow-through outdoor table",
+   "dose": "macrobubbles via air stone at 25 mL/min (low) or 300 mL/min (high), continuous; nanobubbles (~100 nm) generated 2 h in 500 L (Moleaer XTB 200), ± ozone; orbital shaking 240 rpm (est. epsilon ~8 x 10^-2 m2 s-3)",
+   "duration": "lab ~10-15 d; bloom-water experiments 24 h (Old Fort Pond) and 2 d (Meetinghouse Creek)",
+   "setting": "lab + field bloom water (incubated outdoors)",
+   "result": "High-rate macrobubbles cut M. polykrikoides 21-58% (CPSB-1G) and 34-63% (CP1) vs unaerated controls, and 78% at day 10 in the screening test; high-level treatment gave 0% larval fish mortality vs 100% in controls within 1.5 h. In bloom water, cells were 1477 vs 2022 cells/mL in controls after 24 h (Old Fort Pond) and 29-55% in 2 d (Meetinghouse Creek).",
+   "effect_pct": 58,
+   "env_effects": "In Meetinghouse Creek bloom water, Polykrikos sp. and Prorocentrum cordatum increased under macrobubbling while M. polykrikoides fell."
+  },
+  "key_details": "Screening test (strain CPSB-1G, 4 replicates, 500 cells/mL) compared orbital shaking at 240 rpm, nanobubbles with and without ozone, and macrobubbles at 300 mL/min; by day 10 macrobubbles were 78% below control and 72% below both nanobubble treatments. In two-level tests (25 vs 300 mL/min, n=4), high-rate bubbling cut CPSB-1G 21-58% and CP1 34-63% vs unaerated controls; Fv/Fm dropped under both rates. Larval M. beryllina had 0% mortality in high-level bubbling vs 100% in the positive control within 1.5 h; C. variegatus survival was 100% under both bubbling rates. In bloom water (n=3), Old Fort Pond cells went from 2000 to 1477 +/- 94 (high) vs 2022 +/- 14 (control) cells/mL in 24 h; at Meetinghouse Creek, M. polykrikoides fell 55% (low) and 29% (high) by day 2. Orbital shaking also significantly reduced growth (days 6-12). Caveat: small flasks with bubbling fitted to 0.5 L volumes; no scale-up tested.",
+  "discrepancy": "The record's '>60%' is from the highlights; the reported ranges are 21-58% (CPSB-1G) and 34-63% (CP1) for high-level bubbling, 78% at day 10 in screening. Flow rates (25 and 300 mL/min) and durations are given. The field arm was bloom water in flasks, not in-situ aeration. In one bloom test the low rate beat the high rate (55% vs 29%)."
+ },
+ "mixing-02": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1016/0198-0149(90)90063-2",
+  "updates": {
+   "dose": "epsilon 0.05 to 164 cm2 s-3 (gamma 2.2 to 132 rad s-1) in a Couette device; inhibition at epsilon >= 0.18 (gamma >= 4.4), none at 0.05 (gamma 2.2); threshold stress 0.002-0.004 Pa"
+  },
+  "key_details": "Full text is PDF-only (scanned, 1990); the HTML page shows only the abstract, which was read in full. Per the abstract, growth was inhibited at gamma 4.4-132 rad/s but not at 2.2, giving a threshold shear stress of 0.02-0.04 dyne/cm2 (0.002-0.004 Pa). Shear-inhibited cells lost their longitudinal flagella and spun in place.",
+  "discrepancy": "The record's thresholds (zero growth at gamma ~8, none below 2) come from Gibson & Thomas 1995; this paper's own abstract reports inhibition from gamma 4.4 rad/s and none at 2.2."
+ },
+ "mixing-03": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1029/95jc02256",
+  "updates": {},
+  "key_details": "Full text is a PDF-only scan (1995) rendered as images in the Wiley reader; no extractable text. The abstract matches the current record: gamma 9 rad/s applied 0.25-2.5 h/day gave increasingly negative growth, 5 min/day had no effect, and the daily-mean gamma for zero growth fell below 0.09 rad/s with intermittency down to a 5-15 min minimum period.",
+  "discrepancy": ""
+ },
+ "mixing-04": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1111/j.0022-3646.1995.00050.x",
+  "updates": {
+   "result": "Photosynthesis (Psat, PBsat) was not fully inhibited even at 26.6 rad/s and was less sensitive than growth; photosynthesis per cell, pigments per cell and (in 2 of 3 runs) respiration rose, suggesting little disruption of the photosynthetic apparatus."
+  },
+  "key_details": "Full text is PDF-only (1995); only the abstract was readable in HTML. Cultures were rotated in closed bottles on a 'phytoplankton wheel', with turbulence calibrated against Couette-flow growth inhibition. Accessory pigment ratios to chl a did not change; after 1 week of turbulence beta-carotene rose while peridinin and diadinoxanthin fell.",
+  "discrepancy": ""
+ },
+ "mixing-05": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.1111/j.0022-3646.1992.00267.x",
+  "updates": {},
+  "key_details": "Full text is PDF-only (1992); only the abstract was readable in HTML, and it matches the current record. Orbital shaking at 100 rpm stopped division, raised cell volume up to 1.5x and RNA/DNA per cell up to 10x; cells resumed division at ~2/3 the control rate when shaking stopped after 10 days; shaking >20 days caused total cell death. The authors suggest disturbance of microtubules as a possible mechanism.",
+  "discrepancy": ""
+ },
+ "mixing-09": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1046/j.1529-8817.2003.02094.x",
+  "updates": {
+   "scale": "20 L polycarbonate tanks (24 x 10 x 100 cm, filled to 80 cm), turbulence from a pair of vertically oscillating 2.5 cm rods, calibrated with an acoustic Doppler velocimeter",
+   "dose": "high epsilon ~10^-4 m2 s-3, low epsilon ~10^-8 m2 s-3, unstirred control; continuous mixing",
+   "duration": "1-2 weeks continuous mixing after a 1-day unmixed acclimation",
+   "result": "High turbulence cut net growth of Ceratium fusus ~25-50% and drove C. tripos and Pyrocystis noctiluca to net mortality (growth <0); four species (A. catenella, A. tamarense, Gyrodinium sp., P. fusiformis) were essentially unaffected; A. fundyense, G. catenatum and L. polyedrum grew ~30-40% faster. Low turbulence (10^-8) had no significant effect on any species.",
+   "effect_pct": null
+  },
+  "key_details": "Ten dinoflagellate species (30-500 um) were grown in three 20 L tanks: high turbulence, low turbulence and an unstirred control, with treatments rotated among tanks. Most species were run in duplicate experiments (C. tripos in three, across two clones); cells were counted about every other day and net growth taken from log-linear regressions. Growth was inhibited in 3 species (C. fusus, C. tripos, P. noctiluca; the last two with net mortality), unchanged in 4 (A. catenella fell ~15% in one of two runs only) and raised ~30-40% in 3 (A. fundyense 0.38 to 0.53 and 0.37 to 0.50 div/d; L. polyedrum 0.33 to 0.53 and 0.33 to 0.49 div/d; G. catenatum significant in one of two runs). L. polyedrum cells were smaller under high turbulence. Caveat: the HAB taxa most relevant to mitigation (Alexandrium, Lingulodinium, Gymnodinium catenatum) grew faster or were unaffected.",
+  "discrepancy": "The record says 1 species slower and 2 'no increase'; the full text reports 3 species inhibited (C. fusus slower; C. tripos and P. noctiluca net mortality under high turbulence), 4 unaffected and 3 faster."
+ },
+ "mixing-10": {
+  "status": "failed",
+  "source_url": "https://doi.org/10.4319/lo.2000.45.4.0905",
+  "updates": {},
+  "key_details": "Full text is PDF-only (Wiley ePDF reader rendered no extractable text); only the abstract was read. Lingulodinium polyedrum on a 12:12 LD cycle got 1 h/day of Couette shear (0.004 N m-2) or shaken-flask flow for 5-8 d; flow in the last hour of the dark phase reduced net growth more than flow in the light. The abstract matches the current record.",
+  "discrepancy": ""
+ },
+ "mixing-11": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1046/j.1529-8817.2002.00165.x",
+  "updates": {
+   "scale": "isolated cells in 0.5 mL multiwell plates (shaken) and larger cultures in Couette-flow chambers and shaken flasks",
+   "dose": "Couette laminar shear 0.004, 0.010 or 0.019 N m-2 for 1 to 24 h/day; unquantified shaking",
+   "result": "At 0.004 N m-2, 1 h/day cut net growth 25.9 +/- 3.9% and 2-24 h/day ~50% (49.9 +/- 3.0%), entirely through fewer divisions; at 0.010-0.019 N m-2, 1 h/day cut growth 44.8 +/- 4.4% and continuous 0.019 N m-2 61.9 +/- 8.2%, with added mortality; shaken flasks gave 66.5 +/- 2.9%.",
+   "effect_pct": 49.9
+  },
+  "key_details": "Lingulodinium polyedrum was tested three ways: shaken isolated cells tracked individually, Couette chambers at quantified shear, and shaken flasks; division frequency came from flow-cytometric DNA per cell. In isolated cells, percent dividing fell with daily shaking duration (F3,12 = 16.38, P = 0.0002) while mortality was unrelated to shaking. At the lowest shear, growth loss matched lower division; at higher shear and in shaken flasks, net growth fell below division estimates, showing shear-induced mortality. In a late-exponential culture at 0.004 N m-2 continuous, 23.6% of cells were disrupted (dead) vs 0.4% in controls. Caveat: statistics used within-experiment replicates, not replicated treatments, and a single shaker table was used for the isolated-cell tests.",
+  "discrepancy": "The record's 'Duration: Not reported' can be filled: shear was applied 1-24 h/day over multi-day runs. Growth-inhibition magnitudes (26-67%) were missing from the record."
+ },
+ "mixing-17": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.jmarsys.2005.11.012",
+  "updates": {
+   "scale": "2.5 L polycarbonate bottles, 2 still and 2 turbulent per species (n=2), two independent experiments",
+   "dose": "orbital shaker at 130 rpm; epsilon ~10 cm2 s-3 (ADV-estimated) vs still",
+   "duration": "ca. 5 days per experiment",
+   "freshwater_or_marine": "marine",
+   "result": "Turbulence raised Coscinodiscus growth (0.37 to 0.42 and 0.27 to 0.32 d-1; final 33 vs 55 and 22 vs 38 cells/mL) and slightly lowered T. pseudonana growth (1.74 to 1.52 and 1.69 to 1.35 d-1).",
+   "effect_pct": null
+  },
+  "key_details": "Batch cultures of the small diatom Thalassiosira pseudonana (~6 um) and the large Coscinodiscus sp. (~109 um) were grown in P-limited medium (1 uM P, N/P 88.2) at 22 C with duplicate still and turbulent bottles, in two experiments. Turbulence increased Coscinodiscus growth rate and final density in both experiments and slightly reduced T. pseudonana growth. Results were compared with a nutrient-uptake (Sherwood number) model; Sh under turbulence was 1.17 for T. pseudonana and 2.94 for Coscinodiscus. Caveats: n=2 bottles per treatment, non-axenic cultures, Coscinodiscus growth computed from total shells including empty ones.",
+  "discrepancy": ""
+ },
+ "mixing-19": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1007/s00449-005-0030-3",
+  "updates": {
+   "scale": "5 L baffled stirred-tank photobioreactor (BioFlo III), continuous culture at dilution rate 0.0139 h-1, aerated 1.5 L/min",
+   "dose": "stepwise impeller speed 150-550 rpm (P. tricornutum; tip speed 0.68 to >1.56 m/s) and up to 650 rpm (P. cruentum); Pluronic F68 0.01-0.10% w/v",
+   "freshwater_or_marine": "marine",
+   "result": "Steady-state biomass rose with agitation up to 350 rpm (1.56 m/s tip speed) for P. tricornutum and 550 rpm (2.45 m/s) for P. cruentum, then fell; P. cruentum washed out at 650 rpm. Damage came from small bubbles rupturing at the surface, and Pluronic F68 protected cells in a dose-dependent way."
+  },
+  "key_details": "Continuous monocultures of Phaeodactylum tricornutum and Porphyridium cruentum were run in a 5 L stirred photobioreactor with agitation raised stepwise; damage was inferred from falls in steady-state biomass at constant dilution rate. pH was held at 7.7 by CO2 injection, and kLa rose with agitation, so CO2 limitation did not explain the decline. Below the threshold, more agitation raised biomass through better light-dark cycling. The authors note that the net biomass data cannot separate growth and death effects, so relative shear sensitivity of the two species is not firmly established. This is a bioprocess study, not HAB control.",
+  "discrepancy": "The P. cruentum damage threshold (between 2.45 and 2.89 m/s tip speed) was missing from the record, and agitation below the threshold increased biomass."
+ },
+ "mixing-21": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1021/bp070306a",
+  "updates": {
+   "dose": "microfluidic flow contraction at 10-90 mL/min (weighted EDR up to ~5.8 x 10^7 W/m3), 1-3 passes; bubbles from a 30-gauge needle (~5 mm) or sintered-glass sparger (~1 mm)",
+   "duration": "single transient passes (1-3) through the contraction device",
+   "result": "No lysis (LDH and counts) at any flow up to 5.8 x 10^7 W/m3, but motility fell from 87% to 24% after one pass and 2% after three at 90 mL/min from loss of the longitudinal flagellum, which regrew during static recovery. Small bubbles cut motility (~20% loss vs ~4% for large bubbles) and enriched cells in foam up to 1.80x."
+  },
+  "key_details": "Crypthecodinium cohnii (a heterotrophic DHA-producing dinoflagellate) at 3.5 x 10^6 cells/mL was pumped through a microfluidic contraction whose energy dissipation rate was estimated by CFD. Lysis was measured by LDH release and cell counts; none was significant. Motility after 1, 2 and 3 passes at 90 mL/min was 24, 6 and 2% vs 87% initially; at 50 mL/min it was 70, 67 and 62%. Cells attached to bubble films and were trapped in foam Plateau borders; Pluronic F-68 reduced film attachment but not trapping. Caveat: bioprocess study on a non-HAB species; effects are sublethal and reversible.",
+  "discrepancy": "Flagellar loss and motility decline were reversible (flagella regrew during static recovery), a detail missing from the record."
+ },
+ "mixing-23": {
+  "status": "full_read",
+  "source_url": "https://doi.org/10.1016/j.scitotenv.2022.157400",
+  "updates": {
+   "organism": "spring dinoflagellate bloom dominated by Peridiniopsis sp. (also Chlorophyta e.g. Closterium, Bacillariophyta e.g. Cyclotella)",
+   "freshwater_or_marine": "freshwater",
+   "scale": "Lijiahe Reservoir, Xi'an, China (2.18 km2, max depth 80 m, 5.7 x 10^7 m3); eight water-lifting aerators installed 2007; sampled at 2 sites",
+   "dose": "8 water-lifting aerators (diffusers 5 m above sediment; aeration <20 m3/h, lifting flow 20-50 m3/h each)",
+   "duration": "2 weeks of operation (April 9-22, 2021); monitoring March 6 - May 5, 2021",
+   "result": "Within two weeks of mixing, surface dinoflagellate density fell 97.8% (S1) and 96.8% (S2) from pre-mixing peaks of 2.2 x 10^7 and 1.1 x 10^7 cells/L to <5.0 x 10^5 cells/L; total phytoplankton fell 97.1% and 95.5%, and Chl-a stayed <10 ug/L.",
+   "effect_pct": 96.8,
+   "env_effects": "Community shifted from large motile taxa (dinoflagellates, Closterium) to small non-motile diatoms (Cyclotella, reduced only 70.0-84.0%); surface water temperature fell below 10 C and stratification weakened (dT 6.8 to 2.3 C at S1)."
+  },
+  "key_details": "Before-during-after field study of one spring bloom (2021) in a eutrophic, stratified drinking-water reservoir: 8 water-lifting aerators ran for two weeks at bloom onset, with weekly to twice-weekly profiles at two sites near the aerators. Pre-mixing surface peaks reached 2.4 x 10^7 cells/L total phytoplankton (Chl-a 438.8 ug/L) at S1. Reductions compare surface densities during mixing with the pre-mixing surface peak, so part of the drop is vertical redistribution (dilution through the water column), which the authors note alongside cell decay. RDA identified water temperature, Zmix, Zeu/Zmix and TP as the main drivers (69.9% of variance for taxonomic groups). Caveats: no unmixed control site or year, a single event, and the two sites were both inside the aerator zone.",
+  "discrepancy": "The record's -95.5 to -97.1% are total phytoplankton surface reductions; dinoflagellates specifically fell 96.8-97.8%. The record's effect_pct 95.5 is the total-phytoplankton figure at S2."
+ }
+}
