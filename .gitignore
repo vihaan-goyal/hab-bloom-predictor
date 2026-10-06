@@ -11,3 +11,6 @@ skills-lock.json
 
 # alerter link run logs (local)
 hardware/alerter_uno/logs/
+
+# CSEF registration forms: personal contact details (local only)
+forms/

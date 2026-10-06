@@ -61,10 +61,10 @@
 
 // ---- sensors: set to 1 once the part is wired (libraries: Arduino IDE -> Library Manager)
 #ifndef USE_DS18B20
-#define USE_DS18B20 0   // temperature probe            needs OneWire + DallasTemperature
+#define USE_DS18B20 1   // temperature probe            needs OneWire + DallasTemperature
 #endif
 #ifndef USE_TSL2591
-#define USE_TSL2591 0   // chlorophyll (fluorometer)    needs Adafruit TSL2591 Library + Adafruit Unified Sensor
+#define USE_TSL2591 1   // chlorophyll (fluorometer)    needs Adafruit TSL2591 Library + Adafruit Unified Sensor
 #endif
 #ifndef USE_PH
 #define USE_PH 1        // pH module (analog)           no library
@@ -488,6 +488,7 @@ void setup() {
   }
 #if USE_DS18B20
   sensors.begin();
+  sensors.setResolution(12);           // 0.0625 C steps; some probes power up at 9-bit (0.5 C steps)
 #endif
 #if USE_TSL2591
   tslOk = tsl.begin();

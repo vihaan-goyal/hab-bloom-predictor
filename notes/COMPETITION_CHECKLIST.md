@@ -3,7 +3,7 @@
 Fair: Connecticut Science & Engineering Fair (CSEF), ISEF-affiliated.
 Entry type: first-time entry (no Form 7 continuation). Project category:
 Environmental Engineering or Earth & Environmental Sciences (computational).
-Adult sponsor: **not yet secured — critical path.**
+Adult sponsor: **Meghana Fernandez** (also Direct Supervisor; chosen 2026-10-04). Westhill teacher still needed to register the school by Oct 31.
 
 ## Dates (from the CSEF site, screenshot 2026-09-05)
 
@@ -13,10 +13,8 @@ Adult sponsor: **not yet secured — critical path.**
 | Sept 19 | Fallback: any faculty member agrees to sponsor | Vihaan | due tomorrow; cold ask drafted in notes/SPONSOR_ASK.md |
 | **Sept 25** | **HARD STOP: Forms 1A, 1, 3, 1B signed.** No hands-on work before this (notes/LAB_PROTOCOL.md s1) | Vihaan + sponsor + supervisor | open |
 | Sept 28 | First hands-on work: build the rake, jar rig, controller | Vihaan | blocked by Sept 25 |
-| Oct 15 | Deadline to seek approval for independent-student status (only if the school does not register) | Vihaan | n/a if school registers |
-| Oct 31 | School registration closes 11:59 pm | school + Vihaan | open |
-| Nov 15 | Registration due for independent student projects | (fallback path) | n/a |
-| Dec 1 | All high-school registrations close 11:59 pm | Vihaan | open |
+| **Oct 31** | **A Westhill teacher/staff member submits the CSEF school registration and buys a $50 project spot** (registering through school, decided 2026-10-04) | teacher + Vihaan | open: asked chem teacher Ms. Dodita who handles it, 2026-10-04; follow up Oct 7 if no reply |
+| **Dec 1** | **High-school registration closes 11:59 pm**: online form + research plan + Form 2A + release form + any SRC forms (Form 3) | Vihaan | open |
 | Feb 15 | High-school projects selected by school fairs due 11:59 pm | Vihaan | open |
 | Feb 25 | Upload portal opens | Vihaan | open |
 | mid-March | Fair | | |
@@ -36,10 +34,17 @@ Adult sponsor: **not yet secured — critical path.**
   (notes/DEVICE_PROTOTYPE.md s6).
 - **All four (1A, 1, 3, 1B) signed by Fri Sep 25, 2026**, before the first
   hands-on work on Mon Sep 28 (notes/LAB_PROTOCOL.md s1; DEVICE_PROTOTYPE.md s6).
-- Not needed: Form 2 (Qualified Scientist) — optional for computational work on
-  public data; Forms 4–7 — no human, vertebrate, PHBA, or continuation.
-- Regulated Research Institution form: no; computational work done at home on
-  public data. The bench work is done at school under the Designated Supervisor.
+- **CSEF (2026-10-04): Form 2A (Student Support Disclosure) is required for
+  all projects.** Form 2B is required only for independent entries, not for
+  this school entry. Forms 1, 1A, 1B are not uploaded to CSEF (the online form
+  covers them) but are still needed if the project goes to ISEF.
+- Not needed: Forms 4–7 — no human, vertebrate, PHBA, or continuation.
+- Regulated Research Institution form: computational work done at home on
+  public data. **Bench work (2026-10-04): all at Bi-Cultural Hebrew Academy
+  (Stamford), not Westhill, under Direct Supervisor Meghana Fernandez (MS
+  Microbiology, UCLA; adjunct professor, UConn).** Outside the student's own
+  school, so file **Form 2C** to be safe (signed after experimentation).
+  Form 3 filled 2026-10-04: `forms/Form 3.pdf`.
 
 _2026-09-18: corrected. This block previously read "Form 3 (Risk Assessment) —
 no hazards", which contradicted DEVICE_PROTOTYPE.md s6 and LAB_PROTOCOL.md s11;

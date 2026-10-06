@@ -41,6 +41,8 @@ Dates fit `EXECUTION_PLAN.md`: build and calibrate by Oct 24, cultures Oct 15-31
 clicking on D10 (LED as the pretend pump; the real pump isn't bought yet).
 On 2026-09-30 the new Uno (COM5) passed Tests A, B and C by hand, every line matching, and the bare
 relay clicked on D10 with `hardware/relay_click_test/relay_click_test.ino` (toggles D10 every second).
+On 2026-10-05 the Adafruit TSL2591 (STEMMA QT cable, no soldering) read on the new Uno with `USE_TSL2591 1`;
+the pH board reads (zero point ~3.6 V in tap water, buffers not yet bought, so not calibrated).
 
 ## Shopping list (what to order now)
 
