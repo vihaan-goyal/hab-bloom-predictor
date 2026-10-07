@@ -265,6 +265,11 @@ otherwise unused since 2026-10-01.
   more days, it flags "needs cleaning".
 - **Initial calibration** (blank + multiplier) is done once at setup against a reference: lab chlorophyll,
   cell counts, or a sonde. Service visits re-check it with 1-2 reference samples.
+- **Side-by-side with a sonde (the main validation; plan §12 in `notes/mitigation/EXECUTION_PLAN.md`):**
+  - deploy within about 1 m of a RIDEM or Narragansett Bay NERR sonde for 2-4 weeks;
+  - fit `blank` and `chlk` as one linear fit of device counts against sonde µg/L (the same kind of
+    correction DEEP applies to its own CTD);
+  - report r, bias and drift. The target is ±20% of the sonde.
 
 **Parts:**
 - TSL2591 light-sensor breakout (Adafruit, works on 5 V);

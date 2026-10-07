@@ -255,6 +255,35 @@ ones are in `00_CONTROL_LOOP.md`.
 **Added to the shopping list:** low-range peroxide test kit (~$30-60), 5 µm syringe filters and
 syringes (~$20).
 
+## 12. Device validation: side-by-side with a reference sonde (added 2026-10-07)
+
+The device's chlorophyll sensor is a DIY fluorometer, and the Narragansett model was trained on
+RIDEM's YSI sondes. The device's readings have to be shown to track a real sonde before the model's
+skill can be claimed for the device.
+- **Where (in order of preference):**
+  1. a RIDEM Narragansett Bay fixed-site station (the same instruments the model was trained on);
+  2. a Narragansett Bay NERR station (Prudence Island; public NERRS data);
+  3. backup: a UConn LISICOS buoy (WLIS/EXRX), whose sensors drifted, so this is a weaker reference.
+- **When:** as soon as access is granted, ideally November-December 2026. If access takes longer,
+  in spring 2027 before CSEF judging. Ask now, because permission is the long wait.
+- **How:**
+  - mount the device within about 1 m of the sonde intake, at the same depth, for **2-4 weeks**;
+  - log every 15 min;
+  - clean the window on the sonde's service schedule.
+- **Measure:**
+  - device vs sonde chlorophyll as daily means (Pearson r and mean bias; engineering-goal target:
+    within ±20% of the sonde);
+  - temperature and salinity agreement;
+  - drift (the slope of device/sonde over time);
+  - the fouling rate between cleanings.
+- **Calibration it produces:** the device's `blank` and `chlk` are fitted from the side-by-side data,
+  as one linear fit. This is the same kind of linear regression DEEP uses to correct its own CTD
+  fluorometer against lab chlorophyll (M. Lyman, 2026-10-06).
+- **Fallback if no sonde is available:** dye or algae dilution series (lab bench) plus reference
+  samples, either lab-extracted chlorophyll (school spectrophotometer, or samples run by DEEP/UConn)
+  or hemocytometer cell counts.
+- **Pre-register the pass mark** (±20% and r) before deployment, like every other test.
+
 ## Never claim
 - That it prevents blooms in the open Sound; this is tanks only, aimed at enclosed or semi-enclosed water (harbors, shellfish beds, aquaculture pens, coastal ponds).
 - That the device is field-ready.
