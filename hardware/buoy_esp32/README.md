@@ -219,6 +219,9 @@ How Wi-Fi alerts work:
    is not enough.
    - If the scale is off by 2x, the 10 µg/L bloom line and every chlorophyll input are off by 2x.
    - The PC tool `predict_anywhere.py` quantile-rescales chlorophyll; the board does not.
+   - The planned fix is a 2-4 week side-by-side next to a RIDEM or Narragansett Bay NERR sonde
+     (plan §12 in `notes/mitigation/EXECUTION_PLAN.md`). `blank` + `chlk` are fitted from those daily
+     means with a target of ±20%.
 3. **No oxygen sensor.** `do` and `do_lag1` are always missing, so the model uses the training
    median (7.8 mg/L). Oxygen is one of the model's inputs, so expect somewhat weaker skill than the
    fork's published numbers.
