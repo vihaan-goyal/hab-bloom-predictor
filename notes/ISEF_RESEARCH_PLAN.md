@@ -1,372 +1,154 @@
-# Research Plan (ISEF Form 1A structure) — draft 2026-09-05, amended 2026-09-19
+# Research Plan (ISEF Form 1A structure), rewritten 2026-10-07
 
-Status: DRAFT for adult-sponsor review. The prospective test (Section D.3)
-has NOT started; it begins the week after Form 1A is signed. Everything in
-D.1–D.2 was completed before this plan was written and is labelled as such.
+Status: for review and signature by the Adult Sponsor and Direct Supervisor, Meghana Fernandez
+(Forms 1, 1A, 1B; Form 3 and 6A alongside). No bench work starts before these are signed and the CSEF
+Scientific Review Committee approves Forms 3 and 6A.
 
-**This project has two halves.** (1) A *computational half*: forecasting
-chlorophyll-a exceedances at monitoring stations from public government and
-university monitoring records. It involves no human or vertebrate subjects, no
-PHBAs and no hazardous materials. (2) A *bench half* (Sections B, C, D.5, E and
-F below), added after the first draft: a closed 20 L laboratory mesocosm in
-which a magnetite–kaolin–PAC clay is dosed and then retrieved on a magnet. The
-bench half does involve hazardous materials and equipment — PAC powder (an
-acidic aluminium coagulant), N52 neodymium magnets, a student-built 12 V
-controller and pump used beside water, preservation acid handled by adults
-only, and a live, non-toxic marine diatom culture.
-
-**Amendment, 2026-09-19 (hazards).** The 2026-09-05 draft stated that the
-project used no hazardous materials. That was true of the computational half
-and is no longer true of the project as a whole. ISEF **Form 3 (Risk
-Assessment)** is required for the hazardous chemicals, the home-built
-electrical device and the protist culture, signed by the Adult Sponsor and by
-the Designated Supervisor (the school chemistry teacher). No SRC pre-approval
-beyond Form 3 is required: there are no human subjects, no vertebrates, no
-potentially hazardous biological agents, no controlled substances and no rDNA.
-Forms 1A, 1, 1B and 3 must be signed by **Fri Sep 25, 2026**; the first
-hands-on work is Mon Sep 28. Section E is the operative risk assessment.
-
-Throughout, the forecast target is a **chlorophyll-a exceedance** (a lab value
-above 10 µg/L, or a station's own 75th percentile for fluorescence), not a
-"harmful algal bloom"; and the bench device is tested for cell **removal and
-retrieval in a closed tank**, never for bloom prevention or nutrient removal.
+This replaces the 2026-09-05/19 plan, which described a magnetic clay-flocculation device. That device
+was dropped on 2026-10-01 because it can't run unattended on the water; the bench now tests aeration
+and low-dose hydrogen peroxide (`notes/mitigation/EXECUTION_PLAN.md`, "Plan change 2026-10-01"). The
+old plan is in git history (before the 2026-10-07 commit). The CSEF registration text, limited to
+1,000 words, is the "CSEF Research Plan" Google Doc; this file is the full version with the same
+hypotheses.
 
 ## A. Rationale
 
-Algal blooms in estuaries cause oxygen loss, fish kills and shellfish
-closures. Managers find them by sampling on a fixed calendar. Existing
-operational forecasts (NOAA Lake Erie, Gulf of Mexico HAB-OFS, California
-C-HARM) cover a few places, depend on satellites or hydrodynamic models, and
-predict toxin or cell abundance rather than the onset of a chlorophyll bloom.
-Long Island Sound (LIS) and Narragansett Bay have decades of public
-chlorophyll records, and thousands of continuous sondes worldwide now report
-chlorophyll fluorescence every 15–60 minutes. Nobody has tested whether a
-single model trained on one bay can forecast bloom onset at those sensors
-without retraining.
+Algal blooms in coastal waters cause severe hypoxia, toxic contamination of marine life, and
+disruptions to marine ecosystems and local economies. Water-quality agencies find blooms by sampling
+on a fixed schedule, so they usually act only after a bloom is visible, when treatment works least.
+Operational forecasts (NOAA Lake Erie, Gulf of Mexico HAB-OFS, California C-HARM) cover a few places
+and rely on satellites or circulation models. Continuous sensors now report chlorophyll fluorescence
+every 15-60 minutes at thousands of sites, but no low-cost system uses those readings to forecast a
+bloom and act on it automatically.
 
-## B. Research questions and hypotheses
+## B. Research question, hypotheses and engineering goals
 
-Q1. Can a bloom-onset probability 7 days ahead be forecast from a station's
-own recent chlorophyll, oxygen, temperature and salinity record?
-H1: yes, with ranking skill (AUC) above 0.7 and precision above the base
-rate (lift > 1) in held-out years.
+**Question:** Can a low-cost autonomous device forecast algal blooms from daily sensor data and
+trigger treatment early enough to reduce their peak?
 
-Q2. What limits forecast precision: model class, features, data volume,
-sampling frequency, or bloom rarity?
-H2: bloom rarity. Prediction (pre-registered 2026-09-01): thinning
-Narragansett's daily record to LIS's boat cadence will *not* reproduce LIS's
-low precision, but re-thresholding Narragansett to LIS's bloom rate will.
-Model class and input resolution were tested last (2026-09-10, two
-pre-registered neural-network tests, Narragansett findings §26–27): a 1-D
-CNN on the raw 15-minute record scored reliably slightly *below* the
-daily-feature gradient-boosting model on identical rows (paired ΔAUC −0.017
-[−0.027, −0.002]), and a pooled six-site network with a learned site
-embedding transferred worse than pooled boosting (AUC 0.70 vs 0.76). Model
-class, features, data volume and sampling frequency are all now excluded;
-rarity stands.
-Outcome 2026-09-23 (rebuilt lab-scale LIS label): mostly rarity, not only; the
-Sound also separates the classes less well (overlap 0.62 against 0.52). See
-notes/S1_NUMBERS_SHEET.md and notes/LABEL_REBUILD_PREREG.md.
+**Forecasting hypothesis:** if the forecast uses daily sensor data, then it ranks bloom risk better
+than a calendar (time-of-year) forecast in a pre-registered test (p < 0.05), because daily data
+captures bloom starts that 3-weekly boat sampling misses.
 
-Q3. Does a model trained on Narragansett Bay transfer to other water bodies
-with no retraining?
-H3: yes at marine and open-coast sondes after rescaling chlorophyll to the
-target site's own distribution; retraining on local data will not beat it
-except in tidal-fresh water with 3+ local years.
+**Treatment hypothesis:** if a treatment (aeration or low-dose hydrogen peroxide) is switched on
+automatically when the forecast predicts a bloom, then treated tanks will have a lower or later bloom
+peak than both untreated tanks and tanks treated only after the bloom becomes visible, without
+harming non-target organisms (brine shrimp) or pushing algae below their normal levels, because
+acting early stops growth before cell numbers are high.
+- The pass marks are fixed in `notes/mitigation/00_CONTROL_LOOP.md`: aeration is judged on days held
+  below the bloom threshold; peroxide on a ≥ 50% lower peak than untreated tanks and a larger cut than
+  reactive treatment; non-target survival equal to untreated; never below 80% of the warm-up level.
+- Also reported, with no pass mark: days to regrow after treatment stops, and whether peroxide hits
+  small cells (about 2 µm) harder than large ones.
 
-Q4. Does the skill hold prospectively, on forecasts issued before the outcome
-is known?
-H4: pooled onset lift over a fall season falls inside the retrospective band
-for each site group (LIS buoys 1.1–2.5×; NERRS and Chesapeake 1.3–2.0×; ERDDAP
-top sites 1.5–2.5×). Threshold, sites and scoring rule are frozen before the
-first issuance (notes/PROSPECTIVE_PROTOCOL.md in the Narragansett repo).
+**Engineering goals:** a low-cost device (about $400 in parts) that runs the forecast on board and
+matches the computer model's alerts (100% identical), measures chlorophyll within ±20% of a reference
+after calibration, runs unattended for 14 days with no gaps in its log, and doses peroxide so the far
+side of the tank reaches 0.8 ± 0.2 mg/L within 15 min while staying below 2.8 mg/L 50 cm from the
+outlet within 5 min.
 
-Q5 (bench half). When a forecast row alerts, does a magnetic clay dose remove a
-Long Island Sound diatom at pre-bloom density, and how much of the clay comes
-back out on a magnet instead of staying on the bottom? The hypotheses and their
-bands were pre-registered on 2026-09-15, before any bench run, in
-notes/SCIENTIFIC_METHOD.md Phase 11 (device record: notes/DEVICE_PROTOTYPE.md;
-procedure: notes/LAB_PROTOCOL.md). They are reproduced here unchanged:
+## C. Procedures
 
-- **H11a (removal).** Magnetic PAC-kaolin at 0.2 g/L (product basis; stock route
-  S or D per the Oct 30 amendment) removes *Skeletonema marinoi* (CCMP1332,
-  Milford CT isolate) at 1e4 cells/mL by 70–95% at 5 h (control-normalised
-  Sedgewick-Rafter counts, n = 3 batches), and within +/-15 points of plain
-  PAC-kaolin at the same dose. Pass: mean RE >= 70% with the n = 3 CI lower
-  bound > 50% and |magnetic − plain| <= 15 points. Mean >= 70% with a lower
-  bound of 40–50% reads "consistent, underpowered", not failed; the interval is
-  a t-interval on three batch REs (t = 4.30), and "consistent, underpowered" is
-  the pre-registered likely reading. Below 50%: rerun at 0.6 g/L and report both.
-- **H11b (recovery).** The settle–raster–column sequence recovers 75–95% of
-  dosed magnetite-equivalent by pull test on homogenised pad aliquots and >= 70%
-  of total dry product in the winning route's blank, 60–90% / 50–85% with
-  culture, and <= 10% of plain PAC-kaolin (one plain tank blank, n = 1, reported
-  as a description with its ~2–3% solids floor). Pass: mean
-  magnetite-equivalent >= 70% over n = 3 tank runs, each >= 60%; total >= 50%;
-  plain <= 10%. A blank below 70/80 is a design failure (gate), not a
-  hypothesis failure.
-- **H11c (dose-density), MVP version.** RE at 1e4 cells/mL rises monotonically
-  by ordered means over 0.05, 0.1, 0.2 g/L (three means with t-intervals); D90
-  by log-linear interpolation only when bracketed by two adjacent means,
-  otherwise reported as "> 0.2 g/L" or "< 0.05 g/L". Pass: ordered means
-  non-decreasing and, when bracketed, D90 in 0.05–0.2 g/L; an unbracketed D90
-  reads "not testable". (Amendment A1, 2026-09-16, adds a fourth screening arm
-  at 0.4 g/L; the band above is unchanged.)
+**Location and supervision.** Bench work at Bi-Cultural Hebrew Academy (Stamford, CT) under Direct
+Supervisor Meghana Fernandez (M.S. Microbiology, UCLA; Adjunct Professor, UConn), who is present for
+all chemical and culture work. Computational work is done at home on public data.
 
-What Q5 does **not** claim, as pre-registered: not bloom prevention, not
-nutrient removal, not "no habitat impact", not field-ready.
+### C.1 Forecast (computational)
+- **Device model:** gradient boosting trained on Narragansett Bay (RI DEM) fixed-site sondes
+  (chlorophyll fluorescence, oxygen, temperature, salinity, summarized daily); it predicts whether
+  chlorophyll exceeds the bloom level within 7 days. Alert threshold 0.45, chosen on validation data.
+- **Long Island Sound model:** CT DEEP boat-survey data (50 stations, 1993-2025, lab-corrected
+  chlorophyll), logistic regression with 35 features.
+- **Testing:** each model is scored only on years it was not trained on (walk-forward), with
+  thresholds chosen on validation data, and compared with a calendar forecast by AUC with a
+  station-year bootstrap (2,000 resamples, one-sided p < 0.05), as pre-registered. Model-class
+  alternatives (gradient boosting, neural networks, TabPFN) were tested under separate
+  pre-registrations. The 2026 season is a pre-registered independent check
+  (`notes/PROSPECTIVE_2026_PREREG.md`).
 
-## C. Data
+### C.2 Bench
+1. **Seawater:** artificial sea salt in distilled water to salinity 27.5 (matched to the Sound), with
+   nitrate, phosphate and silicate stocks and f/2 trace metals and vitamins; 12-15 °C; 12:12 light.
+2. **Cultures:** non-toxic marine microalgae from NCMA (*Skeletonema*, *Thalassiosira weissflogii*,
+   *Phaeodactylum tricornutum*, *Prorocentrum micans*, *P. triestinum*, *Micromonas pusilla*,
+   *Nannochloropsis*), grown in f/2 medium.
+3. **Aeration screen:** 500 mL cultures at four air flows (none; gentle, CO₂ only; 25 mL/min =
+   0.05 vvm; 300 mL/min = 0.6 vvm, matching Sung & Gobler 2026) × 4 species × 3 replicates; 48 h on,
+   48 h regrowth.
+4. **Peroxide screen:** 250 mL flasks at 0, 0.8, 1.6, 3.2 and 6.4 mg/L H₂O₂ (3% H₂O₂ diluted to a
+   0.1% working solution; 160 µL per 200 mL = 0.8 mg/L), plus three daily 0.8 mg/L pulses; sodium
+   percarbonate at the same peroxide dose; sodium carbonate as a pH control; 3 replicates; counts at
+   24, 48 and 72 h. Brine shrimp (*Artemia*) survival is the non-target check.
+5. **Loop runs:** 10 L tanks, 3 per arm: A untreated; B forecast-triggered loop; C reactive
+   (starts at 50% of the expected peak); D false alarm (loop triggered with no nutrients added).
+   A 21-day low-nutrient warm-up, then a nutrient pulse starts the bloom (2-3 weeks), then 5 days of
+   monitoring. Two pilot tanks confirm the culture blooms and set the expected peak.
+6. **Loop control:** an Arduino reads chlorophyll (DIY fluorometer), temperature and pH, runs the
+   forecast, and turns treatment on at a bloom probability of 0.45. It re-measures after each period
+   and turns off when the forecast drops and chlorophyll is low and not rising.
+   - Peroxide: 0.8 mg/L per pulse (8 mL of 0.1% per 10 L, calibrated peristaltic pump, inline
+     dilution); a new pulse only if the residual is ≤ 0.5 mg/L; at most 3 pulses.
+   - Aeration: air pump switched by a relay.
+   - Automatic stops: peroxide above 2.8 mg/L, pH outside 7.6-8.6, dissolved oxygen below 4 mg/L,
+     or chlorophyll below 80% of normal for 2 days.
+   - Before the loop run, procedure P7 checks pump calibration, the controller logic and how the dose
+     spreads through the tank (`notes/mitigation/PROCEDURES.md`).
 
-- CT DEEP Long Island Sound Water Quality Monitoring, 1993–2025, 50 stations,
-  monthly-to-biweekly boat samples (lab chlorophyll-a). Public, via UConn ERDDAP.
-- RIDEM Narragansett Bay Fixed-Site Monitoring Network sondes, 2005–2023,
-  18 stations, 15-minute cadence (fluorescence chlorophyll). Public annual files.
-- UConn LISICOS buoys WLIS and EXRX, 2019–2026, ECO-FL fluorescence, live ERDDAP.
-- Transfer targets: Maryland DNR Eyes on the Bay, NERRS SWMP (NCEI and IOOS
-  ERDDAP), Cefas SmartBuoy (UK), IMOS National Reference Stations (Australia),
-  NOAA GLERL Lake Erie buoys, USGS San Francisco Bay; plus 172 fixed sondes
-  found by crawling 48 public ERDDAP servers.
-- Satellites: MODIS-Aqua and Sentinel-3 OLCI chlorophyll via NOAA CoastWatch
-  (feasibility only).
+### C.3 Risk and safety (Form 3; Form 6A)
+- **Chemicals:** hydrogen peroxide 3% and 7% (up to 1 L), sodium percarbonate (up to 100 g), sodium
+  carbonate, nutrient salts (sodium nitrate, sodium phosphate, sodium metasilicate), household bleach,
+  90% acetone (up to 250 mL), water-test kit reagents. Hazards: eye and skin irritation or burns;
+  percarbonate and nitrate are oxidizers; bleach releases toxic gas with acids or ammonia; acetone is
+  flammable.
+- **Activities and devices:** mains and 12 V pumps and grow lights near salt water (all mains devices
+  on a GFCI; electronics above the water; unplug before reaching into a tank); soldering (lead-free,
+  ventilated, iron unplugged after use).
+- **Organisms:** non-toxic marine microalgae, Risk Group 1, handled at BSL-1 (Form 6A); brine shrimp
+  (invertebrates) for toxicity tests. No humans, no vertebrates, no tissue, no toxic or pathogenic
+  strains.
+- **Precautions:** supervisor present; splash goggles, nitrile gloves and lab coat; no food or drink;
+  small quantities; Safety Data Sheets read before first use; stocks labeled and dated; never mix
+  bleach with acids, ammonia or peroxide; acetone only with ventilation and no flames.
+- **Disposal:** peroxide-treated water is held until test strips read below 0.5 mg/L; all
+  algae-containing water is disinfected with 10% bleach for 30 min and flushed down a lab sink;
+  consumables are bleached and bagged; brine shrimp are frozen or bleached, never released. Nothing
+  goes into the Sound, storm drains or the ground.
 
-Data generated at the bench (Q5; one CSV row per sample, notes/LAB_PROTOCOL.md
-s9):
-- Cell counts, Lugol-fixed, 1 mL Sedgewick-Rafter chamber, at t0, 5 h and 24 h,
-  with mean chain length; five samples counted independently by two counters.
-- Extracted chlorophyll-a: 250 mL on 47 mm GF/F, 90% acetone, 664/750 nm.
-- Dry solids mass and magnetite-equivalent mass (0.001 g balance plus a
-  magnet pull test calibrated daily against magnetite standards) for the magnet
-  pad and for three loss fractions: tube rinses, floor rinse, and a 5 L
-  supernatant pull.
-- Dissolved oxygen, pH, salinity and temperature in each tank run and jar.
-- Aluminium by ICP, one batch of about five samples (treated jars plus a
-  seawater blank and a filter blank), run by a partner laboratory and reported
-  with its reporting limit beside the 24 µg/L marine guideline.
-- Controller SD-card log of every ledger poll and relay action; floc photographs
-  and 750 nm floor turbidity reads.
+### C.4 Data analysis
+- **Forecast:** AUC on held-out years, precision and lift at the validation-chosen threshold, and the
+  paired bootstrap against the calendar forecast.
+- **Bench:** peak chlorophyll, area under the chlorophyll curve, days below the bloom threshold,
+  total treatment (hours ON or mg dosed), number of treatment episodes, brine shrimp survival and
+  dissolved oxygen, compared between arms with Welch 95% confidence intervals on n = 3 tanks
+  (t-intervals, t = 4.30). With n = 3 a result can be "consistent but underpowered", and it is
+  reported that way.
 
-## D. Procedures
+## D. Bibliography
 
-### D.1 Completed before plan approval: build and test (2025-06 to 2026-09)
-1. Label: daily chlorophyll above threshold (10 µg/L lab; site 75th
-   percentile for fluorescence) within the next 7 days (21 days for LIS boat data).
-2. Features from the station's own history only: chlorophyll lags and
-   rolling means, trend, anomaly vs station climatology, dissolved oxygen,
-   temperature, salinity lags, month. No future information.
-3. Models: logistic regression and gradient boosting; walk-forward
-   year-by-year training; test years never touched during development.
-   Neural networks (tabular MLP, 1-D CNN on 7-day 15-minute windows, a
-   hybrid, and a pooled multi-site MLP with site embedding) were tested
-   under pre-registered criteria on 2026-09-10 and did not beat gradient
-   boosting; they are reported as negative results, not used.
-4. Evaluation on onset rows only (today below threshold) so persistence
-   cannot inflate skill; precision always reported beside base rate; lift =
-   precision / base rate; 95% CIs by station-year clustered bootstrap
-   (n=2000, seed 42); baselines: always-alert, persistence, climatology,
-   simple chlorophyll rules.
-5. Eight pre-registered tests of H2 (cadence thinning, rarity re-thresholding,
-   LIS buoys at 15-minute cadence, tuning search, lead-time sweep,
-   sonde–lab calibration, and the two neural-network tests in item 3:
-   sequence model on 15-minute data, pooled site-embedding network).
+1. Anderson, D. M., Cembella, A. D., & Hallegraeff, G. M. (2012). Progress in understanding harmful
+   algal blooms: paradigm shifts and new technologies for research, monitoring, and management.
+   *Annual Review of Marine Science*, 4, 143-176.
+2. Matthijs, H. C. P., et al. (2012). Selective suppression of harmful cyanobacteria in an entire lake
+   with hydrogen peroxide. *Water Research*, 46, 1460-1472.
+3. Randhawa, V., Thakkar, M., & Wei, L. (2012). Applicability of hydrogen peroxide in brown tide
+   control: culture and microcosm studies. *PLOS ONE*, 7, e47844.
+4. Sung, J., & Gobler, C. J. (2026). Mitigation of harmful algal bloom (*Margalefidinium
+   polykrikoides*) intensity and toxicity via aeration processes. *Journal of Environmental
+   Management*, 402, 129015.
+5. Reichwaldt, E. S., Zheng, L., Barrington, D. J., & Ghadouani, A. (2012). Acute toxicological
+   response of *Daphnia* and *Moina* to hydrogen peroxide. *Journal of Environmental Engineering*,
+   138, 607-611.
+6. Thoo, R., Siuda, W., & Jasser, I. (2020). The effects of sodium percarbonate generated free oxygen
+   on *Daphnia*: implications for the management of harmful algal blooms. *Water*, 12, 1304.
+7. Guillard, R. R. L. (1975). Culture of phytoplankton for feeding marine invertebrates. In W. L.
+   Smith & M. H. Chanley (Eds.), *Culture of Marine Invertebrate Animals* (pp. 29-60). Plenum Press.
+8. Connecticut Department of Energy and Environmental Protection. Long Island Sound Water Quality
+   Monitoring Program data, 1993-2025.
+9. Rhode Island Department of Environmental Management. Narragansett Bay Fixed-Site Monitoring
+   Network data, 2005-2023.
 
-### D.2 Completed before plan approval: transfer and coverage (2026-09-03 to 09-05)
-6. Export the Narragansett model; apply unchanged to six foreign networks
-   and 100 ERDDAP sites after quantile-rescaling chlorophyll; score with the
-   same protocol; compare against local refits three ways.
-7. Satellite feasibility: coverage, agreement with sondes, and forecast
-   skill at 300 m to 4 km.
-8. Reproducibility audit: every result mapped to a script; environment
-   rebuilt from scratch.
-
-### D.3 New work under this plan: prospective test (start after approval)
-9. Freeze model file (SHA-256 recorded), alert threshold 0.50, a list of 20
-   live stations in four groups, each station's 75th-percentile threshold
-   from its historical record, and the scoring rule. Publish the protocol
-   before the first forecast.
-10. Every Monday, pull the last 35 days from each live feed, issue one
-    7-day onset probability per station, append to a ledger that is never
-    edited, and commit it to a public repository (timestamped).
-11. Seven days later, pull the outcome and score each forecast. Report
-    precision, base rate, lift and recall with station-week clustered
-    bootstrap CIs, only once a stratum has at least 30 scored rows and 5
-    positive outcomes. First planned readout after 12 issuances.
-12. Send the LIS buoy forecasts weekly to CT DEEP / UConn contacts; record
-    any use or feedback.
-
-### D.4 New work under this plan: comparison and value
-13. Positioning table against operational HAB forecasts, each row sourced.
-14. Decision-value analysis: for a fixed sampling budget, blooms caught by
-    calendar sampling vs alert-directed sampling, in visits per confirmed bloom.
-15. Independent check of the 2014 LIS chlorophyll step using MODIS satellite
-    chlorophyll at the same stations (criterion pre-registered in the script).
-    DONE / RESOLVED 2026-09-23: DEEP confirmed the step is a CTD sensor scale
-    change (SeaBird to YSI EXO2 around 2009/2010), not the TMDL and not a lab
-    change; the label was rebuilt on the lab scale (notes/LABEL_REBUILD_PREREG.md).
-
-### D.5 New work under this plan: bench test of forecast-triggered clay (Oct–Dec 2026)
-
-The operative procedure is `notes/LAB_PROTOCOL.md`; this is a summary. All work
-is in the school laboratory with the Designated Supervisor present, and starts
-only after Forms 1A, 1, 1B and 3 are signed.
-
-16. *Setup.* A 10 gal glass aquarium at 20 L working volume is the mesocosm; jar
-    tests use three 1.8 L jars at a time on a 12 V paddle rig. Tank water is
-    Long Island Sound seawater collected at Milford or Stratford, gravity
-    filtered through a 5 µm bag, stored cold and dark. Culture water is
-    additionally pasteurised or 0.2 µm filtered. The test organism is
-    *Skeletonema marinoi* CCMP1332, a non-toxic marine diatom purchased from
-    the NCMA (Bigelow), grown in f/2 medium at 18–20 °C and diluted to 1e4
-    cells/mL, a pre-bloom density.
-17. *Clay blend and dose.* Dry blend of 8 g magnetite pigment, 25.3 g EPK kaolin
-    and 6.7 g PAC powder (20% magnetite), weighed in a fume hood with gloves,
-    goggles and a dust mask; a plain kaolin + PAC blend is the comparison arm.
-    Blends are pasted to a 100 g/L stock 24 h before use. Nominal dose 0.2 g/L
-    of dry blend (4 g per 20 L tank); the screen runs 0.05, 0.1, 0.2 and
-    0.4 g/L.
-18. *Run sequence.* A test ledger row is written by hand and read by the ESP32
-    controller, which doses only on `status = ok`, `alert = 1`, `onset_row = 1`;
-    it fires a peristaltic pump for 40 s and a paddle relay for 10 min while the
-    student rapid-mixes for 60 s. Then 10 min slow mix (~50 rpm), 10 min settle,
-    two wall-to-wall magnet-rake passes across the floor at 2 cm/s with release
-    of the pad into a tray after each pass, one mid-depth column pass, and
-    counts plus water-quality reads at t0, T20, T33, T93, 5 h and 24 h. Three
-    clay-only blanks, a stock-route pilot, three jar batches and three tank runs.
-19. *Workup.* The magnet pad and the three loss fractions are settled, dried at
-    65 °C, weighed, ground and pull-tested for magnetite-equivalent mass; counts
-    are read on a Sedgewick-Rafter chamber; chlorophyll is extracted in 90%
-    acetone. Gates at Oct 9 (calibration), Oct 23 (recovery blank), Oct 30
-    (stock route), Nov 6 (design freeze) and Dec 4 (controller) each decide
-    whether the next stage runs.
-
-**Containment.** This is a closed 20 L mesocosm on a bench in a school
-classroom. Nothing is dosed, released or deployed in Long Island Sound or any
-other natural water; the only fieldwork is collecting seawater in carboys from
-shore. No organism leaves the laboratory alive: all culture and all tank
-contents are bleached before disposal, aluminium floc is kept as lab solid
-waste, and the bleached, diluted effluent is disposed of under school drain
-policy. The field version of the device is documented as a concept only and is
-explicitly *not performed* (notes/DEVICE_PROTOTYPE.md s5).
-
-## E. Risk and safety
-
-**Computational half.** Public data only; no fieldwork, no specimens, no
-personal data. Network requests to public servers are rate-limited and
-identified with a research user agent.
-
-**Bench half — risk assessment** (source: notes/LAB_PROTOCOL.md s11 and
-notes/DEVICE_PROTOTYPE.md s6). Exposed persons are the student and, at every
-session, the Designated Supervisor; no other students handle materials.
-
-| Hazard | Who is exposed | Control | Disposal |
-|---|---|---|---|
-| **PAC powder** — acidic aluminium coagulant, dust and eye/skin irritant | student weighing and blending | weighed in a fume hood; nitrile gloves, goggles, dust mask; kept dry and labelled; SDS on file | aluminium floc collected as lab solid waste; effluent bleached, diluted and drain-disposed per school policy |
-| **Route D paste, pH ~3–4** | student pasting stock | gloves; small volumes (11–40 mL); made and used in the hood tray | neutralised with the bulk effluent, drain-disposed per school policy |
-| **N52 magnets** — ~25 kg pull to steel per block, stacks repel at ~12 kgf; blocks pinch, shatter and snap together | student assembling the rake, anyone nearby | stacks assembled one at a time in a locked slotted frame; blocks stay in capped acrylic tubes in use; gloves and eye protection during assembly; phones, cards and any implanted medical device kept away; no magnets carried loose | retained; not waste |
-| **12 V device beside water** — pump, paddle motors, controller | student operating the tank | everything touching water runs at 12 V from a fused supply behind a GFCI outlet; mains tools (drill, hot plate) on a separate bench away from the tank; no mains voltage near water | n/a |
-| **Preservation acid** (sample acidification for ICP aluminium) | partner-lab staff or the chemistry teacher | handled **only** by the partner lab or the teacher; the student never handles the acid | partner lab's waste stream |
-| **Live culture** — *Skeletonema marinoi* CCMP1332, a non-toxic marine diatom, BSL-1 | student and supervisor | closed carboys and tanks; standard lab hygiene, gloves, no mouth pipetting; nothing removed from the lab | all culture and tank contents bleached before disposal; no organism leaves the lab alive |
-| **Lugol's iodine, 90% acetone (chlorophyll extraction)** | student | small volumes; gloves and goggles; acetone used in the hood, away from ignition sources | collected as lab waste per school policy |
-
-**Supervision.** The Adult Sponsor signs Form 1. The **Designated Supervisor is
-the school chemistry teacher**, named on Forms 1 and 3, trained in this
-procedure and present for every hands-on session. Any work outside normal
-school hours (the 5 h and 24 h reads) is covered by a signed after-hours
-agreement among student, parent, Designated Supervisor and principal, with the
-Designated Supervisor present; no hands-on work occurs before those forms are
-signed.
-
-**What is not involved.** No human subjects or human-subject data. No
-vertebrate animals. No potentially hazardous biological agents: no pathogens,
-no human or animal tissue, no blood or body fluids, no unidentified
-environmental microbial cultures (the only organism is a purchased,
-characterised, non-toxic marine diatom). No controlled substances. No
-recombinant DNA or gene transfer. **Form 3 is therefore required for the
-hazardous chemicals, the home-built electrical device and the protist culture;
-no further SRC pre-review is expected beyond it.**
-
-## F. Data analysis
-
-Python 3.13, scikit-learn 1.7.2, pandas 2.3.3 (pinned in environment.yml;
-verified to build from scratch; the neural-network tests add CPU PyTorch
-2.12 in a second pinned environment, environment-nn.yml). All scripts, data-fetch procedures and
-results are in two public GitHub repositories; every figure and number has a
-named script. Statistical reporting rules: onset rows only; base rate
-beside every precision; clustered bootstrap CIs; pre-registered criteria
-stated in the script docstring before the first run; negative results kept.
-
-**Bench analysis** (specified in notes/LAB_PROTOCOL.md s8, written and frozen
-before any measurement exists):
-- *Removal, per batch:* RE = 1 − (Ct/C0) / (Ct,control / C0,control) at 5 h, so
-  every batch is corrected against its own untreated control jar.
-- *H11a:* the mean of the three batch REs with a **t-interval at t = 4.30**
-  (n = 3), read against the pre-registered band in Section B; the magnetic arm
-  is compared with the plain arm at the same dose.
-- *H11b:* recovery per tank run = magnetite-equivalent in the pad / magnetite
-  dosed, with total dry solids recovered / solids dosed reported beside it, and
-  a mass balance: dosed magnetite = pad + tube rinses + floor rinse + 5 L
-  supernatant + unaccounted. The supernatant pull test is reported with its
-  detection floor (8 mg = 1.0% of dosed magnetite) and its quantitative floor
-  (20 mg = 2.5%) printed beside the number. A within-tank resuspension index
-  (T33 count / T20 count, ±20% from counting) says whether the rake stirred
-  cells back up.
-- *H11c:* three batch means per dose with t-intervals, monotonicity judged on
-  ordered means, D90 by log-linear interpolation only when bracketed by two
-  adjacent means, otherwise reported as unbracketed or "not testable".
-- *Counting quality:* mean absolute relative difference and Lin's concordance
-  coefficient on five duplicate counts by two independent counters; Poisson
-  intervals on every count.
-- Measured recovery is compared with the pre-measurement simulation prediction
-  (~95%, an upper bound; notes/DEVICE_SIMULATION.md). Every gate, decision and
-  batch result is committed to git on the day it is produced, so the order of
-  analysis and measurement is on the record.
-
-## G. Bibliography
-
-Forecasting and Long Island Sound ecology:
-
-1. Kavanaugh et al. 2015, NOAA Tech. Rep. NOS CO-OPS 080 (GOMX HAB-OFS assessment).
-2. Kavanaugh et al. 2013, NOAA Tech. Rep. NOS CO-OPS 073 (Eastern GOM HAB-OFS).
-3. Stumpf et al. 2012, PLOS ONE 7(8): e42444 (Lake Erie interannual variability).
-4. Stumpf et al. 2016, J. Great Lakes Res. (Lake Erie seasonal forecast).
-5. Anderson et al. 2016, Harmful Algae (C-HARM skill assessment).
-6. Perreira, S. (2021). *Long Term Nutrient and Chlorophyll a Dynamics across
-   Long Island Sound and Impacts on Dissolved Oxygen Conditions within the
-   Western Sound (1991–2019).* Thesis, CUNY Academic Works.
-   https://academicworks.cuny.edu/cc_etds_theses/961
-7. Reinl et al. (2023). "Blooms also like it cold." *Limnology and Oceanography
-   Letters* 8: 546–564. doi:10.1002/lol2.10316. (Freshwater lakes only; cited
-   for the cold-bloom mechanism, not for estuarine transfer.)
-8. Hattenrath-Lehmann and Gobler (2016). *Historical Occurrence and Current
-   Status of Harmful Algal Blooms in Suffolk County, NY, USA.* December 2016,
-   121 pp.; free PDF via New York Sea Grant and suffolkcountyny.gov.
-9. Wallace, M. K., Kudela, R. M., Gobler, C. J. (2025). "Microcystin
-   contamination of shellfish along the freshwater-to-marine continuum within
-   US mid-Atlantic and Northeast estuaries." *Harmful Algae* 145: 102860.
-   doi:10.1016/j.hal.2025.102860.
-10. CT DEEP Long Island Sound Water Quality Monitoring Program data documentation.
-11. RIDEM Narragansett Bay Fixed-Site Monitoring Network data documentation.
-
-Clay flocculation and magnetic retrieval (bench half):
-
-12. Sengco, M. R. and Anderson, D. M. (2004). "Controlling harmful algal blooms
-    through clay flocculation." *Journal of Eukaryotic Microbiology*.
-    PubMed 15134251.
-13. Yu et al. (2017). "Mitigation of harmful algal blooms using modified clays"
-    (review). PubMed 29122242; open PDF hosted by the WHOI Anderson Lab.
-14. Fan et al. (2026). Removal of *Microcystis aeruginosa* by magnetic clay
-    minerals synergized with CPAM. *Polish Journal of Environmental Studies*
-    35(3): 4139–4150. (Freshwater; the closest published magnetic-clay recipe.)
-15. Ma et al. (2019). Fe3O4/CPAM flocculation of algae-laden raw water.
-    *Journal of Cleaner Production* 248: 119276. (Freshwater.)
-16. NOAA NCCOS, *Prevention, Control and Mitigation of HABs (PCMHAB)
-    Programmatic Environmental Assessment*, final document
-    (cdn.coastalscience.noaa.gov/page-attachments/about/pcm_hab_pea_finaldoc.pdf).
-17. US Patent 10,822,258 B2 (clay spray device) and US Patent 10,981,813 B2
-    (slurry concentrations and a monitoring-keyed dose table).
-18. NCMA at Bigelow Laboratory, strain record CCMP1332 (*Skeletonema marinoi*,
-    Milford CT isolate). https://ncma.bigelow.org/CCMP1332
-
-Working notes behind these entries, including sources judged too incompletely
-recorded to cite here: notes/LITERATURE_NOTES.md,
-notes/CLAY_FLOCCULATION_RESEARCH.md, notes/CLAY_RETRIEVAL_RESEARCH.md.
+## Not claimed
+- That the device prevents blooms in open water: the test is in tanks; the target is enclosed or
+  semi-enclosed water (harbors, shellfish beds, aquaculture pens, coastal ponds).
+- That the device is field-ready, or safe without the false-alarm (arm D) data.
+- Any result before it is measured.
