@@ -14,11 +14,15 @@
                     optional 6th value = that day's chl_climatology (the replay tool sends the fork's)
       vec <23 numbers>   score a raw feature vector (BLOOM_FEATURES order, nan allowed)
       status   reset (clears the daily history)   selftest   hist (print the stored days)
+      site <name>   name used in bulletins (e.g. Newport-Harbor), kept in NVS
       clim <month> <value>   per-site chl climatology for that month, kept in NVS (nan clears it)
       clim     show the table              climclear   erase it
       help
     Each scored day prints   F <date> chl=.. chl_lag1=.. ... month=..
                              P <date> p=0.123456 ALERT|idle n=<days in history>
+    and, when something changes, a harbor bulletin   MSG <title> | <text>
+      Bloom WARNING (alert turns on), All clear (turns off), Bloom detected (chl crosses 10),
+      Buoy check needed (a sensor day was dropped). Demo days print them; sensor days also push them.
 
   SENSOR mode (set any USE_ flag below to 1; needs the libraries named next to it):
       samples every 15 min, keeps daily means, closes a day at local midnight; a day with fewer than
@@ -29,7 +33,7 @@
       gain l|m|h|x   TSL2591 gain (saved; redo blank/chlk after changing it)
       cal686 / cal918   pH probe in pH 6.86 / 9.18 buffer        cal   calclear
   Wi-Fi alerts (USE_WIFI 1): wifi <ssid>   wifipass <password>   ntfy <topic>   ntfytest
-      Stored in NVS, never in this file. A sensor day that turns the alert ON posts to ntfy.sh/<topic>.
+      Stored in NVS, never in this file. Every bulletin from a sensor day posts to ntfy.sh/<topic>.
 
   Outputs: onboard LED (GPIO 2) and relay (GPIO 26) ON while the latest forecast is ALERT.
   The tank loop rules (X, C_ok, MAX_ON) are NOT in this version: see controlHook() below.
@@ -39,6 +43,9 @@
 #include <Preferences.h>
 #include <time.h>
 #include <sys/time.h>
+
+// declared before any function: the Arduino builder puts its auto-prototypes here
+enum Notify { N_SILENT = 0, N_SERIAL = 1, N_PUSH = 2 };   // bulletins: restore / demo day / live sensor day
 
 #define ST_PRINTF(...) Serial.printf(__VA_ARGS__)
 #include "selftest.h"            // pulls in bloom_model.h, features.h, pss78.h, test_vectors.h
@@ -98,6 +105,8 @@ bool alertOn = false, relayOn = false;
 float lastP = NAN;
 int32_t lastDate = 0;
 int selftestFails = -1;
+const float BLOOM_CHL = 10.0f;   // ug/L, the training label's bloom level
+String siteName = "buoy";        // used in bulletins (`site`)
 
 struct Cal { uint32_t magic; float blank, chlK, v686, v918; char gain; };
 const uint32_t CAL_MAGIC = 0xB0A70001;
@@ -184,23 +193,54 @@ bool ntfySend(const char *title, const String &msg) {
 }
 #endif
 
-void applyForecast(int32_t date, float p, float chl, bool notify) {
+/* ---- harbor early-warning bulletins
+   At harbor scale the device cannot treat the water; the warning IS the product. Each bulletin is
+   printed as   MSG <title> | <body>   (so a replay shows it with no Wi-Fi) and, in SENSOR mode with
+   USE_WIFI, posted to ntfy. Walk-forward record 2015-2023 at 0.45 (fork notes/HARBOR_WARNING_PREREG.md):
+   86% of bloom onsets warned 1-7 days ahead, median 1 false warning per site per season. */
+void bulletin(Notify mode, const char *title, const String &body) {
+  if (mode == N_SILENT) return;
+  Serial.printf("MSG %s | %s\n", title, body.c_str());
+#if USE_WIFI
+  if (mode == N_PUSH) ntfySend(title, body);
+#endif
+}
+
+String dateStr(int32_t d) {
+  char s[11];
+  snprintf(s, sizeof(s), "%04ld-%02ld-%02ld", (long)(d / 10000), (long)(d / 100 % 100), (long)(d % 100));
+  return String(s);
+}
+
+/* onset = today's chl > BLOOM_CHL after QUIET_ROWS stored days at or below it (the event definition of the
+   harbor-warning test), so a bloom that hovers around the level is announced once, not every dip. */
+const int QUIET_ROWS = 5;
+
+void applyForecast(int32_t date, float p, float chl, bool onset, Notify mode) {
   bool was = alertOn;
   alertOn = !isnan(p) && p >= BLOOM_THRESHOLD;
   relayOn = controlHook(date, p, chl, alertOn);
   setOutputs();
   lastP = p;
-#if USE_WIFI
-  if (notify && alertOn && !was) {
-    char m[160];
-    snprintf(m, sizeof(m), "Bloom forecast ALERT for %04ld-%02ld-%02ld: p=%.2f (threshold %.2f), chl %.1f ug/L. "
-             "P(chl > 10 ug/L within %d days).", (long)(date / 10000), (long)(date / 100 % 100), (long)(date % 100),
-             p, BLOOM_THRESHOLD, chl, BLOOM_HORIZON_DAYS);
-    ntfySend("HAB buoy alert", String(m));
+  if (date == 0) return;           // `vec` rows have no date: no bulletins
+  String where = siteName + " " + dateStr(date);
+  if (onset) {
+    bulletin(mode, "Bloom detected",
+             where + ": chlorophyll " + String(chl, 1) + " ug/L is above the bloom level (" +
+             String(BLOOM_CHL, 0) + "). Managers: sample for harmful species and toxins now.");
   }
-#else
-  (void)was; (void)notify;
-#endif
+  if (alertOn && !was) {
+    bulletin(mode, "Bloom WARNING",
+             where + ": bloom likely within " + String(BLOOM_HORIZON_DAYS) + " days (risk " + String(p, 2) +
+             ", chl " + String(chl, 1) + " ug/L). Shellfish growers: plan early harvest, hold seed in the "
+             "nursery. Hatcheries: switch to stored or filtered intake water. Managers: start phytoplankton "
+             "and toxin sampling. Forecast, not a measurement: about 1 false warning per site per season. "
+             "An all-clear follows when the risk drops.");
+  } else if (!alertOn && was) {
+    bulletin(mode, "All clear",
+             where + ": bloom risk back below the warning level (risk " + String(p, 2) + ", chl " +
+             String(chl, 1) + " ug/L). Normal operations can resume; the buoy keeps watching.");
+  }
 }
 
 // ------------------------------------------------------------------ scoring
@@ -211,7 +251,7 @@ void printFeatures(const char *tag, const float x[F_COUNT]) {
 }
 
 /* score the newest history row; prints F and P lines */
-void scoreLatest(bool notify) {
+void scoreLatest(Notify mode) {
   if (hist.n == 0) return;
   float x[F_COUNT];
   build_features(&hist, climTable, x);
@@ -220,13 +260,15 @@ void scoreLatest(bool notify) {
   snprintf(tag, sizeof(tag), "%04ld-%02ld-%02ld", (long)(d.date / 10000), (long)(d.date / 100 % 100), (long)(d.date % 100));
   printFeatures(tag, x);
   float p = bloom_prob(x);
-  applyForecast(d.date, p, d.chl, notify);
+  bool onset = d.chl > BLOOM_CHL && hist.n > QUIET_ROWS;
+  for (int k = 2; onset && k <= QUIET_ROWS + 1; k++) onset = hist.r[hist.n - k].chl <= BLOOM_CHL;
+  applyForecast(d.date, p, d.chl, onset, mode);
   lastDate = d.date;
   Serial.printf("P %s p=%.6f %s n=%ld\n", tag, (double)p, p >= BLOOM_THRESHOLD ? "ALERT" : "idle", (long)hist.n);
 }
 
 /* add one daily row and score it. Returns false if rejected. */
-bool addDay(const DayRec &r, bool notify) {
+bool addDay(const DayRec &r, Notify mode) {
   char tag[11];
   snprintf(tag, sizeof(tag), "%04ld-%02ld-%02ld", (long)(r.date / 10000), (long)(r.date / 100 % 100), (long)(r.date % 100));
   if (isnan(r.chl)) {            // training never has a row without chl: the day is not a row
@@ -252,7 +294,7 @@ bool addDay(const DayRec &r, bool notify) {
 #if SENSOR_MODE
   saveHist();
 #endif
-  scoreLatest(notify);
+  scoreLatest(mode);
   return true;
 }
 
@@ -392,10 +434,13 @@ void closeDay() {
     Serial.printf("DAY "); printDate(acc.date);
     Serial.printf(" closed: %u chl, %u temp, %u sal, %u pH readings; pH mean %.2f\n",
                   acc.nChl, acc.nTemp, acc.nSal, acc.nPh, acc.nPh ? acc.sPh / acc.nPh : NAN);
-    addDay(r, true);
+    addDay(r, N_PUSH);
   } else {
     Serial.printf("DAY "); printDate(acc.date);
     Serial.printf(" dropped: %u chl readings < %d (training drops such days)\n", acc.nChl, MIN_READINGS);
+    bulletin(N_PUSH, "Buoy check needed",
+             siteName + " " + dateStr(acc.date) + ": only " + String(acc.nChl) + " of " + String(MIN_READINGS) +
+             " chlorophyll readings yesterday, so no forecast was made. Check the fluorometer, power and fouling.");
   }
 }
 
@@ -426,7 +471,7 @@ void printCal() {
 }
 
 void printStatus() {
-  Serial.printf("mode=%s selftest=%s history=%ld days", SENSOR_MODE ? "SENSOR" : "DEMO",
+  Serial.printf("site=\"%s\" mode=%s selftest=%s history=%ld days", siteName.c_str(), SENSOR_MODE ? "SENSOR" : "DEMO",
                 selftestFails < 0 ? "not run" : selftestFails == 0 ? "PASS" : "FAIL", (long)hist.n);
   if (hist.n) { Serial.print(" ("); printDate(hist.r[0].date); Serial.print(".."); printDate(hist.r[hist.n - 1].date); Serial.print(")"); }
   Serial.printf(" last_p=%.4f state=%s relay=%s threshold=%.2f\n", (double)lastP, alertOn ? "ALERT" : "idle",
@@ -446,7 +491,7 @@ void printStatus() {
 
 void printHelp() {
   Serial.println("demo:   day <yyyy-mm-dd> <chl> <temp> <sal> <do> [clim]   vec <23 numbers>");
-  Serial.println("        status  reset  selftest  hist  clim [<month> <value>]  climclear  help");
+  Serial.println("        status  reset  selftest  hist  site [<name>]  clim [<month> <value>]  climclear  help");
 #if SENSOR_MODE
   Serial.println("sensor: read  date <yyyy-mm-dd> <hh:mm>  blank  chlk <k>  gain l|m|h|x  cal686  cal918  cal  calclear");
 #endif
@@ -498,7 +543,7 @@ void handleLine(char *line) {
     int32_t d = parse_date(t[0]);
     if (!d || !t[1]) { Serial.println("ERR usage: day <yyyy-mm-dd> <chl> <temp> <sal> <do> [clim]"); Serial.println("P ? p=nan SKIP"); return; }
     DayRec r = {d, parseVal(t[1]), parseVal(t[2]), parseVal(t[3]), parseVal(t[4]), parseVal(t[5])};
-    addDay(r, false);            // demo days never send ntfy
+    addDay(r, N_SERIAL);         // demo days print bulletins but never send ntfy
     return;
   }
   if (!strcmp(a, "vec")) {
@@ -508,7 +553,7 @@ void handleLine(char *line) {
     if (n != BLOOM_NF) { Serial.printf("ERR vec needs %d numbers, got %d\n", BLOOM_NF, n); return; }
     printFeatures("vec", x);
     float p = bloom_prob(x);
-    applyForecast(0, p, NAN, false);
+    applyForecast(0, p, NAN, false, N_SILENT);
     Serial.printf("P vec p=%.6f %s\n", (double)p, p >= BLOOM_THRESHOLD ? "ALERT" : "idle");
     return;
   }
@@ -517,6 +562,12 @@ void handleLine(char *line) {
   if (!strcmp(a, "status")) { printStatus(); return; }
   if (!strcmp(a, "help")) { printHelp(); return; }
   if (!strcmp(a, "hist")) { printHist(); return; }
+  if (!strcmp(a, "site")) {
+    const char *n = restOf(raw, "site");
+    if (*n) { siteName = n; prefs.putString("site", siteName); }
+    Serial.printf("site=\"%s\"\n", siteName.c_str());
+    return;
+  }
   if (!strcmp(a, "selftest")) { selftestFails = run_selftest(); return; }
   if (!strcmp(a, "reset")) {
     hist_clear(&hist); clearAcc(0); alertOn = relayOn = false; lastP = NAN; lastDate = 0; setOutputs();
@@ -589,6 +640,7 @@ void setup() {
   if (prefs.getBytesLength("clim") == sizeof(climTable)) prefs.getBytes("clim", climTable, sizeof(climTable));
   Cal stored;
   if (prefs.getBytesLength("cal") == sizeof(Cal) && prefs.getBytes("cal", &stored, sizeof(Cal)) && stored.magic == CAL_MAGIC) cal = stored;
+  siteName = prefs.getString("site", "buoy");
   hist_clear(&hist);
   clearAcc(0);
 #if SENSOR_MODE
@@ -624,7 +676,7 @@ void setup() {
   ntfyTopic = prefs.getString("topic", "");
   if (wifiSsid.length()) wifiUp(10000);
 #endif
-  if (hist.n) scoreLatest(false);  // restore the LED/relay from the last stored day
+  if (hist.n) scoreLatest(N_SILENT);  // restore the LED/relay from the last stored day
   Serial.printf("READY mode=%s. Send `help`, or a day line, e.g.  day 2023-08-03 6.87 22.66 27.44 6.35\n",
                 SENSOR_MODE ? "SENSOR" : "DEMO");
 }

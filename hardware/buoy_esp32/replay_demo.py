@@ -194,6 +194,7 @@ def main():
     ap.add_argument("--clim", choices=["row", "none"], default="row")
     ap.add_argument("--fork", default=DEFAULT_FORK)
     ap.add_argument("--verbose", action="store_true", help="--sim: print every day")
+    ap.add_argument("--bulletins", action="store_true", help="--sim: print the harbor bulletin timeline")
     a = ap.parse_args()
     if not a.sim and not a.port:
         ap.error("give --port COMx (board) or --sim (no board)")
@@ -264,6 +265,22 @@ def main():
     if not send_clim:
         print("  (clim=none: chl_climatology/chl_anomaly are NaN -> training median on the device, so differences "
               "above are the cost of not having a climatology table)")
+    if a.bulletins:
+        # same rules as applyForecast() in buoy_esp32.ino: WARNING when the alert turns on, All clear when it
+        # turns off, Bloom detected when chl > 10 after 5 stored days at or below 10 (an onset)
+        print(f"\nharbor bulletins, station {a.station} (same rules as the firmware):")
+        on = False
+        for k in range(len(rows)):
+            chl, p = X[k, 0], p_py[k]
+            now = p >= model.thr
+            if k >= rep.start:
+                if chl > 10 and k >= 5 and all(X[k - j, 0] <= 10 for j in range(1, 6)):
+                    print(f"  {dates[k]}  Bloom detected   chl {chl:5.1f}")
+                if now and not on:
+                    print(f"  {dates[k]}  Bloom WARNING    risk {p:.2f}, chl {chl:5.1f}  (bloom likely within 7 days)")
+                elif on and not now:
+                    print(f"  {dates[k]}  All clear        risk {p:.2f}, chl {chl:5.1f}")
+            on = now
     if not a.verbose:
         print("\nlast 10 reported days:")
         for k in range(len(rows))[rep][-10:]:

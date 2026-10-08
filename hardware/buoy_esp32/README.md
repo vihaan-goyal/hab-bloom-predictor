@@ -198,10 +198,20 @@ Sensor commands:
 
 How Wi-Fi alerts work:
 
-- A SENSOR day that switches the alert ON sends one push to `https://ntfy.sh/<topic>`.
+- The buoy sends **harbor bulletins** (plain-language messages), each also printed as `MSG <title> | <text>`:
+  - **Bloom WARNING** when the alert turns on: risk, today's chlorophyll, and suggested actions (shellfish growers:
+    plan early harvest, hold seed; hatcheries: switch to stored or filtered intake; managers: start phytoplankton
+    and toxin sampling), plus the honest false-alarm rate (about 1 per site per season, fork findings §31).
+  - **All clear** when the risk drops below 0.45 again.
+  - **Bloom detected** at a bloom onset: daily chlorophyll above 10 µg/L after 5 stored days at or below 10
+    (the event definition of the harbor-warning test), so a bloom hovering around 10 is not announced every dip.
+  - **Buoy check needed** when a day is dropped for too few readings (sensor, power or fouling problem).
+- SENSOR days push every bulletin to `https://ntfy.sh/<topic>`. Demo `day` lines print them but never push.
+- `site <name>` sets the name used in bulletins (e.g. `site Newport-Harbor`); it is kept in NVS.
 - Install the ntfy app and subscribe to the same topic.
 - ntfy topics are public, so pick a topic name nobody would guess.
-- Demo `day` lines never send a push.
+- No board? `python replay_demo.py --sim --station B3 --start 2023-05-01 --days 150 --bulletins` prints the
+  bulletin timeline a real season would have produced (same rules as the firmware).
 
 ## 6. Limitations: read before quoting results
 

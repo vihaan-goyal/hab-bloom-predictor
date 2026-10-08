@@ -43,6 +43,8 @@ On 2026-09-30 the new Uno (COM5) passed Tests A, B and C by hand, every line mat
 relay clicked on D10 with `hardware/relay_click_test/relay_click_test.ino` (toggles D10 every second).
 On 2026-10-05 the Adafruit TSL2591 (STEMMA QT cable, no soldering) read on the new Uno with `USE_TSL2591 1`;
 the pH board reads (zero point ~3.6 V in tap water, buffers not yet bought, so not calibrated).
+On 2026-10-07 the DS18B20 probe (red/yellow/blue leads taped to jumpers, 4.7 kΩ pull-up, 12-bit) read
+correctly on D3 (user report: stage 3 passed).
 
 ## Shopping list (what to order now)
 
