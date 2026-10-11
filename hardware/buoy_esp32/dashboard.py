@@ -25,7 +25,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import serial
 
-KEEP = 300          # samples kept for the charts
+KEEP = 1800         # samples kept for the charts (an hour at one reading every 2 s)
 ADC_TOP = 3.05      # volts: at or above this the pH pin is at the top of its range
 
 state = {"connected": False, "error": "", "relay": "?", "alert": "?", "last_p": None,
@@ -114,6 +114,7 @@ h1{font-size:19px;margin:0}.pill{padding:2px 10px;border-radius:99px;font-size:1
 .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
 .k{font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.05em}
+.tile{cursor:pointer}.tile:hover{border-color:var(--acc)}
 .v{font-size:30px;font-weight:650;font-variant-numeric:tabular-nums;line-height:1.2}.u{font-size:14px;color:var(--dim);font-weight:400}
 .n{font-size:12.5px;color:var(--dim);min-height:18px}.n.warn{color:var(--warn);font-weight:600}.n.bad{color:var(--bad);font-weight:600}
 canvas{width:100%;height:46px;display:block;margin-top:6px}
@@ -131,7 +132,7 @@ button.q{background:var(--card);color:var(--ink);font-weight:400}
 const TILES=[["temp","Temperature","°C",2],["ph_v","pH pin voltage","V",3],["ph","pH","",2],["fl","Light signal (LED on − off)","counts",1],["chl","Chlorophyll","µg/L",2],["sal","Salinity","",2]];
 const NOTE={ph:"needs the two buffers (cal686, cal918)",chl:"needs blank + chlk calibration",sal:"no conductivity sensor wired"};
 const box=document.getElementById("tiles");
-for(const [k,name,unit] of TILES){box.insertAdjacentHTML("beforeend",`<div class="card"><div class="k">${name}</div><div class="v"><span id="v_${k}">–</span> <span class="u">${unit}</span></div><div class="n" id="n_${k}"></div><canvas id="g_${k}" width="400" height="92"></canvas></div>`)}
+for(const [k,name,unit] of TILES){box.insertAdjacentHTML("beforeend",`<div class="card tile" title="Open a large chart in a new tab" onclick="window.open('/detail?k=${k}','_blank')"><div class="k">${name} ↗</div><div class="v"><span id="v_${k}">–</span> <span class="u">${unit}</span></div><div class="n" id="n_${k}"></div><canvas id="g_${k}" width="400" height="92"></canvas></div>`)}
 function spark(id,vals){const c=document.getElementById(id),x=c.getContext("2d"),w=c.width,h=c.height;x.clearRect(0,0,w,h);
  const v=vals.filter(a=>a!==null);if(v.length<2)return;let lo=Math.min(...v),hi=Math.max(...v);if(hi-lo<1e-9){hi+=1;lo-=1}
  const css=getComputedStyle(document.documentElement);x.strokeStyle=css.getPropertyValue("--acc");x.lineWidth=3;x.beginPath();let pen=false;
@@ -158,6 +159,57 @@ tick();setInterval(tick,1000);
 </script></body></html>"""
 
 
+DETAIL = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Buoy reading detail</title>
+<style>
+:root{--bg:#f3f5f6;--card:#fff;--ink:#16202a;--dim:#5d6b78;--line:#d9e0e5;--grid:#e6ebef;--acc:#0b6e8f;--ref:#b25a00}
+@media (prefers-color-scheme:dark){:root{--bg:#10161b;--card:#18212a;--ink:#e6edf2;--dim:#93a3b1;--line:#2a3742;--grid:#222d37;--acc:#5ab8d8;--ref:#f0a44b}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,Segoe UI,Arial,sans-serif}
+main{max-width:1500px;margin:0 auto;padding:16px}h1{font-size:19px;margin:0}
+.top{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:baseline;margin-bottom:10px}
+.v{font-size:40px;font-weight:650;font-variant-numeric:tabular-nums}.u{font-size:16px;color:var(--dim);font-weight:400}
+.st{font-size:13.5px;color:var(--dim);font-variant-numeric:tabular-nums}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+canvas{width:100%;height:70vh;min-height:360px;display:block}
+.b{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0}
+button{padding:6px 12px;border:1px solid var(--line);border-radius:7px;background:var(--card);color:var(--ink);font:inherit;cursor:pointer}
+button.on{background:var(--acc);color:#fff;border-color:var(--acc);font-weight:600}
+</style></head><body><main>
+<div class="top"><h1 id="h">Reading</h1><div class="v"><span id="v">–</span> <span class="u" id="u"></span></div><div class="st" id="st"></div></div>
+<div class="card"><canvas id="c"></canvas></div>
+<div class="b" id="b"></div>
+</main><script>
+const META={temp:["Temperature","°C",2],ph_v:["pH pin voltage","V",3],ph:["pH","",2],fl:["Light signal (LED on − off)","counts",1],chl:["Chlorophyll","µg/L",2],sal:["Salinity","",2]};
+const K=new URLSearchParams(location.search).get("k")||"ph_v",M=META[K]||[K,"",3];
+const REF=K==="ph_v"?[[1.25,"centring target 1.25 V"]]:[];
+let win=120;document.title=M[0]+" detail";document.getElementById("h").textContent=M[0];document.getElementById("u").textContent=M[1];
+const B=document.getElementById("b");for(const [s,l] of [[60,"1 min"],[120,"2 min"],[300,"5 min"],[900,"15 min"],[0,"all"]]){const e=document.createElement("button");e.textContent=l;if(s===win)e.className="on";e.onclick=()=>{win=s;[...B.children].forEach(x=>x.className="");e.className="on";tick()};B.appendChild(e)}
+function nice(span,n){const raw=span/n,p=Math.pow(10,Math.floor(Math.log10(raw))),f=raw/p;return (f<1.5?1:f<3?2:f<7?5:10)*p}
+function draw(pts,now){const c=document.getElementById("c"),r=devicePixelRatio||1,W=c.clientWidth,H=c.clientHeight;c.width=W*r;c.height=H*r;const x=c.getContext("2d");x.scale(r,r);
+ const css=getComputedStyle(document.documentElement),col=n=>css.getPropertyValue(n).trim(),L=64,R=14,T=12,Bm=34;x.clearRect(0,0,W,H);x.font="12px system-ui";
+ if(pts.length<2){x.fillStyle=col("--dim");x.fillText("waiting for readings",L,H/2);return}
+ const t1=now,t0=win?now-win:pts[0][0];let lo=Math.min(...pts.map(p=>p[1]),...REF.map(q=>q[0])),hi=Math.max(...pts.map(p=>p[1]),...REF.map(q=>q[0]));
+ if(hi-lo<1e-6){hi+=.5;lo-=.5}const pad=(hi-lo)*.08;lo-=pad;hi+=pad;const ys=nice(hi-lo,12);lo=Math.floor(lo/ys)*ys;hi=Math.ceil(hi/ys)*ys;
+ const X=t=>L+(t-t0)/(t1-t0)*(W-L-R),Y=v=>T+(hi-v)/(hi-lo)*(H-T-Bm),dp=Math.max(0,Math.min(4,Math.ceil(-Math.log10(ys))+(Math.abs(ys/Math.pow(10,Math.floor(Math.log10(ys)))-1)>1e-9&&ys<1?0:0)));
+ x.lineWidth=1;x.textBaseline="middle";x.textAlign="right";
+ for(let v=lo;v<=hi+ys/2;v+=ys){x.strokeStyle=col("--grid");x.beginPath();x.moveTo(L,Y(v));x.lineTo(W-R,Y(v));x.stroke();x.fillStyle=col("--dim");x.fillText(v.toFixed(dp),L-8,Y(v))}
+ const span=t1-t0,xs=[1,2,5,10,15,30,60,120,300,600,1800].find(s=>span/s<=14)||3600;x.textAlign="center";x.textBaseline="top";
+ for(let t=Math.ceil(t0/xs)*xs;t<=t1;t+=xs){x.strokeStyle=col("--grid");x.beginPath();x.moveTo(X(t),T);x.lineTo(X(t),H-Bm);x.stroke();x.fillStyle=col("--dim");x.fillText(new Date(t*1000).toLocaleTimeString([], {hour12:false}),X(t),H-Bm+8)}
+ x.strokeStyle=col("--line");x.strokeRect(L,T,W-L-R,H-T-Bm);
+ for(const [v,label] of REF){x.strokeStyle=col("--ref");x.setLineDash([6,5]);x.beginPath();x.moveTo(L,Y(v));x.lineTo(W-R,Y(v));x.stroke();x.setLineDash([]);x.fillStyle=col("--ref");x.textAlign="left";x.textBaseline="bottom";x.fillText(label,L+8,Y(v)-4)}
+ x.save();x.beginPath();x.rect(L,T,W-L-R,H-T-Bm);x.clip();x.strokeStyle=col("--acc");x.lineWidth=2;x.beginPath();pts.forEach((p,i)=>i?x.lineTo(X(p[0]),Y(p[1])):x.moveTo(X(p[0]),Y(p[1])));x.stroke();
+ x.fillStyle=col("--acc");for(const p of pts){x.beginPath();x.arc(X(p[0]),Y(p[1]),2.6,0,7);x.fill()}x.restore()}
+async function tick(){let d;try{d=await (await fetch("/data")).json()}catch(e){document.getElementById("st").textContent="dashboard stopped";return}
+ const all=d.samples.filter(a=>a[K]!==null&&a[K]!==undefined).map(a=>[a.t,a[K]]),pts=win?all.filter(p=>p[0]>=d.now-win):all,last=all.at(-1);
+ document.getElementById("v").textContent=last?last[1].toFixed(M[2]):"–";
+ if(pts.length){const v=pts.map(p=>p[1]),mean=v.reduce((a,b)=>a+b,0)/v.length,rec=pts.filter(p=>p[0]>=d.now-30),drift=rec.length>1?(rec.at(-1)[1]-rec[0][1])/Math.max(1,rec.at(-1)[0]-rec[0][0])*60:0;
+  document.getElementById("st").textContent=`${pts.length} readings · min ${Math.min(...v).toFixed(M[2])} · max ${Math.max(...v).toFixed(M[2])} · mean ${mean.toFixed(M[2])} · change over the last 30 s: ${(drift>=0?"+":"")+drift.toFixed(M[2])} ${M[1]} per minute · last reading ${Math.max(0,d.now-last[0]).toFixed(0)} s ago`}
+ else document.getElementById("st").textContent=d.state.connected?"no readings of this sensor yet":"board not connected";
+ draw(pts,d.now)}
+tick();setInterval(tick,1000);addEventListener("resize",tick);
+</script></body></html>"""
+
+
 class Handler(BaseHTTPRequestHandler):
     def _send(self, code, body, kind):
         data = body.encode()
@@ -174,6 +226,8 @@ class Handler(BaseHTTPRequestHandler):
                 body = json.dumps({"now": time.time(), "adc_top": ADC_TOP, "state": state,
                                    "samples": list(samples), "log": list(log)})
             self._send(200, body, "application/json")
+        elif self.path.startswith("/detail"):
+            self._send(200, DETAIL, "text/html; charset=utf-8")
         else:
             self._send(200, PAGE, "text/html; charset=utf-8")
 
