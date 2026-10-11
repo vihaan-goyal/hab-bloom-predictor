@@ -87,7 +87,8 @@ def serial_loop(port, poll):
                         cmd = outbox.popleft()
                         s.write((cmd + "\n").encode())
                         with lock:
-                            log.append({"t": now, "line": f">> {cmd}"})
+                            shown = "wifipass ****" if cmd.split(" ")[0] == "wifipass" else cmd   # never log a password
+                            log.append({"t": now, "line": f">> {shown}"})
                     if poll > 0 and now >= next_read:
                         s.write(b"read\n")
                         next_read = now + poll

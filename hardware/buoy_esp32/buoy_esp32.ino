@@ -32,11 +32,24 @@
       blank    fluorometer: plain seawater = zero chl      chlk <k>   ug/L per count (sonde-equivalent)
       gain l|m|h|x   TSL2591 gain (saved; redo blank/chlk after changing it)
       cal686 / cal918   pH probe in pH 6.86 / 9.18 buffer        cal   calclear
+  Web page (USE_WIFI 1): the buoy serves its own read-only page with the latest readings, forecast,
+      treatment and relay state. Join its open hotspot "HAB-buoy" and open http://192.168.10.1, or, once
+      it has joined your Wi-Fi, open the address `ip` prints.   ap on|off   hotspot (kept in NVS)   ip
   Wi-Fi alerts (USE_WIFI 1): wifi <ssid>   wifipass <password>   ntfy <topic>   ntfytest
       Stored in NVS, never in this file. Every bulletin from a sensor day posts to ntfy.sh/<topic>.
 
-  Outputs: onboard LED (GPIO 2) and relay (GPIO 26) ON while the latest forecast is ALERT.
-  The tank loop rules (X, C_ok, MAX_ON) are NOT in this version: see controlHook() below.
+  Treatment loop (loop_control.h, the Uno alerter's rules; checked on the PC by check_loop_port.py):
+      x <days>   cok <ug/L>   ton <p>   mode F|R|H   warm <mean chl>   floor <frac>   maxon <days>
+      pulse <s>  dosing-pump mode: the relay runs <s> seconds at START and at each check day that
+                 continues the episode. 0 (default) = relay held ON for the whole episode (air pump)
+      skip       skip the next pulse        stop   safety stop at the next scored day
+      loop       show the loop settings and state (also part of `status`)
+    Each scored day also prints   L <date> -> START|ON|OFF|OFF_FLOOR|STOP_MAX_ON|idle next_check=.. episodes=..
+    Settings are kept in NVS; the loop state too in SENSOR mode. `reset` clears the state.
+    Not ported: the Uno's two-pump dosing module (USE_DOSER) and its temperature alarm.
+
+  Outputs: onboard LED (GPIO 2) ON while the latest forecast is ALERT; relay (GPIO 26) follows the
+  treatment loop.
   Wiring and a walkthrough: hardware/buoy_esp32/README.md.
 */
 #include <Arduino.h>
@@ -49,6 +62,7 @@ enum Notify { N_SILENT = 0, N_SERIAL = 1, N_PUSH = 2 };   // bulletins: restore 
 
 #define ST_PRINTF(...) Serial.printf(__VA_ARGS__)
 #include "selftest.h"            // pulls in bloom_model.h, features.h, pss78.h, test_vectors.h
+#include "loop_control.h"        // the treatment ON/OFF rules (ported from the Uno alerter)
 
 // ---- sensors: set to 1 once the part is wired (Arduino IDE -> Library Manager for the library)
 #ifndef USE_DS18B20
@@ -83,6 +97,7 @@ enum Notify { N_SILENT = 0, N_SERIAL = 1, N_PUSH = 2 };   // bulletins: restore 
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 #include <HTTPClient.h>
+#include <WebServer.h>
 #endif
 
 // ---- pins (ESP32 Dev Module)
@@ -105,6 +120,10 @@ bool alertOn = false, relayOn = false;
 float lastP = NAN;
 int32_t lastDate = 0;
 int selftestFails = -1;
+LoopCfg lc;                      // treatment-loop settings (NVS "lcfg")
+LoopState ls;                    // treatment-loop state (NVS "lstate", SENSOR mode only)
+bool pumpOn = false;             // pulse mode: the timed pump run is in progress
+unsigned long pumpStartMs = 0;
 const float BLOOM_CHL = 10.0f;   // ug/L, the training label's bloom level
 String siteName = "buoy";        // used in bulletins (`site`)
 
@@ -127,6 +146,20 @@ bool tslOk = false;
 #endif
 #if USE_WIFI
 String wifiSsid, wifiPass, ntfyTopic;
+// ---- the buoy's own web page: http://192.168.10.1 on its hotspot, or its address on your Wi-Fi
+const char *AP_NAME = "HAB-buoy";      // open hotspot; the page is read-only
+bool apOn = true;                      // `ap on|off`, kept in NVS
+WebServer web(80);
+// Not 192.168.4.x (the ESP32 default): many home routers use that range, and the clash stops the board
+// reaching the internet (ntfy returned -1 on such a network, 2026-10-10).
+void startHotspot() {
+  WiFi.softAPConfig(IPAddress(192, 168, 10, 1), IPAddress(192, 168, 10, 1), IPAddress(255, 255, 255, 0));
+  WiFi.softAP(AP_NAME);
+}
+struct WebSample { uint32_t t; float temp, phV, ph, fl, chl; };
+const int WEB_KEEP = 120;
+WebSample webBuf[WEB_KEEP];
+int webN = 0, webHead = 0;             // webHead = slot of the next sample
 #endif
 
 // ------------------------------------------------------------------ helpers
@@ -141,20 +174,41 @@ void saveHist() { prefs.putBytes("hist", &hist, sizeof(hist)); }
 void saveClim() { prefs.putBytes("clim", climTable, sizeof(climTable)); }
 void saveCal()  { prefs.putBytes("cal", &cal, sizeof(cal)); }
 void saveAcc()  { prefs.putBytes("acc", &acc, sizeof(acc)); }
+void saveLoopCfg() { prefs.putBytes("lcfg", &lc, sizeof(lc)); }
 
 void clearAcc(int32_t date) { memset(&acc, 0, sizeof(acc)); acc.date = date; }
 
 // ------------------------------------------------------------------ alert outputs
-/* controlHook -- the ONE place that decides the relay from a scored day.
-   TODO(loop rules): port the alerter's ON/OFF rules from hardware/alerter_uno/alerter_uno.ino
-   (stepDay): START when p >= T_on; recheck every X days; OFF only if p < T_off (= 0.8 T_on) AND
-   chl < C_ok AND chl not rising; STOP after MAX_ON days; floor rule; handover mode. Keep the state
-   (on, startDay, checkDay, lastChl, ...) in a struct here and persist it in NVS like `hist`.
-   Until then the relay simply follows today's alert. Called once per scored day (and per `vec`).
-   date = yyyymmdd (0 for `vec`), p = forecast, chl = today's daily mean (NAN for `vec`). */
+/* The relay: held ON for the whole treatment episode (air pump), or, in pulse mode (`pulse <s>`), ON
+   only for the timed pump run at START and at each check day that continues the episode. */
+bool relayWanted() { return lc.pulseSec > 0 ? (ls.on && pumpOn) : ls.on; }
+
+/* controlHook -- the ONE place that decides the relay from a scored day: the treatment-loop rules of
+   loop_control.h (START at p >= T_on; recheck every X days; OFF only if p < 0.8 T_on AND chl < C_ok AND
+   chl not rising; STOP after MAX_ON days; floor rule; rule and handover triggers). Called once per scored
+   day. date = yyyymmdd (0 for `vec`, which leaves the loop alone), p = forecast, chl = that day's mean.
+   A day with no chlorophyll row never gets here (training drops it), so a missed check day is simply
+   evaluated on the next stored day; the Uno's "check again tomorrow" case cannot arise. */
 bool controlHook(int32_t date, float p, float chl, bool alert) {
-  (void)date; (void)p; (void)chl;
-  return alert;
+  (void)alert;
+  if (date == 0) return relayWanted();
+  int32_t day = loop_day_number(date);
+  if (day <= ls.histDay) return relayWanted();     // the same day again (replaced row, or a restore at boot)
+  bool was = ls.on;
+  LoopOut o = loop_step(lc, ls, day, p, chl);
+  if (!ls.on) pumpOn = false;
+  if (o.dose && !o.skipped) { pumpOn = true; pumpStartMs = millis(); }
+  Serial.print("L "); printDate(date);
+  Serial.printf(" -> %s", loop_label(ls, o, was));
+  if (ls.on) { Serial.print(" next_check="); printDate(loop_date_of(ls.checkDay)); }
+  Serial.printf(" episodes=%ld", (long)ls.episodes);
+  if (o.dose) { if (o.skipped) Serial.print(" pulse=skipped"); else Serial.printf(" pulse=%us", lc.pulseSec); }
+  if (ls.warn) Serial.print(" WARN(safety stop)");
+  Serial.println();
+#if SENSOR_MODE
+  prefs.putBytes("lstate", &ls, sizeof(ls));
+#endif
+  return relayWanted();
 }
 
 void setOutputs() {
@@ -166,7 +220,7 @@ void setOutputs() {
 bool wifiUp(unsigned long waitMs = 15000) {
   if (WiFi.status() == WL_CONNECTED) return true;
   if (wifiSsid.length() == 0) return false;
-  WiFi.mode(WIFI_STA);
+  WiFi.mode(apOn ? WIFI_AP_STA : WIFI_STA);     // keep the hotspot up while joining
   WiFi.begin(wifiSsid.c_str(), wifiPass.c_str());
   unsigned long t0 = millis();
   while (WiFi.status() != WL_CONNECTED && millis() - t0 < waitMs) delay(250);
@@ -444,9 +498,85 @@ void closeDay() {
   }
 }
 
+#if USE_WIFI
+void webPush(const Sample &s) {
+  webBuf[webHead] = {(uint32_t)time(NULL), s.temp, s.phV, s.ph, s.fl, s.chl};
+  webHead = (webHead + 1) % WEB_KEEP;
+  if (webN < WEB_KEEP) webN++;
+}
+
+String jnum(float v, int dp) { return isnan(v) ? String("null") : String(v, dp); }
+
+static const char WEB_PAGE[] PROGMEM = R"HTML(<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>HAB buoy</title><style>
+:root{--bg:#f3f5f6;--card:#fff;--ink:#16202a;--dim:#5d6b78;--line:#d9e0e5;--ok:#0f7b54;--warn:#b25a00;--bad:#b3261e;--acc:#0b6e8f}
+@media (prefers-color-scheme:dark){:root{--bg:#10161b;--card:#18212a;--ink:#e6edf2;--dim:#93a3b1;--line:#2a3742;--ok:#4cc38a;--warn:#f0a44b;--bad:#ff7b72;--acc:#5ab8d8}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,Segoe UI,Arial,sans-serif}
+main{max-width:900px;margin:0 auto;padding:16px}h1{font-size:19px;margin:0 0 8px}
+.p{display:inline-block;padding:2px 10px;border-radius:99px;font-size:13px;font-weight:600;border:1px solid var(--line);margin:0 6px 6px 0}
+.g{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-top:8px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.k{font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.05em}
+.v{font-size:28px;font-weight:650;font-variant-numeric:tabular-nums}.u{font-size:14px;color:var(--dim);font-weight:400}
+.n{font-size:12.5px;color:var(--dim);min-height:18px}canvas{width:100%;height:44px;display:block;margin-top:6px}
+button{margin-top:12px;padding:8px 16px;border:0;border-radius:7px;background:var(--acc);color:#fff;font:inherit;font-weight:600}
+</style></head><body><main><h1 id="h">HAB buoy</h1>
+<div><span class="p" id="a">forecast</span><span class="p" id="t">treatment</span><span class="p" id="r">relay</span></div>
+<div class="n" id="m"></div><div class="g" id="g"></div><button id="b">Read now</button>
+</main><script>
+const T=[["temp","Temperature","°C",2,1],["ph","pH","",2,3],["phv","pH pin voltage","V",3,2],["fl","Light signal","counts",1,4],["chl","Chlorophyll","µg/L",2,5]];
+const N={ph:"needs the two buffers",chl:"needs blank + chlk calibration"};const g=document.getElementById("g");
+for(const [k,n,u] of T)g.insertAdjacentHTML("beforeend",`<div class="c"><div class="k">${n}</div><div class="v"><span id="v${k}">–</span> <span class="u">${u}</span></div><div class="n" id="n${k}"></div><canvas id="c${k}" width="360" height="88"></canvas></div>`);
+function sp(id,v){const c=document.getElementById(id),x=c.getContext("2d"),w=c.width,h=c.height;x.clearRect(0,0,w,h);const a=v.filter(q=>q!==null);if(a.length<2)return;
+let lo=Math.min(...a),hi=Math.max(...a);if(hi-lo<1e-9){hi+=1;lo-=1}x.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue("--acc");x.lineWidth=3;x.beginPath();let pen=0;
+v.forEach((q,i)=>{if(q===null){pen=0;return}const px=i/(v.length-1)*(w-6)+3,py=h-6-(q-lo)/(hi-lo)*(h-12);pen?x.lineTo(px,py):x.moveTo(px,py);pen=1});x.stroke()}
+function pill(id,t,k){const e=document.getElementById(id);e.textContent=t;e.style.color=`var(--${k})`;e.style.borderColor=`var(--${k})`}
+async function tick(){let d;try{d=await (await fetch("/data")).json()}catch(e){document.getElementById("m").textContent="buoy not reachable";return}
+document.getElementById("h").textContent="HAB buoy: "+d.site;
+pill("a","forecast "+(d.alert?"ALERT":"idle")+(d.p===null?"":" (risk "+d.p.toFixed(2)+")"),d.alert?"bad":"ok");
+pill("t","treatment "+(d.treat?"ON":"idle"),d.treat?"warn":"ok");pill("r","relay "+(d.relay?"ON":"off"),d.relay?"warn":"ok");
+const L=d.s.at(-1);document.getElementById("m").textContent="self-test "+d.selftest+" · stored days "+d.days+" · "+d.s.length+" readings"+(L?" · last "+Math.max(0,d.now-L[0])+" s ago":"");
+for(const [k,,,dp,i] of T){const q=L?L[i]:null;document.getElementById("v"+k).textContent=q===null?"–":q.toFixed(dp);document.getElementById("n"+k).textContent=q===null?(N[k]||"no reading"):"";sp("c"+k,d.s.map(a=>a[i]))}}
+document.getElementById("b").onclick=async()=>{await fetch("/read");tick()};tick();setInterval(tick,5000);
+</script></body></html>)HTML";
+
+void webData() {
+  String site = siteName;
+  site.replace("\\", ""); site.replace("\"", "");
+  String j = "{\"site\":\"" + site + "\",\"now\":" + String((uint32_t)time(NULL)) + ",\"alert\":" + (alertOn ? "true" : "false") +
+             ",\"p\":" + jnum(lastP, 4) + ",\"relay\":" + (relayOn ? "true" : "false") + ",\"treat\":" + (ls.on ? "true" : "false") +
+             ",\"selftest\":\"" + (selftestFails == 0 ? "PASS" : selftestFails < 0 ? "not run" : "FAIL") + "\",\"days\":" + String(hist.n) + ",\"s\":[";
+  for (int i = 0; i < webN; i++) {
+    const WebSample &w = webBuf[(webHead - webN + i + WEB_KEEP) % WEB_KEEP];
+    if (i) j += ",";
+    j += "[" + String(w.t) + "," + jnum(w.temp, 2) + "," + jnum(w.phV, 3) + "," + jnum(w.ph, 2) + "," + jnum(w.fl, 1) + "," + jnum(w.chl, 2) + "]";
+  }
+  j += "]}";
+  web.sendHeader("Cache-Control", "no-store");
+  web.send(200, "application/json", j);
+}
+
+void webStart() {
+  web.on("/", []() { web.send_P(200, "text/html; charset=utf-8", WEB_PAGE); });
+  web.on("/data", webData);
+  web.on("/read", []() { webPush(takeSample()); web.send(200, "text/plain", "ok"); });   // shown, not stored in the day
+  web.begin();
+}
+
+void printNet() {
+  Serial.printf("web page: hotspot \"%s\" %s", AP_NAME, apOn ? "http://" : "off");
+  if (apOn) Serial.print(WiFi.softAPIP());
+  if (WiFi.status() == WL_CONNECTED) { Serial.print("   on your Wi-Fi http://"); Serial.print(WiFi.localIP()); }
+  Serial.println();
+}
+#endif
+
 void sampleTick() {
   Sample s = takeSample();
   printSample(s);
+#if USE_WIFI
+  webPush(s);
+#endif
   if (!clockOk()) { Serial.println("clock not set: send `date yyyy-mm-dd hh:mm` (or enable Wi-Fi); sample not stored"); return; }
   int32_t today = localDate();
   if (acc.date != today) { closeDay(); clearAcc(today); }
@@ -470,12 +600,23 @@ void printCal() {
                 cal.blank, cal.chlK, cal.gain, cal.v686, cal.v918);
 }
 
+void printLoop() {
+  Serial.printf("loop mode=%c X=%ld T_on=%.2f T_off=%.2f C_ok=%.2f MAX_ON=%ld warm=%.2f floor=%.2f", lc.mode, (long)lc.X,
+                (double)lc.tOn, (double)(0.8f * lc.tOn), (double)lc.cOk, (long)(lc.maxOnDays > 0 ? lc.maxOnDays : 4 * lc.X),
+                (double)lc.warmMean, (double)lc.floorFrac);
+  if (lc.pulseSec > 0) Serial.printf(" pulse=%us%s", lc.pulseSec, ls.skipNext ? "(skip next)" : "");
+  Serial.printf(" treatment=%s episodes=%ld", ls.on ? "ON" : "idle", (long)ls.episodes);
+  if (ls.on) { Serial.print(" next_check="); printDate(loop_date_of(ls.checkDay)); }
+  Serial.println();
+}
+
 void printStatus() {
   Serial.printf("site=\"%s\" mode=%s selftest=%s history=%ld days", siteName.c_str(), SENSOR_MODE ? "SENSOR" : "DEMO",
                 selftestFails < 0 ? "not run" : selftestFails == 0 ? "PASS" : "FAIL", (long)hist.n);
   if (hist.n) { Serial.print(" ("); printDate(hist.r[0].date); Serial.print(".."); printDate(hist.r[hist.n - 1].date); Serial.print(")"); }
   Serial.printf(" last_p=%.4f state=%s relay=%s threshold=%.2f\n", (double)lastP, alertOn ? "ALERT" : "idle",
                 relayOn ? "ON" : "off", (double)BLOOM_THRESHOLD);
+  printLoop();
   printClim();
 #if SENSOR_MODE
   printCal();
@@ -486,17 +627,20 @@ void printStatus() {
 #if USE_WIFI
   Serial.printf("wifi ssid=\"%s\" pass=%s ntfy_topic=\"%s\" connected=%s\n", wifiSsid.c_str(),
                 wifiPass.length() ? "****" : "(none)", ntfyTopic.c_str(), WiFi.status() == WL_CONNECTED ? "yes" : "no");
+  printNet();
 #endif
 }
 
 void printHelp() {
   Serial.println("demo:   day <yyyy-mm-dd> <chl> <temp> <sal> <do> [clim]   vec <23 numbers>");
   Serial.println("        status  reset  selftest  hist  site [<name>]  clim [<month> <value>]  climclear  help");
+  Serial.println("loop:   x <days>  cok <ug/L>  ton <p>  mode F|R|H  warm <mean chl>  floor <frac>  maxon <days>");
+  Serial.println("        pulse <s>  skip  stop  loop");
 #if SENSOR_MODE
   Serial.println("sensor: read  date <yyyy-mm-dd> <hh:mm>  blank  chlk <k>  gain l|m|h|x  cal686  cal918  cal  calclear");
 #endif
 #if USE_WIFI
-  Serial.println("wifi:   wifi <ssid>  wifipass <password>  ntfy <topic>  ntfytest");
+  Serial.println("wifi:   wifi <ssid>  wifipass <password>  ntfy <topic>  ntfytest  ap on|off  ip");
 #endif
 }
 
@@ -570,9 +714,10 @@ void handleLine(char *line) {
   }
   if (!strcmp(a, "selftest")) { selftestFails = run_selftest(); return; }
   if (!strcmp(a, "reset")) {
-    hist_clear(&hist); clearAcc(0); alertOn = relayOn = false; lastP = NAN; lastDate = 0; setOutputs();
-    prefs.remove("hist"); prefs.remove("acc");
-    Serial.println("history cleared (calibration and climatology kept)");
+    hist_clear(&hist); clearAcc(0); alertOn = relayOn = false; lastP = NAN; lastDate = 0;
+    loop_reset(ls); pumpOn = false; setOutputs();
+    prefs.remove("hist"); prefs.remove("acc"); prefs.remove("lstate");
+    Serial.println("history and treatment loop cleared (calibration, climatology and loop settings kept)");
     return;
   }
   if (!strcmp(a, "clim")) {
@@ -585,6 +730,20 @@ void handleLine(char *line) {
     printClim();
     return;
   }
+  // ---- treatment loop (same commands as the Uno alerter)
+  bool loopCmd = true;
+  if (!strcmp(a, "x") && b) lc.X = max(1, atoi(b));
+  else if (!strcmp(a, "cok") && b) lc.cOk = atof(b);
+  else if (!strcmp(a, "ton") && b) lc.tOn = atof(b);
+  else if (!strcmp(a, "mode") && b) { char m = toupper(b[0]); lc.mode = (m == 'R' || m == 'H') ? m : 'F'; }
+  else if (!strcmp(a, "warm") && b) lc.warmMean = parseVal(b);
+  else if (!strcmp(a, "floor") && b) lc.floorFrac = atof(b);
+  else if (!strcmp(a, "maxon") && b) lc.maxOnDays = max(0, atoi(b));
+  else if (!strcmp(a, "pulse") && b) { lc.pulseSec = (uint16_t)max(0, atoi(b)); pumpOn = false; relayOn = relayWanted(); setOutputs(); }
+  else if (!strcmp(a, "skip")) ls.skipNext = true;        // e.g. H2O2 residual > 0.5 mg/L at the check
+  else if (!strcmp(a, "stop")) { ls.safetyStop = true; Serial.println("safety stop at the next scored day"); }
+  else if (strcmp(a, "loop")) loopCmd = false;
+  if (loopCmd) { saveLoopCfg(); printLoop(); return; }
   if (!strcmp(a, "climclear")) { for (int m = 0; m < 13; m++) climTable[m] = NAN; saveClim(); printClim(); return; }
 #if SENSOR_MODE
   if (!strcmp(a, "read")) { printSample(takeSample()); return; }
@@ -610,6 +769,15 @@ void handleLine(char *line) {
   if (!strcmp(a, "wifipass")) { wifiPass = restOf(raw, "wifipass"); prefs.putString("pass", wifiPass); WiFi.disconnect(); Serial.println("password stored"); return; }
   if (!strcmp(a, "ntfy")) { ntfyTopic = b ? b : ""; prefs.putString("topic", ntfyTopic); Serial.printf("ntfy topic=\"%s\"\n", ntfyTopic.c_str()); return; }
   if (!strcmp(a, "ntfytest")) { ntfySend("HAB buoy test", String("Test message from the buoy. last p=") + String(lastP, 3)); return; }
+  if (!strcmp(a, "ip")) { printNet(); return; }
+  if (!strcmp(a, "ap") && b) {
+    apOn = !strcmp(b, "on");
+    prefs.putBool("ap", apOn);
+    WiFi.mode(apOn ? WIFI_AP_STA : WIFI_STA);
+    if (apOn) startHotspot();
+    printNet();
+    return;
+  }
 #else
   (void)raw; (void)restOf;
 #endif
@@ -641,6 +809,10 @@ void setup() {
   Cal stored;
   if (prefs.getBytesLength("cal") == sizeof(Cal) && prefs.getBytes("cal", &stored, sizeof(Cal)) && stored.magic == CAL_MAGIC) cal = stored;
   siteName = prefs.getString("site", "buoy");
+  loop_defaults(lc, BLOOM_THRESHOLD);
+  loop_reset(ls);
+  LoopCfg storedCfg;
+  if (prefs.getBytesLength("lcfg") == sizeof(LoopCfg) && prefs.getBytes("lcfg", &storedCfg, sizeof(LoopCfg)) && storedCfg.magic == LOOP_CFG_MAGIC) lc = storedCfg;
   hist_clear(&hist);
   clearAcc(0);
 #if SENSOR_MODE
@@ -649,6 +821,8 @@ void setup() {
   if (prefs.getBytesLength("acc") == sizeof(acc)) prefs.getBytes("acc", &acc, sizeof(acc));
   int64_t saved = prefs.getLong64("clock", 0);
   if (saved > 1600000000 && !clockOk()) { struct timeval tv; tv.tv_sec = (time_t)saved; tv.tv_usec = 0; settimeofday(&tv, NULL); }
+  LoopState storedLoop;
+  if (prefs.getBytesLength("lstate") == sizeof(LoopState) && prefs.getBytes("lstate", &storedLoop, sizeof(LoopState)) && storedLoop.magic == LOOP_STATE_MAGIC) ls = storedLoop;
   if (hist.n) Serial.printf("restored %ld days from NVS\n", (long)hist.n);
 #endif
 #if USE_DS18B20
@@ -674,7 +848,12 @@ void setup() {
   wifiSsid = prefs.getString("ssid", "");
   wifiPass = prefs.getString("pass", "");
   ntfyTopic = prefs.getString("topic", "");
+  apOn = prefs.getBool("ap", true);
+  WiFi.mode(apOn ? WIFI_AP_STA : WIFI_STA);
+  if (apOn) startHotspot();
   if (wifiSsid.length()) wifiUp(10000);
+  webStart();
+  printNet();
 #endif
   if (hist.n) scoreLatest(N_SILENT);  // restore the LED/relay from the last stored day
   Serial.printf("READY mode=%s. Send `help`, or a day line, e.g.  day 2023-08-03 6.87 22.66 27.44 6.35\n",
@@ -687,10 +866,19 @@ unsigned long lastSampleMs = 0;
 bool firstSample = true;
 
 void loop() {
+#if USE_WIFI
+  web.handleClient();
+#endif
   while (Serial.available()) {
     char ch = Serial.read();
     if (ch == '\n' || ch == '\r') { buf[len] = '\0'; if (len) handleLine(buf); len = 0; }
     else if (len < sizeof(buf) - 1) buf[len++] = ch;
+  }
+  if (pumpOn && millis() - pumpStartMs >= lc.pulseSec * 1000UL) {      // pulse mode: the timed run is over
+    pumpOn = false;
+    relayOn = relayWanted();
+    setOutputs();
+    Serial.println("PUMP off");
   }
 #if SENSOR_MODE
   if ((firstSample && millis() > 10000) || millis() - lastSampleMs >= SAMPLE_MS) {
