@@ -283,6 +283,68 @@ skill can be claimed for the device.
   samples, either lab-extracted chlorophyll (school spectrophotometer, or samples run by DEEP/UConn)
   or hemocytometer cell counts.
 - **Pre-register the pass mark** (±20% and r) before deployment, like every other test.
+- **Why the sonde scale and not the lab scale (2026-10-11):** the model learned from sonde readings, and a
+  sonde does not read what the lab reads (sonde 10 ≈ lab 7.8; lab 10 ≈ sonde 12.8, fork findings §10). A
+  device calibrated to lab chlorophyll would read about 20% low for the model, so blooms would look smaller
+  and warnings would come late. If no sonde can be reached, calibrate to the lab and multiply by 1.28, and
+  state it as a limitation (an average across stations).
+- **Most realistic route: a one-day indoor comparison (2026-10-11).** RIDEM's fixed-site sondes are mostly
+  seasonal (about May-October; confirm), so a multi-week field comparison before the March fair is unlikely.
+  The likely offer is a sonde in an indoor tank or a large bucket at their site:
+  1. lower the device's sensing head (§13) into the same water as the sonde;
+  2. start with a concentrated algae mix (sonde about 30-40), read both, write down the pair;
+  3. dilute with clean seawater, stir, read both again; 5-6 steps down to plain seawater (= `blank`);
+  4. fit one straight line through the pairs: its slope is `chlk`; the scatter gives the ±20% check.
+  Bring our own culture (*Nannochloropsis* is fine) and dilute in a container of theirs, not their main
+  tank. Ask which sonde model it is: it should match RIDEM's network. NBNERR monitors year-round, so it is
+  the better winter contact. This sets the scale; it does not measure drift or fouling (those need weeks).
+
+## 13. Sensing head: reads the water directly, no cuvette (decided 2026-10-11)
+
+A cuvette needs a person to fill it, and the device samples every 15 minutes, so a cuvette fluorometer
+cannot be part of an autonomous buoy. The sensing head has to sit in the water.
+
+| Option | Verdict | Why |
+|---|---|---|
+| **Submerged optical head** | **chosen** | No pump, nothing to clog, least power: the most deployable. It is how commercial sondes work |
+| Flow-through (a pump pulls water through a clear tube in the dark box) | fallback | Easier to keep dark and dry, but adds a pump, tubing and bubbles |
+| Cuvette in a dark box | hand checks only | Not autonomous |
+
+**Design of the submerged head (not built yet):**
+- a sealed clear container (acrylic tube with a cap, or a small glass jar) holds the blue LED and the
+  TSL2591, side by side, looking out through one window;
+- a black divider between the LED and the sensor that touches the window, so blue light reflected by the
+  window cannot reach the sensor; the red gel sits over the sensor;
+- everything except the window is blacked out (tape or paint);
+- the container sits inside a black pipe about 15 cm longer than it, open at the bottom, so the sensor
+  looks into shaded water; mount it about 0.5 m down;
+- a cable runs up to the ESP32, or the whole board lives in the same sealed container.
+- **Firmware: no change.** It already reads with the LED off, then on, and uses the difference, and it
+  reports a saturated sensor.
+
+**Risks and what answers each:**
+
+| Risk | Answer |
+|---|---|
+| Sunlight is far brighter than the glow and can saturate the sensor | The black shroud and depth; the LED off/on difference removes steady light. Indoors (bench tanks, the calibration visit) this does not arise |
+| LED light reaching the sensor directly | The divider to the window; `blank` in clean seawater removes what is left |
+| Leaks | Leak-test the empty housing in a bucket overnight before any electronics go in |
+| The window fouls over weeks and the reading drifts | Wipe at each service visit; measure the drift (§12). Sondes use a wiper; we do not have one |
+| Cloudy water scatters blue light into the sensor | `blank` removes the clean-water part; turbidity changes remain a known error |
+
+**Checks before the head is trusted** (set and pre-register each pass mark before running it):
+1. leak test, empty, overnight;
+2. dark stability: repeated readings in clean seawater in the dark;
+3. crosstalk: the `blank` signal with and without the divider;
+4. linearity: a 5-6 step dilution series (the same series as the §12 visit);
+5. room light vs dark on the same sample, with the shroud on.
+
+**Flow-through fallback, if the head cannot be kept dark or dry:** a small pump (5-6 V or peristaltic) on a
+spare pin runs about 10 s before each reading, then stops; the tube stands vertical with the water flowing
+up so bubbles leave; black tubing outside the box. It needs a small firmware change (not written).
+
+**Parts:** clear sealed container, black pipe, red gel (LEE 106), black tape or paint, a waterproof cable
+gland or sealant. Cuvettes stay on the list for hand checks.
 
 ## Never claim
 - That it prevents blooms in the open Sound; this is tanks only, aimed at enclosed or semi-enclosed water (harbors, shellfish beds, aquaculture pens, coastal ponds).

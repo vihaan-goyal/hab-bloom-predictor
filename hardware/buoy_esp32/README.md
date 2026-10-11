@@ -270,6 +270,9 @@ How Wi-Fi alerts work:
 - No board? `python replay_demo.py --sim --station B3 --start 2023-05-01 --days 150 --bulletins` prints the
   bulletin timeline a real season would have produced (same rules as the firmware).
 
+**Sensing head (decided 2026-10-11):** the fluorometer will read the water through a submerged optical
+head, not a cuvette. Design, risks and checks: `notes/mitigation/EXECUTION_PLAN.md` §13. Not built yet.
+
 ## 6. Limitations: read before quoting results
 
 1. **Climatology.** In training, `chl_climatology` is the station's average for the same 15-day
