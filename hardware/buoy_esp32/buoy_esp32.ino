@@ -15,6 +15,10 @@
       vec <23 numbers>   score a raw feature vector (BLOOM_FEATURES order, nan allowed)
       status   reset (clears the daily history)   selftest   hist (print the stored days)
       site <name>   name used in bulletins (e.g. Newport-Harbor), kept in NVS
+      demo [<s>] [nopush]   replay the real station-season in demo_season.h by itself, one day every <s>
+                    seconds (default 2), through the same code as live days: forecast, treatment loop,
+                    relay, bulletins (marked DEMO; pushed to the phone unless `nopush`). Sampling waits,
+                    nothing is saved, and the real history and loop state come back at the end.  demo off
       clim <month> <value>   per-site chl climatology for that month, kept in NVS (nan clears it)
       clim     show the table              climclear   erase it
       help
@@ -63,6 +67,7 @@ enum Notify { N_SILENT = 0, N_SERIAL = 1, N_PUSH = 2 };   // bulletins: restore 
 #define ST_PRINTF(...) Serial.printf(__VA_ARGS__)
 #include "selftest.h"            // pulls in bloom_model.h, features.h, pss78.h, test_vectors.h
 #include "loop_control.h"        // the treatment ON/OFF rules (ported from the Uno alerter)
+#include "demo_season.h"         // one real station-season for `demo` (make_demo_season.py)
 
 // ---- sensors: set to 1 once the part is wired (Arduino IDE -> Library Manager for the library)
 #ifndef USE_DS18B20
@@ -80,13 +85,16 @@ enum Notify { N_SILENT = 0, N_SERIAL = 1, N_PUSH = 2 };   // bulletins: restore 
 #ifndef USE_WIFI
 #define USE_WIFI 0      // ntfy.sh push alerts + NTP clock. Core libraries only
 #endif
+#ifndef USE_LCD
+#define USE_LCD 0       // 16x2 character LCD with an I2C backpack (PCF8574), on SDA/SCL. No library
+#endif
 #define SENSOR_MODE (USE_DS18B20 || USE_TSL2591 || USE_EZO_EC || USE_PH)
 
 #if USE_DS18B20
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #endif
-#if USE_TSL2591 || USE_EZO_EC
+#if USE_TSL2591 || USE_EZO_EC || USE_LCD
 #include <Wire.h>
 #endif
 #if USE_TSL2591
@@ -124,6 +132,10 @@ LoopCfg lc;                      // treatment-loop settings (NVS "lcfg")
 LoopState ls;                    // treatment-loop state (NVS "lstate", SENSOR mode only)
 bool pumpOn = false;             // pulse mode: the timed pump run is in progress
 unsigned long pumpStartMs = 0;
+// ---- demo: replays the real season in demo_season.h through the normal code path (`demo`)
+bool demoOn = false, demoPush = true;
+int demoIdx = 0;
+unsigned long demoStepMs = 2000, demoLastMs = 0;
 const float BLOOM_CHL = 10.0f;   // ug/L, the training label's bloom level
 String siteName = "buoy";        // used in bulletins (`site`)
 
@@ -191,6 +203,7 @@ bool relayWanted() { return lc.pulseSec > 0 ? (ls.on && pumpOn) : ls.on; }
    evaluated on the next stored day; the Uno's "check again tomorrow" case cannot arise. */
 bool controlHook(int32_t date, float p, float chl, bool alert) {
   (void)alert;
+  if (demoOn && demoIdx < DEMO_WARMUP) return false;   // demo warm-up rows only fill the model's window
   if (date == 0) return relayWanted();
   int32_t day = loop_day_number(date);
   if (day <= ls.histDay) return relayWanted();     // the same day again (replaced row, or a restore at boot)
@@ -206,7 +219,7 @@ bool controlHook(int32_t date, float p, float chl, bool alert) {
   if (ls.warn) Serial.print(" WARN(safety stop)");
   Serial.println();
 #if SENSOR_MODE
-  prefs.putBytes("lstate", &ls, sizeof(ls));
+  if (!demoOn) prefs.putBytes("lstate", &ls, sizeof(ls));   // a demo never touches the stored state
 #endif
   return relayWanted();
 }
@@ -254,9 +267,14 @@ bool ntfySend(const char *title, const String &msg) {
    86% of bloom onsets warned 1-7 days ahead, median 1 false warning per site per season. */
 void bulletin(Notify mode, const char *title, const String &body) {
   if (mode == N_SILENT) return;
-  Serial.printf("MSG %s | %s\n", title, body.c_str());
+  String t = title, b = body;
+  if (demoOn) {                    // a replayed bulletin must never read as a live one
+    t = String("DEMO: ") + title;
+    b = String("[Replay of real 2023 data from station " DEMO_STATION ", not a live reading] ") + body;
+  }
+  Serial.printf("MSG %s | %s\n", t.c_str(), b.c_str());
 #if USE_WIFI
-  if (mode == N_PUSH) ntfySend(title, body);
+  if (mode == N_PUSH) ntfySend(t.c_str(), b);
 #endif
 }
 
@@ -319,6 +337,9 @@ void scoreLatest(Notify mode) {
   applyForecast(d.date, p, d.chl, onset, mode);
   lastDate = d.date;
   Serial.printf("P %s p=%.6f %s n=%ld\n", tag, (double)p, p >= BLOOM_THRESHOLD ? "ALERT" : "idle", (long)hist.n);
+#if USE_LCD
+  lcdShow();
+#endif
 }
 
 /* add one daily row and score it. Returns false if rejected. */
@@ -346,7 +367,7 @@ bool addDay(const DayRec &r, Notify mode) {
     if (gap > 1) Serial.printf("note %s: %ld-day gap; lags step over it (row-based, as in training)\n", tag, gap);
   }
 #if SENSOR_MODE
-  saveHist();
+  if (!demoOn) saveHist();
 #endif
   scoreLatest(mode);
   return true;
@@ -535,7 +556,7 @@ async function tick(){let d;try{d=await (await fetch("/data")).json()}catch(e){d
 document.getElementById("h").textContent="HAB buoy: "+d.site;
 pill("a","forecast "+(d.alert?"ALERT":"idle")+(d.p===null?"":" (risk "+d.p.toFixed(2)+")"),d.alert?"bad":"ok");
 pill("t","treatment "+(d.treat?"ON":"idle"),d.treat?"warn":"ok");pill("r","relay "+(d.relay?"ON":"off"),d.relay?"warn":"ok");
-const L=d.s.at(-1);document.getElementById("m").textContent="self-test "+d.selftest+" · stored days "+d.days+" · "+d.s.length+" readings"+(L?" · last "+Math.max(0,d.now-L[0])+" s ago":"");
+const L=d.s.at(-1);document.getElementById("m").textContent=(d.demo?"DEMO replay of a real 2023 season · ":"")+(d.day?"day "+d.day+", chl "+(d.daychl===null?"–":d.daychl)+" µg/L · ":"")+"self-test "+d.selftest+" · stored days "+d.days+" · "+d.s.length+" readings"+(L?" · last "+Math.max(0,d.now-L[0])+" s ago":"");
 for(const [k,,,dp,i] of T){const q=L?L[i]:null;document.getElementById("v"+k).textContent=q===null?"–":q.toFixed(dp);document.getElementById("n"+k).textContent=q===null?(N[k]||"no reading"):"";sp("c"+k,d.s.map(a=>a[i]))}}
 document.getElementById("b").onclick=async()=>{await fetch("/read");tick()};tick();setInterval(tick,5000);
 </script></body></html>)HTML";
@@ -545,7 +566,10 @@ void webData() {
   site.replace("\\", ""); site.replace("\"", "");
   String j = "{\"site\":\"" + site + "\",\"now\":" + String((uint32_t)time(NULL)) + ",\"alert\":" + (alertOn ? "true" : "false") +
              ",\"p\":" + jnum(lastP, 4) + ",\"relay\":" + (relayOn ? "true" : "false") + ",\"treat\":" + (ls.on ? "true" : "false") +
-             ",\"selftest\":\"" + (selftestFails == 0 ? "PASS" : selftestFails < 0 ? "not run" : "FAIL") + "\",\"days\":" + String(hist.n) + ",\"s\":[";
+             ",\"selftest\":\"" + (selftestFails == 0 ? "PASS" : selftestFails < 0 ? "not run" : "FAIL") + "\",\"days\":" + String(hist.n) +
+             ",\"demo\":" + (demoOn ? "true" : "false") +
+             ",\"day\":" + (hist.n ? String("\"") + dateStr(hist.r[hist.n - 1].date) + "\"" : String("null")) +
+             ",\"daychl\":" + (hist.n ? jnum(hist.r[hist.n - 1].chl, 1) : String("null")) + ",\"s\":[";
   for (int i = 0; i < webN; i++) {
     const WebSample &w = webBuf[(webHead - webN + i + WEB_KEEP) % WEB_KEEP];
     if (i) j += ",";
@@ -577,6 +601,9 @@ void sampleTick() {
 #if USE_WIFI
   webPush(s);
 #endif
+#if USE_LCD
+  lcdShow();
+#endif
   if (!clockOk()) { Serial.println("clock not set: send `date yyyy-mm-dd hh:mm` (or enable Wi-Fi); sample not stored"); return; }
   int32_t today = localDate();
   if (acc.date != today) { closeDay(); clearAcc(today); }
@@ -598,6 +625,109 @@ void printClim() {
 void printCal() {
   Serial.printf("cal blank=%.1f chlk=%.5f gain=%c v686=%.3f v918=%.3f\n",
                 cal.blank, cal.chlK, cal.gain, cal.v686, cal.v918);
+}
+
+// ------------------------------------------------------------------ LCD (16x2, PCF8574 backpack)
+#if USE_LCD
+/* Backpack wiring: P0 = RS, P1 = RW, P2 = EN, P3 = backlight, P4..P7 = D4..D7 (the common layout).
+   Power it from 3.3 V unless a level shifter sits on SDA/SCL: at 5 V its pull-ups put 5 V on the
+   ESP32's pins. At 3.3 V the text can be faint; turn the contrast screw. */
+uint8_t lcdAddr = 0;
+
+void lcdNibble(uint8_t nib, uint8_t rs) {
+  uint8_t d = (uint8_t)(nib << 4) | 0x08 | rs;         // 0x08 = backlight on
+  Wire.beginTransmission(lcdAddr); Wire.write(d | 0x04); Wire.endTransmission();   // EN high
+  delayMicroseconds(2);
+  Wire.beginTransmission(lcdAddr); Wire.write(d); Wire.endTransmission();          // EN low: latch
+  delayMicroseconds(60);
+}
+
+void lcdByte(uint8_t v, uint8_t rs) { lcdNibble(v >> 4, rs); lcdNibble(v & 0x0F, rs); }
+
+bool lcdBegin() {
+  const uint8_t tryAddr[2] = {0x27, 0x3F};
+  lcdAddr = 0;
+  for (int i = 0; i < 2 && !lcdAddr; i++) {
+    Wire.beginTransmission(tryAddr[i]);
+    if (Wire.endTransmission() == 0) lcdAddr = tryAddr[i];
+  }
+  if (!lcdAddr) return false;
+  delay(50);
+  lcdNibble(3, 0); delay(5); lcdNibble(3, 0); delay(1); lcdNibble(3, 0); lcdNibble(2, 0);   // into 4-bit mode
+  lcdByte(0x28, 0);    // 2 lines, 5x8 font
+  lcdByte(0x0C, 0);    // display on, no cursor
+  lcdByte(0x06, 0);    // move right after each character
+  lcdByte(0x01, 0); delay(2);
+  return true;
+}
+
+void lcdLine(uint8_t row, const char *text) {
+  if (!lcdAddr) return;
+  size_t n = strlen(text);
+  lcdByte(0x80 | (row ? 0x40 : 0x00), 0);
+  for (size_t i = 0; i < 16; i++) lcdByte(i < n ? text[i] : ' ', 1);
+}
+
+/* line 1: the forecast (or the demo day); line 2: water temperature and the treatment state */
+void lcdShow() {
+  if (!lcdAddr) return;
+  char a[24], b[24];
+  if (demoOn && hist.n) snprintf(a, sizeof(a), "DEMO %s", dateStr(hist.r[hist.n - 1].date).c_str());
+  else if (isnan(lastP)) snprintf(a, sizeof(a), "No forecast yet");
+  else snprintf(a, sizeof(a), "Risk %.2f %s", (double)lastP, alertOn ? "ALERT" : "ok");
+  if (demoOn && !isnan(lastP)) snprintf(b, sizeof(b), "p%.2f %s T:%s", (double)lastP, alertOn ? "ALERT" : "ok", ls.on ? "ON" : "off");
+  else if (isnan(tempC)) snprintf(b, sizeof(b), "--.-C Treat:%s", ls.on ? "ON" : "off");
+  else snprintf(b, sizeof(b), "%.1fC Treat:%s", (double)tempC, ls.on ? "ON" : "off");
+  lcdLine(0, a);
+  lcdLine(1, b);
+}
+#endif
+
+// ------------------------------------------------------------------ demo replay
+/* put back what a demo displaced: the stored days and loop state (SENSOR mode), or an empty history */
+void restoreState() {
+  hist_clear(&hist); loop_reset(ls); pumpOn = false; alertOn = relayOn = false; lastP = NAN; lastDate = 0;
+#if SENSOR_MODE
+  if (prefs.getBytesLength("hist") == sizeof(hist)) prefs.getBytes("hist", &hist, sizeof(hist));
+  if (hist.n < 0 || hist.n > HIST_MAX) hist_clear(&hist);
+  LoopState stored;
+  if (prefs.getBytesLength("lstate") == sizeof(LoopState) && prefs.getBytes("lstate", &stored, sizeof(LoopState)) && stored.magic == LOOP_STATE_MAGIC) ls = stored;
+#endif
+  setOutputs();
+  if (hist.n) scoreLatest(N_SILENT);
+}
+
+void demoStop(const char *why) {
+  if (!demoOn) return;
+  demoOn = false;
+  restoreState();
+  Serial.printf("DEMO %s: the real history and treatment state are back\n", why);
+#if USE_LCD
+  lcdShow();
+#endif
+}
+
+void demoStart(int secPerDay, bool push) {
+  demoOn = true; demoPush = push; demoIdx = 0;
+  demoStepMs = (unsigned long)max(1, secPerDay) * 1000UL;
+  demoLastMs = millis() - demoStepMs;
+  hist_clear(&hist); loop_reset(ls); pumpOn = false; alertOn = relayOn = false; lastP = NAN; lastDate = 0;
+  setOutputs();
+  Serial.printf("DEMO start: station %s, %d real days (after %d warm-up rows), %lu s per day, phone alerts %s. `demo off` stops it.\n",
+                DEMO_STATION, DEMO_N - DEMO_WARMUP, DEMO_WARMUP, demoStepMs / 1000UL, push ? "on" : "off");
+}
+
+/* one stored day per step, through addDay like any other day; the warm-up rows go through at once, silently */
+void demoTick() {
+  if (!demoOn) return;
+  bool warm = demoIdx < DEMO_WARMUP;
+  if (!warm && millis() - demoLastMs < demoStepMs) return;
+  demoLastMs = millis();
+  if (demoIdx == DEMO_WARMUP) alertOn = false;        // so the first shown day can announce a warning
+  DayRec r;
+  memcpy_P(&r, &DEMO_ROWS[demoIdx], sizeof(r));
+  addDay(r, warm ? N_SILENT : demoPush ? N_PUSH : N_SERIAL);
+  if (++demoIdx >= DEMO_N) demoStop("finished");
 }
 
 void printLoop() {
@@ -634,6 +764,7 @@ void printStatus() {
 void printHelp() {
   Serial.println("demo:   day <yyyy-mm-dd> <chl> <temp> <sal> <do> [clim]   vec <23 numbers>");
   Serial.println("        status  reset  selftest  hist  site [<name>]  clim [<month> <value>]  climclear  help");
+  Serial.println("        demo [<seconds per day>] [nopush]   demo off     (replays a real season; real data is kept)");
   Serial.println("loop:   x <days>  cok <ug/L>  ton <p>  mode F|R|H  warm <mean chl>  floor <frac>  maxon <days>");
   Serial.println("        pulse <s>  skip  stop  loop");
 #if SENSOR_MODE
@@ -713,7 +844,13 @@ void handleLine(char *line) {
     return;
   }
   if (!strcmp(a, "selftest")) { selftestFails = run_selftest(); return; }
+  if (!strcmp(a, "demo")) {
+    if (b && !strcmp(b, "off")) { if (demoOn) demoStop("stopped"); else Serial.println("no demo is running"); return; }
+    demoStart(b ? atoi(b) : 2, !(c && !strcmp(c, "nopush")));
+    return;
+  }
   if (!strcmp(a, "reset")) {
+    demoOn = false;
     hist_clear(&hist); clearAcc(0); alertOn = relayOn = false; lastP = NAN; lastDate = 0;
     loop_reset(ls); pumpOn = false; setOutputs();
     prefs.remove("hist"); prefs.remove("acc"); prefs.remove("lstate");
@@ -828,8 +965,12 @@ void setup() {
 #if USE_DS18B20
   ds.begin();
 #endif
-#if USE_TSL2591 || USE_EZO_EC
+#if USE_TSL2591 || USE_EZO_EC || USE_LCD
   Wire.begin(PIN_SDA, PIN_SCL);
+#endif
+#if USE_LCD
+  if (lcdBegin()) Serial.printf("lcd: found at 0x%02X\n", lcdAddr);
+  else Serial.println("lcd: not found at 0x27 or 0x3F (check SDA 21 / SCL 22 and its power)");
 #endif
 #if USE_TSL2591
   tslOk = tsl.begin();
@@ -856,6 +997,9 @@ void setup() {
   printNet();
 #endif
   if (hist.n) scoreLatest(N_SILENT);  // restore the LED/relay from the last stored day
+#if USE_LCD
+  lcdShow();
+#endif
   Serial.printf("READY mode=%s. Send `help`, or a day line, e.g.  day 2023-08-03 6.87 22.66 27.44 6.35\n",
                 SENSOR_MODE ? "SENSOR" : "DEMO");
 }
@@ -874,6 +1018,7 @@ void loop() {
     if (ch == '\n' || ch == '\r') { buf[len] = '\0'; if (len) handleLine(buf); len = 0; }
     else if (len < sizeof(buf) - 1) buf[len++] = ch;
   }
+  demoTick();
   if (pumpOn && millis() - pumpStartMs >= lc.pulseSec * 1000UL) {      // pulse mode: the timed run is over
     pumpOn = false;
     relayOn = relayWanted();
@@ -881,7 +1026,7 @@ void loop() {
     Serial.println("PUMP off");
   }
 #if SENSOR_MODE
-  if ((firstSample && millis() > 10000) || millis() - lastSampleMs >= SAMPLE_MS) {
+  if (!demoOn && ((firstSample && millis() > 10000) || millis() - lastSampleMs >= SAMPLE_MS)) {   // sampling waits for a demo
     firstSample = false;
     lastSampleMs = millis();
     sampleTick();
