@@ -153,6 +153,25 @@ stations: 42,315 days, largest difference 9e-14, zero alert disagreements.
 
 ## 5. Sensors (later)
 
+**Progress (2026-10-10, real board on COM7, sensor build):** self-test PASS; DS18B20 on GPIO 4 read
+20-28 °C; the TSL2591 was found on GPIO 21/22 and saw the GPIO 25 fluorometer LED (about 10,000 counts
+LED on minus off when aimed at it, 1-20 otherwise); a demo bloom day switched the relay module on GPIO 26
+(heard clicking, 4 on/off cycles); the board ran alone from a USB power bank. The pH board reads on
+GPIO 34 through two equal 10 kΩ resistors (Po → R1 → GPIO 34 → R2 → GND): 1.93 V at the pin with the
+probe in its storage cap, so Po ≈ 3.86 V. **Never wire Po straight to the pin** (it can reach 5 V).
+Not calibrated yet: chlorophyll (`blank`, `chlk`; needs the dark box, red gel and 4-clear-side cuvettes)
+and pH (`cal686`, `cal918`; needs the buffers), so no real day has been scored.
+
+The board is wider than one breadboard: its top pin row sits in row a of the main breadboard and its
+bottom row in a mini breadboard below. Wiring diagram (not in the repo):
+`~/.claude/wiring/hab-bloom-predictor/esp32-buoy-with-ph-sensor.html`.
+
+**Live dashboard:** `python dashboard.py --port COM7`, then open `http://localhost:8765`. It holds the
+serial port (close the Serial Monitor), asks the board for a reading every 3 s, and shows each sensor
+with a trend line, the forecast and relay state, the board log and a command box. A pH pin voltage at
+the top of the ADC range is flagged. Send commands through the page or
+`curl -X POST --data "status" http://localhost:8765/cmd`.
+
 Turn a sensor on by setting its flag to 1 near the top of `buoy_esp32.ino`. Any flag at 1 switches
 the board to **SENSOR mode**. In that mode the board:
 

@@ -45,6 +45,11 @@ On 2026-10-05 the Adafruit TSL2591 (STEMMA QT cable, no soldering) read on the n
 the pH board reads (zero point ~3.6 V in tap water, buffers not yet bought, so not calibrated).
 On 2026-10-07 the DS18B20 probe (red/yellow/blue leads taped to jumpers, 4.7 kΩ pull-up, 12-bit) read
 correctly on D3 (user report: stage 3 passed).
+On 2026-10-09/10 the bare relay, its transistor and diode were replaced by a 1-channel relay module
+(high/low-level trigger, jumper on **H**; DC+ → 5V, DC− → GND, IN → D10). `relay_click_test.ino` clicked it,
+and `pulse 3` + `2 0.6 4` switched an LED wired through COM/NO for 3 s with 3 beeps. The buzzer was silent
+until a loose leg of its driver transistor was reconnected (D2 → 330 Ω → base; emitter → GND; collector →
+buzzer −; buzzer + → 5V). Serial Monitor is **115200** baud.
 
 ## Shopping list (what to order now)
 
