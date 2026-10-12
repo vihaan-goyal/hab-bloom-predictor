@@ -52,7 +52,7 @@ SECONDARY REPORTS (descriptive, not part of the decision)
 
 OUTPUTS
   data/cliff_satellite_check.csv      per-year rows + period rows
-  figures/fig_cliff_satellite.png     two panels (lab share and satellite share,
+  figures/model/fig_cliff_satellite.png     two panels (lab share and satellite share,
                                       each on its own axis; matched-day
                                       agreement by year)
   a printed verdict line that quotes the criterion.
@@ -71,7 +71,7 @@ import matplotlib.pyplot as plt
 MODIS_CSV = "data/modis_station_daily.csv"
 LAB_CSV = "data/hab_features_tidal.csv"
 OUT_CSV = "data/cliff_satellite_check.csv"
-OUT_FIG = "figures/fig_cliff_satellite.png"
+OUT_FIG = "figures/model/fig_cliff_satellite.png"
 
 VALID_MIN = 0.5
 REF_YEARS = (2005, 2013)           # threshold reference period
@@ -225,7 +225,7 @@ else:
     verdict = "INCONCLUSIVE"
 
 # ---------------------------------------------------------------- save
-os.makedirs("data", exist_ok=True); os.makedirs("figures", exist_ok=True)
+os.makedirs("data", exist_ok=True); os.makedirs("figures/model", exist_ok=True)
 out = pd.concat([yr, per, ratio_rows], ignore_index=True)
 out.attrs["sat_threshold"] = SAT_THRESH
 out.insert(2, "sat_threshold", SAT_THRESH)

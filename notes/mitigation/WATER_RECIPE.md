@@ -60,7 +60,7 @@ That difference is the pulse.
    - If it's too faint, scale the **whole pulse** up by a fixed factor (for example ×3, keeping the N:P:Si ratios) and report the factor.
    - Re-run the simulation with the real pilot peak (scale `n_pulse` in `src/sim/method_params.csv` by the same factor).
 3. **N:P in the pulse is ~7:1,** below the 16:1 algae need, so nitrogen runs out first. That's typical of the Sound. It's also why nitrogen, not phosphorus, is what the Sound's cleanup plan (the LIS TMDL) targets.
-4. **Silicate unit is inferred.** DEEP's data portal doesn't state it. The values only make sense as mg/L SiO₂: as Si they would be 80-100 µM, far above typical Sound values.
-   - Confirm with DEEP (add it to the Matt Lyman follow-up).
-   - If it's actually Si, double the silicate stock volumes.
+4. **Silicate unit: mg/L SiO₂ (checked 2026-10-11).** The UConn/DEEP parameter guide ([NutrientID.pdf](http://lisicos.uconn.edu/NutrientID.pdf)) lists the parameter as `SIO2-LC`, "Dissolved Silica", mg/L, Lachat QuikChem silica method 30-114-27-1-A, reference EPA 370.1. The parameter is named and measured as silica, and the values only make sense as SiO₂: as Si they would be 80-100 µM, far above typical Sound values.
+   - The guide's units column says "mg/L" without writing "as SiO₂", so this is a well-supported reading, not a written statement from DEEP.
+   - If it were Si, the silicate stock volumes would double.
 5. **Check it against a real sample:** a bucket of western-Sound water, measured for salinity, pH and temperature (and chlorophyll on the fluorometer), should fall inside DEEP's interquartile range for the month (in `lis_baseline.csv`).

@@ -44,7 +44,8 @@ Adult sponsor: **Meghana Fernandez** (also Direct Supervisor; chosen 2026-10-04)
   (Stamford), not Westhill, under Direct Supervisor Meghana Fernandez (MS
   Microbiology, UCLA; adjunct professor, UConn).** Outside the student's own
   school, so file **Form 2C** to be safe (signed after experimentation).
-  Form 3 filled 2026-10-04: `forms/Form 3.pdf`.
+  Form 3 filled 2026-10-04: `forms/Form 3.pdf`; signed by Ms. Fernandez and uploaded to the
+  CSEF online registration 2026-10-07 (registration saved, not yet submitted).
 
 _2026-09-18: corrected. This block previously read "Form 3 (Risk Assessment) —
 no hazards", which contradicted DEVICE_PROTOTYPE.md s6 and LAB_PROTOCOL.md s11;

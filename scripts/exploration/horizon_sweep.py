@@ -47,7 +47,7 @@ def parse_args():
     p.add_argument("--tol", type=int, default=7,
                    help="days of slack when matching a target reading to t+h")
     p.add_argument("--out-csv", default="data/horizon_sweep.csv")
-    p.add_argument("--out-fig", default="figures/horizon_sweep.png")
+    p.add_argument("--out-fig", default="figures/model/horizon_sweep.png")
     return p.parse_args()
 
 

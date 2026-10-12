@@ -106,7 +106,7 @@ weakly (kappa 0.18–0.25), so it is a coarse witness; but a 5–8× fall in
 exceedance frequency would move a 20 km surface mean, and the satellite moved
 by +8 % [+1, +16]. Only 24 % of station-days are satellite-valid (cloud, land
 adjacency), so matched-day n is modest (43–155 per year). Written to
-`data/cliff_satellite_check.csv` and `figures/fig_cliff_satellite.png`; the
+`data/cliff_satellite_check.csv` and `figures/model/fig_cliff_satellite.png`; the
 draft email to CT DEEP / UConn (`notes/EMAIL_DRAFT_2014_CLIFF.md`) should now
 ask specifically about a 2014 chlorophyll method change.
 
@@ -381,7 +381,7 @@ at the full budget the alert precision equals the published lift x base rate
 (LIS 0.132 = 2.63 x 0.050; Narragansett 2023 single split 0.696 = 2.00 x
 0.347).
 
-**Results at V = 8 (data/decision_value.csv, figures/fig_decision_value.png).**
+**Results at V = 8 (data/decision_value.csv, figures/model/fig_decision_value.png).**
 
 | Strategy | LIS visits/bloom [95% CI] | LIS share caught | Narragansett visits/bloom [95% CI] | Narragansett share caught |
 |---|---|---|---|---|
@@ -457,7 +457,7 @@ are 75th-percentile wiggles), and a more flexible model learns those wiggles
 without learning anything that carries to a strong-bloom bay. Fig 13.
 
 **The ceiling as geometry (2026-09-11, fork findings §28; `src/models/lr_geometry.py`,
-`figures/fig_lr_geometry.png`).** Because LR matches every other model, the decision
+`figures/model/fig_lr_geometry.png`).** Because LR matches every other model, the decision
 surface is close to a plane; projecting test-period onset rows onto the LR
 log-odds axis draws the ceiling. Reading rule fixed first: if the class overlap
 (OVL, integral of the smaller of the two class densities) differs by < 0.10
@@ -538,7 +538,7 @@ is the outside-agency confirmation (workstream C1) using data already
 public.
 
 **Result (run 2026-09-14, same day, `src/transfer/iec_zero_shot.py`;
-`data/iec_zero_shot_results.csv`, `figures/fig_iec_zero_shot.png`).**
+`data/iec_zero_shot_results.csv`, `figures/model/fig_iec_zero_shot.png`).**
 5,204 IEC station-days, 34 stations, 1991-2025. Primary rows: 949 onset
 station-days 2020-2025, base rate 0.13 (below the 0.30-0.55 band: the
 monthly winter cadence leaves most 21-day windows with one or no visit, so
@@ -811,12 +811,12 @@ it does not cause blooms.
 ## Where the evidence lives
 
 Parent repo: README.md Findings, notes/KEY_NUMBERS.md, notes/BENCHMARKS.md (incl.
-operational-products table), src/models/decision_value.py + figures/fig_decision_value.png,
-src/models/lr_geometry.py + figures/fig_lr_geometry.png + data/lr_geometry_*.csv (Phase 9 geometry),
-src/models/experiments/cliff_satellite_check.py + figures/fig_cliff_satellite.png,
+operational-products table), src/models/decision_value.py + figures/model/fig_decision_value.png,
+src/models/lr_geometry.py + figures/model/fig_lr_geometry.png + data/lr_geometry_*.csv (Phase 9 geometry),
+src/models/experiments/cliff_satellite_check.py + figures/model/fig_cliff_satellite.png,
 notes/ISEF_RESEARCH_PLAN.md, notes/COMPETITION_CHECKLIST.md.
 Fork (../hab-bloom-predictor-narragansett): notes/NARRAGANSETT_FINDINGS.md
-§1–28, figures/nar_fig1–14, predict_anywhere.py + release/, data/registry/, src/nn/ + environment-nn.yml (Phase 9),
+§1–28, figures/narragansett/nar_fig1–14, predict_anywhere.py + release/, data/registry/, src/nn/ + environment-nn.yml (Phase 9),
 notes/PROSPECTIVE_PROTOCOL.md + src/deploy/prospective_*.py + data/prospective/ (ledger, tracked). Every number has a script under src/;
 the **Reproducibility map** at the top of the fork's findings note lists, per section, the script, inputs and
 output (added 2026-09-05 after an audit found §7–13 and §15 named none; §15 was an inline calculation and now has
@@ -1066,3 +1066,5 @@ exactly from `final_evaluation_threshold_sweep.py`):
 - **ESP32 demo mode and display (2026-10-10):** `demo` replays a real season (B3, 2023, 150 days) on the board itself through the normal code path, with every bulletin marked DEMO; a full run on the real board gave 14 bulletins and 11 treatment starts and then restored the real state. A 16x2 I2C LCD shows the forecast, temperature and treatment state (faint at 3.3 V). The load cell (50 kg, 3-wire half bridge) was set aside: no reservoir is built and a float switch covers the low-level alert.
 - **Sensing-head decision (2026-10-11):** the fluorometer will read the water directly through a submerged optical head (sealed clear housing, LED and sensor behind one window with a divider, black shroud), because a cuvette needs a person and the device samples every 15 minutes; flow-through is the fallback. Not built. The sonde comparison is now planned as a one-day indoor dilution series beside a real sonde (plan §12-13). Why the sonde scale: a lab-calibrated device would read about 20% low for the model (sonde 10 ≈ lab 7.8).
 - **Sensing-head prototype, first readings (2026-10-11, no red filter yet):** a "glass-bottom" head was built: blue LED and TSL2591 on a black-taped cardboard disc with a divider, looking down through the bottom of a glass jar. Light signal (LED on minus off, mean of 10 readings): white table 103-126, water in a white bowl 102, black surface in air 5.2, water over a dark bottom 3.0-3.1. So clear water adds almost nothing, the signal comes from below the glass, and stray light inside the head is about 3-5 counts. Reseating the disc moved the white reading by about 10% each time, so the optics must be fixed rigidly before calibration (3D-printed housing planned). Without the red filter this is reflected blue light, not chlorophyll fluorescence; the spinach, food-colouring and milk checks wait for the filter. In the same water the DS18B20 read 17.2 C and the pH pin settled at 2.13-2.15 V (about 4.3 V at the pH board). The pH board's offset screw reached its end stop there and could not centre to 1.25 V at the pin; turning it the other way hit the 5.1 V ceiling. The alkaline side has full range, so calibration with the 6.86 and 9.18 buffers is still planned; the gap between the two buffer readings will show whether the probe needs replacing. `dashboard.py` gained a large per-sensor chart page (click a tile).
+- **Figures sorted into subfolders (2026-10-11):** in both repos every figure now sits in `figures/<group>/`: `eda`, `model`, `warning`, `precursors`, `intervention`, `lab`, `deploy`, `sim`, `device_concept`, and in the fork `narragansett` (all `nar_fig*`) and `data`. The scripts and notes point to the new paths; no figure or number changed.
+- **Deck for the UConn call, culture panel and silicate unit (2026-10-11):** a nine-slide deck was prepared for a call with Dr. Penny Vlahos (UConn Marine Sciences) on Mon 2026-10-12, 2 pm; it quotes the Narragansett walk-forward numbers (onset AUC 0.877, precision 0.67, lift 2.47 vs random alerting, calendar beaten 9 of 9 years, 74-site median lift 1.51) and states that the model predicts chlorophyll, not species or toxin. New slide figures: `figures/fig_control_loop.png`, `fig_forecast_example.png` (station B3w, onset 2023-02-05, GB fit on <= 2020 and scored on 2023, alert line 0.45, 3 days of continuous warning; a picked example: of 13 clean 2023 onsets, 5 had >= 3 days of continuous warning and 6 had none before the day), `fig_aeration_tank.png`, `fig_aeration_tank_wide.png`, `fig_nutrient_recipe.png`. **Culture panel cut to the three cultures being bought:** *Nannochloropsis* (aquarium supplier), *Thalassiosira* sp. (Carolina 153110) and *Akashiwo sanguinea* (NCMA CCMP3776); *Micromonas*, *Skeletonema*, *T. weissflogii*, *P. micans*, *P. triestinum* are dropped. `EXECUTION_PLAN.md`, `00_CONTROL_LOOP.md`, `01_BUBBLES.md`, `03_PEROXIDE_BAG.md`, `PROCEDURES.md` and `MATERIALS_LIST.md` were updated; screens shrink to 36 and 60 flasks. **H5 reworded before any data:** percent cut ranks *Nannochloropsis* > *Thalassiosira* > *Akashiwo*, larger cells spared at 0.8 mg/L; none of the three was tested in Randhawa et al. 2012, and with one species per size, size and taxon cannot be separated. Stated limitations: the dominant Sound diatom (*Skeletonema*) is not tested; *Akashiwo* is non-toxic but a real bloom-former (its foam has killed seabirds), so it needs sponsor approval and bleach before disposal, and no backup dinoflagellate is on the order. **Silicate unit:** the UConn/DEEP parameter guide (http://lisicos.uconn.edu/NutrientID.pdf) lists `SIO2-LC` as Dissolved Silica, mg/L, Lachat 30-114-27-1-A, EPA 370.1, which supports the recipe's mg/L SiO2 reading (the guide does not write "as SiO2"); `WATER_RECIPE.md`, `LIS_WATER_STATS.md` and `src/lab/lis_water_recipe.py` now cite it. **Narragansett data ends 2023-12-31:** RIDEM has not published the 2024 or 2025 sonde archives (checked 2026-10-10), so there are no 2024-25 Narragansett numbers. The network's sondes are YSI EXO2 (earlier YSI 6600 EDS), which is the instrument to calibrate the device against. No bench results yet.

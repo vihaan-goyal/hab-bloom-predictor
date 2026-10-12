@@ -40,7 +40,7 @@ NaH₂PO₄·H₂O, Na₂SiO₃·9H₂O), f/2 trace metals and vitamins, scale, 
 1. Mix the sample, and fill the 1 mL slide.
 2. Count 10 grid squares, or photograph them and count later in ImageJ.
 3. Convert the count to cells per mL, and record it next to the fluorometer reading.
-4. **Small cells (~2 µm *Micromonas*, *Nannochloropsis*; added 2026-10-01):** use the hemocytometer at **400×** (dilute if crowded; count the 4 corner squares and convert by the chamber volume). These counts are hard at school and are a check on the fluorometer, not the main measure; say so in the write-up.
+4. **Small cells (2-3 µm *Nannochloropsis*; added 2026-10-01):** use the hemocytometer at **400×** (dilute if crowded; count the 4 corner squares and convert by the chamber volume). These counts are hard at school and are a check on the fluorometer, not the main measure; say so in the write-up.
 
 ### P5. Non-target test (brine shrimp)
 **Materials:** *Artemia* eggs, hatching cone, 6-well plates or small cups, light.
@@ -85,19 +85,20 @@ a 10 or 25 mL graduated cylinder, a 10 L tank of P1 water, the low-range peroxid
 
 ## Part 1: Screens (small flasks, days)
 
-**Species panel (both screens, added 2026-10-01), smallest to largest:** *Micromonas pusilla*
-(~2 µm, NCMA), *Nannochloropsis* (2-3 µm, live reef-aquarium food; check it under the microscope and
-keep a clean sub-culture), the diatom *Skeletonema*, and each screen's dinoflagellate. **The ~2 µm
+**Species panel (both screens; three cultures since 2026-10-11, the ones actually bought), smallest
+to largest:** *Nannochloropsis* (2-3 µm, live reef-aquarium food; check it under the microscope and
+keep a clean sub-culture), the diatom *Thalassiosira* sp. (Carolina 153110; measure its cell size on
+arrival), and the dinoflagellate *Akashiwo sanguinea* (NCMA CCMP3776). **The 2-3 µm
 cells are hard to count at school:** measure them with the fluorometer (P3; one species per flask)
 and check with hemocytometer counts at 400× (P4); say so in the write-up.
 
 ### S1. Bubbles
-**Hypothesis:** at 0.6 L/min per litre, the dinoflagellate's cell count after 48 h is ≥ 30% below the still control, and *Skeletonema* is not reduced. The two small algae are reported with no pass mark.
+**Hypothesis:** at 0.6 L/min per litre, the dinoflagellate's (*Akashiwo*) cell count after 48 h is ≥ 30% below the still control, and the diatom (*Thalassiosira*) is not reduced. *Nannochloropsis* is reported with no pass mark.
 
-**Materials:** 48 × 1 L flasks (500 mL culture each), 2 air pumps, manifold, needle valves, tubing, air stones, flow meter, panel cultures (*Micromonas pusilla*, *Nannochloropsis*, *Skeletonema*, dinoflagellate *Akashiwo sanguinea* or *P. triestinum*), fluorometer, hemocytometer, pH probe, thermometer, DO kit, microscope.
+**Materials:** 36 × 1 L flasks (500 mL culture each), 2 air pumps, manifold, needle valves, tubing, air stones, flow meter, panel cultures (*Nannochloropsis*, *Thalassiosira* sp., *Akashiwo sanguinea*), fluorometer, hemocytometer, pH probe, thermometer, DO kit, microscope.
 
 1. Fill the flasks with 500 mL of P1 water and inoculate the same number of cells in each (P2, P4).
-2. Set up 4 arms × 4 species × n = 3 flasks:
+2. Set up 4 arms × 3 species × n = 3 flasks:
    - **still:** no air;
    - **gentle:** a few bubbles per second, which gives CO₂ without stirring;
    - **low:** 25 mL/min;
@@ -112,19 +113,19 @@ Live stock in a cold holding tank, swapped weekly; sugar kelp dies back above ~1
 summer bloom season); can't run unattended. The old procedure is in git history and `02_SEAWEED.md`.
 
 ### S3. Peroxide
-**Hypothesis (restated 2026-09-28 from the source, peroxide-03):** one 1.6 mg/L dose cuts the small-celled alga ≥ 50% in 24 h while the diatoms and *P. micans* drop < 20%; one 0.8 mg/L dose gives a smaller, transient cut; and **three daily 0.8 mg/L pulses** (the loop dose; re-dose only if the residual is ≤ 0.5 mg/L) cut the small-celled alga ≥ 50% by 72 h with brine shrimp survival within 20 points of control. Tested on both small algae.
+**Hypothesis (restated 2026-09-28 from the source, peroxide-03):** one 1.6 mg/L dose cuts the small-celled alga (*Nannochloropsis*) ≥ 50% in 24 h while *Thalassiosira* and *Akashiwo* drop < 20%; one 0.8 mg/L dose gives a smaller, transient cut; and **three daily 0.8 mg/L pulses** (the loop dose; re-dose only if the residual is ≤ 0.5 mg/L) cut the small-celled alga ≥ 50% by 72 h with brine shrimp survival within 20 points of control. The source tested *Micromonas*, which is no longer in the panel (2026-10-11); *Nannochloropsis* is untested in our papers, so a miss here is a real result about that species.
 
-**Secondary hypothesis H5 (added 2026-10-01): sensitivity falls with cell size.** At each dose the percent cut is largest in *Micromonas* and *Nannochloropsis* (~2-3 µm), smaller in *Skeletonema*, and smallest in *T. weissflogii* and *P. micans*; the larger cells are spared at 0.8 mg/L (Randhawa et al. 2012).
+**Secondary hypothesis H5 (added 2026-10-01, reworded 2026-10-11 for the three cultures bought): sensitivity falls with cell size.** At each dose the percent cut is largest in *Nannochloropsis* (2-3 µm), smaller in *Thalassiosira* and smallest in *Akashiwo*; the two larger species are spared at 0.8 mg/L. The size pattern is from Randhawa et al. 2012, where none of these three species was tested. With one species per size, cell size and taxon cannot be separated; say so in the write-up.
 
-**Materials:** 93 × 250 mL flasks, 3% hydrogen peroxide (and its 0.1% working dilution, P6), sodium percarbonate (pure oxygen-bleach powder), sodium carbonate, low-range peroxide kit and strips, 5 µm syringe filters and syringes, panel cultures (*Micromonas pusilla*, *Nannochloropsis*, *Skeletonema*, *T. weissflogii*, *P. micans*), fluorometer, hemocytometer, brine shrimp, goggles and gloves (supervisor present).
+**Materials:** 60 × 250 mL flasks, 3% hydrogen peroxide (and its 0.1% working dilution, P6), sodium percarbonate (pure oxygen-bleach powder), sodium carbonate, low-range peroxide kit and strips, 5 µm syringe filters and syringes, panel cultures (*Nannochloropsis*, *Thalassiosira* sp., *Akashiwo sanguinea*), fluorometer, hemocytometer, brine shrimp, goggles and gloves (supervisor present).
 
 1. **Check the percarbonate first:** dissolve a weighed amount in plain seawater (no algae) and measure peroxide at 0, 15 min, 1 h and 24 h. This confirms how much peroxide it really gives (0.8 mg/L H₂O₂ ≈ 2.5-2.9 mg/L percarbonate). Always dissolve it fresh on the day of use.
-2. Fill the flasks with 200 mL of P1 water. Inoculate each species separately (5 species).
-3. Dose with the 0.1% H₂O₂ working dilution (P6): 0, 0.8, 1.6, 3.2 and 6.4 mg/L × 5 species × n = 3 (75 flasks). Add a **3-pulse arm** on each small alga (n = 3 each): 0.8 mg/L on days 0, 1 and 2, each only if that flask's residual is ≤ 0.5 mg/L. Add a **sodium percarbonate** arm at the same peroxide dose (0.8 mg/L H₂O₂, ~2.9 mg/L percarbonate) on *Micromonas*, *Nannochloropsis* and *Skeletonema*, n = 3, and a **sodium carbonate** control (~2.0 mg/L, the carbonate that percarbonate adds) on *Micromonas*, n = 3.
+2. Fill the flasks with 200 mL of P1 water. Inoculate each species separately (3 species).
+3. Dose with the 0.1% H₂O₂ working dilution (P6): 0, 0.8, 1.6, 3.2 and 6.4 mg/L × 3 species × n = 3 (45 flasks). Add a **3-pulse arm** on *Nannochloropsis* (n = 3): 0.8 mg/L on days 0, 1 and 2, each only if that flask's residual is ≤ 0.5 mg/L. Add a **sodium percarbonate** arm at the same peroxide dose (0.8 mg/L H₂O₂, ~2.9 mg/L percarbonate) on all three species, n = 3 each, and a **sodium carbonate** control (~2.0 mg/L, the carbonate that percarbonate adds) on *Nannochloropsis*, n = 3.
 4. Measure peroxide with the low-range kit at 0, 1, 4 and 24 h.
-5. **At 24 h and 72 h:** fluorometer reading of every flask (P3); hemocytometer counts at 400× for the small algae; Sedgewick-Rafter counts for *Skeletonema*, *T. weissflogii* and *P. micans*.
+5. **At 24 h and 72 h:** fluorometer reading of every flask (P3); hemocytometer counts at 400× for *Nannochloropsis*; Sedgewick-Rafter counts for *Thalassiosira* and *Akashiwo*.
 6. Run brine shrimp tests (P5) at **24 h and 96 h** (peroxide can cause delayed deaths).
-7. **Analysis:** percent cut per species at each dose; the lowest dose that kills small cells while sparing large ones; **H5:** percent cut against cell size at each dose (does the ranking hold?); whether three 0.8 mg/L pulses match one 1.6 mg/L dose; and whether percarbonate matches liquid H₂O₂ at the same peroxide dose. The small alga with the clearest cut becomes the peroxide loop culture.
+7. **Analysis:** percent cut per species at each dose; the lowest dose that kills small cells while sparing large ones; **H5:** percent cut against cell size at each dose (does the ranking hold?); whether three 0.8 mg/L pulses match one 1.6 mg/L dose; and whether percarbonate matches liquid H₂O₂ at the same peroxide dose. *Nannochloropsis* becomes the peroxide loop culture if it is cut; if it is not, the species with the clearest cut does, and that is reported as a change from the plan.
 
 ### S4. Curcumin: dropped 2026-10-01
 Its yellow colour absorbs the ~470 nm excitation light and blinds the fluorometer (false "bloom
@@ -150,7 +151,7 @@ run.
 - The alerter (Arduino, fluorometer, temperature and pH sensors, relay), laptop with `alerter_link.py`.
 - **Aeration:** relay-switched air pumps, airline, check valves and air stones for the 9 treated tanks (0.6 L/min per litre).
 - **Peroxide:** 12 V peristaltic dosing pump (calibrated by weight), a 3% H₂O₂ reservoir bottle, low-range peroxide kit and strips, 5 µm syringe filters.
-- Grow lights and timers, P1 water and nutrient stocks, the loop cultures chosen by the screens (aeration: the dinoflagellate; peroxide: the small alga mixed with *Skeletonema*).
+- Grow lights and timers, P1 water and nutrient stocks, the loop cultures chosen by the screens (aeration: the dinoflagellate *Akashiwo*; peroxide: *Nannochloropsis* mixed with *Thalassiosira*).
 - Microscope, hemocytometer, Sedgewick-Rafter slide, DO kit, brine shrimp.
 
 **Setup (one run per method; both run on the same dates):**
@@ -178,7 +179,7 @@ run.
 | **H2** false alarm is safe | both | brine shrimp survival (P5), arm D vs arm A, at each re-measure | D is within 20 points of A |
 | **H3** regrowth after OFF (reported) | both | days from each B OFF until chlorophyll is back above C_ok | no pass mark; for aeration it tells how often reruns are needed |
 | **H4** trim, don't remove | both | arm B's lowest chlorophyll vs its warm-up level; daytime DO | B never falls below 80% of warm-up, and daytime DO stays at or above warm-up |
-| **H5** size selectivity (screen; also checked in the mixed peroxide tanks) | peroxide | small-cell vs large-cell chlorophyll (5 µm filter) in arm B | the small alga falls more than *Skeletonema* |
+| **H5** size selectivity (screen; also checked in the mixed peroxide tanks) | peroxide | small-cell vs large-cell chlorophyll (5 µm filter) in arm B | *Nannochloropsis* falls more than *Thalassiosira* |
 
 **Also reported:** treatment used (ON hours or dose) in B and C, treatment per percent of peak
 cut, safety stops, and human interventions per week (autonomy).

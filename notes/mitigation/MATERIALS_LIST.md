@@ -11,6 +11,14 @@ items are removed (listed at the end as dropped). Added: *Micromonas pusilla* an
 cultures for the cell-size panel, a hemocytometer, the loop-run air supply, and the peristaltic pump
 and 3% H₂O₂ reservoir for the peroxide loop run.
 
+**Updated 2026-10-11:** the cultures being bought are **three**: *Akashiwo sanguinea* (NCMA
+CCMP3776), *Thalassiosira* sp. (Carolina 153110) and live *Nannochloropsis* (aquarium supplier),
+requested through the CSEF Urban School Challenge mini-grant. *Skeletonema*, *Micromonas pusilla*,
+*T. weissflogii*, *Phaeodactylum*, *P. triestinum* and *P. micans* are not being bought. Flask counts
+below are recalculated for three species. The method files (`00_CONTROL_LOOP.md`, `01_BUBBLES.md`,
+`03_PEROXIDE_BAG.md`, `PROCEDURES.md`), `EXECUTION_PLAN.md` and hypothesis H5 were updated the
+same day.
+
 Prices are estimates. **Borrow first:** ask the sponsor for the microscope, scale, glassware and
 pH/DO meters before buying.
 
@@ -38,11 +46,12 @@ Current plan:
 |---|---|---|---|---|
 | Artificial sea salt + refractometer | 1 bag / 1 | $45 | Salt makes seawater; the refractometer measures salinity | The tanks copy the western Sound at salinity 27.5 (WATER_RECIPE.md); evaporation (worse with bubbling) raises it, so we check and top up |
 | f/2 medium (make f/4 by halving) | 1 kit | $30 | Algae "fertilizer": nitrogen, phosphorus, vitamins, trace metals | Grows the cultures, and the nutrient pulse on day 21 is what starts the bloom |
-| **Cultures from NCMA:** *Skeletonema* (lead diatom), *Thalassiosira weissflogii*, *Phaeodactylum* (backup), dinoflagellate *Akashiwo* / *P. triestinum*, *P. micans*, ***Micromonas pusilla*** | 5-6 strains | $250-400 | Living, non-toxic stand-ins for bloom algae, from ~2 µm to ~50 µm | The "bloom" we try to stop, and the cell-size panel. *Micromonas* (~2 µm) was wiped out by peroxide in Randhawa et al. 2012; *Skeletonema* is the dominant diatom of Long Island Sound blooms |
-| **Live *Nannochloropsis*** (reef-aquarium phytoplankton, sold as coral and rotifer food) | 1 bottle | $15-25 | A harmless 2-3 µm alga, bought live | Second small-celled alga for the size panel; its peroxide sensitivity is untested in our papers, so it is a real test. Check it under the microscope and keep a clean sub-culture (NCMA *Nannochloropsis* as backup) |
+| ***Akashiwo sanguinea*** (NCMA CCMP3776) | 1 strain | $210 + $71.74 S&H | A non-toxic dinoflagellate, the largest cell in the panel. It is a real bloom-former: its blooms make a foam that has killed seabirds, so it needs sponsor approval and bleach before disposal | The stand-in for the rust-tide dinoflagellate that bubbling slowed in Sung & Gobler 2026; the aeration loop culture if the screen shows it is slowed |
+| ***Thalassiosira* sp.** (Carolina Biological 153110) | 1 culture | $10.50 | A harmless diatom, mid-sized | The diatom check: Long Island Sound blooms are mostly diatoms, and bubbling may help them |
+| **Live *Nannochloropsis*** (reef-aquarium phytoplankton, sold as coral and rotifer food) | 1 bottle | $15-25 | A harmless 2-3 µm alga, bought live | The small-celled alga for the size panel; its peroxide sensitivity is untested in our papers, so it is a real test. Check it under the microscope and keep a clean sub-culture |
 | Backup culture flasks | 2 per strain | (from the flasks below) | Spare copies of every culture | If a culture crashes or gets contaminated, we restart instead of losing the run |
 | Sedgewick-Rafter counting chamber + transfer pipettes | 1 / 200 | $30 | A slide with a 1 mL grid for counting cells under a microscope | Cell counts are the ground truth for the larger cells: the fluorometer measures glow, which treatments can distort |
-| **Hemocytometer** (Neubauer) + cover slips | 1 | $20 | A fine-grid counting slide for very small cells at 400× | Counts the ~2 µm *Micromonas* and *Nannochloropsis*, which are too small for the Sedgewick-Rafter slide; hard at school, so it checks the fluorometer rather than replacing it |
+| **Hemocytometer** (Neubauer) + cover slips | 1 | $20 | A fine-grid counting slide for very small cells at 400× | Counts the 2-3 µm *Nannochloropsis*, which is too small for the Sedgewick-Rafter slide; hard at school, so it checks the fluorometer rather than replacing it |
 | Microscope with 40× objective (400×) (borrow) + phone adapter | 1 / 1 | $0-15 | Magnifies the cells; the adapter lets a phone photograph them | Counting; photos are counted later in ImageJ, which cuts the daily counting time |
 | Scale, 0.01 g (borrow if possible) | 1 | $20 | Weighs small amounts | Percarbonate, sodium carbonate, salt, nutrient salts |
 | Adjustable micropipettes (10-100 µL and 100-1000 µL) + tips | 2 | $50 | Measure tiny volumes exactly | Flask doses of 160-1280 µL of the peroxide working solutions (PROCEDURES P6) |
@@ -66,7 +75,7 @@ Current plan:
 
 | Item | Qty | Approx. | What it does | Why we need it |
 |---|---|---|---|---|
-| 1 L flasks (500 mL culture each): still, low, high, **gentle** × 4 species (*Micromonas*, *Nannochloropsis*, *Skeletonema*, dinoflagellate) × n = 3 | 48 | $95 | Holds each culture | Copies the Sung & Gobler setup so our result is comparable; the panel shows which cell sizes aeration slows |
+| 1 L flasks (500 mL culture each): still, low, high, **gentle** × 3 species (*Nannochloropsis*, *Thalassiosira*, *Akashiwo*) × n = 3 | 36 | $70 | Holds each culture | Copies the Sung & Gobler setup so our result is comparable; the panel shows which cell sizes aeration slows |
 | Aquarium air pumps + gang manifold + needle valves + tubing | 2 | $40 | Pumps air; the valves set each flask's flow | Airflow is the "dose", and every flask in an arm must get the same flow |
 | Air stones | 36 | $20 | Break the air into bubbles at the bottom | What the paper used to make the bubbles |
 | Flow meter (rotameter, 0-500 mL/min) | 1 | $20 | Measures airflow | Sets 25 and 300 mL/min exactly (0.05 and 0.6 L/min per litre) |
@@ -90,7 +99,7 @@ the daily fluorometer readings; it needs no extra kit.
 
 | Item | Qty | Approx. | What it does | Why we need it |
 |---|---|---|---|---|
-| 250 mL flasks: 0, 0.8, 1.6, 3.2, 6.4 mg/L × 5 species, + 3-pulse 0.8 arm × 2 small algae, + percarbonate × 3 species, + Na₂CO₃, × n = 3 | 93 | $125 | Test cultures | A dose ladder from ~2 µm to ~50 µm cells tests the "only kills small cells" idea (H5) |
+| 250 mL flasks: 0, 0.8, 1.6, 3.2, 6.4 mg/L × 3 species, + 3-pulse 0.8 arm × *Nannochloropsis*, + percarbonate × 3 species, + Na₂CO₃, × n = 3 | 60 | $80 | Test cultures | A dose ladder from 2-3 µm to ~50 µm cells tests the "only kills small cells" idea (H5) |
 | Drugstore 3% H₂O₂ | 2 bottles | $6 | Liquid peroxide | **Main dosing method**: diluted to 0.1% for flasks (160 µL per 200 mL = 0.8 mg/L) and pumped in tanks (0.27 mL of 3% per 10 L) |
 | Sodium percarbonate, pure (oxygen-bleach powder, no fragrance or surfactant) | 1 small tub | $10 | Dissolves into hydrogen peroxide plus washing soda | The active ingredient of registered pond algaecides; tested in the screen only, as the "real-world product" version at the same peroxide dose |
 | **Low-range peroxide test kit** (steps below 1 mg/L) | 1 | $30-60 | Measures peroxide at low levels | Strips can't tell 0.8 from 0.5 mg/L; this confirms the dose and the ≤ 0.5 mg/L re-dose rule |
@@ -137,10 +146,10 @@ show and test the parts with, not dosed into tanks).
 
 | | Approx. |
 |---|---|
-| Shared kit + cultures (incl. *Micromonas*, *Nannochloropsis*) + arm A and pilot tanks for two cultures (much of the electronics already bought) | $945-1,205 |
-| Aeration (screen + loop run) | $315 |
-| Peroxide (screen + loop run) | $315-345 |
-| **Both methods** | **about $1,575-1,865 before borrowing; ~$1,100-1,350 if the sponsor lends the microscope, scale, micropipettes, glassware and meters** |
+| Shared kit + the three cultures (~$310) + arm A and pilot tanks for two cultures (much of the electronics already bought) | $985-1,100 |
+| Aeration (screen + loop run) | $290 |
+| Peroxide (screen + loop run) | $270-300 |
+| **Both methods** | **about $1,545-1,690 before borrowing; ~$1,070-1,175 if the sponsor lends the microscope, scale, micropipettes, glassware and meters** |
 
 ## Open points
 - **One dosing pump or nine?** The alerter drives one relay. Each B, C and D tank runs its own schedule, so either each treated tank gets its own relay channel and pump (an 8-channel relay module, ~$10, plus more pumps), or one alerter-driven tank is the full demonstration and the others are switched by hand at the logged times. Decide before `LOOP_PREREG.md`, and report it under autonomy.

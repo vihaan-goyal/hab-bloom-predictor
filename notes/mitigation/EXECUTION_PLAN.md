@@ -23,7 +23,7 @@ aquaculture pens, coastal ponds), never the open Sound.
 | Clay/flocculation and the other scoreboard methods | Already out (counselor, 2026-09-24) |
 | **Two full loop runs: aeration and peroxide** (were seaweed and shellfish) | The two methods that meet the autonomy rule. Arms A-D, n = 3 per arm, the floor rule, the handover, `MAX_ON` (peroxide 3 pulses) and the pumped 0.8 mg/L peroxide pulses (3% H₂O₂ by peristaltic pump; sodium percarbonate only in the screen) all stay as they were |
 | **Aeration is judged on delay, not peak cut** (written down now, before data) | Primary outcome for aeration: **days held below `C_ok`** in arm B vs untreated arm A, reported with **hours ON** and **number of ON episodes** (reruns). The ≥ 50% peak cut becomes secondary for aeration. In real water, tides flush nutrients and conditions change, so holding a bloom back lets its window pass, and the device simply re-runs when the forecast fires again. H3 (regrowth after OFF) stays and tells how often reruns are needed. Peroxide keeps H1 (≥ 50% peak cut) |
-| **Cell-size species panel in both screens** | The freed time goes into a panel: *Nannochloropsis* (2-3 µm), *Micromonas pusilla* (~2 µm), the diatom *Skeletonema*, and the dinoflagellate already in each screen. New secondary hypothesis: **peroxide sensitivity falls with cell size** (Randhawa et al. 2012) |
+| **Cell-size species panel in both screens** | The freed time goes into a panel. **Since 2026-10-11 the panel is the three cultures actually bought:** *Nannochloropsis* (2-3 µm), the diatom *Thalassiosira* sp. and the dinoflagellate *Akashiwo sanguinea* (was also *Micromonas pusilla*, *Skeletonema*, *T. weissflogii*, *P. micans*). Secondary hypothesis: **peroxide sensitivity falls with cell size** (Randhawa et al. 2012) |
 
 The seaweed, shellfish and curcumin method files, evidence reviews and Layer 2 results are kept as
 a record of what was considered and why it was dropped.
@@ -68,8 +68,8 @@ both methods in the full loop.
 | Dose | 0.05 and 0.6 L/min per litre (Sung & Gobler: 25 and 300 mL/min into 500 mL); loop at 0.6 | **0.8** mg/L H₂O₂ per pulse, up to 3 daily pulses; re-dose only if residual ≤ 0.5; stop if > 2.8 |
 | `X` | 48 h | 24 h per pulse |
 | `MAX_ON` | 192 h per episode; a new forecast alert after OFF starts a new episode (a rerun) | **3 pulses** |
-| Screen species (2026-10-01 panel) | *Nannochloropsis*, *Micromonas pusilla*, *Skeletonema*, dinoflagellate *Akashiwo sanguinea* (backup *Prorocentrum triestinum*) | *Nannochloropsis*, *Micromonas pusilla*, *Skeletonema*, *T. weissflogii*, *P. micans* (larger cells as the "expected spared" controls) |
-| Loop culture | the dinoflagellate the screen shows is slowed (fallback: the panel species with the largest growth pause) | the small alga the screen shows is cut, mixed with *Skeletonema* (tests size selectivity in the tank) |
+| Screen species (2026-10-11 panel, same three in both screens) | *Nannochloropsis*, *Thalassiosira* sp., *Akashiwo sanguinea* | *Nannochloropsis*, *Thalassiosira* sp., *Akashiwo sanguinea* (the two larger cells as the "expected spared" controls) |
+| Loop culture | *Akashiwo* if the screen shows it is slowed (fallback: the panel species with the largest growth pause) | *Nannochloropsis* if the screen shows it is cut, mixed with *Thalassiosira* (tests size selectivity in the tank) |
 | Extra controls | still, gentle bubbling (CO₂ control), pulsed | sodium percarbonate arm, sodium carbonate |
 | Method safety limit | temp +2 °C, evaporation > 5% | residual > 2.8 mg/L, pH > 9.0 |
 | Non-target check | *Artemia* 24 h | *Artemia* **24 h and 96 h** (delayed deaths) |
@@ -81,9 +81,9 @@ own limit); non-target survival more than 20 points below control.
 ## 3. Hypotheses we test
 
 **Screens** (one per method, pre-registered before starting):
-- **S1 bubbles:** at 0.6 L/min per litre, the dinoflagellate's cell count after 48 h is ≥ 30% below the still control, and *Skeletonema* is not reduced. The two small algae are reported (no pass mark). Regrowth after the 48 h OFF is measured in every species, because it sets how often the loop has to re-run.
-- **S3 peroxide (restated 2026-09-28 from the source):** one 1.6 mg/L dose cuts the small-celled alga ≥ 50% in 24 h while the diatoms and *P. micans* drop < 20%; one 0.8 mg/L dose gives a smaller, transient cut (peroxide-03); and **three daily 0.8 mg/L pulses** (the loop dose) cut the small-celled alga ≥ 50% by 72 h with *Artemia* survival (24 h and 96 h) within 20 points of control. Tested on both small algae (*Micromonas* and *Nannochloropsis*).
-- **H5 / S-size (secondary, new 2026-10-01; `00_CONTROL_LOOP.md`): peroxide sensitivity falls with cell size.** At each dose, the percent cut ranks *Micromonas* ≈ *Nannochloropsis* (2-3 µm) > *Skeletonema* > *T. weissflogii* > *P. micans*, and the larger cells (and the arm-D non-target check) are spared at 0.8 mg/L, as Randhawa et al. 2012 reported. *Micromonas* was eradicated by peroxide in Randhawa 2012 (peroxide-03); *Nannochloropsis*'s peroxide sensitivity is untested in our papers, so it is a real test.
+- **S1 bubbles:** at 0.6 L/min per litre, the dinoflagellate's (*Akashiwo*) cell count after 48 h is ≥ 30% below the still control, and the diatom (*Thalassiosira*) is not reduced. *Nannochloropsis* is reported (no pass mark). Regrowth after the 48 h OFF is measured in every species, because it sets how often the loop has to re-run.
+- **S3 peroxide (restated 2026-09-28 from the source):** one 1.6 mg/L dose cuts the small-celled alga (*Nannochloropsis*) ≥ 50% in 24 h while *Thalassiosira* and *Akashiwo* drop < 20%; one 0.8 mg/L dose gives a smaller, transient cut (peroxide-03); and **three daily 0.8 mg/L pulses** (the loop dose) cut the small-celled alga ≥ 50% by 72 h with *Artemia* survival (24 h and 96 h) within 20 points of control. The source tested *Micromonas*, which is no longer in the panel (2026-10-11); *Nannochloropsis* is untested in our papers, so a miss is a real result about that species.
+- **H5 / S-size (secondary, new 2026-10-01, reworded 2026-10-11; `00_CONTROL_LOOP.md`): peroxide sensitivity falls with cell size.** At each dose, the percent cut ranks *Nannochloropsis* (2-3 µm) > *Thalassiosira* > *Akashiwo*, and the two larger species (and the arm-D non-target check) are spared at 0.8 mg/L. The size pattern is from Randhawa et al. 2012 (peroxide-03), where none of these three species was tested. With one species per size, cell size and taxon cannot be separated.
 - *S2 seaweed, S4 curcumin, S5 shellfish: dropped 2026-10-01 (see Plan change).*
 
 **Counting 2 µm cells:** they are hard to count with a school microscope. The small algae are
@@ -112,9 +112,9 @@ The fixed points:
 
 | Dates (2026-27) | Phase | What happens | Blocking on |
 |---|---|---|---|
-| **Now - Oct 10** | 0. Admin | Find a sponsor or Designated Supervisor and a lab space. Forms 1, 1A, 1B, and Form 3 (sodium percarbonate oxidizer, 3% H₂O₂). Ask NCMA about the strains, including *Micromonas pusilla* (§5). Buy live *Nannochloropsis* (reef-aquarium phytoplankton). Optional: email Dr. Gobler for the bubble PDF | **You** |
+| **Now - Oct 10** | 0. Admin | Find a sponsor or Designated Supervisor and a lab space. Forms 1, 1A, 1B, and Form 3 (sodium percarbonate oxidizer, 3% H₂O₂). Order the three cultures (§5): *Akashiwo sanguinea* (NCMA), *Thalassiosira* sp. (Carolina), live *Nannochloropsis* (reef-aquarium phytoplankton). Optional: email Dr. Gobler for the bubble PDF | **You** |
 | Oct 5 - Oct 24 | 1. Build and calibrate | Arduino Uno alerter with relay → air pump and peristaltic dosing pump; dosing module with inline dilution (Oct 12-24: circulation pump, flow and float switches, 2-channel relay; pump calibration, dry test and 10 L mixing test, `PROCEDURES.md` P7); DIY fluorometer; calibrate to µg/L with a dilution series. Percarbonate peroxide-content check in seawater without algae (low-range kit at 0, 15 min, 1 h, 24 h). Calibrate the peristaltic pump by weight. Start the design log | parts ordered |
-| Oct 15 - Oct 31 | Culture up | Grow the panel (*Nannochloropsis*, *Micromonas*, *Skeletonema*, *T. weissflogii*, the dinoflagellates) to working density; check the aquarium *Nannochloropsis* under the microscope and sub-culture it clean; hatch *Artemia* test batches | cultures arrive |
+| Oct 15 - Oct 31 | Culture up | Grow the panel (*Nannochloropsis*, *Thalassiosira*, *Akashiwo*) to working density; measure the *Thalassiosira* cell size; check the aquarium *Nannochloropsis* under the microscope and sub-culture it clean; hatch *Artemia* test batches | cultures arrive |
 | **Oct 26 - Nov 14** | 2. Screens | Two screens on the species panel, in flasks, n = 3 each (§6). 4 and 3 days, run in parallel; repeat a failed flask set if time allows | cultures, forms |
 | **Nov 10** | Warm-up start | 28 tanks start logging at low nutrients (the model's 21-day warm-up) | controller working |
 | Nov 16 - Nov 25 | 3. Decide and pre-register | Apply the go rule; choose each loop's species; write `LOOP_PREREG.md` (arms, n, X, dose, endpoints, stats, the aeration delay outcome) and commit it **before** nutrients go in | screen results |
@@ -142,11 +142,11 @@ The fixed points:
    - Form 3: sodium percarbonate is an oxidizer; 3% H₂O₂ is an irritant. (Ethanol is no longer used, 2026-10-01.)
    - No vertebrates are used: *Artemia* are invertebrates. No live shellfish or seaweed any more. Confirm with the SRC.
 2. **Lab space:** room for 28 tanks plus flask racks, grow lights, a GFCI outlet and a microscope.
-3. **Email NCMA (Bigelow)** to ask:
-   - whether they have non-toxic strains of *Akashiwo sanguinea* and *Prorocentrum triestinum*;
-   - whether they have *Skeletonema*, *Thalassiosira weissflogii*, *P. micans*, *Micromonas pusilla* and (as a backup to the aquarium culture) *Nannochloropsis*.
+3. **Order the cultures (decided 2026-10-11; through the CSEF Urban School Challenge mini-grant):**
+   - *Akashiwo sanguinea*, NCMA (Bigelow) CCMP3776, $210 + $71.74 shipping;
+   - *Thalassiosira* sp., Carolina Biological 153110, $10.50.
 
-   *Akashiwo* has caused seabird deaths (a surfactant, not a toxin), so the sponsor must approve it. Otherwise use *P. triestinum*.
+   *Akashiwo* has caused seabird deaths (a surfactant, not a toxin), so the sponsor must approve it. The earlier backup (*P. triestinum*) is not on the order, so a "no" means choosing and buying a replacement dinoflagellate before the screens.
 4. **Buy live *Nannochloropsis*** from a reef-aquarium supplier (sold as live coral and rotifer food). It is harmless; check it under the microscope and keep a clean sub-culture.
 5. *(Dropped 2026-10-01: the kelp-farm and shellfish-hatchery emails and the aquaculture permit question.)*
 6. **Order parts** (§8).
@@ -156,17 +156,17 @@ The fixed points:
 
 | Screen | Vessels | Arms (n = 3 each) | Length | Measure |
 |---|---|---|---|---|
-| Bubbles | 500 mL cultures in 1 L flasks (the Sung & Gobler setup) | still; gentle (a few bubbles/s, CO₂ control); air stone at 25 mL/min; air stone at 300 mL/min; × 4 species (*Nannochloropsis*, *Micromonas*, *Skeletonema*, dinoflagellate); n = 3 (48 flasks) | 4 d (covers 48 h ON + 48 h regrowth) | cells daily (small algae: fluorometer + hemocytometer at 400×), pH, temperature, dawn DO |
-| Peroxide | 250 mL flasks (93) | liquid H₂O₂ 0, 0.8, 1.6, 3.2, 6.4 mg/L × 5 species (*Nannochloropsis*, *Micromonas*, *Skeletonema*, *T. weissflogii*, *P. micans*); 3 daily 0.8 mg/L pulses (both small algae); percarbonate at 0.8 mg/L H₂O₂ × 3 species (both small algae, *Skeletonema*); Na₂CO₃ (*Micromonas*) | 72 h (+ *Artemia* to 96 h) | chlorophyll by fluorometer, hemocytometer (small cells, 400×) and Sedgewick-Rafter (large cells) counts, H₂O₂ kit and strips, *Artemia* 24 h + 96 h |
+| Bubbles | 500 mL cultures in 1 L flasks (the Sung & Gobler setup) | still; gentle (a few bubbles/s, CO₂ control); air stone at 25 mL/min; air stone at 300 mL/min; × 3 species (*Nannochloropsis*, *Thalassiosira*, *Akashiwo*); n = 3 (36 flasks) | 4 d (covers 48 h ON + 48 h regrowth) | cells daily (small algae: fluorometer + hemocytometer at 400×), pH, temperature, dawn DO |
+| Peroxide | 250 mL flasks (60) | liquid H₂O₂ 0, 0.8, 1.6, 3.2, 6.4 mg/L × 3 species (*Nannochloropsis*, *Thalassiosira*, *Akashiwo*); 3 daily 0.8 mg/L pulses (*Nannochloropsis*); percarbonate at 0.8 mg/L H₂O₂ × all 3 species; Na₂CO₃ (*Nannochloropsis*) | 72 h (+ *Artemia* to 96 h) | chlorophyll by fluorometer, hemocytometer (small cells, 400×) and Sedgewick-Rafter (large cells) counts, H₂O₂ kit and strips, *Artemia* 24 h + 96 h |
 | *Seaweed, curcumin, shellfish* | | *dropped 2026-10-01* | | |
 
-**Total:** about 141 vessels: 48 × 1 L flasks (bubbles) and 93 × 250 mL flasks (peroxide). They
+**Total:** about 96 vessels: 36 × 1 L flasks (bubbles) and 60 × 250 mL flasks (peroxide). They
 are small and can share one shelf and light bank.
 
 ## 7. Loop run layout (Phase 4)
 
 Two methods, **aeration and peroxide** (2026-10-01), run at the same time. They are likely to use
-**different cultures** (a dinoflagellate for aeration; a small alga mixed with *Skeletonema* for
+**different cultures** (*Akashiwo* for aeration; *Nannochloropsis* mixed with *Thalassiosira* for
 peroxide), so each method gets its own untreated arm A and its own pilot tanks:
 
 | Arm | Tanks | Notes |
@@ -189,17 +189,17 @@ If the screens point both methods at the **same** culture, arm A and the pilots 
 | Arduino Uno (+1 spare), relay, peristaltic dosing pump (12 V), wiring | controllers | $60 |
 | DIY fluorometer parts × 3 (470 nm LED, photodiode, red filter, op-amp) | all | $90 |
 | pH probe, DS18B20 × 6, DO kit, ammonia kit | all | $120 |
-| 28 tanks (4-10 L) + ~141 flasks | all | $250 |
+| 28 tanks (4-10 L) + ~96 flasks | all | $250 |
 | 2 air pumps, manifold, needle valves, tubing (screen) | bubbles | $40 |
 | Air pumps for the loop tanks (enough for the 9 aeration B, C and D tanks at 0.6 L/min per L), airline, check valves, air stones | bubbles | $60 |
 | LED grow lights × 2 + timers | all | $60 |
 | Sea salt, f/2 and f/4 medium, Sedgewick-Rafter chamber, hemocytometer | all | $100 |
-| Cultures (NCMA, 5-6 strains incl. *Micromonas pusilla*) | all | $250-400 |
+| Cultures: *Akashiwo sanguinea* (NCMA CCMP3776, $210 + $71.74 S&H) and *Thalassiosira* sp. (Carolina 153110, $10.50) | all | $292 |
 | Live *Nannochloropsis* (reef-aquarium supplier) | all | $15-25 |
 | Sodium percarbonate, 3% H₂O₂, low-range kit and strips | peroxide | $60-90 |
 | *Artemia* eggs | non-target | $10 |
 | *(Curcumin, ethanol, kelp, mesh cages, oysters, mesh bags: dropped 2026-10-01)* | | |
-| **Total** | | **about $1,100-1,300, assuming the sponsor lends the microscope, scale, micropipettes, glassware and meters** (about $1,575-1,865 without borrowing; `MATERIALS_LIST.md`) |
+| **Total** | | **about $1,070-1,175, assuming the sponsor lends the microscope, scale, micropipettes, glassware and meters** (about $1,545-1,690 without borrowing; recalculated 2026-10-11 for three cultures in `MATERIALS_LIST.md`, the rows above are not re-priced) |
 
 Much of this can be borrowed: ask the sponsor for the microscope, glassware and the pH/DO meters.
 
@@ -209,6 +209,7 @@ Much of this can be borrowed: ask the sponsor for the microscope, glassware and 
 - `03_PEROXIDE_BAG.md`: a fixed per-pulse target replaces the freshwater dose-per-chlorophyll rule (now 0.8 mg/L per pulse, up to 3 pulses; was 1.6 in this list); `MAX_ON` 3 pulses; *Artemia* checked at 96 h.
 - Add H3 (regrowth after OFF) to `00_CONTROL_LOOP.md` (done 2026-09-28).
 - **2026-10-01:** `00_CONTROL_LOOP.md`, `01_BUBBLES.md`, `03_PEROXIDE_BAG.md`, `PROCEDURES.md` and `MATERIALS_LIST.md` updated for the two-method plan, the aeration delay outcome and the species panel; `02_SEAWEED.md`, `04_CURCUMIN.md` and `05_SHELLFISH.md` carry a "Dropped 2026-10-01" banner. (The 2026-09-28 changes to the curcumin and shellfish files stand in those files as a record.)
+- **2026-10-11:** the species panel is cut to the three cultures actually bought (*Nannochloropsis*, *Thalassiosira* sp., *Akashiwo sanguinea*). This file, `00_CONTROL_LOOP.md`, `01_BUBBLES.md`, `03_PEROXIDE_BAG.md`, `PROCEDURES.md` and `MATERIALS_LIST.md` are updated; H5 is reworded for three species; screens shrink to 36 and 60 flasks. *Skeletonema* (the dominant Sound diatom) and *Micromonas* (the species the peroxide source paper eradicated) are no longer tested, which is a stated limitation.
 
 ## 10. Risks
 
@@ -217,7 +218,7 @@ Much of this can be borrowed: ask the sponsor for the microscope, glassware and 
 | No sponsor by mid-October | the whole timeline slips | screens can shrink to 2 weeks; loop runs start mid-December and the bloom phase moves to January |
 | Bubble screen: no panel species is slowed | aeration's delay result is likely negative (still reportable) | run the aeration loop on the dinoflagellate anyway and report the delay result honestly; or run a second peroxide dose level in those tanks, decided in `LOOP_PREREG.md` before nutrients go in |
 | Peroxide screen: small algae not cut at 0.8 mg/L | H1a for peroxide likely fails | use the screen's lowest dose that cuts small cells and still passes the *Artemia* check (never above the 2.8 mg/L stop), decided before nutrients go in |
-| Aquarium *Nannochloropsis* is mixed or contaminated | wrong species in the screen | clean sub-culture; NCMA *Nannochloropsis* as backup; *Micromonas* carries the size test alone |
+| Aquarium *Nannochloropsis* is mixed or contaminated | wrong species in the screen | clean sub-culture; re-buy (NCMA *Nannochloropsis* as backup) before the screen, because it is now the only small alga and the size test rests on it |
 | 2 µm cells can't be counted reliably | weak cell counts for the small algae | fluorometer is the main measure for the small algae, hemocytometer at 400× as a check, 5 µm size fraction in mixed tanks; say so in the write-up |
 | Fluorometer disagrees with cell counts | the OFF rule is wrong | the OFF rule uses cell counts for peroxide; report glow per cell for both methods |
 | Model never fires in a tank (month term, rescaling) | arm B has no model trigger | the rule trigger drives arm B; report the model's behaviour as a finding |
@@ -239,7 +240,7 @@ ones are in `00_CONTROL_LOOP.md`.
 | The fluorometer reads glow, not cells; treatments and time of day change glow per cell | Same sampling time daily, 15 min dark before reading, report glow per cell; counts decide OFF for peroxide | `00_CONTROL_LOOP.md` |
 | Arm A may never bloom (culture crash), which fails every hypothesis | **Pilot bloom run** in 2 spare tanks per culture during warm-up; it also sets arm C's start and `C_ok`. Keep backup culture flasks | `00_CONTROL_LOOP.md` |
 | Cell counting (28 tanks × ~10 min) is too much work | Phone photos through the microscope, count later in ImageJ; every 2 days, daily only around trigger and OFF; split between both team members | `00_CONTROL_LOOP.md` |
-| *Phaeodactylum* is hardy and may under-respond | ***Skeletonema*** first (dominant Long Island Sound diatom) | `00_CONTROL_LOOP.md` |
+| *Phaeodactylum* is hardy and may under-respond | ***Skeletonema*** first (dominant Long Island Sound diatom). *Superseded 2026-10-11: the diatom bought is* Thalassiosira *sp.; neither* Skeletonema *nor* Phaeodactylum *is in the panel* | `00_CONTROL_LOOP.md` |
 | Nothing stopped the loop from pushing diatoms (oxygen makers) below normal | **H4** + a floor OFF rule: 2 days below 80% of the warm-up level → OFF; log daytime DO | `00_CONTROL_LOOP.md` |
 
 **Per method:**

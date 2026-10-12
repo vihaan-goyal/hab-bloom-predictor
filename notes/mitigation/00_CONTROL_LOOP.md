@@ -141,7 +141,7 @@ cells. Glow per cell changes with time of day (light history) and with treatment
 photosynthesis or bleach cells (peroxide), so a fake drop could trigger OFF.
 - Sample every tank at the **same time each day**.
 - **Keep each sample in the dark for 15 min** before reading it.
-- Cell counts are the ground truth: report **glow per cell** at each count, and the OFF rule uses counts for peroxide (it bleaches cells). For the ~2 µm algae, counts are hemocytometer counts at 400×, which are hard at school; the fluorometer is their main measure and the counts are a check (2026-10-01).
+- Cell counts are the ground truth: report **glow per cell** at each count, and the OFF rule uses counts for peroxide (it bleaches cells). For the 2-3 µm *Nannochloropsis*, counts are hemocytometer counts at 400×, which are hard at school; the fluorometer is its main measure and the counts are a check (2026-10-01).
 - Counting workload: 28 tanks × ~10 min is too much daily. Photograph the counting chamber through the microscope with a phone and count later (ImageJ); count every 2 days, and daily only around trigger and OFF; split the work between both team members.
 
 **Safety limits (EMERGENCY OFF at any time):** DO < 4 mg/L; pH outside the method's range (marine 7.6-8.6); non-target survival more than 20 percentage points below control; any method-specific limit in its file.
@@ -196,11 +196,14 @@ peroxide; secondary for aeration since 2026-10-01):
 until chlorophyll is back above `C_ok`. Bubble effects stop when the treatment is removed,
 so regrowth is expected, and measuring it is part of the result. For aeration it sets how often the
 device has to re-run.
-**H5 (secondary, screens; added 2026-10-01): peroxide sensitivity falls with cell size.** On the
-species panel, the percent cut at each dose is largest in the ~2 µm algae (*Micromonas pusilla*,
-*Nannochloropsis*) and smaller in *Skeletonema*, *T. weissflogii* and *P. micans*; the larger cells
-and the arm-D non-target check are spared at 0.8 mg/L, as Randhawa et al. 2012 reported (peroxide-03,
-where *Micromonas* was eradicated). *Nannochloropsis* is untested in our papers.
+**H5 (secondary, screens; added 2026-10-01, reworded 2026-10-11 for the three cultures bought):
+peroxide sensitivity falls with cell size.** At each dose the percent cut is largest in
+*Nannochloropsis* (2-3 µm), smaller in *Thalassiosira* and smallest in *Akashiwo sanguinea*; the two
+larger species and the arm-D non-target check are spared at 0.8 mg/L. The size pattern is from
+Randhawa et al. 2012 (peroxide-03), but none of our three species was tested there (*Micromonas*,
+the species eradicated in that paper, is no longer in the panel), so this tests whether the pattern
+holds on new species. Limit, stated before any data: with one species per size, cell size and
+taxon (green alga, diatom, dinoflagellate) cannot be separated.
 **H4 (added 2026-09-28): trim the bloom, don't remove the algae.** Diatoms at normal levels make
 oxygen and feed the food web, so the loop must cut the *peak*, not push the algae below normal.
 - **Pass:** in arm B, the 3-tank mean chlorophyll (and cell count) never falls below **80% of the warm-up mean** (the normal, pre-bloom level), from nutrients-in to the end of the cool-down.
@@ -227,20 +230,23 @@ per arm if space allows.
 
 ## Organisms (non-toxic stand-ins)
 
-**Species panel for both screens (added 2026-10-01), smallest to largest:**
-- ***Micromonas pusilla*** (~2 µm), from NCMA; eradicated by peroxide in Randhawa et al. 2012 (peroxide-03).
-- ***Nannochloropsis*** (2-3 µm), sold live as reef-aquarium food; harmless; its peroxide sensitivity is untested in our papers. Check it under the microscope and keep a clean sub-culture (NCMA as backup).
-- the diatom ***Skeletonema*** (and *T. weissflogii* in the peroxide screen);
-- the dinoflagellate already in each screen: *Akashiwo sanguinea* (backup *P. triestinum*) for bubbles; *P. micans* for peroxide.
+**Species panel for both screens (three cultures since 2026-10-11, the ones actually bought),
+smallest to largest:**
+- ***Nannochloropsis*** (2-3 µm), sold live as reef-aquarium food; harmless; its peroxide sensitivity is untested in our papers. Check it under the microscope and keep a clean sub-culture.
+- the diatom ***Thalassiosira* sp.** (Carolina Biological 153110); measure its cell size under the microscope on arrival.
+- the dinoflagellate ***Akashiwo sanguinea*** (NCMA CCMP3776).
 
-The ~2 µm cells are measured by the fluorometer plus hemocytometer counts at 400×; that is stated
+Not bought, so no longer in the panel: *Micromonas pusilla*, *Skeletonema*, *T. weissflogii*,
+*P. triestinum*, *P. micans*, *Phaeodactylum*.
+
+The 2-3 µm cells are measured by the fluorometer plus hemocytometer counts at 400×; that is stated
 in the write-up as a limitation.
 
 **Loop cultures (2026-10-01):** aeration runs on the dinoflagellate its screen shows is slowed;
-peroxide runs on the small alga its screen shows is cut, mixed with *Skeletonema*. If the cultures
+peroxide runs on *Nannochloropsis* (if its screen shows it is cut), mixed with *Thalassiosira*. If the cultures
 differ, each method gets its own arm A and pilot tanks (28 tanks in all; `EXECUTION_PLAN.md` §7).
-- **Dinoflagellate:** *Prorocentrum micans* (used as the non-toxic control in Mardones et al. 2023). **Not as the main test organism for bubbles:** bubbling *promoted* *Prorocentrum* in Sung & Gobler 2026, so for bubbles it's only an "expected to resist" comparison (see `01_BUBBLES.md`).
-- **Diatom:** ***Skeletonema*** first (added 2026-09-28: the dominant diatom of Long Island Sound blooms, so the most relevant stand-in), then *Thalassiosira*. *Phaeodactylum tricornutum* is a very hardy lab species and may under-respond to seaweed; keep it only as a backup. Long Island Sound blooms are mostly diatoms.
+- **Dinoflagellate:** *Akashiwo sanguinea* (NCMA CCMP3776). *Prorocentrum micans* is not bought (2026-10-11): bubbling *promoted* *Prorocentrum* in Sung & Gobler 2026, so it was only ever an "expected to resist" comparison (see `01_BUBBLES.md`).
+- **Diatom:** ***Thalassiosira* sp.** (Carolina 153110), since 2026-10-11. *Skeletonema* is the dominant diatom of Long Island Sound blooms and would be the more relevant stand-in, but it is not being bought; state that as a limitation. Long Island Sound blooms are mostly diatoms.
 - **Source:** the National Center for Marine Algae and Microbiota (NCMA, Bigelow Laboratory, Maine) sells cultures.
 - **Do not use *Scrippsiella*:** Northwest Atlantic strains harm shellfish larvae.
 - Never culture toxic *Alexandrium*, *Karenia*, *Margalefidinium* or *Microcystis*.

@@ -7,7 +7,7 @@ test-period ONSET rows (today's chl <= 10) out of sample, and project them onto
 axis 1 = the LR decision value z.w + b (log-odds; t* is a vertical line at logit t*) and
 axis 2 = the first principal component of the standardized test matrix after removing w/|w|.
 Writes data/lr_geometry_summary.csv, data/lr_geometry_rows_{nar,lis}.csv,
-figures/fig_lr_geometry.png (copied to <nar-root>/figures/nar_fig14_lr_geometry.png).
+figures/model/fig_lr_geometry.png (copied to <nar-root>/figures/narragansett/nar_fig14_lr_geometry.png).
 Design and reading rule: fork notes/NARRAGANSETT_FINDINGS.md section 28 (fixed before running).
 """
 import argparse
@@ -38,7 +38,7 @@ NAR_TRAIN_MAX, NAR_VAL, NAR_TEST = 2020, (2021, 2022), 2023
 from locked_pipeline import T_STAR_21 as LIS_T_STAR  # noqa: E402  (single source)
 LIS_TRAIN_END, LIS_TEST_YEARS = "2019-12-31", (2020, 2025)
 OUT_SUMMARY = tagged("data/lr_geometry_summary.csv")
-FIG = tagged("figures/fig_lr_geometry.png")
+FIG = tagged("figures/model/fig_lr_geometry.png")
 BLUE, ORANGE, GRAY = "#2a78d6", "#eb6834", "#8a8f98"
 
 
@@ -181,7 +181,7 @@ def main():
     S, R, D = {}, {}, {}
     S["narragansett"], R["narragansett"], D["narragansett"] = narragansett(a.nar_root)
     S["lis"], R["lis"], D["lis"] = lis()
-    os.makedirs("data", exist_ok=True); os.makedirs("figures", exist_ok=True)
+    os.makedirs("data", exist_ok=True); os.makedirs("figures/model", exist_ok=True)
     for bay, key in (("narragansett", "nar"), ("lis", "lis")):
         R[bay].to_csv(tagged("data/lr_geometry_rows_%s.csv" % key), index=False)
     summ = pd.DataFrame([S["narragansett"], S["lis"]])
@@ -191,7 +191,7 @@ def main():
             "pod", "tp", "fp", "fn", "ovl", "pos_in_neg_90band"]
     print(summ[cols].to_string(index=False, float_format=lambda x: "%.4f" % x))
     plot(S, R, D, FIG)
-    dst = os.path.join(a.nar_root, "figures", "nar_fig14_lr_geometry.png")
+    dst = os.path.join(a.nar_root, "figures", "narragansett", "nar_fig14_lr_geometry.png")
     shutil.copyfile(FIG, dst)
     print("wrote %s, data/lr_geometry_rows_*.csv, %s, %s" % (OUT_SUMMARY, FIG, dst))
 

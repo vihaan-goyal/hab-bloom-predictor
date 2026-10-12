@@ -57,7 +57,7 @@ Inputs.
        9-fold loop (train <= T-2, test == T, GB tier A, T in 2015..2023) is
        re-run here verbatim to obtain per-row out-of-fold probabilities.
 
-Outputs: data/decision_value.csv, figures/fig_decision_value.png.
+Outputs: data/decision_value.csv, figures/model/fig_decision_value.png.
 
 Run from the LIS repo root with the BASE anaconda python:
     python src/models/decision_value.py [--nar-root ../hab-bloom-predictor-narragansett]
@@ -107,7 +107,7 @@ STRATEGY_COLOR = {"calendar_fixed": "#2a78d6", "random_uniform": "#eb6834",
                   "alert_causal": "#4a3aa7"}
 OUT_CSV = tagged("data/decision_value.csv")
 OUT_ROWS = tagged("data/decision_value_rows.csv")
-OUT_FIG = tagged("figures/fig_decision_value.png")
+OUT_FIG = tagged("figures/model/fig_decision_value.png")
 
 
 # --------------------------------------------------------------------------

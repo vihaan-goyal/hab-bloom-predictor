@@ -348,8 +348,8 @@ ax2.set_xlim(0, 1)
 ax2.set_ylim(0, 1)
 
 plt.tight_layout()
-plt.savefig(f"figures/threshold_sweep{TAG}.png", dpi=150, bbox_inches="tight")
-print(f"Saved figures/threshold_sweep{TAG}.png")
+plt.savefig(f"figures/model/threshold_sweep{TAG}.png", dpi=150, bbox_inches="tight")
+print(f"Saved figures/model/threshold_sweep{TAG}.png")
 
 # ---------------------------------------------------------------------------
 # Summary

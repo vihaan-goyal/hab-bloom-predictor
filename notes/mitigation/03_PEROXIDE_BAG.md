@@ -11,11 +11,14 @@ Seaweed, shellfish and curcumin were dropped because the device must run fully a
 pump plus a 3% H₂O₂ reservoir meets that rule (`EXECUTION_PLAN.md`, "Plan change 2026-10-01").
 - The loop keeps **H1** (≥ 50% peak cut, B vs A; B beats reactive C), the 0.8 mg/L pumped pulses,
   `MAX_ON` 3 pulses and the re-dose rule. Sodium percarbonate stays a screen comparison only.
-- **The screen uses a cell-size panel:** *Micromonas pusilla* (~2 µm; eradicated by peroxide in
-  Randhawa et al. 2012, peroxide-03), *Nannochloropsis* (2-3 µm; untested in our papers), *Skeletonema*,
-  *T. weissflogii* and *P. micans*.
-- **New secondary hypothesis (H5):** peroxide sensitivity falls with cell size. The small cells are
-  hit; the larger diatoms and dinoflagellates, and the arm-D non-target check, are spared at 0.8 mg/L.
+- **The screen uses a cell-size panel** (three cultures since 2026-10-11, the ones actually bought):
+  *Nannochloropsis* (2-3 µm; untested in our papers), *Thalassiosira* sp. (diatom) and *Akashiwo
+  sanguinea* (dinoflagellate). *Micromonas pusilla*, the species eradicated by peroxide in Randhawa
+  et al. 2012 (peroxide-03), is no longer in the panel.
+- **Secondary hypothesis (H5, reworded 2026-10-11):** peroxide sensitivity falls with cell size:
+  the cut is largest in *Nannochloropsis*, smaller in *Thalassiosira*, smallest in *Akashiwo*, and the
+  two larger species and the arm-D non-target check are spared at 0.8 mg/L. None of the three was
+  tested in the source paper, and with one species per size, size and taxon cannot be separated.
 
 **Added 2026-10-03: inline-dilution dosing module (field design).**
 - **Field stock is 7% H₂O₂** (plain, no surfactant; ~71.7 g/L), not drugstore 3%. A 200 m³ pen needs
@@ -82,7 +85,7 @@ happens, then the OFF rule decides whether to send another. This keeps exposure 
 ## Bench setup
 - **Screen:** 250 mL flasks, one species each (the panel above), n = 3 (Randhawa used 250 mL).
 - **Loop tanks:** 3 per arm, 4-10 L (Lusty & Gobler used 4 L bottles). The peristaltic pump doses 3% H₂O₂ from a reservoir; check the reservoir's strength weekly with the low-range kit and refill it (the one allowed maintenance).
-- **Loop culture (2026-10-01):** the small alga the screen shows is cut (*Micromonas pusilla* or *Nannochloropsis*), mixed with ***Skeletonema***. That tests the size selectivity in the tank: does the small alga crash while the diatom survives?
+- **Loop culture (updated 2026-10-11):** *Nannochloropsis* (if the screen shows it is cut), mixed with ***Thalassiosira***. The 5 µm filter split below only works if the *Thalassiosira* cells are clearly larger than 5 µm; check under the microscope before the run. That tests the size selectivity in the tank: does the small alga crash while the diatom survives?
 - *(Dropped 2026-09-28)* **Bag:** 2-4 layers of polyester or nonwoven fabric, heat-sealed or sewn, holding the weighed CaO₂. Keliri tested four fabric types; start with the one they found released like loose granules.
 - **Percarbonate check first (replaces the CaO₂ release curve):** dissolve a weighed amount of sodium percarbonate in plain seawater and measure H₂O₂ at 0, 15 min, 1 h and 24 h with the low-range kit. That confirms its real peroxide content (theoretical 32.5% H₂O₂ by weight; commercial powder is often less), so 0.8 mg/L H₂O₂ ≈ **2.5-2.9 mg/L percarbonate (~25-29 mg per 10 L)**. Always dissolve it fresh on the day of dosing. (The old CaO₂ release-curve pilot is dropped.)
 - **Comparison arm:** sodium percarbonate at the same H₂O₂ dose, plus a **sodium carbonate control** matched to the carbonate it adds (~2.0 mg/L Na₂CO₃ per 2.9 mg/L percarbonate), which separates peroxide from carbonate and pH.
@@ -106,7 +109,7 @@ happens, then the OFF rule decides whether to send another. This keeps exposure 
 | Peroxide test strips (0.5-25 mg/L) | $20 |
 | Flasks for the panel screen (93 × 250 mL); loop tanks counted in `EXECUTION_PLAN.md` §8 | $120 |
 | Arduino Uno alerter + 12 V peristaltic dosing pump (now needed for the loop run) + 3% H₂O₂ reservoir bottle; fluorometer, pH, temperature, DO kit | $110 |
-| Sea salt, f/2, cultures (NCMA, incl. *Micromonas pusilla*); live *Nannochloropsis* (reef-aquarium supplier) | $95-155 |
+| Sea salt, f/2, the three cultures (shared with aeration; prices in `MATERIALS_LIST.md`) | $380-390 |
 | Brine shrimp eggs | $10 |
 
 ## Safety and forms

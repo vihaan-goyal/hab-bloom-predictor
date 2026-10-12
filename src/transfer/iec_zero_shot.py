@@ -11,7 +11,7 @@ Outputs
   data/iec_station_days.csv        one row per IEC station-date with the 35 features
   data/iec_zero_shot_results.csv   metrics + bootstrap CIs per scenario
   data/iec_crosslab_pairs.csv      DEEP vs IEC chlorophyll pairs at A4/B3/C1/C2
-  figures/fig_iec_zero_shot.png    lift by scenario, cross-lab scatter
+  figures/model/fig_iec_zero_shot.png    lift by scenario, cross-lab scatter
 
 Run from repo root:
     python src/transfer/iec_zero_shot.py
@@ -38,7 +38,7 @@ GUST = "data/gust_features_daily.csv"
 OUT_ROWS = tagged("data/iec_station_days.csv")
 OUT_RES = tagged("data/iec_zero_shot_results.csv")
 OUT_PAIRS = tagged("data/iec_crosslab_pairs.csv")
-OUT_FIG = tagged("figures/fig_iec_zero_shot.png")
+OUT_FIG = tagged("figures/model/fig_iec_zero_shot.png")
 
 TRAIN_END = "2019-12-31"      # LIS training cut, locked
 PRIMARY_START = "2018-01-01"  # IEC year-round period

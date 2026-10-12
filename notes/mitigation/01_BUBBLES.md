@@ -11,8 +11,8 @@ change 2026-10-01"). Two changes for this method:
   (reruns). The ≥ 50% peak cut is reported as secondary. In real water, tides flush nutrients and
   conditions change, so holding a bloom back lets its window pass, and the device re-runs when the
   forecast fires again. H3 (regrowth after OFF) tells how often reruns are needed.
-- **The screen uses a cell-size panel:** *Nannochloropsis* (2-3 µm), *Micromonas pusilla* (~2 µm),
-  *Skeletonema* (diatom) and the dinoflagellate *Akashiwo sanguinea* (backup *P. triestinum*).
+- **The screen uses a cell-size panel** (three cultures since 2026-10-11, the ones actually bought):
+  *Nannochloropsis* (2-3 µm), *Thalassiosira* sp. (diatom) and the dinoflagellate *Akashiwo sanguinea*.
 
 ## Why this method
 - **Evidence:** Sung & Gobler (2026), *Journal of Environmental Management*, [doi:10.1016/j.jenvman.2026.129015](https://doi.org/10.1016/j.jenvman.2026.129015). Full text read 2026-09-26 (through Columbia Libraries).
@@ -82,7 +82,7 @@ methods' studies) saw most of their effect, and it's long enough to separate a r
 
 ## Bench setup
 - **Vessels (updated 2026-10-02):** the screen uses 500 mL cultures in 1 L flasks and the loop run uses 4-10 L tanks (below); the earlier 1 m column design is dropped. Water: Sound-matched seawater at salinity 27.5, 12:12 light, 12-15 °C (`WATER_RECIPE.md`).
-- **Culture (updated 2026-10-01):** the screen tests the panel (*Nannochloropsis*, *Micromonas pusilla*, *Skeletonema*, *Akashiwo sanguinea* or *P. triestinum*). The loop run uses the dinoflagellate the screen shows is slowed (fallback: the panel species with the largest growth pause). *P. micans* is not the test organism (bubbling promoted *Prorocentrum*; see above). The ~2 µm algae are measured by fluorometer plus hemocytometer counts at 400×, which are hard at school; say so in the write-up.
+- **Culture (updated 2026-10-11):** the screen tests the panel (*Nannochloropsis*, *Thalassiosira* sp., *Akashiwo sanguinea*). The loop run uses *Akashiwo* if the screen shows it is slowed (fallback: the panel species with the largest growth pause). *Thalassiosira* is the diatom check, since bubbling may help diatoms. The 2-3 µm *Nannochloropsis* is measured by fluorometer plus hemocytometer counts at 400×, which are hard at school; say so in the write-up.
 - **Loop tanks (2026-10-01):** 4-10 L tanks with an air stone at 0.6 L/min per litre (2.4-6 L/min per tank), one relay-switched air supply per treated tank (B, C, D). Check that the pumps reach that flow through the stones; if not, use 4 L of water per tank.
 - **Air:** one aquarium pump per arm via a manifold, with an air stone (coarse bubbles) at the bottom and a needle valve so every flask or tank gets the same flow. Measure flow with a bubble-counter or a rotameter.
 - **Extra arm worth adding:** a fine airstone at the same airflow, which replicates the paper's coarse-versus-fine contrast.
