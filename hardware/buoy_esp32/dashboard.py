@@ -35,6 +35,8 @@ log = deque(maxlen=250)
 lock = threading.Lock()
 outbox = deque()
 quiet = {"until": 0.0}   # the automatic `status` replies update the header but stay out of the log
+pending = {"read": 0.0}  # when the last `read` went out; 0 once its S line is back
+READ_TIMEOUT = 15.0      # seconds before an unanswered `read` is given up on
 
 
 def num(text):
@@ -50,6 +52,7 @@ def parse(line):
     if line.startswith("S "):
         kv = dict(tok.split("=", 1) for tok in line.split()[1:] if "=" in tok)
         samples.append({"t": time.time(), **{k: num(v) for k, v in kv.items()}})
+        pending["read"] = 0.0
         return
     if line.startswith("F "):
         return                      # the 23 feature values: too long for the log
@@ -89,8 +92,13 @@ def serial_loop(port, poll):
                         with lock:
                             shown = "wifipass ****" if cmd.split(" ")[0] == "wifipass" else cmd   # never log a password
                             log.append({"t": now, "line": f">> {shown}"})
-                    if poll > 0 and now >= next_read:
+                    # One `read` at a time (fix 2026-10-14): a reading can take longer than the poll
+                    # interval, and requests queued on the board made typed commands run minutes
+                    # late (a delayed `cal918` saved the probe-in-air voltage).
+                    if poll > 0 and now >= next_read and (
+                            not pending["read"] or now - pending["read"] > READ_TIMEOUT):
                         s.write(b"read\n")
+                        pending["read"] = now
                         next_read = now + poll
                     if now >= next_status:
                         s.write(b"status\n")
