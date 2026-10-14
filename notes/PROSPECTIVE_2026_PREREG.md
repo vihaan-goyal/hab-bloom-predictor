@@ -59,6 +59,57 @@ is the same rule as `notes/CALENDAR_BASELINE_PREREG.md`.
 **Whatever the result, it is reported as is.** No change to the model, threshold, label or baseline
 after seeing it.
 
-## Result
+## Amendment A1 (2026-10-14, written before any 2026 row was scored)
 
-*(empty until run)*
+DEEP (M. Lyman, 2026-10-13) sent the 2026 EXO profiles (Jan 8 - Jul 17; 225 casts, 11 cruises)
+and corrected chlorophyll for 2022-2023. Nothing below was chosen after seeing a 2026 score.
+
+1. **2022-23 corrected.** `label_rebuild.py` now fills 2022-23 from DEEP's per-cruise lines, as it
+   did for 2024. Validation (2020-22) rows change, so the validation-chosen thresholds move:
+   t = 0.40 (alert budget) and t* = 0.20 (POD rule). The model itself is unchanged (trained ≤ 2019).
+   - The primary test is threshold-free and is not affected.
+   - The secondary numbers are reported at **both** pairs: the thresholds fixed above
+     (0.47 / 0.25) and the recomputed ones (0.40 / 0.20).
+2. **2026 station-days.** One row per station and date: the mean over every depth row of the cast
+   (the same aggregation as the 2025 rows); chlorophyll = DEEP's corrected value;
+   `percent_saturation` from the depth-code S row.
+3. **Nutrient features** (`nox_lag2`, `dip_lag2`, `dip_change`, `dip_x_month`) have no 2026 data,
+   so they are missing and train-median filled, as for every 2025 row.
+4. **Tides:** NOAA CO-OPS monthly means (MLLW datum), downloaded 2026-10-14; the 2025 months
+   match the stored files exactly.
+5. **Gusts:** NCEI's airport archive ends 2025-08-25. From 2025-08-26 the same three airports
+   (BDR, GON, HVN) come from the Iowa Environmental Mesonet. On 2025 days both sources hold,
+   daily maxima agree within 0.23 m/s, apart from one 156-knot report. Rule: drop reports
+   > 75 kt (the stored record maximum is 72 kt).
+6. **Gate before scoring:** the combined file must reproduce the 2023-25 test predictions exactly.
+
+## Result (run 2026-10-14, partial season: DEEP data to 2026-07-17)
+
+`python src/models/prospective_2026.py build` then `score`; log `data/prospective_2026_score.log`,
+rows `data/prospective_2026_predictions.csv`.
+
+- **Gates passed before scoring.**
+  - Every rebuilt feature reproduces the stored 2025 rows (max difference 6e-14).
+  - The model reproduces all 683 test predictions of 2023-25 (max difference 2e-14) with identical
+    labels.
+- **Rows.**
+  - 225 station-days in 2026 (41 stations, Jan 8 - Jul 17).
+  - 66 have a resolved 28-day window (Feb 10 - Jun 8).
+  - **6 events**, base rate 0.091. That is at least 5, so the test is powered by the rule above.
+- **PRIMARY: model AUC 0.814, calendar AUC 0.883, difference −0.069 [−0.121, −0.005], one-sided
+  p = 0.98. The model does not beat the calendar in 2026.**
+- **Secondary** (4 sampled months):
+
+  | Threshold | Model alerts | Model TP | Model precision | Model recall | Calendar (same alert count) |
+  |---|---|---|---|---|---|
+  | 0.47 (fixed budget) | 1 | 1 | 1.00 | 0.17 | TP 0 |
+  | 0.25 (fixed POD) | 15 | 4 | 0.27 | 0.67 | TP 4 |
+  | 0.40 (recomputed budget) | 2 | 1 | 0.50 | 0.17 | TP 1 |
+  | 0.20 (recomputed POD) | 22 | 4 | 0.18 | 0.67 | TP 6 |
+
+- **Reading.**
+  - On the first data the project could not have tuned to, the LIS boat-data model ranks well in
+    absolute terms (0.81), but the station-month calendar ranks better.
+  - This agrees with the 2023-25 result (no better than the calendar).
+  - Reported as is; nothing is changed after seeing it.
+  - To be rerun on the full season when DEEP's August-October data arrive.

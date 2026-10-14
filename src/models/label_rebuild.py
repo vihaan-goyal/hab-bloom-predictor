@@ -40,11 +40,12 @@ RATIO_CSV = "data/sensor_vs_lab_chl.csv"
 OUT_TMPL = "data/hab_features_tidal_{}.csv"
 PREDS_TMPL = "data/test_predictions_{}.csv"
 RESULTS_CSV = "data/label_rebuild_results.csv"
-# DEEP profile file (M. Lyman, 2026-10-02): raw and corrected chlorophyll, Jan 2024 - Jul 2026.
-# DEEP's correction is exactly linear per cruise (corrected = a * raw + b, residuals ~1e-15), and
-# those lines reproduce our existing 2025 Corrected_Chlorophyll with zero difference, so they fill
-# the missing 2024 values. 2022-2023 remain uncorrected until DEEP sends them.
-DEEP_PROFILE_XLSX = "data/raw/deep_lab_chla/DEEP Profile Chla data 2024_2026.xlsx"
+# DEEP profile file (M. Lyman): raw and corrected chlorophyll. Jan 2024 - Jul 2026 sent 2026-10-02;
+# 2022-2023 sent 2026-10-13 as a second sheet of the 2022_2026 file (its 2024-26 sheet is identical
+# to the first file). DEEP's correction is exactly linear per cruise (corrected = a * raw + b,
+# residuals ~1e-15), and those lines reproduce our existing 2025 Corrected_Chlorophyll with zero
+# difference, so they fill the missing 2022-2024 values.
+DEEP_PROFILE_XLSX = "data/raw/deep_lab_chla/DEEP Profile Chla data 2022_2026.xlsx"
 
 BLOOM = 10.0
 HORIZON_D = 28
@@ -84,7 +85,7 @@ def deep_cruise_correction(path=DEEP_PROFILE_XLSX):
     """Per-cruise (slope, intercept) of DEEP's correction, plus each station-day's cruise."""
     if not os.path.exists(path):
         return None
-    p = pd.read_excel(path)
+    p = pd.concat(pd.read_excel(path, sheet_name=None).values(), ignore_index=True)
     p["date"] = pd.to_datetime(p.Activity_Date).dt.normalize()
     p = p.dropna(subset=["Chlorophyll ug/L", "Corrected Chlorophyll ug/L"])
     coef = {c: np.polyfit(g["Chlorophyll ug/L"], g["Corrected Chlorophyll ug/L"], 1)

@@ -1,5 +1,60 @@
 # Current numbers on the lab-consistent label (S1), after the 2026-09-28 audit
 
+## UPDATE 2026-10-14: 2022-2023 now on the corrected (lab) scale, and the 2026 test. These numbers supersede everything below where they differ.
+
+**What changed.** DEEP (M. Lyman, 2026-10-13) sent raw and corrected profile chlorophyll for
+2022-2023 (`DEEP Profile Chla data 2022_2026.xlsx`; its 2024-26 sheet is identical to the first file).
+- The correction is exactly linear per cruise again (30 cruises, residuals ~1e-15).
+- `label_rebuild.py` now fills 2022-24 from it. Gates G1 and G2 pass.
+- One-day share above 10 µg/L: 2022 0.076 → 0.010, 2023 0.031 → 0.003.
+- **The whole S1 record is now on the corrected scale.**
+- Validation (2020-22) changed, so the validation-chosen thresholds moved:
+  - alert budget 0.47 → **0.40**;
+  - POD rule 0.25 → **0.20**.
+- The model itself is unchanged (trained ≤ 2019).
+
+**28-day test 2023-25** (`data/rerun_2223fix_eval28.log`; 683 rows, **15 events**, base 2.2%):
+- **AUC 0.818 [0.672, 0.937]** (station-year cluster bootstrap, 2,000, seed 42).
+- **Per year:**
+  - 2023: AUC 0.818, 2 events (was 12 on the raw scale);
+  - 2024: AUC 0.962, 9 events;
+  - 2025: AUC 0.493, 4 events.
+- **Budget threshold t = 0.40:**
+  - precision 0.131 [0.047, 0.213], recall 0.533 (8 of 15);
+  - lift 5.97 [2.71, 10.96];
+  - 3.0 alerts/month.
+- **POD rule t* = 0.20:** precision 0.038, recall 0.867, lift 1.72.
+- **Reading:**
+  - 15 events, 9 of them in one year, so the intervals are wide.
+  - The 35 features were chosen partly on 2023-25 (disclosed).
+  - Most of the 2023 "events" were raw-sensor artefacts.
+
+**21-day walk-forward CV 2016-2025** (`data/rerun_2223fix_cv21.log`): pooled AUC **0.659**, 1,971 rows, 77 events.
+
+**Pre-registered calendar test** (`data/rerun_2223fix_calendar.log`):
+- **2016-25:** model 0.659 vs calendar 0.525, **+0.134 [+0.083, +0.189], p < 0.001. PASS.**
+- **2023-25:** model 0.743 vs calendar 0.744, −0.001 [−0.095, +0.130], p = 0.51. Level with the
+  calendar (11 events).
+
+**Hybrid** (`data/rerun_2223fix_hybrid.log`): still not adopted (development hybrid − locked −0.009).
+
+**2026 prospective test** (`notes/PROSPECTIVE_2026_PREREG.md` + Amendment A1; `data/prospective_2026_score.log`):
+- 66 resolved rows, 6 events, data to 2026-07-17.
+- **Model AUC 0.814 vs calendar 0.883, −0.069 [−0.121, −0.005], p = 0.98: does not beat the
+  calendar.**
+- Full-season rerun pending DEEP's August-October data.
+
+**Not yet re-run on the 2022-23 correction:** every `rerun4_*` result in the 2026-10-02 block below
+(significance checks, station-specific, reference baselines, basin alert, decision value, LR geometry,
+point of no return, cadence thinning, warning operating point and robustness). Quote them with
+"(before the 2022-23 correction; not re-run)".
+
+**Honest LIS claim now:**
+- The model beats a calendar over 2016-2025 walk-forward (p < 0.001).
+- It is level with the calendar in 2023-25.
+- It is below the calendar on the first truly unseen data (2026, 6 events).
+- Narragansett carries the forecasting claim.
+
 ## UPDATE 2026-10-02: 2024 now on the corrected (lab) scale. These numbers supersede the ones below where they differ.
 
 **What changed.** DEEP (M. Lyman) sent profile chlorophyll, raw and corrected, for Jan 2024 - Jul 2026.
