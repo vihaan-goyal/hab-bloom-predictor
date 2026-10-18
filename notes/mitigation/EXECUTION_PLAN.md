@@ -258,6 +258,9 @@ syringes (~$20).
 
 ## 12. Device validation: side-by-side with a reference sonde (added 2026-10-07)
 
+> **Update 2026-10-18:** the main calibration route is now §14 (extracted chlorophyll on the school
+> spectrophotometer). A sonde comparison is an optional extra check, not a requirement.
+
 The device's chlorophyll sensor is a DIY fluorometer, and the Narragansett model was trained on
 RIDEM's YSI sondes. The device's readings have to be shown to track a real sonde before the model's
 skill can be claimed for the device.
@@ -346,6 +349,48 @@ up so bubbles leave; black tubing outside the box. It needs a small firmware cha
 
 **Parts:** clear sealed container, black pipe, red gel (LEE 106), black tape or paint, a waterproof cable
 gland or sealant. Cuvettes stay on the list for hand checks.
+
+## 14. ⚠️ IMPORTANT: calibrate the sensor ourselves with the school spectrophotometer (decided 2026-10-18; do it once the printed head is built)
+
+**This replaces the sonde visit (§12) as the main way to put the sensor on a µg/L scale.** The sonde
+comparison becomes an optional extra check. Vihaan has a spectrophotometer.
+
+**Two different jobs, two different methods:**
+- **Treatment tests (bench tanks, flasks):** no µg/L needed. Report the **percent change** of each tank
+  against its own starting reading, and confirm with **hemocytometer cell counts** before and after
+  (advice from Dr. Penny Vlahos, UConn, 2026-10-15). Peroxide can dim the chlorophyll glow without
+  killing cells, so the cell counts are the real proof of reduction.
+- **The forecast on the buoy:** needs chlorophyll in **µg/L on the sonde scale**, because the model was
+  trained on sonde readings and its bloom line is 10 µg/L. Cell counts cannot give this (chlorophyll per
+  cell varies 5-10× with species, light and growth stage), so use extracted chlorophyll:
+
+**Procedure (standard extraction method):**
+1. Filter a measured volume of a live culture (e.g. 50 mL) through a 25 mm glass-fibre filter in a syringe
+   filter holder (or spin it down in a centrifuge).
+2. Extract the filter in 10 mL of 90% acetone or 95% ethanol, in the fridge, in the dark, for 24 h; let it settle.
+3. Spectrophotometer, 1 cm cuvette, solvent as the blank: read A664, A647, A630 and A750 (turbidity).
+   Subtract A750 from the others.
+4. Acetone (Jeffrey & Humphrey 1975): Chl a (µg/mL extract) = 11.85·A664 − 1.54·A647 − 0.08·A630.
+   Culture Chl a (µg/L) = extract value × extract volume (mL) ÷ sample volume (L).
+   Ethanol needs a different set of equations: look them up and cite them before using ethanol.
+5. Dilute the same culture into 5-6 known strengths, read each with the sensing head (same day, same
+   setup), fit one straight line: the slope is `chlk`, plain water is `blank`.
+6. Convert lab scale to the model's sonde scale: × 1.28 (sonde 10 ≈ lab 7.8, fork findings §10/§32).
+   State this as an assumption (an average across stations).
+
+**Watch out:** acetone dissolves plastic cuvettes, so use glass with acetone (ethanol is gentler and easier
+for the SRC); calibrate with **real algae cultures**, not spinach; small extras to get: glass-fibre filters,
+a 25 mm syringe filter holder and syringe, the solvent. Add the solvent to Form 3 (risk assessment).
+
+**Other advice from the Vlahos call (2026-10-15):**
+- Chlorophyll cannot tell a harmful bloom from a harmless one or identify species; that needs a lab and is
+  not autonomous. Say "algal bloom (high chlorophyll)", not "HAB detected".
+- **Aeration is the way to go (aeration >> peroxide):** aeration as the long-term treatment, peroxide only as
+  a short acute response (it breaks down to water + O₂ but may harm the environment). Measure peroxide's
+  **half-life** (residual at 0, 1, 4, 24 h).
+- Redfield N:P = 16:1. Long Island Sound is below 16 (nitrogen-limited); heavy rain flushes in nitrogen, and
+  warm water + an N pulse drives blooms. Keep tank media at N:P ≥ 16 (f/2 is ~24:1). A "recent rain"
+  forecast feature would need its own pre-registered test.
 
 ## Never claim
 - That it prevents blooms in the open Sound; this is tanks only, aimed at enclosed or semi-enclosed water (harbors, shellfish beds, aquaculture pens, coastal ponds).
