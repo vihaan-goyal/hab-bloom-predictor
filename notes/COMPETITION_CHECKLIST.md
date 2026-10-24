@@ -13,7 +13,7 @@ Adult sponsor: **Meghana Fernandez** (also Direct Supervisor; chosen 2026-10-04)
 | Sept 19 | Fallback: any faculty member agrees to sponsor | Vihaan | due tomorrow; cold ask drafted in notes/SPONSOR_ASK.md |
 | **Sept 25** | **HARD STOP: Forms 1A, 1, 3, 1B signed.** No hands-on work before this (notes/LAB_PROTOCOL.md s1) | Vihaan + sponsor + supervisor | open |
 | Sept 28 | First hands-on work: build the rake, jar rig, controller | Vihaan | blocked by Sept 25 |
-| **Oct 31** | **A Westhill teacher/staff member submits the CSEF school registration and buys a $50 project spot** (registering through school, decided 2026-10-04) | teacher + Vihaan | open: asked chem teacher Ms. Dodita who handles it, 2026-10-04; follow up Oct 7 if no reply |
+| **Oct 31** | **A Westhill teacher/staff member submits the CSEF school registration and buys a $50 project spot** (registering through school, decided 2026-10-04) | teacher + Vihaan | **DONE 2026-10-24:** school registered by another Westhill teacher; Vihaan's project spot is registered |
 | **Dec 1** | **High-school registration closes 11:59 pm**: online form + research plan + Form 2A + release form + any SRC forms (Form 3) | Vihaan | open |
 | Feb 15 | High-school projects selected by school fairs due 11:59 pm | Vihaan | open |
 | Feb 25 | Upload portal opens | Vihaan | open |
