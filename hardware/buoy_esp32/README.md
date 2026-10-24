@@ -191,6 +191,7 @@ The last 30 days, the clock, today's partial sums and all calibration are kept i
 |---|---|---|---|
 | `USE_DS18B20` | DS18B20 waterproof temperature probe | data → **GPIO 4**, 4.7 kΩ from data to 3.3 V, red → 3.3 V, black → GND | OneWire, DallasTemperature |
 | `USE_TSL2591` | TSL2591 light sensor (fluorometer) | SDA → **GPIO 21**, SCL → **GPIO 22**, VIN → 3.3 V, GND | Adafruit TSL2591 Library, Adafruit Unified Sensor |
+| `AUTO_GAIN` (default 1) | TSL2591 gain ranging: the gain is picked each sample, so daylight does not saturate the sensor and the dark keeps max gain. 0 = the gain stays where `gain` puts it | — | — |
 | (with TSL2591) | Blue excitation LED | **GPIO 25** → 1 kΩ → NPN transistor base; LED + resistor on the collector side (do not drive a bright LED straight from the pin) | — |
 | `USE_EZO_EC` | Atlas EZO-EC conductivity circuit, **I2C mode**, address 0x64 | SDA → **GPIO 21**, SCL → **GPIO 22** (shared with the TSL2591), VCC → 3.3 V, GND | none (Wire) |
 | `USE_PH` | Analog pH module | Po → voltage divider (10 kΩ / 20 kΩ, 5 V → 3.3 V) → **GPIO 34**; module V+ → 5 V, G → GND | none |
@@ -215,9 +216,31 @@ Sensor commands:
 | `date 2026-10-05 14:30` | Sets the clock (needed without Wi-Fi; the board has no battery-backed clock) |
 | `blank` | With the cuvette full of filtered seawater: stores its signal as zero chlorophyll |
 | `chlk <k>` | Sets µg/L per fluorometer count, from a dilution series against a sonde or lab value |
-| `gain l\|m\|h\|x` | Sets the TSL2591 gain. Redo `blank` and `chlk` after changing it |
+| `gain auto` | TSL2591 gain chosen each sample (`AUTO_GAIN 1` builds; the default). Kept in NVS |
+| `gain l\|m\|h\|x` | Locks one TSL2591 gain (kept in NVS). `gain` alone shows the gain, integration time and thresholds; `status` shows them too |
 | `cal686`, `cal918` | pH probe in the 6.86 buffer, then in the 9.18 buffer. `cal` shows the calibration; `calclear` erases it |
 | `wifi <ssid>`, `wifipass <password>`, `ntfy <topic>`, `ntfytest` | Wi-Fi alerts (`USE_WIFI 1`). Stored in NVS, never in the code |
+
+Fluorometer gain (`AUTO_GAIN`, added 2026-10-24; compiled, not yet run on the board):
+
+- Each sample first reads the light with the LED **off**. If either TSL2591 channel is above 70% of full
+  scale (65,535 counts at 200 ms; 37,888 at 100 ms, datasheet), the gain steps down and it reads again. It
+  steps up only if the next gain should stay under 30% of full scale, counting the LED light of the last
+  sample. The gain steps are 17-25x, so the light must change more than about 2.3x before the gain moves
+  back: it does not flip every sample. LED on and LED off of one sample always use the same gain.
+- Integration stays at 200 ms. Auto starts at max gain (`x`), so in the dark it reads exactly as before.
+- `fl` is always in **gain-x counts** (the scale of the bench `blank` and `chlk`):
+  fl = fl_raw × 9876 / gain ratio. The ratios (low 1, med 25, high 428, max 9876) are the Adafruit
+  library's nominal values. Check them once (see the bench check below). At lower gains `fl` is coarser:
+  one raw count at `h` is 23 gain-x counts.
+- With the TSL2591 on, each sample line also has `fl_raw=` (LED on minus off at that gain), `gain=l|m|h|x`
+  and `sat=0|1`. If the sensor saturates even at the lowest gain, the line shows `sat=1 fl=nan chl=nan`,
+  and that reading is left out of the day. `blank` refuses to save a saturated reading.
+- **Bench check (once):** with a steady target that reads several thousand counts at `gain x` (a strong
+  dye or spinach sample, or the LED shining onto the sensor: about 10,000 counts on 2026-10-10), keep
+  everything still, send `gain x` and `read` a few times, then `gain h` and `read` a few times. `fl_raw` at x divided by `fl_raw` at h
+  should be about 23.1. If it is not, put the measured ratio in `GAIN_X` in the sketch. Send `gain auto`
+  when done.
 
 LCD (`USE_LCD 1`, added 2026-10-10): a 16x2 character LCD with an I2C backpack (PCF8574) shares SDA/SCL
 (GPIO 21/22) with the light sensor. No library is needed.
@@ -329,5 +352,7 @@ head, not a cuvette. Design, risks and checks: `notes/mitigation/EXECUTION_PLAN.
 ## Size
 
 ESP32 Dev Module, esp32 core 3.3.12, all flags 0: 352,322 bytes flash (26%), 24,664 bytes RAM (7%).
+With USE_TSL2591 (2026-10-24 build): 410,778 bytes flash (31%), 26,328 bytes RAM with `AUTO_GAIN 1`;
+410,502 bytes with `AUTO_GAIN 0`. Gain ranging costs about 2 KB of flash and 16 bytes of RAM.
 With USE_EZO_EC + USE_PH + USE_WIFI: 1,128,844 bytes flash (86%; Wi-Fi + HTTPS is most of it), 52,456 bytes RAM.
 The model tables take about 37 KB of flash.

@@ -392,6 +392,16 @@ a 25 mm syringe filter holder and syringe, the solvent. Add the solvent to Form 
   warm water + an N pulse drives blooms. Keep tank media at N:P ≥ 16 (f/2 is ~24:1). A "recent rain"
   forecast feature would need its own pre-registered test.
 
+**Calculator (written 2026-10-24, before the real calibration):** `src/lab/chl_calibration.py` does steps 4-6.
+Fill copies of `src/lab/templates/spectro_template.csv` (one row per extract) and `dilution_template.csv`
+(one row per sensor reading; plain water = dilution 0) and run
+`python src/lab/chl_calibration.py --spectro <file> --dilution <file>`. It prints Chl a per extract (with
+warnings for A750 > 0.005 or A664 outside 0.1-0.8), fits the straight line on the proportional range only
+(dense levels that fall >15% below the line are dropped as inner filter), the limit of detection
+(3·SD blank ÷ slope), the top of the linear range, and the serial commands: `blank` in plain water, then
+`chlk` = 1.28 ÷ slope (sonde scale), then `cal` to check. Tested on synthetic data
+(`tests/test_chl_calibration.py`); `--demo` shows a worked example.
+
 ## Never claim
 - That it prevents blooms in the open Sound; this is tanks only, aimed at enclosed or semi-enclosed water (harbors, shellfish beds, aquaculture pens, coastal ponds).
 - That the device is field-ready.

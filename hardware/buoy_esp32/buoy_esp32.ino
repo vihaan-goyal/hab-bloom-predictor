@@ -34,7 +34,9 @@
       live in NVS (Preferences), so a reboot keeps them.
       read     one sample line, not stored      date <yyyy-mm-dd> <hh:mm>   set the clock (no Wi-Fi)
       blank    fluorometer: plain seawater = zero chl      chlk <k>   ug/L per count (sonde-equivalent)
-      gain l|m|h|x   TSL2591 gain (saved; redo blank/chlk after changing it)
+      gain auto      TSL2591 gain chosen each sample from the LED-off light (AUTO_GAIN 1, the default)
+      gain l|m|h|x   lock one gain (saved). fl is always in gain-x counts; `gain` alone shows the gain
+      S lines with the TSL2591 add   fl_raw=<counts at that gain> gain=l|m|h|x sat=0|1   (sat=1: fl=nan)
       cal686 / cal918   pH probe in pH 6.86 / 9.18 buffer        cal   calclear
   Web page (USE_WIFI 1): the buoy serves its own read-only page with the latest readings, forecast,
       treatment and relay state. Join its open hotspot "HAB-buoy" and open http://192.168.10.1, or, once
@@ -76,6 +78,9 @@ enum Notify { N_SILENT = 0, N_SERIAL = 1, N_PUSH = 2 };   // bulletins: restore 
 #ifndef USE_TSL2591
 #define USE_TSL2591 0   // chlorophyll fluorometer, I2C  needs Adafruit TSL2591 Library + Adafruit Unified Sensor
 #endif
+#ifndef AUTO_GAIN
+#define AUTO_GAIN 1     // fluorometer: pick the TSL2591 gain each sample from the LED-off light (`gain auto`);
+#endif                  // 0 = the gain stays where `gain l|m|h|x` puts it, as before
 #ifndef USE_EZO_EC
 #define USE_EZO_EC 0    // Atlas EZO-EC conductivity, I2C 0x64 -> salinity (PSS-78). Wire only, no library
 #endif
@@ -146,7 +151,8 @@ Cal cal = {CAL_MAGIC, NAN, NAN, NAN, NAN, 'm'};
 // daily accumulator (sensor mode): sums of the 15-min readings of the current local day
 struct Acc { int32_t date; double sChl, sTemp, sSal, sPh; uint16_t nChl, nTemp, nSal, nPh; };
 Acc acc;
-struct Sample { float temp, cond, sal, ph, phV, fl, chl; };   // one 15-min reading (NAN = sensor off)
+struct Sample { float temp, cond, sal, ph, phV, fl, chl, flRaw; char gain; bool sat; };   // one 15-min reading (NAN = sensor off)
+struct FlRead { float fl, raw; char gain; bool sat; };   // fl in gain-x counts; raw at `gain`; sat = no valid reading
 
 #if USE_DS18B20
 OneWire oneWire(PIN_TEMP);
@@ -155,6 +161,22 @@ DallasTemperature ds(&oneWire);
 #if USE_TSL2591
 Adafruit_TSL2591 tsl = Adafruit_TSL2591(2591);
 bool tslOk = false;
+/* ---- gain ranging. GAIN_X = gain relative to LOW, the Adafruit library's values (Adafruit_TSL2591.h enum
+   comments and calculateLux(): 1, 25, 428, 9876). They are NOMINAL: the ams datasheet quotes a part-to-part
+   spread, so check once on the bench: read one spinach/dye sample with `gain x`, then `gain h`;
+   fl_raw(x) / fl_raw(h) should be 9876/428 = 23.1 (and h/m 17.1). If not, put the measured ratio here.
+   fl is always reported in gain-x counts at 200 ms (the scale of the bench `blank` and `chlk`):
+   fl = fl_raw * 9876 / GAIN_X[gain] * 200 ms / integration. At gain x and 200 ms, fl = fl_raw exactly. */
+const char GAIN_CH[4] = {'l', 'm', 'h', 'x'};
+const float GAIN_X[4] = {1.0f, 25.0f, 428.0f, 9876.0f};
+const tsl2591Gain_t GAIN_REG[4] = {TSL2591_GAIN_LOW, TSL2591_GAIN_MED, TSL2591_GAIN_HIGH, TSL2591_GAIN_MAX};
+// Hysteresis: step DOWN when the brightest channel with the LED off passes 70% of full scale; step UP only if
+// the next gain is predicted to stay under 30% (LED light of the last sample included). With gain steps of
+// 17-25x the light must change ~2.3x or more between a step down and the next step up, so it cannot flip-flop.
+const float AG_DOWN = 0.70f, AG_UP = 0.30f;
+int gainIdx = 3;                 // current hardware gain (index into GAIN_CH)
+bool autoGain = AUTO_GAIN;       // runtime: `gain auto` / `gain l|m|h|x` (kept in NVS "gauto")
+float flLedEq = 0;               // last LED-on minus off, gain-x counts: headroom the LED needs at a higher gain
 #endif
 #if USE_WIFI
 String wifiSsid, wifiPass, ntfyTopic;
@@ -384,25 +406,69 @@ void readTemp() {
 #endif
 }
 
-float readFluor() {
-  // Blue LED off, then on: the difference is the chlorophyll glow (ambient light cancels), as alerter_uno.
 #if USE_TSL2591
-  if (!tslOk) return NAN;
-  float dark = 0, lit = 0;
-  digitalWrite(PIN_FLUOR_LED, LOW);
-  for (int i = 0; i < 3; i++) dark += tsl.getFullLuminosity() & 0xFFFF;
-  digitalWrite(PIN_FLUOR_LED, HIGH);
-  delay(20);
-  for (int i = 0; i < 3; i++) {
-    uint16_t full = tsl.getFullLuminosity() & 0xFFFF;
-    if (full == 0xFFFF) { digitalWrite(PIN_FLUOR_LED, LOW); Serial.println("fluor: SATURATED, lower the gain"); return NAN; }
-    lit += full;
+int gainIndex(char g) { return g == 'l' ? 0 : g == 'h' ? 2 : g == 'x' ? 3 : 1; }   // anything else = MED, as before
+void applyGain(int i) { gainIdx = i; tsl.setGain(GAIN_REG[i]); }
+float tslMs() { return 100.0f * ((int)tsl.getTiming() + 1); }
+// full scale per the TSL2591 datasheet: 37888 counts at 100 ms, 65535 at 200 ms and longer
+float tslLimit() { return tsl.getTiming() == TSL2591_INTEGRATIONTIME_100MS ? 37888.0f : 65535.0f; }
+
+/* mean of n readings of channel 0 (full spectrum, the fluorometer signal); peak = brightest of either channel */
+float tslRead(int n, uint16_t &peak) {
+  float s = 0;
+  peak = 0;
+  for (int i = 0; i < n; i++) {
+    uint32_t v = tsl.getFullLuminosity();
+    uint16_t c0 = v & 0xFFFF, c1 = v >> 16;
+    s += c0;
+    peak = max(peak, max(c0, c1));
   }
-  digitalWrite(PIN_FLUOR_LED, LOW);
-  return (lit - dark) / 3.0f;
-#else
-  return NAN;
+  return s / n;
+}
 #endif
+
+FlRead readFluor() {
+  // Blue LED off, then on: the difference is the chlorophyll glow (ambient light cancels), as alerter_uno.
+  // Auto gain: the gain is chosen from the LED-off reading BEFORE the LED goes on, so both halves of one
+  // sample use the same gain and integration time.
+  FlRead r = {NAN, NAN, '-', false};
+#if USE_TSL2591
+  if (!tslOk) return r;
+  const float lim = tslLimit();
+  bool noUp = false;               // after a step down, no step back up within the same sample
+  for (int tries = 0; tries < 8; tries++) {   // at most 3 steps down + 3 up; 8 is a safety stop
+    uint16_t pk;
+    digitalWrite(PIN_FLUOR_LED, LOW);
+    float dark = tslRead(3, pk);
+    if (autoGain) {
+      if (pk >= AG_DOWN * lim && gainIdx > 0) { applyGain(gainIdx - 1); noUp = true; continue; }
+      if (!noUp && gainIdx < 3) {
+        float next = GAIN_X[gainIdx + 1];
+        float predicted = pk * next / GAIN_X[gainIdx] + flLedEq * next / GAIN_X[3] * tslMs() / 200.0f;
+        if (predicted < AG_UP * lim) { applyGain(gainIdx + 1); continue; }
+      }
+    }
+    r.gain = GAIN_CH[gainIdx];
+    if (pk >= lim) { r.sat = true; Serial.println(autoGain ? "fluor: SATURATED at the lowest gain" : "fluor: SATURATED, lower the gain"); return r; }
+    digitalWrite(PIN_FLUOR_LED, HIGH);
+    delay(20);
+    float lit = tslRead(3, pk);
+    digitalWrite(PIN_FLUOR_LED, LOW);
+    if (pk >= lim) {
+      if (autoGain && gainIdx > 0) { applyGain(gainIdx - 1); noUp = true; continue; }   // the LED tipped it over
+      r.sat = true;
+      Serial.println(autoGain ? "fluor: SATURATED at the lowest gain" : "fluor: SATURATED, lower the gain");
+      return r;
+    }
+    r.raw = lit - dark;
+    r.fl = r.raw * (GAIN_X[3] / GAIN_X[gainIdx]) * (200.0f / tslMs());
+    flLedEq = max(0.0f, r.fl);
+    return r;
+  }
+  r.sat = true;
+  Serial.println("fluor: gain did not settle");
+#endif
+  return r;
 }
 
 /* blank + multiplier -> sonde-equivalent ug/L (the scale the model was trained on) */
@@ -465,14 +531,20 @@ Sample takeSample() {
   s.sal = (float)pss78_salinity(s.cond, s.temp, 0.0);
   s.phV = readPhVolts();
   s.ph = phFromVolts(s.phV);
-  s.fl = readFluor();
+  FlRead f = readFluor();
+  s.fl = f.fl; s.flRaw = f.raw; s.gain = f.gain; s.sat = f.sat;
   s.chl = chlFromFluor(s.fl);
   return s;
 }
 
 void printSample(const Sample &s) {
-  Serial.printf("S temp=%.2f cond_mScm=%.3f sal=%.3f ph=%.2f ph_v=%.3f fl=%.1f chl=%.2f\n",
+  Serial.printf("S temp=%.2f cond_mScm=%.3f sal=%.3f ph=%.2f ph_v=%.3f fl=%.1f chl=%.2f",
                 s.temp, s.cond, s.sal, s.ph, s.phV, s.fl, s.chl);
+#if USE_TSL2591
+  // fl = gain-x-equivalent counts (the calibration scale); fl_raw = counts at `gain`; sat=1 -> fl=nan
+  Serial.printf(" fl_raw=%.1f gain=%c sat=%d", s.flRaw, s.gain, s.sat ? 1 : 0);
+#endif
+  Serial.println();
 }
 
 // ------------------------------------------------------------------ clock (sensor mode)
@@ -750,6 +822,7 @@ void printStatus() {
   printClim();
 #if SENSOR_MODE
   printCal();
+  printGain();
   Serial.printf("sensors: ds18b20=%d tsl2591=%d ezo_ec=%d ph=%d  today=", USE_DS18B20, USE_TSL2591, USE_EZO_EC, USE_PH);
   if (acc.date) printDate(acc.date); else Serial.print("-");
   Serial.printf(" chl_readings=%u/%d  clock=%s\n", acc.nChl, MIN_READINGS, clockOk() ? "set" : "NOT SET");
@@ -768,7 +841,7 @@ void printHelp() {
   Serial.println("loop:   x <days>  cok <ug/L>  ton <p>  mode F|R|H  warm <mean chl>  floor <frac>  maxon <days>");
   Serial.println("        pulse <s>  skip  stop  loop");
 #if SENSOR_MODE
-  Serial.println("sensor: read  date <yyyy-mm-dd> <hh:mm>  blank  chlk <k>  gain l|m|h|x  cal686  cal918  cal  calclear");
+  Serial.println("sensor: read  date <yyyy-mm-dd> <hh:mm>  blank  chlk <k>  gain [auto|l|m|h|x]  cal686  cal918  cal  calclear");
 #endif
 #if USE_WIFI
   Serial.println("wifi:   wifi <ssid>  wifipass <password>  ntfy <topic>  ntfytest  ap on|off  ip");
@@ -784,14 +857,39 @@ void printHist() {
   if (!hist.n) Serial.println("history empty");
 }
 
-void setGain(char g) {
+void printGain() {
 #if USE_TSL2591
   if (!tslOk) { Serial.println("fluor: TSL2591 not found"); return; }
-  tsl.setGain(g == 'l' ? TSL2591_GAIN_LOW : g == 'h' ? TSL2591_GAIN_HIGH : g == 'x' ? TSL2591_GAIN_MAX : TSL2591_GAIN_MED);
-  Serial.printf("gain=%c\n", g);
-  if (cal.gain != g) { cal.gain = g; Serial.println("gain changed: redo `blank` and `chlk` at this gain"); saveCal(); printCal(); }
+  float lim = tslLimit();
+  Serial.printf("fluor gain=%c (%s, x%.0f) integration=%.0fms full_scale=%.0f step_down>=%.0f step_up<%.0f auto_build=%d\n",
+                GAIN_CH[gainIdx], autoGain ? "auto" : "locked", (double)GAIN_X[gainIdx], (double)tslMs(), (double)lim,
+                (double)(AG_DOWN * lim), (double)(AG_UP * lim), AUTO_GAIN);
+#endif
+}
+
+/* `gain auto` (AUTO_GAIN builds) or `gain l|m|h|x` to lock one gain; `gain` alone shows it */
+void setGain(const char *arg) {
+#if USE_TSL2591
+  if (!tslOk) { Serial.println("fluor: TSL2591 not found"); return; }
+  if (arg && !strcmp(arg, "auto")) {
+#if AUTO_GAIN
+    autoGain = true; prefs.putBool("gauto", true);
 #else
-  (void)g; Serial.println("fluor: USE_TSL2591 is 0");
+    Serial.println("gain auto: AUTO_GAIN is 0 in this build");
+#endif
+  } else if (arg) {
+    char g = arg[0];
+    if (g != 'l' && g != 'm' && g != 'h' && g != 'x') { Serial.println("ERR gain auto|l|m|h|x"); return; }
+    autoGain = false; prefs.putBool("gauto", false);
+    applyGain(gainIndex(g));
+    if (cal.gain != g) {
+      cal.gain = g; saveCal(); printCal();
+      Serial.println("gain changed: fl stays in gain-x counts, so blank/chlk carry over if the gain ratio holds (README bench check)");
+    }
+  }
+  printGain();
+#else
+  (void)arg; Serial.println("fluor: USE_TSL2591 is 0");
 #endif
 }
 
@@ -893,9 +991,13 @@ void handleLine(char *line) {
     Serial.print("clock set to "); printDate(localDate()); Serial.printf(" %02d:%02d\n", hh, mm);
     return;
   }
-  if (!strcmp(a, "blank")) { cal.blank = readFluor(); saveCal(); printCal(); return; }
+  if (!strcmp(a, "blank")) {
+    float f = readFluor().fl;
+    if (isnan(f)) { Serial.println("blank NOT saved: no valid fluorometer reading (saturated or no sensor)"); printCal(); return; }
+    cal.blank = f; saveCal(); printCal(); return;
+  }
   if (!strcmp(a, "chlk") && b) { cal.chlK = atof(b); saveCal(); printCal(); return; }
-  if (!strcmp(a, "gain") && b) { setGain(tolower(b[0])); return; }
+  if (!strcmp(a, "gain")) { if (b) for (char *q = b; *q; q++) *q = tolower(*q); setGain(b); return; }
   if (!strcmp(a, "cal686")) { cal.v686 = readPhVolts(); saveCal(); printCal(); return; }
   if (!strcmp(a, "cal918")) { cal.v918 = readPhVolts(); saveCal(); printCal(); return; }
   if (!strcmp(a, "cal")) { printCal(); return; }
@@ -976,8 +1078,8 @@ void setup() {
   tslOk = tsl.begin();
   if (tslOk) {
     tsl.setTiming(TSL2591_INTEGRATIONTIME_200MS);
-    char g = cal.gain;
-    tsl.setGain(g == 'l' ? TSL2591_GAIN_LOW : g == 'h' ? TSL2591_GAIN_HIGH : g == 'x' ? TSL2591_GAIN_MAX : TSL2591_GAIN_MED);
+    autoGain = AUTO_GAIN && prefs.getBool("gauto", true);
+    applyGain(autoGain ? 3 : gainIndex(cal.gain));   // auto starts at max gain and steps down in light
   } else Serial.println("fluor: TSL2591 not found (check SDA 21 / SCL 22)");
 #endif
 #if USE_EZO_EC

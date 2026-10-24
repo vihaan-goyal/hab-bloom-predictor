@@ -1,0 +1,1 @@
+date,experiment,arm,species,tank_id,replicate,position,volume_L,day,timepoint_h,fl_counts,fl_blank_counts,temp_c,ph,do_mgL,do_dawn,h2o2_mgL,airflow_mL_min,dose_mgL,treatment_on_h,event,trigger,artemia_start,artemia_alive_24h,artemia_alive_96h,excluded,exclusion_reason,notes
